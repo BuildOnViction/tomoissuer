@@ -30,5 +30,10 @@
     "morgan": "^1.9.1",
     "swagger-ui-express": "^4.0.2",
     "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "ganache-cli": "^6.4.3",
+    "truffle-hdwallet-provider": "^1.0.8",
+    "web3-provider-engine": "^15.0.0"
   }
 }
