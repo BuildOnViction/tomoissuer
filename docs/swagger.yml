@@ -1,0 +1,35 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: TomoIssuer APIs
+  description: Happy to code TomoIssuer APIs
+  license:
+    name: Github
+    url: 'https://github.com/tomochain/tomoissuer'
+tags:
+  - name: Config
+    description: Get TomoIssuer Application Configuration
+schemes:
+  - https
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /api/config:
+    get:
+      tags:
+        - Config
+      summary: Get TomoMaster Application Configuration
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '406':
+          description: Not Acceptable
+        '500':
+          description: Server Internal Error
