@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --port 3000"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "ganache-cli": "^6.4.3",
     "truffle-hdwallet-provider": "^1.0.8",
-    "web3-provider-engine": "^15.0.0"
+    "web3-provider-engine": "^15.0.0",
+    "webpack": "^4.30.0"
   }
 }
