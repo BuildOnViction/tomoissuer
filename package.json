@@ -34,8 +34,10 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "ganache-cli": "^6.4.3",
     "truffle-hdwallet-provider": "^1.0.8",
+    "uglifyjs-webpack-plugin": "^2.1.2",
     "web3-provider-engine": "^15.0.0",
     "webpack": "^4.30.0"
   }
