@@ -22,14 +22,14 @@ module.exports = {
             gasPrice: 10000000000000
         }
     },
-	compilers: {
-		solc: {
-			version: '^0.4.24',
-			settings: {
-				optimizer: {
-					enabled: true
-				}
-			}
-		}
-	}
+    compilers: {
+        solc: {
+            version: '^0.4.24',
+            settings: {
+                optimizer: {
+                    enabled: true
+                }
+            }
+        }
+    }
 }
