@@ -60,61 +60,89 @@ library SafeMath {
 	}
 }
 
-contract Issuer {
+contract TRC21Issuer {
     using SafeMath for uint256;
+    uint256 public _delay;
+    uint256 _minApply;
+    address[] _tokens;
+    mapping(address=>TokenState) tokensState;
 
-    uint256 public withdrawDelay;
-    address[] tokens;
-    mapping(address=>TokenState) tokenStates;
-    uint256 minApply;
 
     struct TokenState{
-        address owner;
         uint256 balance;
+        address owner;
         bool isActive;
         uint256 endNumber;
     }
 
     constructor (uint256 delay, uint256 value) public {
-        withdrawDelay=delay;
-        minApply=value;
+        _delay=delay;
+        _minApply=value;
+    }
+
+    function minApply() public view returns(uint256) {
+        return _minApply;
+    }
+
+    function withdrawDelay() public view returns(uint256) {
+        return _delay;
+    }
+
+    function tokens() public view returns(address[]) {
+        return _tokens;
+    }
+
+    function tokenBalance(address token) public view returns(uint256) {
+        return tokensState[token].balance;
+    }
+
+    function tokenOwner(address token) public view returns(address) {
+        return tokensState[token].owner;
+    }
+
+    function tokenStatus(address token) public view returns(bool) {
+        return tokensState[token].isActive;
+    }
+
+    function tokenEndNumber(address token) public view returns(uint256) {
+        return tokensState[token].endNumber;
     }
 
     modifier isOwnerToken(address token){
         require(token != address(0));
-        require(tokenStates[token].owner==msg.sender);
+        require(tokensState[token].owner==msg.sender);
         _;
     }
-    modifier onlyValidNewToken(address token){
+    modifier onlyValidApplyNewToken(address token){
         require(token != address(0));
-        require(msg.value >= minApply);
-        require(tokenStates[token].owner==address(0));
+        require(msg.value >= _minApply);
+        require(tokensState[token].owner==address(0));
         _;
     }
 
     modifier onlyValidActiveToken(address token){
         require(token != address(0));
-        require(tokenStates[token].isActive);
+        require(tokensState[token].isActive);
         _;
     }
 
     modifier onlyValidWithDrawToken(address token){
         require(token != address(0));
-        require(!tokenStates[token].isActive);
-        require(tokenStates[token].endNumber>0);
-        require(tokenStates[token].endNumber>=block.number);
+        require(!tokensState[token].isActive);
+        require(tokensState[token].endNumber>0);
+        require(tokensState[token].endNumber>=block.number);
         _;
     }
 
     modifier onlyValidReActiveToken(address token){
         require(token != address(0));
-        require(!tokenStates[token].isActive);
+        require(!tokensState[token].isActive);
         _;
     }
 
-    function applyToken(address token) public payable onlyValidNewToken(token){
-        tokens.push(token);
-        tokenStates[token] = TokenState({
+    function applyToken(address token) public payable onlyValidApplyNewToken(token){
+        _tokens.push(token);
+        tokensState[token] = TokenState({
             owner: msg.sender,
             isActive: true,
             balance:msg.value,
@@ -123,23 +151,22 @@ contract Issuer {
     }
 
     function depositFee(address token) public payable isOwnerToken(token) onlyValidActiveToken(token){
-        uint256 newBalance = tokenStates[token].balance.add(msg.value);
-        tokenStates[token].balance=newBalance;
+        uint256 newBalance = tokensState[token].balance.add(msg.value);
+        tokensState[token].balance=newBalance;
     }
-
     function resignToken(address token) public isOwnerToken(token) onlyValidActiveToken(token) {
-        uint256 withdrawNumber = withdrawDelay.add(block.number);
-        tokenStates[token].endNumber==withdrawNumber;
-        tokenStates[token].isActive=false;
+        uint256 withdrawNumber = _delay.add(block.number);
+        tokensState[token].endNumber==withdrawNumber;
+        tokensState[token].isActive=false;
     }
 
     function reActiveToken(address token) public isOwnerToken(token) onlyValidReActiveToken(token) {
-        tokenStates[token].endNumber==0;
-        tokenStates[token].isActive=true;
+        tokensState[token].endNumber==0;
+        tokensState[token].isActive=true;
     }
 
     function withdrawToken(address token) public isOwnerToken(token) onlyValidWithDrawToken(token) {
-        msg.sender.transfer(tokenStates[token].balance);
-        tokenStates[token].balance=0;
+        msg.sender.transfer(tokensState[token].balance);
+        tokensState[token].balance=0;
     }
 }

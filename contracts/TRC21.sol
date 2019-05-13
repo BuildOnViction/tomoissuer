@@ -67,6 +67,7 @@ library SafeMath {
  * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
  * Originally based on code by FirstBlood: https://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol
  */
+
 contract TRC21 {
 	using SafeMath for uint256;
 
@@ -284,11 +285,11 @@ contract MyTRC21 is TRC21 {
     string private _symbol;
     uint8 private _decimals;
 
-    constructor (string memory name, string memory symbol, uint8 decimals, uint256 cap, uint256 minFee) public {
+    constructor (string memory name, string memory symbol, uint8 decimals, uint256 cap,uint256 minFee) public {
         _name = name;
         _symbol = symbol;
         _decimals = decimals;
-        super._mint(msg.sender, cap, minFee);
+        super._mint(msg.sender, cap,minFee);
     }
 
     /**
