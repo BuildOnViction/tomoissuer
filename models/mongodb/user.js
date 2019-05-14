@@ -8,7 +8,7 @@ var User = new Schema({
         type: String,
         index: true,
         unique: true
-    },
+    }
 }, { timestamps: true })
 
 module.exports = mongoose.model('User', User)
