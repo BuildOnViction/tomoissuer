@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
-import Login from './components/Login.vue'
 
 import Web3 from 'web3'
 import BootstrapVue from 'bootstrap-vue'
@@ -53,11 +52,7 @@ Vue.prototype.getAccount = async function () {
 
 const router = new VueRouter({
     mode: 'history',
-    routes: [
-        {
-            path: '/login', component: Login
-        }
-    ]
+    routes: []
 })
 
 new Vue({ // eslint-disable-line no-new
