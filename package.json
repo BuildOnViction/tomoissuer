@@ -12,6 +12,7 @@
     "dev": "./node_modules/.bin/nodemon index.js & cross-env NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --port 3000",
     "dev-https": "./node_modules/.bin/nodemon index.js & cross-env NODE_ENV=development webpack-dev-server --https --key ./sslcert/server.key --cert ./sslcert/server.crt --hot --host 0.0.0.0 --port 3000",
     "client-dev": "cross-env NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --port 3000",
+    "build": "cross-env NODE_ENV=production webpack -p --progress --hide-modules",
     "lint": "eslint --cache ./ --ext .vue --ext .js",
     "lint-fix": "eslint --cache ./ --ext .vue --ext .js --fix"
   },
