@@ -11,14 +11,33 @@ import TrezorConnect from 'trezor-connect'
 import * as HDKey from 'ethereumjs-wallet/hdkey'
 import * as localStorage from 'store'
 import axios from 'axios'
+import Vuex from 'vuex'
+import Toasted from 'vue-toasted'
 
 Vue.use(BootstrapVue)
 Vue.use(VueRouter)
+Vue.use(Vuex)
+Vue.use(Toasted, {
+    position: 'bottom-right',
+    theme: 'bubble',
+    duration: 4000,
+    action : {
+        text : 'Dismiss',
+        onClick : (e, toastObject) => {
+            toastObject.goAway(0)
+        }
+    }
+})
 
 // set trezor's manifest
 TrezorConnect.manifest({
     email: 'admin@tomochain.com',
     appUrl: 'https://master.tomochain.com'
+})
+const store = new Vuex.Store({
+    state: {
+        walletLoggedIn: null
+    }
 })
 
 Vue.prototype.isElectron = !!(window && window.process && window.process.type)
@@ -43,13 +62,14 @@ Vue.prototype.getAccount = async function () {
         account = (await wjs.eth.getAccounts())[0]
         break
     case 'custom':
-        if (wjs.currentProvider.address) {
-            account = wjs.currentProvider.address
-        }
+        account = (await wjs.eth.getAccounts())[0]
+        // if (wjs.currentProvider.address) {
+        //     account = wjs.currentProvider.address
+        // }
 
-        if (wjs.currentProvider.addresses) {
-            account = wjs.currentProvider.addresses[0]
-        }
+        // if (wjs.currentProvider.addresses) {
+        //     account = wjs.currentProvider.addresses[0]
+        // }
         break
     case 'trezor':
         const xpub = (Vue.prototype.trezorPayload) ? Vue.prototype.trezorPayload.xpub
@@ -190,8 +210,19 @@ const router = new VueRouter({
     ]
 })
 
+router.beforeEach(async (to, from, next) => {
+    const provider = Vue.prototype.NetworkProvider || localStorage.get('network') || null
+    await Vue.prototype.detectNetwork(provider)
+    next()
+})
+
+const EventBus = new Vue()
+
+Vue.prototype.$bus = EventBus
+
 new Vue({ // eslint-disable-line no-new
     el: '#app',
+    store,
     router: router,
     components: { App },
     template: '<App/>'
