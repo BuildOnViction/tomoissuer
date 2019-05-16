@@ -5,7 +5,7 @@
                 toggleable="lg"
                 type="dark"
                 variant="info">
-                <div class="container">
+                <section class="container container--wide">
                     <b-navbar-brand to="/">
                         Logo here
                     </b-navbar-brand>
@@ -34,18 +34,12 @@
                                 variant="primary">
                                 <template
                                     slot="button-content">
-                                    <i class="tm-cog icon-2x"/>
+                                    <!-- <i class="tm-cog icon-2x"/> -->
+                                    Profile
                                 </template>
-                                <b-dropdown-item
-                                    :to="`/voter/${account}`"
-                                    class="dd-address">
+                                <b-dropdown-text>
                                     {{ truncate(account, 20) }}
-                                </b-dropdown-item>
-                                <b-dropdown-divider />
-                                <b-dropdown-item
-                                    target="_bank"
-                                    href="https://bit.ly/2B6p29o">Help</b-dropdown-item>
-                                <b-dropdown-item to="/setting">Settings/Withdraws</b-dropdown-item>
+                                </b-dropdown-text>
                                 <b-dropdown-divider />
                                 <b-dropdown-item
                                     href="/"
@@ -53,7 +47,7 @@
                             </b-dropdown>
                         </b-navbar-nav>
                     </b-collapse>
-                </div>
+                </section>
             </b-navbar>
             <div class="main-content">
                 <router-view/>
@@ -63,15 +57,60 @@
 </template>
 
 <script>
+import store from 'store'
+
 export default {
     name: 'App',
     components: { },
     data () {
-        return { }
+        return {
+            isReady: !!this.web3,
+            isTomonet: false,
+            account: ''
+        }
     },
-    async updated () { },
+    async updated () {
+        await this.checkNetworkAndLogin()
+    },
     destroyed () { },
-    created: async function () { },
-    methods: { }
+    created: async function () {
+        try {
+            const self = this
+            if (!self.isReady && self.NetworkProvider === 'metamask') {
+                throw Error('Web3 is not properly detected. Have you installed MetaMask extension?')
+            }
+            self.$bus.$on('logged', async () => {
+                await self.checkNetworkAndLogin()
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    methods: {
+        async checkNetworkAndLogin () {
+            let self = this
+            setTimeout(async () => {
+                try {
+                    if (store.get('address')) {
+                        self.account = store.get('address').toLowerCase()
+                    } else {
+                        self.account = this.$store.state.walletLoggedIn
+                            ? this.$store.state.walletLoggedIn : await self.getAccount()
+                    }
+                    if (self.account) {
+                        self.isTomonet = true
+                    }
+                } catch (error) {}
+            }, 0)
+        },
+        signOut () {
+            store.clearAll()
+            this.$store.state.walletLoggedIn = null
+
+            this.$router.go({
+                path: '/'
+            })
+        }
+    }
 }
 </script>

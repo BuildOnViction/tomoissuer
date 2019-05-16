@@ -12,10 +12,22 @@ import * as HDKey from 'ethereumjs-wallet/hdkey'
 import * as localStorage from 'store'
 import axios from 'axios'
 import Vuex from 'vuex'
+import Toasted from 'vue-toasted'
 
 Vue.use(BootstrapVue)
 Vue.use(VueRouter)
 Vue.use(Vuex)
+Vue.use(Toasted, {
+    position: 'bottom-right',
+    theme: 'bubble',
+    duration: 4000,
+    action : {
+        text : 'Dismiss',
+        onClick : (e, toastObject) => {
+            toastObject.goAway(0)
+        }
+    }
+})
 
 // set trezor's manifest
 TrezorConnect.manifest({
@@ -203,6 +215,10 @@ router.beforeEach(async (to, from, next) => {
     await Vue.prototype.detectNetwork(provider)
     next()
 })
+
+const EventBus = new Vue()
+
+Vue.prototype.$bus = EventBus
 
 new Vue({ // eslint-disable-line no-new
     el: '#app',
