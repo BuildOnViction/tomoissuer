@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
 import Login from './components/Login.vue'
+import Home from './components/Home.vue'
 
 import Web3 from 'web3'
 import BootstrapVue from 'bootstrap-vue'
@@ -13,6 +14,8 @@ import * as localStorage from 'store'
 import axios from 'axios'
 import Vuex from 'vuex'
 import Toasted from 'vue-toasted'
+import Transport from '@ledgerhq/hw-transport-u2f' // for browser
+import Eth from '@ledgerhq/hw-app-eth'
 
 Vue.use(BootstrapVue)
 Vue.use(VueRouter)
@@ -70,6 +73,25 @@ Vue.prototype.getAccount = async function () {
         // if (wjs.currentProvider.addresses) {
         //     account = wjs.currentProvider.addresses[0]
         // }
+        break
+    case 'ledger':
+        try {
+            if (!Vue.prototype.appEth) {
+                let transport = await new Transport()
+                Vue.prototype.appEth = await new Eth(transport)
+            }
+            let ethAppConfig = await Vue.prototype.appEth.getAppConfiguration()
+            if (!ethAppConfig.arbitraryDataEnabled) {
+                throw new Error(`Please go to App Setting
+                    to enable contract data and display data on your device!`)
+            }
+            let result = await Vue.prototype.appEth.getAddress(
+                localStorage.get('hdDerivationPath')
+            )
+            account = result.address
+        } catch (error) {
+            throw error
+        }
         break
     case 'trezor':
         const xpub = (Vue.prototype.trezorPayload) ? Vue.prototype.trezorPayload.xpub
@@ -141,6 +163,42 @@ Vue.prototype.loadTrezorWallets = async (offset, limit) => {
     }
 }
 
+Vue.prototype.loadMultipleLedgerWallets = async function (offset, limit) {
+    let u2fSupported = await Transport.isSupported()
+    if (!u2fSupported) {
+        throw new Error(`U2F not supported in this browser. 
+                Please try using Google Chrome with a secure (SSL / HTTPS) connection!`)
+    }
+    await Vue.prototype.detectNetwork('ledger')
+    if (!Vue.prototype.appEth) {
+        let transport = await new Transport()
+        Vue.prototype.appEth = await new Eth(transport)
+    }
+    let web3 = Vue.prototype.web3
+    let balance = 0
+    let wallets = {}
+    let walker = offset
+    while (limit > 0) {
+        let tail = '/' + walker.toString()
+        let hdPath = localStorage.get('hdDerivationPath')
+        hdPath += tail
+        let result = await Vue.prototype.appEth.getAddress(
+            hdPath
+        )
+        if (!result || !result.address) {
+            return {}
+        }
+        balance = await web3.eth.getBalance(result.address)
+        wallets[walker] = {
+            address: result.address,
+            balance: parseFloat(web3.utils.fromWei(balance, 'ether')).toFixed(2)
+        }
+        walker++
+        limit--
+    }
+    return wallets
+}
+
 const getConfig = Vue.prototype.appConfig = async function () {
     let config = await axios.get('/api/config')
     return config.data
@@ -204,9 +262,8 @@ Vue.prototype.truncate = (fullStr, strLen) => {
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        {
-            path: '/login', component: Login
-        }
+        { path: '/', component: Home },
+        { path: '/login', component: Login }
     ]
 })
 

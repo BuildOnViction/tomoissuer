@@ -174,6 +174,8 @@
             size="lg"
             ok-title="Unlock wallet"
             cancel-title="Cancel"
+            no-close-on-backdrop
+            no-close-on-esc
             @ok="setHdPath">
             <div
                 v-for="(hdwallet, index) in hdWallets"
@@ -186,7 +188,7 @@
                         autocomplete="off"
                         style="width: 5%; float: left" >
                     <div style="width: 50%; float: left">
-                        {{ truncate(hdwallet.address, 60) }}
+                        {{ truncate(hdwallet.address, 30) }}
                     </div>
                     <div style="width: 30%; margin-left: 2%; float: right">
                         {{ hdwallet.balance }} {{ getCurrencySymbol() }}
