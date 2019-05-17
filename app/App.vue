@@ -52,12 +52,29 @@
             <div class="main-content">
                 <router-view/>
             </div>
+            <footer
+                class="tomo-footer footer">
+                <div class="container container--wide">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="tomo-footer__copyright">
+                                TomoIssuer &copy; {{ (new Date()).getFullYear() }} -
+                                <a
+                                    :href="`https://github.com/tomochain/tomomaster/releases/tag/v${version}`"
+                                    class="version-tag">
+                                    v{{ version }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
 </template>
 
 <script>
 import store from 'store'
+import pkg from '../package.json'
 
 export default {
     name: 'App',
@@ -66,7 +83,8 @@ export default {
         return {
             isReady: !!this.web3,
             isTomonet: false,
-            account: ''
+            account: '',
+            version: pkg.version
         }
     },
     async updated () {
