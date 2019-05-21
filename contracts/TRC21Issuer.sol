@@ -69,7 +69,6 @@ contract TRC21Issuer {
     struct TokenState {
         uint256 balance;
         address owner;
-        bool isActive;
     }
 
     constructor (uint256 value) public {
@@ -92,10 +91,6 @@ contract TRC21Issuer {
         return tokensState[token].owner;
     }
 
-    function getTokenStatus(address token) public view returns(bool) {
-        return tokensState[token].isActive;
-    }
-
     modifier onlyValidApplyNewToken(address token){
         require(token != address(0));
         require(msg.value >= _minFee);
@@ -113,7 +108,6 @@ contract TRC21Issuer {
         _tokens.push(token);
         tokensState[token] = TokenState({
             owner: msg.sender,
-            isActive: true,
             balance: msg.value
         });
     }
