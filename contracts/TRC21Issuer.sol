@@ -67,7 +67,6 @@ contract TRC21Issuer {
     address[] _tokens;
     mapping(address => TokenState) tokensState;
 
-
     struct TokenState {
         uint256 balance;
         address owner;
@@ -91,15 +90,15 @@ contract TRC21Issuer {
         return _tokens;
     }
 
-    function tokenBalance(address token) public view returns(uint256) {
+    function getTokenBalance(address token) public view returns(uint256) {
         return tokensState[token].balance;
     }
 
-    function tokenOwner(address token) public view returns(address) {
+    function getTokenOwner(address token) public view returns(address) {
         return tokensState[token].owner;
     }
 
-    function tokenStatus(address token) public view returns(bool) {
+    function getTokenStatus(address token) public view returns(bool) {
         return tokensState[token].isActive;
     }
 
@@ -116,7 +115,7 @@ contract TRC21Issuer {
         _;
     }
 
-    function applyToken(address token) public payable onlyValidApplyNewToken(token){
+    function applyToken(address token) public payable onlyValidApplyNewToken(token) {
         _tokens.push(token);
         tokensState[token] = TokenState({
             owner: msg.sender,
