@@ -66,6 +66,9 @@ contract TRC21Issuer {
     address[] _tokens;
     mapping(address => uint256) tokensState;
 
+	event Apply(address indexed issuer, address indexed token, uint256 value);
+	event Charge(address indexed supporter, address indexed token, uint256 value);
+
     constructor (uint256 value) public {
         _minCap = value;
     }
@@ -91,10 +94,12 @@ contract TRC21Issuer {
     function apply(address token) public payable onlyValidCapacity(token) {
         _tokens.push(token);
         tokensState[token] = tokensState[token].add(msg.value);
+        emit Apply(msg.sender, token, msg.value);
     }
 
     function charge(address token) public payable onlyValidCapacity(token) {
         tokensState[token] = tokensState[token].add(msg.value);
+        emit Charge(msg.sender, token, msg.value);
     }
 
 }
