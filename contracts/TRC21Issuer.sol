@@ -62,7 +62,6 @@ library SafeMath {
 
 contract TRC21Issuer {
     using SafeMath for uint256;
-    uint256 public _delay;
     uint256 _minFee;
     address[] _tokens;
     mapping(address => TokenState) tokensState;
@@ -73,17 +72,12 @@ contract TRC21Issuer {
         bool isActive;
     }
 
-    constructor (uint256 delay, uint256 value) public {
-        _delay = delay;
+    constructor (uint256 value) public {
         _minFee = value;
     }
 
     function minFee() public view returns(uint256) {
         return _minFee;
-    }
-
-    function withdrawDelay() public view returns(uint256) {
-        return _delay;
     }
 
     function tokens() public view returns(address[]) {
