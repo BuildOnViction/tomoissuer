@@ -41,6 +41,7 @@
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.11",
     "morgan": "^1.9.1",
+    "solc": "^0.4.25",
     "store": "^2.0.12",
     "swagger-ui-express": "^4.0.2",
     "trezor-connect": "^7.0.3",
