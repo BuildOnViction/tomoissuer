@@ -60,6 +60,10 @@ library SafeMath {
     }
 }
 
+contract AbstractTokenTRC21 {
+    function issuer() public view returns (address);
+}
+
 contract TRC21Issuer {
     using SafeMath for uint256;
     uint256 _minCap;
@@ -92,6 +96,8 @@ contract TRC21Issuer {
     }
 
     function apply(address token) public payable onlyValidCapacity(token) {
+        AbstractTokenTRC21 t = AbstractTokenTRC21(token);
+        require(t.issuer() == msg.sender);
         _tokens.push(token);
         tokensState[token] = tokensState[token].add(msg.value);
         emit Apply(msg.sender, token, msg.value);
