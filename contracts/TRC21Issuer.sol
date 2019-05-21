@@ -62,7 +62,7 @@ library SafeMath {
 
 contract TRC21Issuer {
     using SafeMath for uint256;
-    uint256 _minFee;
+    uint256 _minCap;
     address[] _tokens;
     mapping(address => TokenState) tokensState;
 
@@ -72,11 +72,11 @@ contract TRC21Issuer {
     }
 
     constructor (uint256 value) public {
-        _minFee = value;
+        _minCap = value;
     }
 
-    function minFee() public view returns(uint256) {
-        return _minFee;
+    function minCap() public view returns(uint256) {
+        return _minCap;
     }
 
     function tokens() public view returns(address[]) {
@@ -93,18 +93,18 @@ contract TRC21Issuer {
 
     modifier onlyValidApplyNewToken(address token){
         require(token != address(0));
-        require(msg.value >= _minFee);
+        require(msg.value >= _minCap);
         require(tokensState[token].owner == address(0));
         _;
     }
 
-    modifier onlyValidDepositFee(address token){
+    modifier onlyValidChargeCap(address token){
         require(token != address(0));
-        require(msg.value >= _minFee);
+        require(msg.value >= _minCap);
         _;
     }
 
-    function applyToken(address token) public payable onlyValidApplyNewToken(token) {
+    function apply(address token) public payable onlyValidApplyNewToken(token) {
         _tokens.push(token);
         tokensState[token] = TokenState({
             owner: msg.sender,
@@ -112,7 +112,7 @@ contract TRC21Issuer {
         });
     }
 
-    function depositFee(address token) public payable onlyValidDepositFee(token) {
+    function charge(address token) public payable onlyValidChargeCap(token) {
         uint256 newBalance = tokensState[token].balance.add(msg.value);
         tokensState[token].balance = newBalance;
     }
