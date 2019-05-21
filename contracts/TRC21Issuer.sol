@@ -63,7 +63,7 @@ library SafeMath {
 contract TRC21Issuer {
     using SafeMath for uint256;
     uint256 public _delay;
-    uint256 _minApply;
+    uint256 _minFee;
     address[] _tokens;
     mapping(address => TokenState) tokensState;
 
@@ -76,11 +76,11 @@ contract TRC21Issuer {
 
     constructor (uint256 delay, uint256 value) public {
         _delay = delay;
-        _minApply = value;
+        _minFee = value;
     }
 
-    function minApply() public view returns(uint256) {
-        return _minApply;
+    function minFee() public view returns(uint256) {
+        return _minFee;
     }
 
     function withdrawDelay() public view returns(uint256) {
@@ -105,14 +105,14 @@ contract TRC21Issuer {
 
     modifier onlyValidApplyNewToken(address token){
         require(token != address(0));
-        require(msg.value >= _minApply);
+        require(msg.value >= _minFee);
         require(tokensState[token].owner == address(0));
         _;
     }
 
     modifier onlyValidDepositFee(address token){
         require(token != address(0));
-        require(msg.value >= _minApply);
+        require(msg.value >= _minFee);
         _;
     }
 
