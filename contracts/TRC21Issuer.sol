@@ -64,12 +64,7 @@ contract TRC21Issuer {
     using SafeMath for uint256;
     uint256 _minCap;
     address[] _tokens;
-    mapping(address => TokenState) tokensState;
-
-    struct TokenState {
-        uint256 balance;
-        address owner;
-    }
+    mapping(address => uint256) tokensState;
 
     constructor (uint256 value) public {
         _minCap = value;
@@ -83,38 +78,23 @@ contract TRC21Issuer {
         return _tokens;
     }
 
-    function getTokenBalance(address token) public view returns(uint256) {
-        return tokensState[token].balance;
+    function getTokenCapacity(address token) public view returns(uint256) {
+        return tokensState[token];
     }
 
-    function getTokenOwner(address token) public view returns(address) {
-        return tokensState[token].owner;
-    }
-
-    modifier onlyValidApplyNewToken(address token){
-        require(token != address(0));
-        require(msg.value >= _minCap);
-        require(tokensState[token].owner == address(0));
-        _;
-    }
-
-    modifier onlyValidChargeCap(address token){
+    modifier onlyValidCapacity(address token) {
         require(token != address(0));
         require(msg.value >= _minCap);
         _;
     }
 
-    function apply(address token) public payable onlyValidApplyNewToken(token) {
+    function apply(address token) public payable onlyValidCapacity(token) {
         _tokens.push(token);
-        tokensState[token] = TokenState({
-            owner: msg.sender,
-            balance: msg.value
-        });
+        tokensState[token] = tokensState[token].add(msg.value);
     }
 
-    function charge(address token) public payable onlyValidChargeCap(token) {
-        uint256 newBalance = tokensState[token].balance.add(msg.value);
-        tokensState[token].balance = newBalance;
+    function charge(address token) public payable onlyValidCapacity(token) {
+        tokensState[token] = tokensState[token].add(msg.value);
     }
 
 }
