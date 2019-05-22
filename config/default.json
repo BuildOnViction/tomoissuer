@@ -18,6 +18,7 @@
         "uri": "mongodb://mongodb:27017/tomoissuer"
     },
     "truffle": {
-        "privateKey": ""
+        "privateKey": "",
+        "minCapacity": "10"
     }
 }
