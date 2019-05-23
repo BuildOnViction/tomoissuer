@@ -30,144 +30,82 @@ library SafeMath {
 		return c;
 	}
 
-	/**
-	* @dev Subtracts two numbers, reverts on overflow (i.e. if subtrahend is greater than minuend).
-	*/
-	function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-		require(b <= a);
-		uint256 c = a - b;
+    /**
+     * @dev Subtracts two numbers, reverts on overflow (i.e. if subtrahend is greater than minuend).
+     */
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+        require(b <= a);
+        uint256 c = a - b;
 
-		return c;
-	}
+        return c;
+    }
 
-	/**
-	* @dev Adds two numbers, reverts on overflow.
-	*/
-	function add(uint256 a, uint256 b) internal pure returns (uint256) {
-		uint256 c = a + b;
-		require(c >= a);
+    /**
+     * @dev Adds two numbers, reverts on overflow.
+     */
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+        uint256 c = a + b;
+        require(c >= a);
 
-		return c;
-	}
+        return c;
+    }
 
-	/**
-	* @dev Divides two numbers and returns the remainder (unsigned integer modulo),
-	* reverts when dividing by zero.
-		*/
-	function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-		require(b != 0);
-		return a % b;
-	}
+    /**
+     * @dev Divides two numbers and returns the remainder (unsigned integer modulo),
+     * reverts when dividing by zero.
+     */
+    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
+        require(b != 0);
+        return a % b;
+    }
+}
+
+contract AbstractTokenTRC21 {
+    function issuer() public view returns (address);
 }
 
 contract TRC21Issuer {
     using SafeMath for uint256;
-    uint256 public _delay;
-    uint256 _minApply;
+    uint256 _minCap;
     address[] _tokens;
-    mapping(address => TokenState) tokensState;
+    mapping(address => uint256) tokensState;
 
+	event Apply(address indexed issuer, address indexed token, uint256 value);
+	event Charge(address indexed supporter, address indexed token, uint256 value);
 
-    struct TokenState{
-        uint256 balance;
-        address owner;
-        bool isActive;
-        uint256 endNumber;
+    constructor (uint256 value) public {
+        _minCap = value;
     }
 
-    constructor (uint256 delay, uint256 value) public {
-        _delay = delay;
-        _minApply = value;
-    }
-
-    function minApply() public view returns(uint256) {
-        return _minApply;
-    }
-
-    function withdrawDelay() public view returns(uint256) {
-        return _delay;
+    function minCap() public view returns(uint256) {
+        return _minCap;
     }
 
     function tokens() public view returns(address[]) {
         return _tokens;
     }
 
-    function tokenBalance(address token) public view returns(uint256) {
-        return tokensState[token].balance;
+    function getTokenCapacity(address token) public view returns(uint256) {
+        return tokensState[token];
     }
 
-    function tokenOwner(address token) public view returns(address) {
-        return tokensState[token].owner;
-    }
-
-    function tokenStatus(address token) public view returns(bool) {
-        return tokensState[token].isActive;
-    }
-
-    function tokenEndNumber(address token) public view returns(uint256) {
-        return tokensState[token].endNumber;
-    }
-
-    modifier isOwnerToken(address token){
+    modifier onlyValidCapacity(address token) {
         require(token != address(0));
-        require(tokensState[token].owner==msg.sender);
-        _;
-    }
-    modifier onlyValidApplyNewToken(address token){
-        require(token != address(0));
-        require(msg.value >= _minApply);
-        require(tokensState[token].owner == address(0));
+        require(msg.value >= _minCap);
         _;
     }
 
-    modifier onlyValidActiveToken(address token){
-        require(token != address(0));
-        require(tokensState[token].isActive);
-        _;
-    }
-
-    modifier onlyValidWithDrawToken(address token){
-        require(token != address(0));
-        require(!tokensState[token].isActive);
-        require(tokensState[token].endNumber > 0);
-        require(tokensState[token].endNumber >= block.number);
-        _;
-    }
-
-    modifier onlyValidReActiveToken(address token){
-        require(token != address(0));
-        require(!tokensState[token].isActive);
-        _;
-    }
-
-    function applyToken(address token) public payable onlyValidApplyNewToken(token){
+    function apply(address token) public payable onlyValidCapacity(token) {
+        AbstractTokenTRC21 t = AbstractTokenTRC21(token);
+        require(t.issuer() == msg.sender);
         _tokens.push(token);
-        tokensState[token] = TokenState({
-            owner: msg.sender,
-            isActive: true,
-            balance:msg.value,
-            endNumber:0
-        });
+        tokensState[token] = tokensState[token].add(msg.value);
+        emit Apply(msg.sender, token, msg.value);
     }
 
-    function depositFee(address token) public payable isOwnerToken(token) onlyValidActiveToken(token){
-        uint256 newBalance = tokensState[token].balance.add(msg.value);
-        tokensState[token].balance = newBalance;
+    function charge(address token) public payable onlyValidCapacity(token) {
+        tokensState[token] = tokensState[token].add(msg.value);
+        emit Charge(msg.sender, token, msg.value);
     }
 
-    function resignToken(address token) public isOwnerToken(token) onlyValidActiveToken(token) {
-        uint256 withdrawNumber = _delay.add(block.number);
-        tokensState[token].endNumber = withdrawNumber;
-        tokensState[token].isActive = false;
-    }
-
-    function reActiveToken(address token) public isOwnerToken(token) onlyValidReActiveToken(token) {
-        tokensState[token].endNumber = 0;
-        tokensState[token].isActive = true;
-    }
-
-    function withdrawToken(address token) public isOwnerToken(token) onlyValidWithDrawToken(token) {
-        msg.sender.transfer(tokensState[token].balance);
-        tokensState[token].balance = 0;
-    }
 }
