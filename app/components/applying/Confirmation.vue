@@ -14,6 +14,29 @@
                 variant="primary"
                 @click="deploy">Create</b-button>
         </div>
+        <div
+            v-if="loading"
+            class="mt-5">loading.....</div>
+        <div class="mt-5">
+            <b-form-group
+                v-if="transactionHash"
+                class="mb-4"
+                label="Transaction Hash"
+                label-for="transactionHash">
+                <b-form-input
+                    v-model="transactionHash"
+                    type="text" />
+            </b-form-group>
+            <b-form-group
+                v-if="contractAddress"
+                class="mb-4"
+                label="Contract Address"
+                label-for="contractAddress">
+                <b-form-input
+                    v-model="contractAddress"
+                    type="text" />
+            </b-form-group>
+        </div>
     </div>
 </template>
 
@@ -36,7 +59,9 @@ export default {
             sourceCode: '11',
             transactionHash: '',
             contractAddress: '',
-            account: ''
+            account: '',
+            provider: this.NetworkProvider,
+            loading: false
         }
     },
     async updated () {
@@ -80,6 +105,8 @@ export default {
             const self = this
             try {
                 const web3 = self.web3
+                self.loading = true
+                self.account = await self.getAccount()
                 const compiledContract = await axios.post('/api/token/compileContract', {
                     name: self.tokenName,
                     sourceCode: self.sourceCode
@@ -87,28 +114,49 @@ export default {
 
                 const contract = new web3.eth.Contract(
                     compiledContract.data.abi, null, { data: '0x' + compiledContract.data.bytecode })
-                console.log(typeof contract)
-                if (self.NetworkProvider === 'ledger') {
+                if (self.provider === 'ledger') {
                     const a = await self.appEth.getAddress(
                         store.get('hdDerivationPath')
                     )
-                    console.log(a)
                     self.account = a.address
                 }
+                // deployment
+                let result
+                switch (self.provider) {
+                case 'custom':
+                case 'metamask':
+                    result = await contract.deploy({
+                        arguments: [
+                            self.tokenName,
+                            self.tokenSymbol,
+                            self.decimals,
+                            (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
+                            (new BigNumber(1).multipliedBy(1e+18)).toString(10)
+                        ]
+                    }).send({
+                        from: self.account.toLowerCase(),
+                        gas: web3.utils.toHex(40000000),
+                        gasPrice: web3.utils.toHex(10000000000000)
+                    })
+                        .on('transactionHash', (txHash) => { self.transactionHash = txHash })
+                    break
+                default:
+                    break
+                }
 
-                const result = await contract.deploy({
-                    arguments: [
-                        self.tokenName,
-                        self.tokenSymbol,
-                        self.decimals,
-                        (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
-                        (new BigNumber(1).multipliedBy(1e+18)).toString(10)
-                    ]
-                }).send({
-                    from: self.account,
-                    gas: web3.utils.toHex(40000000),
-                    gasPrice: web3.utils.toHex(10000000000000)
-                })
+                // const result = await contract.deploy({
+                //     arguments: [
+                //         self.tokenName,
+                //         self.tokenSymbol,
+                //         self.decimals,
+                //         (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
+                //         (new BigNumber(1).multipliedBy(1e+18)).toString(10)
+                //     ]
+                // }).send({
+                //     from: self.account,
+                //     gas: web3.utils.toHex(40000000),
+                //     gasPrice: web3.utils.toHex(10000000000000)
+                // })
                 // .on('error', (error) => {
                 //     self.$toasted.show(
                 //         error, { type : 'error' }
@@ -120,9 +168,12 @@ export default {
                 // }).catch(e => console.log())
                 if (result) {
                     console.log('OK', result)
+                    self.contractAddress = result.options ? result.options.address : 'nothing'
                     self.$toasted.show('Successfull')
+                    self.loading = false
                 }
             } catch (error) {
+                self.loading = false
                 console.log(error)
                 self.$toasted.show(
                     error, { type : 'error' }
