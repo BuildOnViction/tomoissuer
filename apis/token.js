@@ -5,6 +5,7 @@ const router = express.Router()
 const { check, validationResult } = require('express-validator/check')
 const fs = require('fs')
 const path = require('path')
+const solc = require('solc')
 
 function createContract (name) {
     try {
@@ -20,11 +21,11 @@ function createContract (name) {
 router.post('/createToken', [
     check('name').exists().withMessage("'name' is required"),
     check('symbol').exists().withMessage("'symbol' is required"),
-    check('decimal').exists().withMessage("'decimal' is required"),
+    check('decimals').exists().withMessage("'decimal' is required"),
     check('totalSupply').exists().withMessage("'totalSupply' is required"),
     check('type').exists().withMessage("'type' is required")
         .isIn(['trc20', 'trc21']).withMessage("'type' should be 'trc20' or 'trc21'"),
-    check('minFee').isInt({ min: 0 }).exists().withMessage("'minFee' is required")
+    check('minFee').isFloat({ min: 0 }).exists().withMessage("'minFee' is required")
 ], async function (req, res, next) {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -33,21 +34,46 @@ router.post('/createToken', [
 
     const name = req.body.name
     const symbol = req.body.symbol
-    const decimal = req.body.decimal
+    const decimals = req.body.decimals
     const totalSupply = req.body.totalSupply
     const type = req.body.type
     const minFee = req.body.minFee
     // create contract
     const contractCode = createContract(name)
-    return res.send({
+    return res.json({
         name,
         symbol,
-        decimal,
+        decimals,
         totalSupply,
         type,
         minFee,
         contractCode
     })
+})
+
+router.post('/compileContract', [
+    check('name').exists().withMessage("'name' is required"),
+    check('sourceCode').exists().withMessage("'sourceCode is required")
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return next(errors.array())
+    }
+    try {
+        const name = req.body.name
+        const sourceCode = req.body.sourceCode
+        const compiledContract = solc.compile(sourceCode, 1)
+        let contract = compiledContract.contracts[name] || compiledContract.contracts[':' + name]
+        const bytecode = contract.bytecode
+        const abi = JSON.parse(contract.interface)
+
+        return res.json({
+            bytecode,
+            abi
+        })
+    } catch (error) {
+        return next(error)
+    }
 })
 
 module.exports = router

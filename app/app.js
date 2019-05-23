@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 import App from './App.vue'
 import Login from './components/Login.vue'
 import Home from './components/Home.vue'
+import Confirmation from './components/applying/Confirmation.vue'
+import CreateToken from './components/applying/CreateToken.vue'
+import './components/applying/codemirror'
 
 import Web3 from 'web3'
 import BootstrapVue from 'bootstrap-vue'
@@ -16,6 +19,7 @@ import Vuex from 'vuex'
 import Toasted from 'vue-toasted'
 import Transport from '@ledgerhq/hw-transport-u2f' // for browser
 import Eth from '@ledgerhq/hw-app-eth'
+import VueCodeMirror from 'vue-codemirror'
 
 Vue.use(BootstrapVue)
 Vue.use(VueRouter)
@@ -29,6 +33,23 @@ Vue.use(Toasted, {
         onClick : (e, toastObject) => {
             toastObject.goAway(0)
         }
+    }
+})
+
+Vue.use(VueCodeMirror, {
+    options: {
+        readOnly: true,
+        tabSize: 4,
+        styleActiveLine: true,
+        lineNumbers: true,
+        lineWrapping: true,
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        mode: 'text/javascript',
+        matchBrackets: true,
+        openDialog:true,
+        scrollbarStyle: 'simple',
+        theme: 'eclipse'
     }
 })
 
@@ -263,7 +284,9 @@ const router = new VueRouter({
     mode: 'history',
     routes: [
         { path: '/', component: Home },
-        { path: '/login', component: Login }
+        { path: '/login', component: Login },
+        { path: '/confirm', component: Confirmation, name: 'Confirmation' },
+        { path: '/create', component: CreateToken }
     ]
 })
 
