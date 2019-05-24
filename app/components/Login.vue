@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <b-row v-if="loading">loading...</b-row>
         <b-row
             align-v="center"
             align-h="center"
