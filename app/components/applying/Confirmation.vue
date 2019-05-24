@@ -140,6 +140,35 @@ export default {
                     })
                         .on('transactionHash', (txHash) => { self.transactionHash = txHash })
                     break
+                case 'ledger':
+                case 'trezor':
+                    const deploy = await contract.deploy({
+                        arguments: [
+                            self.tokenName,
+                            self.tokenSymbol,
+                            self.decimals,
+                            (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
+                            (new BigNumber(1).multipliedBy(1e+18)).toString(10)
+                        ]
+                    }).encodeABI()
+
+                    // let nonce = await self.web3.eth.getTransactionCount(self.account)
+                    const dataTx = {
+                        from: self.account,
+                        gas: web3.utils.toHex(40000000),
+                        gasPrice: web3.utils.toHex(10000000000000),
+                        gasLimit: web3.utils.toHex(40000000),
+                        data: deploy,
+                        chainId: 89,
+                        value: web3.utils.toHex(0),
+                        to: self.account,
+                        // nonce: web3.utils.toHex(nonce)
+                        nonce: undefined
+                    }
+                    const signature = await self.signTransaction(dataTx)
+                    console.log(signature)
+                    result = await self.sendSignedTransaction(dataTx, signature)
+                    break
                 default:
                     break
                 }

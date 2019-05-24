@@ -5,7 +5,8 @@ import Login from './components/Login.vue'
 import Home from './components/Home.vue'
 import Confirmation from './components/applying/Confirmation.vue'
 import CreateToken from './components/applying/CreateToken.vue'
-import './components/applying/codemirror'
+import VerifyContract from './components/applying/VerifyContract.vue'
+import './utils/codemirror'
 
 import Web3 from 'web3'
 import BootstrapVue from 'bootstrap-vue'
@@ -20,6 +21,7 @@ import Toasted from 'vue-toasted'
 import Transport from '@ledgerhq/hw-transport-u2f' // for browser
 import Eth from '@ledgerhq/hw-app-eth'
 import VueCodeMirror from 'vue-codemirror'
+import Transaction from 'ethereumjs-tx'
 
 Vue.use(BootstrapVue)
 Vue.use(VueRouter)
@@ -252,6 +254,103 @@ Vue.prototype.detectNetwork = async function (provider) {
     }
 }
 
+/**
+ * @param object txParams
+ * @return object signature {r, s, v}
+ */
+Vue.prototype.signTransaction = async function (txParams) {
+    try {
+        const path = localStorage.get('hdDerivationPath')
+        const provider = Vue.prototype.NetworkProvider
+        let signature
+        if (provider === 'ledger') {
+            const config = await getConfig()
+            const chainConfig = config.blockchain
+            const rawTx = new Transaction(txParams)
+            rawTx.v = Buffer.from([chainConfig.networkId])
+            const serializedRawTx = rawTx.serialize().toString('hex')
+            signature = await Vue.prototype.appEth.signTransaction(
+                path,
+                serializedRawTx
+            )
+        }
+        if (provider === 'trezor') {
+            console.log(txParams)
+            const result = await TrezorConnect.ethereumSignTransaction({
+                path,
+                transaction: txParams
+            })
+            signature = result.payload
+        }
+        return signature
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+/**
+ * @param object txParams
+ * @param object signature {r,s,v}
+ * @return transactionReceipt
+ */
+Vue.prototype.sendSignedTransaction = async function (txParams, signature) {
+    // "hexify" the keys
+    Object.keys(signature).map((key, _) => {
+        if (signature[key].startsWith('0x')) {
+            return signature[key]
+        } else signature[key] = '0x' + signature[key]
+    })
+    let txObj = Object.assign({}, txParams, signature)
+    let tx = new Transaction(txObj)
+    let serializedTx = '0x' + tx.serialize().toString('hex')
+    // web3 v0.2, method name is sendRawTransaction
+    // You are using web3 v1.0. The method was renamed to sendSignedTransaction.
+    let rs = await Vue.prototype.web3.eth.sendSignedTransaction(
+        serializedTx
+    )
+    console.log(rs)
+    if (!rs.tx && rs.transactionHash) {
+        rs.tx = rs.transactionHash
+    }
+    return rs
+}
+
+Vue.prototype.signMessage = async function (message) {
+    try {
+        const path = localStorage.get('hdDerivationPath')
+        const provider = Vue.prototype.NetworkProvider
+        let result
+        switch (provider) {
+        case 'ledger':
+            const signature = await Vue.prototype.appEth.signPersonalMessage(
+                path,
+                Buffer.from(message).toString('hex')
+            )
+            let v = signature['v'] - 27
+            v = v.toString(16)
+            if (v.length < 2) {
+                v = '0' + v
+            }
+            result = '0x' + signature['r'] + signature['s'] + v
+            break
+        case 'trezor':
+            const sig = await TrezorConnect.ethereumSignMessage({
+                path,
+                message
+            })
+            result = '0x' + sig.payload.signature || ''
+            break
+        default:
+            break
+        }
+        return result
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
 Vue.prototype.formatCurrencySymbol = function (number) {
     let unit = this.getCurrencySymbol()
 
@@ -286,7 +385,8 @@ const router = new VueRouter({
         { path: '/', component: Home },
         { path: '/login', component: Login },
         { path: '/confirm', component: Confirmation, name: 'Confirmation' },
-        { path: '/create', component: CreateToken }
+        { path: '/create', component: CreateToken },
+        { path: '/verify', component: VerifyContract }
     ]
 })
 
