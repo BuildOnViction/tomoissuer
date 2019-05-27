@@ -25,6 +25,11 @@
                                 id="btn-become-candidate"
                                 to="/login"
                                 variant="primary">Login</b-button>
+                            <b-button
+                                v-if="isTomonet"
+                                id="btn-become-candidate"
+                                to="/create"
+                                variant="primary">Create Token</b-button>
                             <b-dropdown
                                 v-if="isTomonet"
                                 class="dd-setting ml-1"
