@@ -6,6 +6,7 @@ import Home from './components/Home.vue'
 import Confirmation from './components/applying/Confirmation.vue'
 import CreateToken from './components/applying/CreateToken.vue'
 import VerifyContract from './components/applying/VerifyContract.vue'
+import TokenDetail from './components/Token.vue'
 import './utils/codemirror'
 
 import Web3 from 'web3'
@@ -379,6 +380,13 @@ Vue.prototype.truncate = (fullStr, strLen) => {
            fullStr.substr(fullStr.length - backChars)
 }
 
+Vue.prototype.formatNumber = function (number) {
+    let seps = (number || 0).toString().split('.')
+    seps[0] = seps[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+    return seps.join('.')
+}
+
 const router = new VueRouter({
     mode: 'history',
     routes: [
@@ -386,7 +394,8 @@ const router = new VueRouter({
         { path: '/login', component: Login },
         { path: '/confirm', component: Confirmation, name: 'Confirmation' },
         { path: '/create', component: CreateToken },
-        { path: '/verify', component: VerifyContract }
+        { path: '/verify', component: VerifyContract },
+        { path: '/token/:address', component: TokenDetail }
     ]
 })
 

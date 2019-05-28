@@ -65,7 +65,7 @@
                             <div class="tomo-footer__copyright">
                                 TomoIssuer &copy; {{ (new Date()).getFullYear() }} -
                                 <a
-                                    :href="`https://github.com/tomochain/tomomaster/releases/tag/v${version}`"
+                                    :href="`https://github.com/tomochain/tomoissuer/releases/tag/v${version}`"
                                     class="version-tag">
                                     v{{ version }}</a>
                             </div>

@@ -48,6 +48,7 @@
     "swagger-ui-express": "^4.0.2",
     "trezor-connect": "^7.0.3",
     "truffle-hdwallet-provider": "^1.0.9",
+    "url-join": "^4.0.0",
     "vue-codemirror": "^4.0.6",
     "vue-toasted": "^1.1.26",
     "vuex": "^3.1.1",

@@ -1,6 +1,6 @@
 'use strict'
 const express = require('express')
-// const config = require('config')
+const config = require('config')
 const router = express.Router()
 const { check, validationResult } = require('express-validator/check')
 const fs = require('fs')
@@ -9,6 +9,7 @@ const solc = require('solc')
 const axios = require('axios')
 const web3 = require('../models/blockchain/web3')
 const md5 = require('blueimp-md5')
+const urljoin = require('url-join')
 
 function createContract (name) {
     try {
@@ -131,6 +132,18 @@ router.post('/verifyContract', [
             }
             return res.send('Verified!')
         })
+    } catch (error) {
+        return next(error)
+    }
+})
+
+router.get('/:token', [], async (req, res, next) => {
+    try {
+        const token = req.params.token || ''
+        const { data } = await axios.get(
+            urljoin(config.get('tomoscanUrl'), `/api/tokens/${token}`)
+        )
+        return res.json(data)
     } catch (error) {
         return next(error)
     }
