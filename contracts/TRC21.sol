@@ -282,4 +282,9 @@ contract MyTRC21 is TRC21 {
         return _decimals;
     }
 
+    function setMinFee(uint256 value) public {
+        require(msg.sender == issuer());
+        _changeMinFee(value);
+    }
+
 }
