@@ -9,6 +9,7 @@
     "cors": [
         "https://swagger.tomochain.com"
     ],
+    "tomoscanUrl": "https://scan.tomochain.com",
     "blockchain": {
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",
