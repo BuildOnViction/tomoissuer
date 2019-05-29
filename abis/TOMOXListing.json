@@ -10,7 +10,8 @@
       ],
       "payable": false,
       "stateMutability": "nonpayable",
-      "type": "constructor"
+      "type": "constructor",
+      "signature": "constructor"
     },
     {
       "constant": true,
@@ -24,7 +25,8 @@
       ],
       "payable": false,
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "signature": "0x64fd173b"
     },
     {
       "constant": true,
@@ -38,7 +40,8 @@
       ],
       "payable": false,
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "signature": "0x9d63848a"
     },
     {
       "constant": true,
@@ -57,7 +60,8 @@
       ],
       "payable": false,
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "signature": "0xa3ff31b5"
     },
     {
       "constant": false,
@@ -71,7 +75,8 @@
       "outputs": [],
       "payable": true,
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "signature": "0x1612ec4f"
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.4.26+commit.4563c3fc\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"token\",\"type\":\"address\"}],\"name\":\"applyToken\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"minApply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"tokens\",\"outputs\":[{\"name\":\"\",\"type\":\"address[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"token\",\"type\":\"address\"}],\"name\":\"getTokenStatus\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"value\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/vagrant/projects/tomoissuer/contracts/TOMOXListing.sol\":\"TOMOXListing\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/vagrant/projects/tomoissuer/contracts/TOMOXListing.sol\":{\"keccak256\":\"0xbb80a276d72f0c4ef8ddce2410b834ef446aad63136a8a4e2dba0a3f77c1b592\",\"urls\":[\"bzzr://0cc053c2c4b9832bc2138cc3678bb3e21925452eec823969a840c3a0c621cc53\"]}},\"version\":1}",
@@ -2841,9 +2846,16 @@
     "name": "solc",
     "version": "0.4.26+commit.4563c3fc.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "89": {
+      "events": {},
+      "links": {},
+      "address": "0xBEf15F9CaD8e5aF571442eA25A720aE11Be51890",
+      "transactionHash": "0x3a09663616bf04dc4d412480701d1cf73f853995a686ce7e716f635b94455de3"
+    }
+  },
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-05-15T08:20:46.152Z",
+  "updatedAt": "2019-05-29T10:01:55.702Z",
   "devdoc": {
     "methods": {}
   },
