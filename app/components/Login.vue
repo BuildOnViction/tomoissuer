@@ -7,7 +7,7 @@
             class="m-0">
             <b-card
                 v-if="!address"
-                :class="'col-12 col-md-8 col-lg-7 tomo-card tomo-card--lighter p-0'
+                :class="'col-12 col-md-8 col-lg-7 p-0'
                 + (loading ? ' tomo-loading' : '')">
                 <h4 class="color-white tomo-card__title tomo-card__title--big">Login</h4>
                 <b-form

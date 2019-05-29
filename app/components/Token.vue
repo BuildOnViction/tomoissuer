@@ -1,20 +1,19 @@
 <template>
     <div class="container container--wide">
-        <div class="card tomo-card tomo-card--token">
-            <div class="tomo-card__header">
-                <h2 class="tomo-card__headline">{{ tokenName }}&nbsp;</h2>
+        <div>
+            <div>
+                <h2>{{ tokenName }}&nbsp;</h2>
                 <i
                     v-if="moreInfo"
                     class="fa fa-check-circle token-status"
                     aria-hidden="true"/>
                 <h6 class="mb-0">{{ symbol }}</h6>
             </div>
-            <div class="tomo-card__body">
+            <div>
                 <b-row>
                     <b-col md="6">
                         <table
-                            v-if="token"
-                            class="tomo-card__table">
+                            v-if="token">
                             <tbody>
                                 <tr>
                                     <td>Total Supply</td>
@@ -34,8 +33,7 @@
                     </b-col>
                     <b-col md="6">
                         <table
-                            v-if="token"
-                            class="tomo-card__table">
+                            v-if="token">
                             <tbody>
                                 <tr>
                                     <td>Contract</td>
@@ -49,7 +47,7 @@
                                 </tr>
                                 <tr>
                                     <td>Type</td>
-                                    <td>{{ token.type.toUpperCase() }}</td>
+                                    <td>{{ token.type ? token.type.toUpperCase() : token.type }}</td>
                                 </tr>
                             </tbody>
                         </table>
