@@ -47,6 +47,7 @@
     "store": "^2.0.12",
     "swagger-ui-express": "^4.0.2",
     "trezor-connect": "^7.0.3",
+    "truffle-contract": "^4.0.17",
     "truffle-hdwallet-provider": "^1.0.9",
     "url-join": "^4.0.0",
     "vue-codemirror": "^4.0.6",

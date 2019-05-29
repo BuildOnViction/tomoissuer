@@ -10,6 +10,8 @@ import TokenDetail from './components/Token.vue'
 import AccountView from './components/accounts/View.vue'
 import './utils/codemirror'
 
+import TRC21Issuer from '../abis/TRC21Issuer.json'
+
 import Web3 from 'web3'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -24,6 +26,7 @@ import Transport from '@ledgerhq/hw-transport-u2f' // for browser
 import Eth from '@ledgerhq/hw-app-eth'
 import VueCodeMirror from 'vue-codemirror'
 import Transaction from 'ethereumjs-tx'
+import * as contract from 'truffle-contract'
 
 Vue.use(BootstrapVue)
 Vue.use(VueRouter)
@@ -67,13 +70,14 @@ const store = new Vuex.Store({
         walletLoggedIn: null
     }
 })
-
+Vue.prototype.TRC21Issuer = contract(TRC21Issuer)
 Vue.prototype.isElectron = !!(window && window.process && window.process.type)
 
 Vue.prototype.setupProvider = function (provider, wjs) {
     Vue.prototype.NetworkProvider = provider
     if (wjs instanceof Web3) {
         Vue.prototype.web3 = wjs
+        Vue.prototype.TRC21Issuer.setProvider(wjs.currentProvider)
     }
 }
 
