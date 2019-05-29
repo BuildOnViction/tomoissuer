@@ -42,9 +42,10 @@
                                     <!-- <i class="tm-cog icon-2x"/> -->
                                     Profile
                                 </template>
-                                <b-dropdown-text>
+                                <b-dropdown-item
+                                    :to="'/address/' + account">
                                     {{ truncate(account, 20) }}
-                                </b-dropdown-text>
+                                </b-dropdown-item>
                                 <b-dropdown-divider />
                                 <b-dropdown-item
                                     href="/"
@@ -65,7 +66,7 @@
                             <div class="tomo-footer__copyright">
                                 TomoIssuer &copy; {{ (new Date()).getFullYear() }} -
                                 <a
-                                    :href="`https://github.com/tomochain/tomomaster/releases/tag/v${version}`"
+                                    :href="`https://github.com/tomochain/tomoissuer/releases/tag/v${version}`"
                                     class="version-tag">
                                     v{{ version }}</a>
                             </div>
