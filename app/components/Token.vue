@@ -54,6 +54,40 @@
                     </b-col>
                 </b-row>
             </div>
+            <div
+                v-if="isApplied"
+                class="mt-3">This token is already applied</div>
+            <div
+                v-else
+                class="mt-3">
+                <b-form-group
+                    id="deposite"
+                    label="Deposite"
+                    label-for="deposite">
+                    <b-form-input
+                        id="deposite"
+                        v-model="depositeAmount" />
+                </b-form-group>
+                <b-button
+                    variant="primary"
+                    @click="applyToken">Apply</b-button>
+            </div>
+            <div
+                v-if="loading"
+                class="mt-5">
+                Loading...
+            </div>
+            <div class="mt-5">
+                <b-form-group
+                    v-if="transactionHash"
+                    class="mb-4"
+                    label="Transaction Hash"
+                    label-for="transactionHash">
+                    <b-form-input
+                        v-model="transactionHash"
+                        type="text" />
+                </b-form-group>
+            </div>
         </div>
     </div>
 </template>
@@ -61,6 +95,7 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import axios from 'axios'
+import BigNumber from 'bignumber.js'
 
 export default {
     name: 'App',
@@ -68,13 +103,18 @@ export default {
     mixins: [validationMixin],
     data () {
         return {
+            web3: this.web3,
             address: this.$route.params.address.toLowerCase(),
             token: null,
             tokenName: null,
             symbol: null,
             tokenTxsCount: 0,
             holdersCount: 0,
-            moreInfo: ''
+            moreInfo: '',
+            loading: false,
+            depositeAmount: '',
+            isApplied: false,
+            transactionHash: ''
         }
     },
     validations: {},
@@ -83,8 +123,14 @@ export default {
     updated () {},
     beforeDestroy () {},
     created: async function () {
-        const self = this
-        await self.getTokenDetail()
+        try {
+            const self = this
+            self.getTokenDetail()
+            self.checkApplied()
+        } catch (error) {
+            console.log(error)
+            this.$toasted.show(error, { type :'error' })
+        }
     },
     mounted () {},
     methods: {
@@ -96,6 +142,37 @@ export default {
             self.symbol = data.symbol
             self.tokenTxsCount = data.tokenTxs
             self.holdersCount = data.tokenHolders
+        },
+        async applyToken () {
+            try {
+                this.loading = true
+                const contract = await this.getTRC21IssuerInstance()
+                const txParams = {
+                    from: (await this.getAccount()).toLowerCase(),
+                    value: this.web3.utils.toHex(new BigNumber(this.depositeAmount)
+                        .multipliedBy(10 ** 18).toString(10)),
+                    gasPrice: this.web3.utils.toHex(10000000000000),
+                    gas: this.web3.utils.toHex(40000000),
+                    gasLimit: this.web3.utils.toHex(40000000)
+                }
+                const result = await contract.apply(this.address, txParams)
+                this.transactionHash = result.tx
+                this.loading = false
+            } catch (error) {
+                this.loading = false
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            }
+        },
+        async checkApplied () {
+            const contract = await this.getTRC21IssuerInstance()
+            const result = await contract.tokens()
+            if (result && result.length > 0) {
+                const lowerCaseArr = result.map(m => m.toLowerCase())
+                if (lowerCaseArr.indexOf(this.address) > -1) {
+                    this.isApplied = true
+                }
+            }
         }
     }
 }

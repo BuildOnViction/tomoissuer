@@ -56,7 +56,7 @@ export default {
             minFee: this.$route.query.minFee,
             totalSupply: this.$route.query.totalSupply,
             type: this.$route.query.type,
-            sourceCode: '11',
+            sourceCode: 'Generating Contract...',
             transactionHash: '',
             contractAddress: '',
             account: '',
@@ -64,15 +64,12 @@ export default {
             loading: false
         }
     },
-    async updated () {
-    },
+    async updated () {},
     destroyed () { },
     created: async function () {
         const self = this
-        console.log(this.web3)
         self.account = await self.getAccount()
         await self.createContract()
-        // console.log(self.sourceCode)
     },
     methods: {
         async createContract () {
@@ -166,7 +163,6 @@ export default {
                         nonce: undefined
                     }
                     const signature = await self.signTransaction(dataTx)
-                    console.log(signature)
                     result = await self.sendSignedTransaction(dataTx, signature)
                     break
                 default:
@@ -196,7 +192,6 @@ export default {
                 //     self.contractAddress = newContractInstance.options.address
                 // }).catch(e => console.log())
                 if (result) {
-                    console.log('OK', result)
                     self.contractAddress = result.options ? result.options.address : 'nothing'
                     self.$toasted.show('Successfull')
                     self.loading = false
