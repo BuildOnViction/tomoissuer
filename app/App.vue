@@ -124,7 +124,10 @@ export default {
                     if (self.account) {
                         self.isTomonet = true
                     }
-                } catch (error) {}
+                } catch (error) {
+                    console.log(error)
+                    self.$toasted.show(error, { type: 'error' })
+                }
             }, 0)
         },
         signOut () {

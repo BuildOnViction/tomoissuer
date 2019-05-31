@@ -88,7 +88,6 @@ export default {
     created: async function () {},
     methods: {
         validate: function () {
-            console.log(111)
             this.confirm()
         },
         confirm () {

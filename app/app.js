@@ -10,7 +10,7 @@ import TokenDetail from './components/Token.vue'
 import AccountView from './components/accounts/View.vue'
 import './utils/codemirror'
 
-import TRC21Issuer from '../abis/TRC21Issuer.json'
+import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
 
 import Web3 from 'web3'
 import BootstrapVue from 'bootstrap-vue'
@@ -70,14 +70,14 @@ const store = new Vuex.Store({
         walletLoggedIn: null
     }
 })
-Vue.prototype.TRC21Issuer = contract(TRC21Issuer)
 Vue.prototype.isElectron = !!(window && window.process && window.process.type)
 
 Vue.prototype.setupProvider = function (provider, wjs) {
     Vue.prototype.NetworkProvider = provider
+    Vue.prototype.TRC21Issuer = contract(TRC21IssuerAritfacts)
     if (wjs instanceof Web3) {
         Vue.prototype.web3 = wjs
-        Vue.prototype.TRC21Issuer.setProvider(wjs.currentProvider)
+        Vue.prototype.TRC21Issuer.setProvider(wjs.currentProvider.connection)
     }
 }
 
@@ -254,7 +254,7 @@ Vue.prototype.detectNetwork = async function (provider) {
                 break
             }
         }
-        await this.setupProvider(provider, await wjs)
+        this.setupProvider(provider, await wjs)
     } catch (error) {
         console.log(error)
     }
@@ -281,7 +281,6 @@ Vue.prototype.signTransaction = async function (txParams) {
             )
         }
         if (provider === 'trezor') {
-            console.log(txParams)
             const result = await TrezorConnect.ethereumSignTransaction({
                 path,
                 transaction: txParams
@@ -408,6 +407,24 @@ Vue.prototype.serializeQuery = function (params, prefix) {
     })
 
     return [].concat.apply([], query).join('&')
+}
+
+/**
+ * @return TomoValidator contract instance
+ */
+Vue.prototype.getTRC21IssuerInstance = async function () {
+    // workaround for web3 version 1.0.0
+    // @link https://github.com/trufflesuite/truffle-contract/issues/57#issuecomment-331300494
+    if (typeof Vue.prototype.TRC21Issuer.currentProvider.sendAsync !== 'function') {
+        Vue.prototype.TRC21Issuer.currentProvider.sendAsync = function () {
+            return Vue.prototype.TRC21Issuer.currentProvider.send.apply(
+                Vue.prototype.TRC21Issuer.currentProvider,
+                arguments
+            )
+        }
+    }
+    let instance = await Vue.prototype.TRC21Issuer.deployed()
+    return instance
 }
 
 const router = new VueRouter({
