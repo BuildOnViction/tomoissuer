@@ -60,17 +60,27 @@
             <div
                 v-else
                 class="mt-3">
-                <b-form-group
-                    id="deposite"
-                    label="Deposite"
-                    label-for="deposite">
-                    <b-form-input
+                <b-form
+                    novalidate
+                    @submit.prevent="validate()">
+                    <b-form-group
                         id="deposite"
-                        v-model="depositeAmount" />
-                </b-form-group>
-                <b-button
-                    variant="primary"
-                    @click="applyToken">Apply</b-button>
+                        label="Deposite"
+                        label-for="deposite">
+                        <b-form-input
+                            id="deposite"
+                            v-model="depositeAmount" />
+                        <span
+                            v-if="$v.depositeAmount.$dirty && !$v.depositeAmount.minValue"
+                            class="text-danger">Minimum of depositing is 10 TOMO</span>
+                        <span
+                            v-if="$v.depositeAmount.$dirty && !$v.depositeAmount.required"
+                            class="text-danger">Depositing amount is required</span>
+                    </b-form-group>
+                    <b-button
+                        type="submit"
+                        variant="primary">Apply</b-button>
+                </b-form>
             </div>
             <div
                 v-if="loading"
@@ -96,6 +106,7 @@
 import { validationMixin } from 'vuelidate'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
+import { required, minValue } from 'vuelidate/lib/validators'
 
 export default {
     name: 'App',
@@ -117,7 +128,12 @@ export default {
             transactionHash: ''
         }
     },
-    validations: {},
+    validations: {
+        depositeAmount: {
+            required,
+            minValue: minValue(10)
+        }
+    },
     computed: {},
     watch: {},
     updated () {},
@@ -172,6 +188,13 @@ export default {
                 if (lowerCaseArr.indexOf(this.address) > -1) {
                     this.isApplied = true
                 }
+            }
+        },
+        validate () {
+            this.$v.$touch()
+
+            if (!this.$v.$invalid) {
+                this.applyToken()
             }
         }
     }
