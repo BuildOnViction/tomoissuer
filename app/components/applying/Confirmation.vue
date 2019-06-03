@@ -122,7 +122,7 @@ export default {
                 switch (self.provider) {
                 case 'custom':
                 case 'metamask':
-                    result = await contract.deploy({
+                    await contract.deploy({
                         arguments: [
                             self.tokenName,
                             self.tokenSymbol,
@@ -135,7 +135,18 @@ export default {
                         gas: web3.utils.toHex(40000000),
                         gasPrice: web3.utils.toHex(10000000000000)
                     })
-                        .on('transactionHash', (txHash) => { self.transactionHash = txHash })
+                        .on('transactionHash', async (txHash) => {
+                            self.transactionHash = txHash
+                            let check = true
+                            while (check) {
+                                const receipt = await web3.eth.getTransactionReceipt(txHash)
+                                if (receipt) {
+                                    self.contractAddress = receipt.contractAddress
+                                    self.loading = false
+                                    check = false
+                                }
+                            }
+                        })
                     break
                 case 'ledger':
                 case 'trezor':
@@ -164,35 +175,13 @@ export default {
                     }
                     const signature = await self.signTransaction(dataTx)
                     result = await self.sendSignedTransaction(dataTx, signature)
+
+                    console.log(result)
                     break
                 default:
                     break
                 }
-
-                // const result = await contract.deploy({
-                //     arguments: [
-                //         self.tokenName,
-                //         self.tokenSymbol,
-                //         self.decimals,
-                //         (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
-                //         (new BigNumber(1).multipliedBy(1e+18)).toString(10)
-                //     ]
-                // }).send({
-                //     from: self.account,
-                //     gas: web3.utils.toHex(40000000),
-                //     gasPrice: web3.utils.toHex(10000000000000)
-                // })
-                // .on('error', (error) => {
-                //     self.$toasted.show(
-                //         error, { type : 'error' }
-                //     )
-                // })
-                // .on('transactionHash', (txHash) => { self.txHash = txHash })
-                // .then((newContractInstance) => {
-                //     self.contractAddress = newContractInstance.options.address
-                // }).catch(e => console.log())
-                if (result) {
-                    self.contractAddress = result.options ? result.options.address : 'nothing'
+                if (self.transactionHash && self.contractAddress) {
                     self.$toasted.show('Successfull')
                     self.loading = false
                 }

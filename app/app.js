@@ -254,7 +254,7 @@ Vue.prototype.detectNetwork = async function (provider) {
                 break
             }
         }
-        this.setupProvider(provider, await wjs)
+        this.setupProvider(provider, wjs)
     } catch (error) {
         console.log(error)
     }
