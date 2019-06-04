@@ -14,7 +14,8 @@
     "client-dev": "cross-env NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --port 3000",
     "build": "cross-env NODE_ENV=production webpack -p --progress --hide-modules",
     "lint": "eslint --cache ./ --ext .vue --ext .js",
-    "lint-fix": "eslint --cache ./ --ext .vue --ext .js --fix"
+    "lint-fix": "eslint --cache ./ --ext .vue --ext .js --fix",
+    "crawl-dev": "./node_modules/.bin/nodemon crawl.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +30,7 @@
   "dependencies": {
     "@ledgerhq/hw-app-eth": "^4.56.0",
     "@ledgerhq/hw-transport-u2f": "^4.56.0",
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "bignumber.js": "^8.1.1",
     "bip39": "^3.0.2",
     "blueimp-md5": "^2.10.0",
@@ -42,6 +43,7 @@
     "express-validator": "^5.3.1",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.11",
+    "mongoose": "^5.5.12",
     "morgan": "^1.9.1",
     "solc": "^0.4.25",
     "store": "^2.0.12",
