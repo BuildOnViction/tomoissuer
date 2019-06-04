@@ -14,7 +14,7 @@
                     <option
                         value="trc20">TRC20</option>
                     <option
-                        value="trc21">TRC21</option>
+                        value="trc721">TRC721</option>
                 </b-form-select>
             </b-form-group>
             <b-form-group

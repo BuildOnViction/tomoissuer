@@ -28,7 +28,7 @@ router.post('/createToken', [
     check('decimals').exists().withMessage("'decimal' is required"),
     check('totalSupply').exists().withMessage("'totalSupply' is required"),
     check('type').exists().withMessage("'type' is required")
-        .isIn(['trc20', 'trc21']).withMessage("'type' should be 'trc20' or 'trc21'"),
+        .isIn(['trc20', 'trc721']).withMessage("'type' should be 'trc20' or 'trc721'"),
     check('minFee').isFloat({ min: 0 }).exists().withMessage("'minFee' is required")
 ], async function (req, res, next) {
     const errors = validationResult(req)
