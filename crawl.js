@@ -58,7 +58,8 @@ async function watchIssuer (blockNumber) {
         logger.info('Issuer crawling tokens from block %s', blockNumber)
 
         // const blk = await web3.eth.getBlock(4783249)
-        web3.eth.getBlock(blockNumber).then(async blk => {
+        const blk = await web3.eth.getBlock(blockNumber)
+        if (blk) {
             const txes = blk.transactions
             if (txes && txes.length > 0) {
                 const map = txes.map(async t => {
@@ -99,7 +100,7 @@ async function watchIssuer (blockNumber) {
                                 token.totalSupplyNumber = new BigNumber(token.totalSupply).div(10 ** parseInt(token.decimals)).toNumber()
                                 // type of token
                                 if (minFee && minFee !== '0x') {
-                                    token.type = 'trc721'
+                                    token.type = 'trc21'
                                 } else { token.type = 'trc20' }
                                 token.contractCreator = receipt.from
 
@@ -113,7 +114,7 @@ async function watchIssuer (blockNumber) {
                 })
                 return Promise.all(map)
             }
-        }).catch(e => console.log(e))
+        }
     } catch (error) {
         logger.error('watchIssuer error %s', error)
     }
