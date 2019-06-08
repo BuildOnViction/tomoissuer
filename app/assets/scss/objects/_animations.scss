@@ -1,0 +1,284 @@
+/* Fade Out Up & Down small for site-menu */
+@-webkit-keyframes fadeOutDownSmall {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, 10px, 0);
+    }
+}
+
+@keyframes fadeOutDownSmall {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(0, 10px, 0);
+    }
+}
+
+.fadeOutDownSmall {
+    animation-name: fadeOutDownSmall;
+}
+
+@-webkit-keyframes fadeInUpSmall {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 10px, 0);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInUpSmall {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 10px, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.fadeInUpSmall {
+    animation-name: fadeInUpSmall;
+}
+
+@keyframes roadmapGlowing {
+    0% {box-shadow: 0 0 -10px #ffb567;}
+    40% {box-shadow: 0 0 20px #ffb567;}
+    60% {box-shadow: 0 0 20px #ffb567;}
+    100% {box-shadow: 0 0 -10px #ffb567;}
+}
+
+@-webkit-keyframes roadmapAnimation {
+    0%{background-position:43% 0%}
+    50%{background-position:58% 100%}
+    100%{background-position:43% 0%}
+}
+@-moz-keyframes roadmapAnimation {
+    0%{background-position:43% 0%}
+    50%{background-position:58% 100%}
+    100%{background-position:43% 0%}
+}
+@keyframes roadmapAnimation {
+    0%{background-position:43% 0%}
+    50%{background-position:58% 100%}
+    100%{background-position:43% 0%}
+}
+
+@-webkit-keyframes sliderButtonAnimation {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes sliderButtonAnimation {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes sliderButtonAnimation {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+/* Slide in for team meberm info */
+@-webkit-keyframes team-member-info-slide-in {
+
+    0% {
+        -webkit-transform: translate3d(-40px, 0, 0);
+    }
+
+    100% {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+@-moz-keyframes team-member-info-slide-in {
+
+    0% {
+        -moz-transform: translate3d(-40px, 0, 0);
+    }
+
+    100% {
+        -moz-transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes team-member-info-slide-in {
+
+    0% {
+        -webkit-transform: translate3d(-40px, 0, 0);
+        -moz-transform: translate3d(-40px, 0, 0);
+        -ms-transform: translate3d(-40px, 0, 0);
+        -o-transform: translate3d(-40px, 0, 0);
+        transform: translate3d(-40px, 0, 0);
+    }
+
+    100% {
+        -webkit-transform: translate3d(0, 0, 0);
+        -moz-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+        -o-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes glowingColor1 {
+    0% { box-shadow: 0 0 22px 4px rgba(52, 128, 153, 0.3); }
+    40% { box-shadow: 0 0 22px 8px rgba(52, 128, 153, 0.3); }
+    60% { box-shadow: 0 0 22px 8px rgba(52, 128, 153, 0.3); }
+    100% { box-shadow: 0 0 22px 4px rgba(52, 128, 153, 0.3); }
+}
+
+@keyframes glowingColor2 {
+    0% { box-shadow: 0 0 15px 4px rgba(255, 149, 187, 0.4); }
+    40% { box-shadow: 0 0 15px 8px rgba(255, 149, 187, 0.4); }
+    60% { box-shadow: 0 0 15px 8px rgba(255, 149, 187, 0.4); }
+    100% { box-shadow: 0 0 15px 4px rgba(255, 149, 187, 0.4); }
+}
+
+@keyframes glowingColor3 {
+    0% { box-shadow: 0 0 15px 4px rgba(255, 181, 103, 0.4); }
+    40% { box-shadow: 0 0 15px 8px rgba(255, 181, 103, 0.4); }
+    60% { box-shadow: 0 0 15px 8px rgba(255, 181, 103, 0.4); }
+    100% { box-shadow: 0 0 15px 4px rgba(255, 181, 103, 0.4); }
+}
+
+@keyframes glowingColor4 {
+    0% { box-shadow: 0 0 23px 4px rgba(98, 208, 183, 0.4); }
+    40% { box-shadow: 0 0 23px 8px rgba(98, 208, 183, 0.4); }
+    60% { box-shadow: 0 0 23px 8px rgba(98, 208, 183, 0.4); }
+    100% { box-shadow: 0 0 23px 4px rgba(98, 208, 183, 0.4); }
+}
+
+@keyframes glowingColor5 {
+    0% { box-shadow: 0 0 22px 4px rgba(134, 128, 235, 0.4); }
+    40% { box-shadow: 0 0 22px 8px rgba(134, 128, 235, 0.4); }
+    60% { box-shadow: 0 0 22px 8px rgba(134, 128, 235, 0.4); }
+    100% { box-shadow: 0 0 22px 4px rgba(134, 128, 235, 0.4); }
+}
+
+@keyframes glowingColor6 {
+    0% { box-shadow: 0 0 23px 2px rgba(255, 181, 103, 0.4); }
+    40% { box-shadow: 0 0 23px 4px rgba(255, 181, 103, 0.4); }
+    60% { box-shadow: 0 0 23px 4px rgba(255, 181, 103, 0.4); }
+    100% { box-shadow: 0 0 23px 2px rgba(255, 181, 103, 0.4); }
+}
+
+@keyframes glowingColor7 {
+    0% { box-shadow: 0 0 22px 2px rgba(255, 149, 187, 0.4); }
+    40% { box-shadow: 0 0 22px 4px rgba(255, 149, 187, 0.4); }
+    60% { box-shadow: 0 0 22px 4px rgba(255, 149, 187, 0.4); }
+    100% { box-shadow: 0 0 22px 2px rgba(255, 149, 187, 0.4); }
+}
+
+@keyframes glowingColor8 {
+    0% { box-shadow: 0 0 22px 3px rgba(67, 173, 250, 0.4); }
+    40% { box-shadow: 0 0 22px 6px rgba(67, 173, 250, 0.4); }
+    60% { box-shadow: 0 0 22px 6px rgba(67, 173, 250, 0.4); }
+    100% { box-shadow: 0 0 22px 3px rgba(67, 173, 250, 0.4); }
+}
+
+@keyframes translate1 {
+    0% { transform: translate(10px, 10px); }
+    20% { transform: translate(40px, 40px); }
+    40% { transform: translate(60px, 30px); }
+    60% { transform: translate(40px, 40px); }
+    100% { transform: translate(10px, 10px); }
+}
+
+@keyframes translate2 {
+    0% { transform: translate(10px, 10px); }
+    20% { transform: translate(10px, -40px); }
+    40% { transform: translate(60px, -30px); }
+    60% { transform: translate(60px, -40px); }
+    100% { transform: translate(10px, 10px); }
+}
+
+@keyframes translate3 {
+    0% { transform: translate(10px, 10px); }
+    20% { transform: translate(120px, 40px); }
+    40% { transform: translate(140px, 10px); }
+    60% { transform: translate(160px, 40px); }
+    100% { transform: translate(10px, 10px); }
+}
+
+@keyframes translate4 {
+    0% { transform: translate(10px, -10px); }
+    20% { transform: translate(20px, -40px); }
+    40% { transform: translate(40px, -10px); }
+    60% { transform: translate(60px, -40px); }
+    100% { transform: translate(10px, -10px); }
+}
+
+@keyframes scale1 {
+	0%   { transform: translateY(-50%) scale(.5); }
+	10%  { opacity: 1; transform: translateY(-50%) scale(.5); }
+	100% { opacity: 0; transform: translateY(-50%) scale(1); }
+}
+
+@keyframes smokeL {
+	0%   { transform: scale(.2) translate(0, 0); }
+	10%  { opacity: 1; transform: scale(.2) translate(0, -5px); }
+	100% { opacity: 0; transform: scale(1) translate(60px, -130px); }
+}
+
+@keyframes smokeR {
+	0%   { transform: scale(.2) translate(0, 0); }
+	10%  { opacity: 1; transform: scale(.2) translate(0, -5px); }
+	100% { opacity: 0; transform: scale(1) translate(80px, -130px); }
+}
+
+@keyframes smokeR1 {
+	0%   { transform: scale(.2) translate(0, 0); }
+	10%  { opacity: 1; transform: scale(.2) translate(0, -5px); }
+	100% { opacity: 0; transform: scale(1) translate(120px, -70px); }
+}
+
+@keyframes smokeR2 {
+	0%   { transform: scale(.2) translate(0, 0); }
+	10%  { opacity: 1; transform: scale(.2) translate(0, -5px); }
+	100% { opacity: 0; transform: scale(1) translate(100px, -100px); }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+
+    @keyframes smokeR1 {
+        0%   { transform: scale(.5) translate(0, 0); }
+        10%  { opacity: 1; transform: scale(.5) translate(0, -5px); }
+        100% { opacity: 0; transform: scale(1) translate(100px, -70px); }
+    }
+
+    @keyframes smokeR2 {
+        0%   { transform: scale(.5) translate(0, 0); }
+        10%  { opacity: 1; transform: scale(.5) translate(0, -5px); }
+        100% { opacity: 0; transform: scale(1) translate(80px, -100px); }
+    }
+}
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+
+    @keyframes smokeR1 {
+        0%   { transform: scale(.5) translate(0, 0); }
+        10%  { opacity: 1; transform: scale(.5) translate(0, -5px); }
+        100% { opacity: 0; transform: scale(1) translate(200px, -70px); }
+    }
+
+    @keyframes smokeR2 {
+        0%   { transform: scale(.5) translate(0, 0); }
+        10%  { opacity: 1; transform: scale(.5) translate(0, -5px); }
+        100% { opacity: 0; transform: scale(1) translate(180px, -100px); }
+    }
+}
