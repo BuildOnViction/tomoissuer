@@ -1,24 +1,24 @@
-a {
-    color: $color__link;
+// a {
+//     color: $color__link;
 
-    @extend %transit;
+//     @extend %transit;
 
-	&:visited {
-		color: $color__link-visited;
-    }
-    &:hover {
-        text-decoration: none;
-    }
-	&:hover,
-	&:focus,
-	&:active {
-		color: $color__link-hover;
-	}
-	&:focus {
-		outline: 0;
-	}
-	&:hover,
-	&:active {
-		outline: 0;
-	}
-}
+// 	&:visited {
+// 		color: $color__link-visited;
+//     }
+//     &:hover {
+//         text-decoration: none;
+//     }
+// 	&:hover,
+// 	&:focus,
+// 	&:active {
+// 		color: $color__link-hover;
+// 	}
+// 	&:focus {
+// 		outline: 0;
+// 	}
+// 	&:hover,
+// 	&:active {
+// 		outline: 0;
+// 	}
+// }
