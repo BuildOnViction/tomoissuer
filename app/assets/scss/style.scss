@@ -11,15 +11,6 @@
 --------------------------------------------------------------*/
 
 /*
-SETTINGS FONT
-
-add google font
-================================================
-*/
-@import url('https://fonts.googleapis.com/css?family=Quicksand|Roboto&display=swap');
-
-
-/*
 SETTINGS
 store all variables, config switches, etc.
 Split up into logical sections, the smaller and simpler the better.
@@ -41,4 +32,3 @@ This is where majority of our work takes place and our UI components are often c
 @import 'components/container';
 @import 'components/footer';
 @import 'components/main-content';
-@import 'components/token';

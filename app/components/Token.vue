@@ -2,7 +2,7 @@
     <div class="container container--wide">
         <div>
             <div>
-                <h2 class="tmp-title-one">TIIM (TriipProtocol)</h2>
+                <h2>{{ tokenName }}&nbsp;</h2>
                 <i
                     v-if="moreInfo"
                     class="fa fa-check-circle token-status"
