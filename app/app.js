@@ -77,7 +77,7 @@ Vue.prototype.setupProvider = function (provider, wjs) {
     Vue.prototype.TRC21Issuer = contract(TRC21IssuerAritfacts)
     if (wjs instanceof Web3) {
         Vue.prototype.web3 = wjs
-        Vue.prototype.TRC21Issuer.setProvider(wjs.currentProvider.connection)
+        Vue.prototype.TRC21Issuer.setProvider(wjs.currentProvider.connection || wjs.currentProvider)
     }
 }
 
