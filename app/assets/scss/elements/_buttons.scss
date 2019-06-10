@@ -1,0 +1,38 @@
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+	@include fsz(14);
+	border: 0px;
+	border-radius: 50%;
+	padding: .6em 1em;
+
+	&:active,
+	&:focus {
+		outline: none;
+	}
+}
+
+// Begin style button
+
+.tmp-btn-blue {
+    background: $background-blue;
+
+    @include transit;
+
+    &:hover,
+    .active {
+        background: $background-blue-active;
+    }
+}
+
+.tmp-btn-violet {
+    background: $background-violet;
+
+    @include transit;
+
+    &:hover,
+    &.active {
+        background: $background-violet-active;
+    }
+}
