@@ -3,11 +3,14 @@
         <div class="page-layout">
             <b-navbar
                 toggleable="lg"
-                type="dark"
-                variant="info">
+                type="light"
+                class="tomo-header"
+                variant="white">
                 <section class="container container--wide">
                     <b-navbar-brand to="/">
-                        Logo here
+                        <b-img
+                            src="../app/assets/images/logo-tomoissuer.svg"
+                            alt="logo tomoissuer"/>
                     </b-navbar-brand>
                     <b-navbar-toggle
                         target="nav-collapse"
@@ -15,16 +18,31 @@
                     <b-collapse
                         id="nav-collapse"
                         is-nav>
-                        <!-- Right aligned nav items -->
-                        <b-navbar-nav class="ml-auto ">
-                            TOMOISSUER
-                        </b-navbar-nav>
                         <b-navbar-nav class="ml-auto navbar-buttons">
                             <b-button
+                                id="btn-issuer-new-token"
+                                to="/"
+                                variant="primary">
+                                <i class="tomoissuer-icon-plus"/>
+                                Issue new token
+                            </b-button>
+                            <b-nav-item-dropdown
+                                right>
+                                <template
+                                    slot="button-content">
+                                    <i class="tomoissuer-icon-wallet"/>
+                                    My Wallet
+                                </template>
+                                <b-dropdown-item to="/">EN</b-dropdown-item>
+                                <b-dropdown-item to="/">ES</b-dropdown-item>
+                                <b-dropdown-item to="/">RU</b-dropdown-item>
+                                <b-dropdown-item to="/">FA</b-dropdown-item>
+                            </b-nav-item-dropdown>
+                            <!-- <b-button
                                 v-if="!isTomonet"
                                 id="btn-become-candidate"
                                 to="/login"
-                                variant="primary">Login</b-button>
+                                variant="primary">Login</b-button> -->
                             <b-button
                                 v-if="isTomonet"
                                 id="btn-become-candidate"

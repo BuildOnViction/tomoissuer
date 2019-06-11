@@ -1,22 +1,24 @@
-// html {
-// 	box-sizing: border-box;
-// }
+html {
+	box-sizing: border-box;
+}
 
-// *,
-// *:before,
-// *:after { /* Inherit box-sizing to make it easier to change the property for components that leverage other behavior; see https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
-// 	box-sizing: content-box;
-// }
+*,
+*:before,
+*:after { /* Inherit box-sizing to make it easier to change the property for components that leverage other behavior; see https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+	box-sizing: border-box;
+}
 
-// body {
-//     background-color: #1C2139;
-// }
+body {
+    @include fsz(14);
+    background-color: #F3F6FC;
+    font-family: $font-quicksand;
+}
 
-// img {
-// 	height: auto; /* Make sure images are scaled correctly. */
-// 	max-width: 100%; /* Adhere to container width. */
-// }
+img {
+	height: auto; /* Make sure images are scaled correctly. */
+	max-width: 100%; /* Adhere to container width. */
+}
 
-// figure {
-// 	margin: 1em 0; /* Extra wide images within figure tags don't overflow the content area. */
-// }
+figure {
+	margin: 1em 0; /* Extra wide images within figure tags don't overflow the content area. */
+}

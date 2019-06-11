@@ -6,7 +6,7 @@ optgroup,
 textarea {
 	// color: $color__text-main;
 	// font-family: $font__main;
-	// @include font-size(0.875);
+	// font-size: $baseSize;
 }
 
 p {
@@ -55,7 +55,6 @@ big {
 
 h1, h2, h3, h4, h5, h6 {
     clear: both;
-    color: #ebeaf5;
 }
 
 
@@ -63,7 +62,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .tmp-title-small {
 	@include fsz(10);
-	font-family: $font-roboto;
+	font-family: $font-quicksand;
+	font-weight: normal;
 	&.oranges {
 		color: $color-text-oranges;
 	}
@@ -79,9 +79,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .tmp-title-normal {
-	@include fsz-cha(16,15,14);
-	font-family: $font-roboto;
+	@include fsz(14);
+	font-family: $font-quicksand;
 	color: $color-text-default;
+	font-weight: normal;
 	&.oranges {
 		color: $color-text-oranges;
 	}
