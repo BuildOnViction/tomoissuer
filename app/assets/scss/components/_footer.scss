@@ -1,57 +1,74 @@
 .tomo-footer {
-    margin-bottom: 20px;
-  
-    a {
-      color: #7573a6;
+    @include fsz(12);
+    padding: 15px 0;
+    .row {
+        align-items: flex-end;
     }
-  
-    a:hover {
-      color: #cfcde1;
-    }
-  
-    &__copyright {
-      margin-bottom: 1rem;
-  
-      a {
-        color: #6a8ae8;
-      }
-    }
-  
-    &__social {
-      font-size: 18px;
-    }
-  
-    &__links {
-      margin-top: 1rem;
-    }
-  
-    @include media-breakpoint-up(md) {
-  
-      > .container > .row {
-        align-items: center;
-      }
-  
-      &__copyright {
-        margin-bottom: 0.5rem;
-      }
-  
-      &__social {
-        text-align: right;
-        font-size: 20px;
-      }
-    }
-  }
-  
-  .footer-right {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    a {
-      color: #3498db;
-      margin-top: 5px;
-    }
-  }
-  
-  .footer-center {
-    text-align: center;
-  }
+    .tomo-meta-links {
+        padding-top: 15px;
+        ul {
+            li {
+                display: inline-block;
+                padding: 0px 25px;
+                position: relative;
+                &::after {
+                    content: "";
+                    background: $color-text-gray;
+                    width: 1px;
+                    height: 15px;
+                    position: absolute;
+                    right: 0;
+                    margin-top: 4px;
+                }
+                &:first-child {
+                    padding-left: 0;
+                }
+                &:last-child {
+                    padding-right: 0;
+                    &::after {
+                        display: none;
+                    }
+                }
+                a {
+                    color: $color-text-gray;
+                    &:hover {
+                        color: $color-text-violet;
+                    }
+                }
+            }
+        }
+    }//tomo-meta-links
+    .tomo-social {
+        padding-top: 15px;
+        ul {
+            text-align: right;
+            @include media-breakpoint-down(md) {
+                text-align: center;
+            }
+            li {
+                display: inline-block;
+                padding: 3px;
+                a {
+                    background: $background-white;
+                    border-radius: 8px;
+                    box-shadow: 0 10px 20px 0 rgba(23, 21, 48, 0.02);
+                    color: $color-text-gray;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 30px;
+                    height: 30px;
+                    i {
+                        @include transit();
+                        opacity: .5;
+                    }
+                    &:hover {
+                        i {
+                            opacity: 1;;
+                        }
+                    }
+                }
+            }
+        }
+    }//tomo-social
+}

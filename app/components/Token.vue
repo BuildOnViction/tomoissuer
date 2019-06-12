@@ -8,7 +8,9 @@
                     class="fa fa-check-circle token-status"
                     aria-hidden="true"/>
                 <b-row>
-                    ds
+                    <b-col>
+                        sdsd
+                    </b-col>
                 </b-row>
             </div>
         </div><!-- main-box-header -->

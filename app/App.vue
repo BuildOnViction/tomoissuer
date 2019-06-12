@@ -67,12 +67,32 @@
                 <div class="container container-tomochain">
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="tomo-footer__copyright">
+                            <div class="tomo-copyright">
                                 TomoIssuer &copy; {{ (new Date()).getFullYear() }} -
                                 <a
                                     :href="`https://github.com/tomochain/tomoissuer/releases/tag/v${version}`"
                                     class="version-tag">
                                     v{{ version }}</a>
+                            </div>
+                            <div class="tomo-meta-links">
+                                <ul>
+                                    <li><a href="#">Need help?</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">Terms of Service</a></li>
+                                    <li><a href="#">API Documentation</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="tomo-social">
+                                <ul>
+                                    <li><a href="#"><i class="tomoissuer-icon-facebook"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-twiter"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-telegram"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-github"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-linkedin"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-email"/></a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
