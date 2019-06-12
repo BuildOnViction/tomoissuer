@@ -6,59 +6,40 @@
                 type="light"
                 class="tomo-header"
                 variant="white">
-                <section class="container container--wide">
+                <section class="container container-tomochain">
                     <b-navbar-brand to="/">
                         <b-img
                             src="../app/assets/images/logo-tomoissuer.svg"
                             alt="logo tomoissuer"/>
                     </b-navbar-brand>
+                    <!-- button menu SP -->
                     <b-navbar-toggle
                         target="nav-collapse"
                         class="btn-menu-sp"/>
+                    <!-- /button menu SP -->
                     <b-collapse
                         id="nav-collapse"
                         is-nav>
                         <b-navbar-nav class="ml-auto navbar-buttons">
-                            <b-button
-                                id="btn-issuer-new-token"
-                                to="/"
+                            <b-nav-item
+                                v-if="isTomonet"
+                                class="tmp-btn-blue"
+                                to="/create"
                                 variant="primary">
                                 <i class="tomoissuer-icon-plus"/>
                                 Issue new token
-                            </b-button>
+                            </b-nav-item>
                             <b-nav-item-dropdown
+                                v-if="isTomonet"
+                                class="tmp-btn-transparent"
+                                offset="25"
+                                variant="primary"
                                 right>
                                 <template
-                                    slot="button-content">
+                                    slot="button-content"
+                                    class="tmp-btn-transparent">
                                     <i class="tomoissuer-icon-wallet"/>
                                     My Wallet
-                                </template>
-                                <b-dropdown-item to="/">EN</b-dropdown-item>
-                                <b-dropdown-item to="/">ES</b-dropdown-item>
-                                <b-dropdown-item to="/">RU</b-dropdown-item>
-                                <b-dropdown-item to="/">FA</b-dropdown-item>
-                            </b-nav-item-dropdown>
-                            <!-- <b-button
-                                v-if="!isTomonet"
-                                id="btn-become-candidate"
-                                to="/login"
-                                variant="primary">Login</b-button> -->
-                            <b-button
-                                v-if="isTomonet"
-                                id="btn-become-candidate"
-                                to="/create"
-                                variant="primary">Create Token</b-button>
-                            <b-dropdown
-                                v-if="isTomonet"
-                                class="dd-setting ml-1"
-                                right
-                                offset="25"
-                                no-caret
-                                variant="primary">
-                                <template
-                                    slot="button-content">
-                                    <!-- <i class="tm-cog icon-2x"/> -->
-                                    Profile
                                 </template>
                                 <b-dropdown-item
                                     :to="'/address/' + account">
@@ -68,7 +49,12 @@
                                 <b-dropdown-item
                                     href="/"
                                     @click="signOut">Sign out</b-dropdown-item>
-                            </b-dropdown>
+                            </b-nav-item-dropdown>
+                            <b-button
+                                v-if="!isTomonet"
+                                id="btn-become-candidate"
+                                to="/login"
+                                variant="primary">Login</b-button>
                         </b-navbar-nav>
                     </b-collapse>
                 </section>
@@ -78,7 +64,7 @@
             </div>
             <footer
                 class="tomo-footer footer">
-                <div class="container container--wide">
+                <div class="container container-tomochain">
                     <div class="row">
                         <div class="col-md-8">
                             <div class="tomo-footer__copyright">

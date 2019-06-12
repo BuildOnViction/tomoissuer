@@ -1,5 +1,5 @@
 <template>
-    <div class="container container--wide">
+    <div class="container container-tomochain">
         <div class="main-box-header">
             <div class="">
                 <h2 class="tmp-title-large">TIIM</h2>
