@@ -162,18 +162,29 @@ export default {
                         ]
                     }).encodeABI()
 
+                    const data = {
+                        data: deploy,
+                        to: '0x'
+                    }
+
                     let nonce = await self.web3.eth.getTransactionCount(self.account)
                     const dataTx = {
-                        from: self.account,
+                        from: self.account.toLowerCase(),
+                        gas: web3.utils.toHex(40000000),
                         gasPrice: web3.utils.toHex(10000000000000),
                         gasLimit: web3.utils.toHex(40000000),
-                        data: deploy,
-                        chainId: self.chainConfig.networkId,
-                        nonce: web3.utils.toHex(nonce),
-                        to: '0x',
-                        value: '0x'
+                        value: '0x',
+                        chainId: self.chainConfig.networkId
                     }
-                    const signature = await self.signTransaction(dataTx)
+                    Object.assign(
+                        data,
+                        dataTx,
+                        {
+                            nonce: web3.utils.toHex(nonce)
+                        }
+                    )
+
+                    const signature = await self.signTransaction(data)
                     result = await self.sendSignedTransaction(dataTx, signature)
                     if (result && result.contractAddress) {
                         self.transactionHash = result.transactionHash
