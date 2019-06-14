@@ -1,13 +1,9 @@
-ul, ol {
-	margin: 0 0 1.5em 3em;
-}
-
-ul {
-	list-style: disc;
-}
-
-ol {
-	list-style: decimal;
+ul,
+ol,
+li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
 li > ul,

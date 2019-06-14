@@ -1,22 +1,73 @@
-// html {
-// 	box-sizing: border-box;
-// }
+html {
+	box-sizing: border-box;
+}
 
-// *,
-// *:before,
-// *:after { /* Inherit box-sizing to make it easier to change the property for components that leverage other behavior; see https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
-// 	box-sizing: content-box;
-// }
+*,
+*:before,
+*:after { /* Inherit box-sizing to make it easier to change the property for components that leverage other behavior; see https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+	box-sizing: border-box;
+}
 
-// body {
-//     background-color: #1C2139;
-// }
+body {
+    @include fsz(14);
+	background-color: #F3F6FC;
+	color: $color-text-default;
+    font-family: $font-quicksand;
+}
 
-// img {
-// 	height: auto; /* Make sure images are scaled correctly. */
-// 	max-width: 100%; /* Adhere to container width. */
-// }
+p {
+	margin-bottom: 1.5em;
+}
 
-// figure {
-// 	margin: 1em 0; /* Extra wide images within figure tags don't overflow the content area. */
-// }
+strong {
+    font-weight: 700;
+}
+
+img {
+	height: auto; /* Make sure images are scaled correctly. */
+	max-width: 100%; /* Adhere to container width. */
+}
+
+figure {
+	margin: 1em 0; /* Extra wide images within figure tags don't overflow the content area. */
+}
+
+dfn, cite, em, i {
+	font-style: italic;
+}
+
+blockquote {
+	margin: 0 1.5em;
+}
+
+address {
+	margin: 0 0 1.5em;
+}
+
+pre {
+	margin-bottom: 1.6em;
+	max-width: 100%;
+	overflow: auto;
+	padding: 1.6em;
+}
+
+code, kbd, tt, var {
+	// font-family: $font__code;
+	// @include fsz(14);
+}
+
+abbr, acronym {
+	cursor: help;
+}
+
+mark, ins {
+	text-decoration: none;
+}
+
+big {
+	font-size: 125%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    clear: both;
+}

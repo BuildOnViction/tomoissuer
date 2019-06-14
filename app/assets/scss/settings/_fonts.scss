@@ -1,3 +1,76 @@
 //Font famyli setting
 $font-quicksand: 'Quicksand', sans-serif;
 $font-roboto: 'Roboto', sans-serif;
+
+//Fonts tomoissuer Icomoon
+@font-face {
+  font-family: 'tomoissuer';
+  src:  url('../fonts/tomoissuer/tomoissuer.eot?cgkiqz');
+  src:  url('../fonts/tomoissuer/tomoissuer.eot?cgkiqz#iefix') format('embedded-opentype'),
+        url('../fonts/tomoissuer/tomoissuer.ttf?cgkiqz') format('truetype'),
+        url('../fonts/tomoissuer/tomoissuer.woff?cgkiqz') format('woff'),
+        url('../fonts/tomoissuer/tomoissuer.svg?cgkiqz#tomoissuer') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="tomoissuer-"], [class*=" tomoissuer-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'tomoissuer' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tomoissuer-icon-angle-double-left:before {
+  content: "\e900";
+}
+.tomoissuer-icon-angle-double-right:before {
+  content: "\e901";
+}
+.tomoissuer-icon-angle-down:before {
+  content: "\e902";
+}
+.tomoissuer-icon-angle-left:before {
+  content: "\e903";
+}
+.tomoissuer-icon-angle-right:before {
+  content: "\e904";
+}
+.tomoissuer-icon-angle-up:before {
+  content: "\e905";
+}
+.tomoissuer-icon-email:before {
+  content: "\e906";
+}
+.tomoissuer-icon-facebook:before {
+  content: "\e907";
+}
+.tomoissuer-icon-github:before {
+  content: "\e908";
+}
+.tomoissuer-icon-linkedin:before {
+  content: "\e909";
+}
+.tomoissuer-icon-plus:before {
+  content: "\e90a";
+}
+.tomoissuer-icon-telegram:before {
+  content: "\e90b";
+}
+.tomoissuer-icon-tomoz:before {
+  content: "\e90c";
+}
+.tomoissuer-icon-twiter:before {
+  content: "\e90d";
+}
+.tomoissuer-icon-wallet:before {
+  content: "\e90e";
+}

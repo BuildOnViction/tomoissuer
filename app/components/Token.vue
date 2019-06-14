@@ -1,104 +1,23 @@
 <template>
-    <div class="container container--wide">
-        <div>
-            <div>
-                <h2 class="tmp-title-large">TIIM (TriipProtocol)</h2>
+    <div class="container container-tomochain">
+        <div class="main-box-header">
+            <div class="">
+                <h2 class="tmp-title-large">TIIM</h2>
                 <i
                     v-if="moreInfo"
                     class="fa fa-check-circle token-status"
                     aria-hidden="true"/>
-                <h6 class="mb-0">{{ symbol }}</h6>
-            </div>
-            <div>
                 <b-row>
-                    <b-col md="6">
-                        <table
-                            v-if="token">
-                            <tbody>
-                                <tr>
-                                    <td>Total Supply</td>
-                                    <td>{{ formatNumber(token.totalSupplyNumber) }} {{ symbol }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Holders</td>
-                                    <td>{{ formatNumber(holdersCount) }}
-                                        {{ holdersCount > 1 ? 'addresses' : 'address' }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Transfers</td>
-                                    <td>{{ formatNumber(tokenTxsCount) }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </b-col>
-                    <b-col md="6">
-                        <table
-                            v-if="token">
-                            <tbody>
-                                <tr>
-                                    <td>Contract</td>
-                                    <td>
-                                        {{ token.hash }}
-                                    </td>
-                                </tr>
-                                <tr v-if="token.type === 'trc20'">
-                                    <td>Decimal</td>
-                                    <td>{{ token.decimals }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Type</td>
-                                    <td>{{ token.type ? token.type.toUpperCase() : token.type }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <b-col>
+                        sdsd
                     </b-col>
                 </b-row>
             </div>
-            <div
-                v-if="isApplied"
-                class="mt-3">This token is already applied</div>
-            <div
-                v-else
-                class="mt-3">
-                <b-form
-                    novalidate
-                    @submit.prevent="validate()">
-                    <b-form-group
-                        id="deposite"
-                        label="Deposite"
-                        label-for="deposite">
-                        <b-form-input
-                            id="deposite"
-                            v-model="depositeAmount" />
-                        <span
-                            v-if="$v.depositeAmount.$dirty && !$v.depositeAmount.minValue"
-                            class="text-danger">Minimum of depositing is 10 TOMO</span>
-                        <span
-                            v-if="$v.depositeAmount.$dirty && !$v.depositeAmount.required"
-                            class="text-danger">Depositing amount is required</span>
-                    </b-form-group>
-                    <b-button
-                        type="submit"
-                        variant="primary">Apply</b-button>
-                </b-form>
-            </div>
-            <div
-                v-if="loading"
-                class="mt-5">
-                Loading...
-            </div>
-            <div class="mt-5">
-                <b-form-group
-                    v-if="transactionHash"
-                    class="mb-4"
-                    label="Transaction Hash"
-                    label-for="transactionHash">
-                    <b-form-input
-                        v-model="transactionHash"
-                        type="text" />
-                </b-form-group>
-            </div>
+        </div><!-- main-box-header -->
+        <div class="main-box-body">
+            body
         </div>
+        <!-- main-box-header -->
     </div>
 </template>
 
