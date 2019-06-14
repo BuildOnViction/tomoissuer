@@ -1,0 +1,22 @@
+a {
+    color: $color-link-default;
+    @extend %transit;
+	&:visited {
+		color: $color-text-violet;
+    }
+    &:hover {
+        text-decoration: none;
+    }
+	&:hover,
+	&:focus,
+	&:active {
+		color: $color-text-violet;
+	}
+	&:focus {
+		outline: 0;
+	}
+	&:hover,
+	&:active {
+		outline: 0;
+	}
+}

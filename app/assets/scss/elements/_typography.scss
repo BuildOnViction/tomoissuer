@@ -1,0 +1,92 @@
+// Begin style title
+
+.tmp-title-small {
+	@include fsz(10);
+	font-family: $font-quicksand;
+	font-weight: normal;
+	&.oranges {
+		color: $color-text-oranges;
+	}
+	&.blue {
+		color: $color-text-blue;
+	}
+	&.violet {
+		color: $color-text-violet;
+	}
+	&.yellow {
+		color: $color-text-yellow;
+	}
+}
+
+.tmp-title-normal {
+	@include fsz(14);
+	font-family: $font-quicksand;
+	color: $color-text-default;
+	font-weight: normal;
+	&.oranges {
+		color: $color-text-oranges;
+	}
+	&.blue {
+		color: $color-text-blue;
+	}
+	&.violet {
+		color: $color-text-violet;
+	}
+	&.yellow {
+		color: $color-text-yellow;
+	}
+}
+
+.tmp-title-medium {
+	@include fsz-cha(18,16,15);
+	font-family: $font-roboto;
+	color: $color-text-default;
+	&.oranges {
+		color: $color-text-oranges;
+	}
+	&.blue {
+		color: $color-text-blue;
+	}
+	&.violet {
+		color: $color-text-violet;
+	}
+	&.yellow {
+		color: $color-text-yellow;
+	}
+}
+
+.tmp-title-large {
+	@include fsz-cha(24,20,18);
+	font-family: $font-roboto;
+	color: $color-text-default;
+	&.oranges {
+		color: $color-text-oranges;
+	}
+	&.blue {
+		color: $color-text-blue;
+	}
+	&.violet {
+		color: $color-text-violet;
+	}
+	&.yellow {
+		color: $color-text-yellow;
+	}
+}
+
+.tmp-title-big {
+	@include fsz-cha(32,28,24);
+	font-family: $font-roboto;
+	color: $color-text-default;
+	&.oranges {
+		color: $color-text-oranges;
+	}
+	&.blue {
+		color: $color-text-blue;
+	}
+	&.violet {
+		color: $color-text-violet;
+	}
+	&.yellow {
+		color: $color-text-yellow;
+	}
+}

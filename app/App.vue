@@ -3,44 +3,43 @@
         <div class="page-layout">
             <b-navbar
                 toggleable="lg"
-                type="dark"
-                variant="info">
-                <section class="container container--wide">
+                type="light"
+                class="tomo-header"
+                variant="white">
+                <section class="container container-tomochain">
                     <b-navbar-brand to="/">
-                        Logo here
+                        <b-img
+                            src="../app/assets/images/logo-tomoissuer.svg"
+                            alt="logo tomoissuer"/>
                     </b-navbar-brand>
+                    <!-- button menu SP -->
                     <b-navbar-toggle
                         target="nav-collapse"
                         class="btn-menu-sp"/>
+                    <!-- /button menu SP -->
                     <b-collapse
                         id="nav-collapse"
                         is-nav>
-                        <!-- Right aligned nav items -->
-                        <b-navbar-nav class="ml-auto ">
-                            TOMOISSUER
-                        </b-navbar-nav>
                         <b-navbar-nav class="ml-auto navbar-buttons">
-                            <b-button
-                                v-if="!isTomonet"
-                                id="btn-become-candidate"
-                                to="/login"
-                                variant="primary">Login</b-button>
-                            <b-button
+                            <b-nav-item
                                 v-if="isTomonet"
-                                id="btn-become-candidate"
+                                class="tmp-btn-blue"
                                 to="/create"
-                                variant="primary">Create Token</b-button>
-                            <b-dropdown
-                                v-if="isTomonet"
-                                class="dd-setting ml-1"
-                                right
-                                offset="25"
-                                no-caret
                                 variant="primary">
+                                <i class="tomoissuer-icon-plus"/>
+                                Issue new token
+                            </b-nav-item>
+                            <b-nav-item-dropdown
+                                v-if="isTomonet"
+                                class="tmp-btn-transparent"
+                                offset="25"
+                                variant="primary"
+                                right>
                                 <template
-                                    slot="button-content">
-                                    <!-- <i class="tm-cog icon-2x"/> -->
-                                    Profile
+                                    slot="button-content"
+                                    class="tmp-btn-transparent">
+                                    <i class="tomoissuer-icon-wallet"/>
+                                    My Wallet
                                 </template>
                                 <b-dropdown-item
                                     :to="'/address/' + account">
@@ -50,7 +49,12 @@
                                 <b-dropdown-item
                                     href="/"
                                     @click="signOut">Sign out</b-dropdown-item>
-                            </b-dropdown>
+                            </b-nav-item-dropdown>
+                            <b-button
+                                v-if="!isTomonet"
+                                id="btn-become-candidate"
+                                to="/login"
+                                variant="primary">Login</b-button>
                         </b-navbar-nav>
                     </b-collapse>
                 </section>
@@ -60,15 +64,35 @@
             </div>
             <footer
                 class="tomo-footer footer">
-                <div class="container container--wide">
+                <div class="container container-tomochain">
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="tomo-footer__copyright">
+                            <div class="tomo-copyright">
                                 TomoIssuer &copy; {{ (new Date()).getFullYear() }} -
                                 <a
                                     :href="`https://github.com/tomochain/tomoissuer/releases/tag/v${version}`"
                                     class="version-tag">
                                     v{{ version }}</a>
+                            </div>
+                            <div class="tomo-meta-links">
+                                <ul>
+                                    <li><a href="#">Need help?</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">Terms of Service</a></li>
+                                    <li><a href="#">API Documentation</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="tomo-social">
+                                <ul>
+                                    <li><a href="#"><i class="tomoissuer-icon-facebook"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-twiter"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-telegram"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-github"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-linkedin"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-email"/></a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,81 @@
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+	@include fsz(14);
+	border: 0px;
+	border-radius: 50%;
+	padding: .6em 1em;
+
+	&:active,
+	&:focus {
+		outline: none;
+	}
+}
+
+// Begin style button
+
+.tmp-btn-transparent {
+    a.nav-link {
+        @include transit;
+        background: transparent;
+        color: $color-text-gray!important;
+        display: flex;
+        align-items: center;
+        padding: .5em 1.2em!important;
+        i {
+            padding-right: 5px;
+            font-weight: bold;
+        }
+        &.dropdown-toggle {
+            position: relative;
+            &::after {
+                border: 0;
+                content: "\e902";
+                font-family: tomoissuer;
+                font-size: 12px;
+                position: absolute;
+                right: 0px;
+                top: 12px;
+            }
+        }
+    }
+}
+
+.tmp-btn-blue {
+    a {
+        @include transit;
+        background: $background-blue;
+        color: $color-text-white!important;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        padding: .5em 1.2em!important;
+        i {
+            padding-right: 5px;
+            font-weight: bold;
+        }
+        &:hover,
+        .active {
+            background: $background-blue-active;
+        }
+    }
+}
+
+.tmp-btn-violet {
+    a {
+        @include transit;
+        background: $background-violet;
+        color: $color-text-white!important;
+        display: flex;
+        align-items: center;
+        i {
+            padding-right: 5px;
+            font-weight: bold;
+        }
+        &:hover,
+        &.active {
+            background: $background-violet-active;
+        }
+    }
+}

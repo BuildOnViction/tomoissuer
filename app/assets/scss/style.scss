@@ -11,6 +11,15 @@
 --------------------------------------------------------------*/
 
 /*
+SETTINGS FONT
+
+add google font
+================================================
+*/
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,700|Roboto:400,500,700&display=swap');
+
+
+/*
 SETTINGS
 store all variables, config switches, etc.
 Split up into logical sections, the smaller and simpler the better.
@@ -29,6 +38,33 @@ COMPONENTS
 Specific UI components.
 This is where majority of our work takes place and our UI components are often composed of Objects and Components
 */
-@import 'components/container';
+
+//Folder tools
+@import 'tools/mixins';
+@import 'tools/placeholder';
+
+//Folder settings
+@import 'settings/colors';
+@import 'settings/fonts';
+
+//Folder objects
+@import 'objects/alignments';
+@import 'objects/animations';
+@import 'objects/clearings';
+@import 'objects/media';
+
+//Folder elements
+@import 'elements/buttons';
+@import 'elements/elements';
+@import 'elements/fields';
+@import 'elements/links';
+@import 'elements/lists';
+@import 'elements/tables';
+@import 'elements/typography';
+
+//Folder components
+@import 'components/header';
 @import 'components/footer';
+@import 'components/container';
 @import 'components/main-content';
+@import 'components/token';
