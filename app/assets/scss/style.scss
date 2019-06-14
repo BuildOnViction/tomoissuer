@@ -16,8 +16,7 @@ SETTINGS FONT
 add google font
 ================================================
 */
-@import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,700|Roboto:400,500,700&display=swap');
-
+@import url('https://fonts.googleapis.com/css?family=Bai+Jamjuree:400,500,600,700|Quicksand:400,500,700|Roboto:400,500,700&display=swap');
 
 /*
 SETTINGS
@@ -65,6 +64,7 @@ This is where majority of our work takes place and our UI components are often c
 //Folder components
 @import 'components/header';
 @import 'components/footer';
+@import 'components/welcome';
 @import 'components/container';
 @import 'components/main-content';
 @import 'components/token';

@@ -1,16 +1,27 @@
 .tomo-footer {
-    @include fsz(12);
-    padding: 15px 0;
+    @include fsz(15);
+    padding: 25px 0;
+    @include media-breakpoint-down(sm) {
+        text-align: center;
+    }
     .row {
         align-items: flex-end;
+    }
+    .tomo-copyright {
     }
     .tomo-meta-links {
         padding-top: 15px;
         ul {
+            @include media-breakpoint-down(md) {
+                margin: 0 -10px;
+            }
             li {
                 display: inline-block;
                 padding: 0px 25px;
                 position: relative;
+                @include media-breakpoint-down(md) {
+                    padding: 2px 10px;
+                }
                 &::after {
                     content: "";
                     background: $color-text-gray;
@@ -19,12 +30,20 @@
                     position: absolute;
                     right: 0;
                     margin-top: 4px;
+                    @include media-breakpoint-down(md) {
+                        height: 12px;
+                        margin-top: 5px;
+                    }
                 }
                 &:first-child {
-                    padding-left: 0;
+                    @include media-breakpoint-up(lg) {
+                        padding-left: 0;
+                    }
                 }
                 &:last-child {
-                    padding-right: 0;
+                    @include media-breakpoint-up(lg) {
+                        padding-right: 0;
+                    }
                     &::after {
                         display: none;
                     }
@@ -60,7 +79,7 @@
                     height: 30px;
                     i {
                         @include transit();
-                        opacity: .5;
+                        opacity: .2;
                     }
                     &:hover {
                         i {

@@ -1,0 +1,24 @@
+//welcome-tomoissuer
+.welcom-tomoissuer {
+    min-height: calc(100vh - 105px);
+    display: flex;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    @include media-breakpoint-down(md) {
+        min-height: calc(100vh - 181px);
+    }
+    .btn-box {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        padding: 1em 0;
+        margin: 0 -10px;
+        a {
+            margin: 10px;
+        }
+    }
+    .link-login {
+    }
+}

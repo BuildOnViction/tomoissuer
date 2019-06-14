@@ -69,7 +69,7 @@ $bp_sp: 767px; //sp
 
 
 // @include fsz(Arbitrary size, size of parent element); ※px unnecessary
-$baseSize: 14;
+$baseSize: 16;
 
 @mixin fsz($size:$baseSize,$parent:null){
 	$i: $size * (100 / $baseSize);

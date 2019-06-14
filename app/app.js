@@ -7,7 +7,6 @@ import Confirmation from './components/applying/Confirmation.vue'
 import CreateToken from './components/applying/CreateToken.vue'
 import VerifyContract from './components/applying/VerifyContract.vue'
 import TokenDetail from './components/Token.vue'
-import AccountView from './components/accounts/View.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
@@ -435,8 +434,7 @@ const router = new VueRouter({
         { path: '/confirm', component: Confirmation, name: 'Confirmation' },
         { path: '/create', component: CreateToken },
         { path: '/verify', component: VerifyContract },
-        { path: '/token/:address', component: TokenDetail },
-        { path: '/address/:address', component: AccountView }
+        { path: '/token/:address', component: TokenDetail }
     ]
 })
 
