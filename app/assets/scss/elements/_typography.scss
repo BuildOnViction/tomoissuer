@@ -38,8 +38,8 @@
 }
 
 .tmp-title-medium {
-	@include fsz-cha(18,16,15);
-	font-family: $font-roboto;
+	@include fsz-cha(16,16,15);
+	font-family: $font-baijam;
 	color: $color-text-default;
 	&.oranges {
 		color: $color-text-oranges;
@@ -56,8 +56,8 @@
 }
 
 .tmp-title-large {
-	@include fsz-cha(24,20,18);
-	font-family: $font-roboto;
+	@include fsz(24);
+	font-family: $font-baijam;
 	color: $color-text-default;
 	&.oranges {
 		color: $color-text-oranges;
@@ -74,8 +74,8 @@
 }
 
 .tmp-title-big {
-	@include fsz-cha(32,28,24);
-	font-family: $font-roboto;
+	@include fsz-cha(70,50,30);
+	font-family: $font-baijam;
 	color: $color-text-default;
 	&.oranges {
 		color: $color-text-oranges;

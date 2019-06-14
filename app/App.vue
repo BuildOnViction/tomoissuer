@@ -2,6 +2,7 @@
     <div id="app">
         <div class="page-layout">
             <b-navbar
+                v-if="isTomonet"
                 toggleable="lg"
                 type="light"
                 class="tomo-header"
@@ -24,8 +25,7 @@
                             <b-nav-item
                                 v-if="isTomonet"
                                 class="tmp-btn-blue"
-                                to="/create"
-                                variant="primary">
+                                to="/create">
                                 <i class="tomoissuer-icon-plus"/>
                                 Issue new token
                             </b-nav-item>
@@ -33,7 +33,6 @@
                                 v-if="isTomonet"
                                 class="tmp-btn-transparent"
                                 offset="25"
-                                variant="primary"
                                 right>
                                 <template
                                     slot="button-content"
@@ -50,23 +49,19 @@
                                     href="/"
                                     @click="signOut">Sign out</b-dropdown-item>
                             </b-nav-item-dropdown>
-                            <b-button
-                                v-if="!isTomonet"
-                                id="btn-become-candidate"
-                                to="/login"
-                                variant="primary">Login</b-button>
                         </b-navbar-nav>
                     </b-collapse>
                 </section>
             </b-navbar>
-            <div class="main-content">
+            <div
+                :class="`${isTomonet === true ? 'common-main-content' : 'welcom-tomoissuer'}`">
                 <router-view/>
             </div>
             <footer
                 class="tomo-footer footer">
                 <div class="container container-tomochain">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-7 col-lg-8">
                             <div class="tomo-copyright">
                                 TomoIssuer &copy; {{ (new Date()).getFullYear() }} -
                                 <a
@@ -83,7 +78,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-5 col-lg-4">
                             <div class="tomo-social">
                                 <ul>
                                     <li><a href="#"><i class="tomoissuer-icon-facebook"/></a></li>

@@ -1,5 +1,5 @@
 <template>
-    <div class="container container--wide">
+    <div class="container">
         <b-table
             :items="tokens"
             :fields="fields"
@@ -63,12 +63,13 @@
 
 <script>
 import axios from 'axios'
+import store from 'store'
 export default {
     name: 'App',
     components: { },
     data () {
         return {
-            address: this.$route.params.address.toLowerCase(),
+            address: store.get('address'),
             fields: [
                 {
                     key: 'hash',

@@ -2,7 +2,7 @@ a {
     color: $color-link-default;
     @extend %transit;
 	&:visited {
-		color: $color-text-violet;
+		color: $color-link-default;
     }
     &:hover {
         text-decoration: none;

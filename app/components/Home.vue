@@ -1,17 +1,21 @@
 <template>
-    <div
+    <list-token
         v-if="account"
-        style="text-align: center; padding-top: 10em">
-        Welcome {{ account }}
-    </div>
+        style="text-align: center; padding-top: 10em" />
+    <welcome v-else/>
 </template>
 
 <script>
 import store from 'store'
+import Welcome from './Welcome.vue'
+import ListToken from './accounts/ListToken.vue'
 
 export default {
     name: 'App',
-    components: {},
+    components: {
+        Welcome,
+        ListToken
+    },
     mixins: [],
     data () {
         return {

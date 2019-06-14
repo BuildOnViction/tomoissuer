@@ -9,6 +9,25 @@ $color-text-blue: #01c5de;
 $color-text-violet: #5565c7;
 $color-text-yellow: #ffaf01;
 
+.text-gray {
+    color: $color-text-gray;
+}
+.text-white {
+    color: $color-text-white;
+}
+.text-oranges {
+    color: $color-text-oranges;
+}
+.text-blue {
+    color: $color-text-blue;
+}
+.text-violet {
+    color: $color-text-violet;
+}
+.text-yellow {
+    color: $color-text-yellow;
+}
+
 //background color setting
 $background-default: #F3F6FC;
 $background-transparent: transparent;
