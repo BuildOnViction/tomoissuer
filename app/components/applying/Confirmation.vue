@@ -161,7 +161,6 @@ export default {
                             (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
                         ]
                     }).encodeABI()
-                    console.log(typeof deploy)
 
                     const data = {
                         data: deploy,
@@ -184,23 +183,8 @@ export default {
                             nonce: web3.utils.toHex(nonce)
                         }
                     )
-                    console.log(JSON.stringify(data, null, 4))
-
-                    // const a = {
-                    //     to: '0x0000000000000000000000000000000000000088',
-                    //     data: '0x6dd7d8ea000000000000000000000000ffc679dcdf444d2eeb0491a998e7902b411ccf20',
-                    //     from: '0x33c2e732ae7dce8b05f37b2ba0cfe14c980c4dbe',
-                    //     gas: '0x3d0900',
-                    //     gasLimit: '0x3d0900',
-                    //     gasPrice: '0xee6b280',
-                    //     nonce: '0xb5',
-                    //     value: '0x56bc75e2d63100000',
-                    //     chainId: 89
-                    // }
 
                     const signature = await self.signTransaction(data)
-                    console.log(22)
-                    console.log(signature)
                     result = await self.sendSignedTransaction(dataTx, signature)
                     if (result && result.contractAddress) {
                         self.transactionHash = result.transactionHash
