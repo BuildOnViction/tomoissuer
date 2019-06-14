@@ -74,7 +74,7 @@
 }
 
 .tmp-title-big {
-	@include fsz-cha(70,50,30);
+	@include fsz-cha(90,50,30);
 	font-family: $font-baijam;
 	color: $color-text-default;
 	&.oranges {

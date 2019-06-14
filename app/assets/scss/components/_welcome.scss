@@ -1,4 +1,169 @@
-//welcome-tomoissuer
+// animation
+@keyframes anZoom {
+    0% {
+        transform: scale(.5);
+        background-color: #ffa500;
+        opacity: .1;
+    }
+    50% {
+        background-color: #01C5DE;
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
+        background-color: yellow;
+        opacity: 0;
+    }
+}
+.ani_bg_element_one {
+    height: 120px;
+    width: 120px;
+    border-radius: 100%;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    background-color: red;
+    animation-name: anZoom;
+    animation-duration: 5s; 
+    animation-timing-function: ease-out; 
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-fill-mode: none;
+    animation-play-state: running;
+}
+
+//**
+
+
+@keyframes blue-circle-anim-x {
+50% {
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateX(44px);
+    }
+}
+@keyframes blue-circle-anim-y {
+50% {
+    animation-timing-function: cubic-bezier(0.55, 0, 0.2, 1);
+        transform: translateY(17px);
+    }
+}
+@keyframes green-rectangle-anim {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@keyframes red-triangle-anim {
+50% {
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(25px) rotate(-53deg);
+    }
+}
+@keyframes yellow-semicircle-anim {
+40% {
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateY(40px) rotate(-1deg);
+    }
+}
+@keyframes grey-rounded-rectangle-anim {
+    65% {
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(-48px) rotate(-75deg);
+    }
+}
+
+.animation_bg {
+    height: 100%;
+    left: 50%;
+    min-height: 700px;
+    min-width: 1024px;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: -1;
+    img,
+    span {
+        position: absolute;
+        display: block;
+    }
+}
+#blue-circle-container {
+    animation: blue-circle-anim-x 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    left: calc(13% - 50px);
+    top: calc(18% - 26px);
+}
+#blue-circle-container::after {
+    background: url('/app/assets/images/icon-font/blue_circle.svg') no-repeat top left;
+    animation: blue-circle-anim-y 9s cubic-bezier(0.25, 0, 0.2, 1) infinite;
+    content: ' ';
+    height: 43px;
+    position: absolute;
+    width: 43px;
+}
+#yellow-dots {
+    background: url('/app/assets/images/icon-font/yellow_dots.svg') no-repeat top left;
+    background-color: var(--navi-shape-yellow-dots-color);
+    content: ' ';
+    height: 57px;
+    left: 13%;
+    top: 18%;
+    width: 76px;
+}
+#grey-rounded-rectangle {
+    background: url('/app/assets/images/icon-font/grey_rounded_rectangle.svg') no-repeat top left;
+    animation: grey-rounded-rectangle-anim 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    background-color: var(--navi-shape-grey-color);
+    content: ' ';
+    height: 132px;
+    left: -42px;
+    top: 45%;
+    width: 132px;
+}
+#red-triangle {
+    background: url('/app/assets/images/icon-font/red_triangle.svg') no-repeat bottom left;
+    animation: red-triangle-anim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    background-color: var(--navi-shape-red-color);
+    bottom: 15%;
+    content: ' ';
+    height: 74px;
+    left: 12%;
+    width: 65px;
+}
+#yellow-semicircle {
+    background: url('/app/assets/images/icon-font/yellow_semicircle.svg') no-repeat top right;
+    animation: yellow-semicircle-anim 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    background-color: var(--navi-shape-yellow-semicircle-color);
+    content: ' ';
+    height: 171px;
+    right: 28.5%;
+    top: -50px;
+    transform: rotate(-7deg);
+    width: 211px;
+}
+#green-rectangle {
+    background: url('/app/assets/images/icon-font/green_rectangle.svg') no-repeat bottom right;
+    animation: green-rectangle-anim 40s infinite linear;
+    background-color: var(--navi-shape-green-color);
+    bottom: 8%;
+    content: ' ';
+    height: 371px;
+    right: -255px;
+    width: 371px;
+}
+#grey-oval {
+    background: url('/app/assets/images/icon-font/grey_oval.svg') no-repeat bottom right;
+    background-color: var(--navi-shape-grey-color);
+    bottom: calc(8% + 24px);
+    content: ' ';
+    height: 100px;
+    mix-blend-mode: multiply;
+    right: 48px;
+    width: 100px;
+}
+
+
+// Main Content
 .welcom-tomoissuer {
     min-height: calc(100vh - 105px);
     display: flex;
@@ -18,7 +183,5 @@
         a {
             margin: 10px;
         }
-    }
-    .link-login {
     }
 }
