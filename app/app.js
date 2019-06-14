@@ -72,7 +72,7 @@ const store = new Vuex.Store({
 })
 Vue.prototype.isElectron = !!(window && window.process && window.process.type)
 
-Vue.prototype.setupProvider = function (provider, wjs) {
+Vue.prototype.setupProvider = async function (provider, wjs) {
     Vue.prototype.NetworkProvider = provider
     Vue.prototype.TRC21Issuer = contract(TRC21IssuerAritfacts)
     if (wjs instanceof Web3) {
@@ -85,12 +85,10 @@ Vue.prototype.getAccount = async function () {
     const provider = Vue.prototype.NetworkProvider || ''
     const wjs = Vue.prototype.web3
     let account
-    if (provider === 'metamask') {
-        // Request account access if needed - for metamask
-        await window.ethereum.enable()
-    }
     switch (provider) {
     case 'metamask':
+        // Request account access if needed - for metamask
+        await window.ethereum.enable()
         account = (await wjs.eth.getAccounts())[0]
         break
     case 'custom':
@@ -106,7 +104,7 @@ Vue.prototype.getAccount = async function () {
     case 'ledger':
         try {
             if (!Vue.prototype.appEth) {
-                let transport = await new Transport()
+                let transport = await Transport.create()
                 Vue.prototype.appEth = await new Eth(transport)
             }
             let ethAppConfig = await Vue.prototype.appEth.getAppConfiguration()
@@ -200,7 +198,7 @@ Vue.prototype.loadMultipleLedgerWallets = async function (offset, limit) {
     }
     await Vue.prototype.detectNetwork('ledger')
     if (!Vue.prototype.appEth) {
-        let transport = await new Transport()
+        let transport = await Transport.create()
         Vue.prototype.appEth = await new Eth(transport)
     }
     let web3 = Vue.prototype.web3
