@@ -75,13 +75,13 @@
 .animation_bg {
     height: 100%;
     left: 50%;
-    min-height: 700px;
-    min-width: 1024px;
+    height: 100%;
+    width: 100%;
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 100%;
     z-index: -1;
+    overflow: hidden;
     img,
     span {
         position: absolute;
@@ -94,7 +94,7 @@
     top: calc(18% - 26px);
 }
 #blue-circle-container::after {
-    background: url('/app/assets/images/icon-font/blue_circle.svg') no-repeat top left;
+    background: url('/app/assets/images/blue_circle.svg') no-repeat top left;
     animation: blue-circle-anim-y 9s cubic-bezier(0.25, 0, 0.2, 1) infinite;
     content: ' ';
     height: 43px;
@@ -102,7 +102,7 @@
     width: 43px;
 }
 #yellow-dots {
-    background: url('/app/assets/images/icon-font/yellow_dots.svg') no-repeat top left;
+    background: url('/app/assets/images/yellow_dots.svg') no-repeat top left;
     background-color: var(--navi-shape-yellow-dots-color);
     content: ' ';
     height: 57px;
@@ -111,7 +111,7 @@
     width: 76px;
 }
 #grey-rounded-rectangle {
-    background: url('/app/assets/images/icon-font/grey_rounded_rectangle.svg') no-repeat top left;
+    background: url('/app/assets/images/grey_rounded_rectangle.svg') no-repeat top left;
     animation: grey-rounded-rectangle-anim 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     background-color: var(--navi-shape-grey-color);
     content: ' ';
@@ -119,69 +119,88 @@
     left: -42px;
     top: 45%;
     width: 132px;
+    @include media-breakpoint-down (md) {
+        height: 80px;
+        left: -42px;
+        top: 45%;
+        width: 80px;
+    }
 }
 #red-triangle {
-    background: url('/app/assets/images/icon-font/red_triangle.svg') no-repeat bottom left;
+    background: url('/app/assets/images/red_triangle.svg') no-repeat bottom left;
     animation: red-triangle-anim 9.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     background-color: var(--navi-shape-red-color);
-    bottom: 15%;
     content: ' ';
+    bottom: 15%;
     height: 74px;
     left: 12%;
     width: 65px;
+    @include media-breakpoint-down (md) {
+        bottom: 10%;
+        height: 50px;
+        left: 2%;
+        width: 30px;
+    }
 }
 #yellow-semicircle {
-    background: url('/app/assets/images/icon-font/yellow_semicircle.svg') no-repeat top right;
+    background: url('/app/assets/images/yellow_semicircle.svg') no-repeat top right;
     animation: yellow-semicircle-anim 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     background-color: var(--navi-shape-yellow-semicircle-color);
     content: ' ';
+    transform: rotate(-7deg);
     height: 171px;
     right: 28.5%;
     top: -50px;
-    transform: rotate(-7deg);
     width: 211px;
+    @include media-breakpoint-down (md) {
+        height: 100px;
+        right: 15%;
+        top: -10px;
+        width: 100px;
+    }
 }
 #green-rectangle {
-    background: url('/app/assets/images/icon-font/green_rectangle.svg') no-repeat bottom right;
+    background: url('/app/assets/images/green_rectangle.svg') no-repeat bottom right;
     animation: green-rectangle-anim 40s infinite linear;
     background-color: var(--navi-shape-green-color);
-    bottom: 8%;
     content: ' ';
+    bottom: 8%;
     height: 371px;
     right: -255px;
     width: 371px;
+    @include media-breakpoint-down (md) {
+        bottom: 15%;
+        height: 120px;
+        right: -80px;
+        width: 120px;
+    }
 }
 #grey-oval {
-    background: url('/app/assets/images/icon-font/grey_oval.svg') no-repeat bottom right;
+    background: url('/app/assets/images/grey_oval.svg') no-repeat bottom right;
     background-color: var(--navi-shape-grey-color);
-    bottom: calc(8% + 24px);
     content: ' ';
+    bottom: calc(8% + 24px);
     height: 100px;
     mix-blend-mode: multiply;
     right: 48px;
     width: 100px;
+    @include media-breakpoint-down (md) {
+        bottom: calc(20% + 24px);
+        height: 50px;
+        right: 15px;
+        width: 50px;
+    }
 }
-
 
 // Main Content
 .welcom-tomoissuer {
-    min-height: calc(100vh - 105px);
     display: flex;
-    align-items: center;
-    text-align: center;
-    height: 100%;
-    @include media-breakpoint-down(md) {
-        min-height: calc(100vh - 181px);
-    }
-    .btn-box {
+    .page-welcome {
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
-        justify-content: center;
-        padding: 1em 0;
-        margin: 0 -10px;
-        a {
-            margin: 10px;
+        width: 100%;
+        .step-login {
+            text-align: center;
         }
     }
 }

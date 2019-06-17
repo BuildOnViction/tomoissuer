@@ -1,6 +1,6 @@
 .tomo-footer {
     @include fsz(15);
-    padding: 25px 0;
+    padding: 2em 0;
     @include media-breakpoint-down(sm) {
         text-align: center;
     }
