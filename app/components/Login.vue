@@ -78,6 +78,15 @@
                             <span>Trustwallet</span>
                         </template>
                         <div class="content-tab tab-trustwallet">
+                            <p>
+                                Using node at
+                                <a
+                                    href="rpc.tomochain.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    rpc.tomochain.com
+                                </a>
+                            </p>
                             <div class="btn-box">
                                 <b-link
                                     class="tmp-btn-blue"

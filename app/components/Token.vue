@@ -51,7 +51,11 @@
                             <div class="col-6">
                                 <div class="box-item">
                                     <p class="tmp-title-medium">Total supply</p>
-                                    <p class="fsz-size text-blue">92528</p>
+                                    <p
+                                        class="fsz-size text-blue"
+                                        title="900,000,000,000">
+                                        9B
+                                    </p>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -77,7 +81,11 @@
                                         <li>
                                             <p>Profile summary</p>
                                             <p class="common_txt_ellipsis text-blue">
-                                                <a href="#">0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74</a>
+                                                <a
+                                                    href="#"
+                                                    title="0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74">
+                                                    0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74
+                                                </a>
                                             </p>
                                         </li>
                                         <li>
