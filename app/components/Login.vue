@@ -1,6 +1,210 @@
 <template>
     <div class="container">
-        <b-row v-if="loading">loading...</b-row>
+        <div>
+            <b-row v-if="loading">loading...</b-row>
+            <b-row
+                align-v="center"
+                align-h="center"
+                class="m-0">
+                <b-card
+                    v-if="!address"
+                    :class="'col-12 col-md-8 col-lg-7 p-0'
+                    + (loading ? ' tomo-loading' : '')">
+                    <h4 class="color-white tomo-card__title tomo-card__title--big">Login</h4>
+                    <b-form
+                        class="tomo-form tomo-form--setting"
+                        novalidate
+                        @submit.prevent="validate()">
+                        <b-form-group
+                            class="mb-4"
+                            label="Network Provider"
+                            label-for="provider">
+                            <b-input-group>
+                                <b-form-select
+                                    id="provider"
+                                    v-model="provider"
+                                    class="form-control"
+                                    @change="onChangeSelect">
+                                    <option
+                                        value="custom">PrivateKey/MNEMONIC</option>
+                                    <option
+                                        value="ledger">Ledger Wallet</option>
+                                    <option
+                                        value="trezor">Trezor Wallet</option>
+                                    <option
+                                        v-if="!isElectron"
+                                        value="metamask">Metamask/TrustWallet/MidasWallet</option>
+                                </b-form-select>
+                            </b-input-group>
+                            <small
+                                v-if="provider !== 'metamask'"
+                                class="form-text text-muted">Using node at {{ chainConfig.rpc }}.</small>
+                        </b-form-group>
+                        <b-form-group
+                            v-if="provider === 'custom'"
+                            class="mb-4"
+                            label="Privatekey/MNEMONIC"
+                            label-for="mnemonic">
+                            <b-form-input
+                                :class="getValidationClass('mnemonic')"
+                                v-model="mnemonic"
+                                autocomplete="off"
+                                type="text" />
+                            <span
+                                v-if="$v.mnemonic.$dirty && !$v.mnemonic.required"
+                                class="text-danger">Required field</span>
+                        </b-form-group>
+
+                        <b-form-group
+                            v-if="provider === 'custom'"
+                            class="mb-4"
+                            label="Select HD derivation path(MNEMONIC)"
+                            label-for="hdPath">
+                            <b-form-input
+                                :class="getValidationClass('hdPath')"
+                                :value="hdPath"
+                                v-model="hdPath"
+                                type="text" />
+                            <span
+                                v-if="$v.hdPath.$dirty && !$v.hdPath.required"
+                                class="text-danger">Required field</span>
+                            <small
+                                class="form-text text-muted">To unlock the wallet, try paths
+                                <code>m/44'/60'/0'/0</code>
+                                or <code>m/44'/60'/0'</code>
+                                or try path <code>m/44'/889'/0'/0</code></small>
+                        </b-form-group>
+
+                        <b-form-group
+                            v-if="provider === 'tomowallet'"
+                            class="mb-4"
+                            style="text-align: center">
+                            <vue-qrcode
+                                :options="{size: 250 }"
+                                :value="qrCode"
+                                class="img-fluid text-center text-lg-right"/>
+                            <div
+                                v-if="mobileCheck">
+                                <b-button
+                                    :href="qrCodeApp"
+                                    variant="primary">
+                                    Open in App
+                                </b-button>
+                            </div>
+                            <div>
+                                <b>In case you do not have TomoWallet, download here</b>
+                            </div>
+                            <div
+                                style="margin-top: 5px">
+                                <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href="https://goo.gl/MvE1GV"
+                                    class="social-links__link">
+                                    <img src="/app/assets/img/appstore.png" >
+                                </a>
+                                <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href="https://goo.gl/4tFQzY"
+                                    class="social-links__link">
+                                    <img src="/app/assets/img/googleplay.png" >
+                                </a>
+                            </div>
+                        </b-form-group>
+                        <b-form-group
+                            v-if="provider === 'ledger'"
+                            class="mb-4"
+                            label="Select HD derivation path"
+                            label-for="hdPath">
+                            <b-form-input
+                                :class="getValidationClass('hdPath')"
+                                :value="hdPath"
+                                v-model="hdPath"
+                                type="text" />
+                            <span
+                                v-if="$v.hdPath.$dirty && !$v.hdPath.required"
+                                class="text-danger">Required field</span>
+                            <small
+                                class="form-text text-muted">To unlock the wallet, try paths
+                                <code>m/44'/60'/0'</code>
+                                or <code>m/44'/60'/0'/0</code>
+                                with Ethereum App,<br>
+                                or try path <code>m/44'/889'/0'/0</code>
+                                with TomoChain App (on Ledger).</small>
+                        </b-form-group>
+
+                        <b-form-group
+                            v-if="provider === 'trezor'"
+                            class="mb-4"
+                            label-for="hdPath">
+                            <span>HD derivation path: </span>
+                            <label class="ml-1"><b>m/44'/60'/0'/0</b></label>
+                            <!-- <b-form-input
+                                :class="getValidationClass('hdPath')"
+                                :value="hdPath"
+                                v-model="hdPath"
+                                readonly
+                                type="text" /> -->
+                            <!-- <span
+                                v-if="$v.hdPath.$dirty && !$v.hdPath.required"
+                                class="text-danger">Required field</span> -->
+                        </b-form-group>
+
+                        <div
+                            v-if="!isReady && provider === 'metamask'">
+                            <p>Please install &amp; login
+                                <a
+                                    href="https://metamask.io/"
+                                    target="_blank">Metamask Extension</a>
+                                then connect it to Tomochain Mainnet or Testnet.</p>
+                        </div>
+                        <div class="buttons text-right">
+                            <b-button
+                                v-if="provider !== 'tomowallet'"
+                                type="submit"
+                                variant="primary">Save</b-button>
+                        </div>
+                    </b-form>
+                </b-card>
+            </b-row>
+            <b-modal
+                ref="hdwalletModal"
+                title="Please select the address you would like to interact with"
+                centered
+                scrollable
+                size="lg"
+                ok-title="Unlock wallet"
+                cancel-title="Cancel"
+                no-close-on-backdrop
+                no-close-on-esc
+                @ok="setHdPath">
+                <div
+                    v-for="(hdwallet, index) in hdWallets"
+                    :key="index">
+                    <label style="width: 100%; margin-bottom: 5px; line-height: 16px; cursor: pointer">
+                        <input
+                            :value="index"
+                            name="hdWallet"
+                            type="radio"
+                            autocomplete="off"
+                            style="width: 5%; float: left" >
+                        <div style="width: 50%; float: left">
+                            {{ truncate(hdwallet.address, 30) }}
+                        </div>
+                        <div style="width: 30%; margin-left: 2%; float: right">
+                            {{ hdwallet.balance }} {{ getCurrencySymbol() }}
+                        </div>
+                    </label>
+                </div>
+                <div
+                    id="moreHdAddresses"
+                    style="margin-top: 10px; cursor: pointer"
+                    @click="moreHdAddresses">
+                    More Addresses
+                </div>
+            </b-modal>
+        </div>
         <div
             v-if="!address"
             :class="'main-page-login'

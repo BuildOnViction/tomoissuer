@@ -134,13 +134,13 @@
                         active>
                         <template>
                             <p>A total of 822,078 transactions found (Showing the last 100K records)</p>
-                            <div class="tomo_main_table">
+                            <div class="tomo_main_table colum-5">
                                 <b-table
                                     id="transfer_table"
-                                    :per-page="perPage"
-                                    :current-page="currentPage"
-                                    :fields="fields"
-                                    :items="items"
+                                    :per-page="tranferPerPage"
+                                    :current-page="tranferCurrentPage"
+                                    :fields="tranferFields"
+                                    :items="tranferItems"
                                     stacked="lg">
                                     <template
                                         slot="txn_hash"
@@ -168,7 +168,7 @@
                                     <template
                                         slot="icon"
                                         slot-scope="data">
-                                        <i class="tomoissuer-icon-angle-double-right"/>
+                                        <i class="tomoissuer-icon-next-right"/>
                                     </template>
                                     <template
                                         slot="to"
@@ -184,15 +184,45 @@
                         </template>
                         <div class="mt-3 common_tmp_page">
                             <b-pagination
-                                v-model="currentPage"
-                                :total-rows="totalRows"
-                                :per-page="perPage"
+                                v-model="tranferCurrentPage"
+                                :total-rows="tranferRows"
+                                :per-page="tranferPerPage"
                                 aria-controls="transfer_table"
                                 align="center"/>
                         </div>
                     </b-tab>
-                    <b-tab title="Holders">
-                        <b-card-text>Tab Contents 2</b-card-text>
+                    <b-tab
+                        title="holders">
+                        <template>
+                            <p>A total of 822,078 transactions found (Showing the last 100K records)</p>
+                            <div class="tomo_main_table colum-4">
+                                <b-table
+                                    id="holders_table"
+                                    :per-page="holdersPerPage"
+                                    :current-page="holdersCurrentPage"
+                                    :fields="holdersFields"
+                                    :items="holdersItems"
+                                    stacked="lg">
+                                    <template
+                                        slot="address"
+                                        slot-scope="data">
+                                        <a
+                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                            :title="data.value">
+                                            {{ data.value }}
+                                        </a>
+                                    </template>
+                                </b-table>
+                            </div>
+                        </template>
+                        <div class="mt-3 common_tmp_page">
+                            <b-pagination
+                                v-model="holdersCurrentPage"
+                                :total-rows="holdersRows"
+                                :per-page="holdersPerPage"
+                                aria-controls="holders_table"
+                                align="center"/>
+                        </div>
                     </b-tab>
                 </b-tabs>
             </div>
@@ -229,10 +259,10 @@ export default {
             isApplied: false,
             transactionHash: '',
             ownerBalance: '',
-            perPage: 5,
-            currentPage: 1,
-            totalRows: 0,
-            fields: [
+            tranferCurrentPage: 1,
+            tranferRows: 10,
+            tranferPerPage: 5,
+            tranferFields: [
                 { key: 'txn_hash', label: 'Txn Hash' },
                 { key: 'age', label: 'Age' },
                 { key: 'from', label: 'From' },
@@ -240,7 +270,7 @@ export default {
                 { key: 'to', label: 'To' },
                 { key: 'amount', label: 'Amount' }
             ],
-            items: [
+            tranferItems: [
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     age: '40',
@@ -321,6 +351,59 @@ export default {
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     amount: '0.46448'
                 }
+            ],
+            holdersCurrentPage: 1,
+            holdersRows: 7,
+            holdersPerPage: 5,
+            holdersFields: [
+                { key: 'rank', label: 'Rank' },
+                { key: 'address', label: 'Address' },
+                { key: 'amount', label: 'Amount' },
+                { key: 'percentage', label: 'Percentage (%)' }
+            ],
+            holdersItems: [
+                {
+                    rank: '1',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '2',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '3',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '4',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '5',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '6',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '7',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                }
             ]
         }
     },
@@ -330,11 +413,7 @@ export default {
             minValue: minValue(10)
         }
     },
-    computed: {
-        // totalRows () {
-        //     return this.items.length
-        // }
-    },
+    computed: {},
     watch: {},
     updated () {},
     beforeDestroy () {},
@@ -344,8 +423,9 @@ export default {
             await self.getTokenDetail()
             self.getTokenTransfer()
             self.getTokenHolders()
-            self.getOwnerBalance()
-            await self.getTransferTable()
+            // self.getOwnerBalance()
+            self.getTransferTable()
+            self.getHoldersTable()
             self.checkApplied()
         } catch (error) {
             console.log(error)
@@ -417,26 +497,51 @@ export default {
                 this.$toasted.show(error, { type: 'error' })
             }
         },
-        async getTransferTable () {
-            try {
-                const self = this
-                const { data } = await axios.get(`/api/token/txes/${self.address}`)
-                const items = []
-                data.items.map(m => {
-                    items.push({
-                        txn_hash: m.transactionHash,
-                        age: moment(m.createdAt).fromNow(),
-                        from: m.from,
-                        to: m.to,
-                        amount: self.formatNumber(
-                            new BigNumber(m.value).div(10 ** self.token.decimals).toNumber())
+        getTransferTable () {
+            const self = this
+            axios.get(`/api/token/txes/${self.address}`).then(response => {
+                const data = response.data
+                if (data) {
+                    const items = []
+                    data.items.map(m => {
+                        items.push({
+                            txn_hash: m.transactionHash,
+                            age: moment(m.createdAt).fromNow(),
+                            from: m.from,
+                            to: m.to,
+                            amount: self.formatNumber(
+                                new BigNumber(m.value).div(10 ** self.token.decimals).toNumber())
+                        })
                     })
-                })
-                self.items = items
-                self.totalRows = data.total
-            } catch (error) {
+                    self.tranferItems = items
+                    self.tranferRows = data.total
+                }
+            }).catch(error => {
                 console.log(error)
-            }
+                this.$toatsed.show(error, { type: 'error' })
+            })
+        },
+        getHoldersTable () {
+            const self = this
+            axios.get(`/api/token/holders/${self.address}`).then(response => {
+                const data = response.data
+                if (data) {
+                    const items = []
+                    data.items.map(m => {
+                        items.push({
+                            rank: m.rank,
+                            address: m.hash,
+                            amount: self.formatNumber(m.quantityNumber),
+                            percentage: m.percentage
+                        })
+                    })
+                    self.holdersItems = items
+                    self.tranferRows = data.total
+                }
+            }).catch(error => {
+                console.log(error)
+                this.$toatsed.show(error, { type: 'error' })
+            })
         },
         async checkApplied () {
             const contract = await this.getTRC21IssuerInstance()

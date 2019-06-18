@@ -113,10 +113,6 @@
                     }
                 }
                 tr {
-                    @include media-breakpoint-up(lg) {
-                        display: grid;
-                        grid-template-columns: 32% 12% 20% 4% 20% 12%;
-                    }
                     @include media-breakpoint-down(md) {
                         background: $background-white;
                         border-radius: 10px;
@@ -136,6 +132,26 @@
                     .table-icon {
                         @include fsz(10);
                         color: $color-link-default;
+                        text-align: center;
+                        div {
+                            padding-top: 5px;
+                        }
+                    }
+                }
+                &.colum-5 {
+                    tr {
+                        @include media-breakpoint-up(lg) {
+                            display: grid;
+                            grid-template-columns: 32% 12% 20% 4% 20% 12%;
+                        }
+                    }
+                }
+                &.colum-4 {
+                    tr {
+                        @include media-breakpoint-up(lg) {
+                            display: grid;
+                            grid-template-columns: 10% 60% 15% 15%;
+                        }
                     }
                 }
             }
