@@ -353,12 +353,7 @@ Vue.prototype.signMessage = async function (message) {
     }
 }
 
-Vue.prototype.formatCurrencySymbol = function (number) {
-    let unit = this.getCurrencySymbol()
-
-    if (unit === null) {
-        unit = 'TOMO'
-    }
+Vue.prototype.formatCurrencySymbol = function (number, unit) {
     return `${number} ${unit}`
 }
 
@@ -404,6 +399,19 @@ Vue.prototype.serializeQuery = function (params, prefix) {
     })
 
     return [].concat.apply([], query).join('&')
+}
+
+Vue.prototype.formatCapacity = function (value) {
+    // Nine Zeroes for Billions
+    return Math.abs(Number(value)) >= 1.0e+9
+        ? Math.abs(Number(value)) / 1.0e+9 + 'B'
+        // Six Zeroes for Millions
+        : Math.abs(Number(value)) >= 1.0e+6
+            ? Math.abs(Number(value)) / 1.0e+6 + 'M'
+        // Three Zeroes for Thousands
+            : Math.abs(Number(value)) >= 1.0e+3
+                ? Math.abs(Number(value)) / 1.0e+3 + 'K'
+                : Math.abs(Number(value))
 }
 
 /**

@@ -3,11 +3,11 @@
         <div class="main-box-header">
             <div class="row">
                 <div class="col-md-7">
-                    <h2 class="tmp-title-large">TIIM</h2>
+                    <h2 class="tmp-title-large">{{ token.name }}</h2>
                     <div class="under">
                         <span
                             v-if="!moreInfo">
-                            TriipProtocol
+                            {{ token.symbol }}
                         </span>
                         <span
                             v-if="!moreInfo"
@@ -51,19 +51,19 @@
                             <div class="col-6">
                                 <div class="box-item">
                                     <p class="tmp-title-medium">Total supply</p>
-                                    <p class="fsz-size text-blue">92528</p>
+                                    <p class="fsz-size text-blue">{{ formatCapacity(token.totalSupplyNumber) }}</p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
                                     <p class="tmp-title-medium">Transfer</p>
-                                    <p class="fsz-size text-yellow">981</p>
+                                    <p class="fsz-size text-yellow">{{ tokenTransfers }}</p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
                                     <p class="tmp-title-medium">Holder</p>
-                                    <p class="fsz-size text-oranges">8678</p>
+                                    <p class="fsz-size text-oranges">{{ tokenHolders }}</p>
                                 </div>
                             </div>
                         </div>
@@ -77,12 +77,12 @@
                                         <li>
                                             <p>Profile summary</p>
                                             <p class="common_txt_ellipsis text-blue">
-                                                <a href="#">0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74</a>
+                                                <a href="#">{{ token.hash }}</a>
                                             </p>
                                         </li>
                                         <li>
                                             <p>Decimals</p>
-                                            <p>9</p>
+                                            <p>{{ token.decimals }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -98,7 +98,8 @@
                                         <li>
                                             <p>Owner balance</p>
                                             <div class="flex-box">
-                                                <span>100,000,000  TIIM</span>
+                                                <span>{{ formatCurrencySymbol(
+                                                formatNumber(ownerBalance), token.symbol) }}</span>
                                                 <span><a href="#">Transfer</a></span>
                                             </div>
                                         </li>
@@ -143,7 +144,7 @@
                                     <template
                                         slot="age"
                                         slot-scope="data">
-                                        {{ data.item.age }} mins ago
+                                        {{ data.item.age }}
                                     </template>
                                     <template
                                         slot="from"
@@ -172,7 +173,7 @@
                         <div class="mt-3 common_tmp_page">
                             <b-pagination
                                 v-model="currentPage"
-                                :total-rows="rows"
+                                :total-rows="totalRows"
                                 :per-page="perPage"
                                 aria-controls="transfer_table"
                                 align="center"/>
@@ -194,6 +195,8 @@ import { validationMixin } from 'vuelidate'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import { required, minValue } from 'vuelidate/lib/validators'
+import store from 'store'
+import moment from 'moment'
 
 export default {
     name: 'App',
@@ -203,18 +206,20 @@ export default {
         return {
             web3: this.web3,
             address: this.$route.params.address.toLowerCase(),
-            token: null,
+            token: {},
             tokenName: null,
             symbol: null,
-            tokenTxsCount: 0,
-            holdersCount: 0,
+            tokenTransfers: 0,
+            tokenHolders: 0,
             moreInfo: '',
             loading: false,
             depositeAmount: '',
             isApplied: false,
             transactionHash: '',
+            ownerBalance: '',
             perPage: 5,
             currentPage: 1,
+            totalRows: 0,
             fields: [
                 { key: 'txn_hash', label: 'Txn Hash' },
                 { key: 'age', label: 'Age' },
@@ -314,9 +319,9 @@ export default {
         }
     },
     computed: {
-        rows () {
-            return this.items.length
-        }
+        // totalRows () {
+        //     return this.items.length
+        // }
     },
     watch: {},
     updated () {},
@@ -324,7 +329,11 @@ export default {
     created: async function () {
         try {
             const self = this
-            self.getTokenDetail()
+            await self.getTokenDetail()
+            self.getTokenTransfer()
+            self.getTokenHolders()
+            self.getOwnerBalance()
+            await self.getTransferTable()
             self.checkApplied()
         } catch (error) {
             console.log(error)
@@ -339,8 +348,41 @@ export default {
             self.token = data
             self.tokenName = data.name
             self.symbol = data.symbol
-            self.tokenTxsCount = data.tokenTxs
-            self.holdersCount = data.tokenHolders
+        },
+        getTokenTransfer () {
+            axios.get(`/api/token/txes/${this.address}`).then(response => {
+                if (response.data) {
+                    this.tokenTransfers = response.data.total
+                }
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            })
+        },
+        getTokenHolders () {
+            axios.get(`/api/token/holders/${this.address}`).then(response => {
+                if (response.data) {
+                    this.tokenHolders = response.data.total
+                }
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            })
+        },
+        getOwnerBalance () {
+            const account = store.get('address').toLowerCase()
+            const web3 = this.web3
+            // 0x70a08231 is mean balanceOf(address)
+            let data = '0x70a08231' +
+                '000000000000000000000000' +
+                account.substr(2) // chop off the 0x
+            web3.eth.call({ to: this.address, data: data }).then(result => {
+                let balance = new BigNumber(web3.utils.hexToNumberString(result))
+                this.ownerBalance = balance.div(10 ** this.token.decimals).toNumber()
+            }).catch(error => {
+                console.log(error)
+                this.$toatsed.show(error, { type: 'error' })
+            })
         },
         async applyToken () {
             try {
@@ -361,6 +403,26 @@ export default {
                 this.loading = false
                 console.log(error)
                 this.$toasted.show(error, { type: 'error' })
+            }
+        },
+        async getTransferTable () {
+            try {
+                const self = this
+                const { data } = await axios.get(`/api/token/txes/${self.address}`)
+                const items = []
+                data.items.map(m => {
+                    items.push({
+                        txn_hash: m.transactionHash,
+                        age: moment(m.createdAt).fromNow(),
+                        from: m.from,
+                        to: m.to,
+                        quantity: new BigNumber(m.value).div(10 ** self.token.decimals).toNumber()
+                    })
+                })
+                self.items = items
+                self.totalRows = data.total
+            } catch (error) {
+                console.log(error)
             }
         },
         async checkApplied () {

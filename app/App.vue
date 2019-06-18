@@ -81,10 +81,16 @@
                         <div class="col-md-5 col-lg-4">
                             <div class="tomo-social">
                                 <ul>
-                                    <li><a href="#"><i class="tomoissuer-icon-facebook"/></a></li>
-                                    <li><a href="#"><i class="tomoissuer-icon-twiter"/></a></li>
+                                    <li><a
+                                        href="https://www.facebook.com/tomochainofficial"
+                                        target="_blank"><i class="tomoissuer-icon-facebook"/></a></li>
+                                    <li><a
+                                        href="https://twitter.com/TomoChainANN"
+                                        target="_blank"><i class="tomoissuer-icon-twiter"/></a></li>
                                     <li><a href="#"><i class="tomoissuer-icon-telegram"/></a></li>
-                                    <li><a href="#"><i class="tomoissuer-icon-github"/></a></li>
+                                    <li><a
+                                        href="https://github.com/tomochain/"
+                                        target="_blank"><i class="tomoissuer-icon-github"/></a></li>
                                     <li><a href="#"><i class="tomoissuer-icon-linkedin"/></a></li>
                                     <li><a href="#"><i class="tomoissuer-icon-email"/></a></li>
                                 </ul>
