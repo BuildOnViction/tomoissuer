@@ -133,13 +133,13 @@
                         active>
                         <template>
                             <p>A total of 822,078 transactions found (Showing the last 100K records)</p>
-                            <div class="tomo_main_table">
+                            <div class="tomo_main_table colum-5">
                                 <b-table
                                     id="transfer_table"
-                                    :per-page="perPage"
-                                    :current-page="currentPage"
-                                    :fields="fields"
-                                    :items="items"
+                                    :per-page="tranferPerPage"
+                                    :current-page="tranferCurrentPage"
+                                    :fields="tranferFields"
+                                    :items="tranferItems"
                                     stacked="lg">
                                     <template
                                         slot="txn_hash"
@@ -167,7 +167,7 @@
                                     <template
                                         slot="icon"
                                         slot-scope="data">
-                                        <i class="tomoissuer-icon-angle-double-right"/>
+                                        <i class="tomoissuer-icon-next-right"/>
                                     </template>
                                     <template
                                         slot="to"
@@ -183,15 +183,45 @@
                         </template>
                         <div class="mt-3 common_tmp_page">
                             <b-pagination
-                                v-model="currentPage"
-                                :total-rows="rows"
-                                :per-page="perPage"
+                                v-model="tranferCurrentPage"
+                                :total-rows="tranferRows"
+                                :per-page="tranferPerPage"
                                 aria-controls="transfer_table"
                                 align="center"/>
                         </div>
                     </b-tab>
-                    <b-tab title="Holders">
-                        <b-card-text>Tab Contents 2</b-card-text>
+                    <b-tab
+                        title="holders">
+                        <template>
+                            <p>A total of 822,078 transactions found (Showing the last 100K records)</p>
+                            <div class="tomo_main_table colum-4">
+                                <b-table
+                                    id="holders_table"
+                                    :per-page="holdersPerPage"
+                                    :current-page="holdersCurrentPage"
+                                    :fields="holdersFields"
+                                    :items="holdersItems"
+                                    stacked="lg">
+                                    <template
+                                        slot="address"
+                                        slot-scope="data">
+                                        <a
+                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                            :title="data.value">
+                                            {{ data.value }}
+                                        </a>
+                                    </template>
+                                </b-table>
+                            </div>
+                        </template>
+                        <div class="mt-3 common_tmp_page">
+                            <b-pagination
+                                v-model="holdersCurrentPage"
+                                :total-rows="holdersRows"
+                                :per-page="holdersPerPage"
+                                aria-controls="holders_table"
+                                align="center"/>
+                        </div>
                     </b-tab>
                 </b-tabs>
             </div>
@@ -225,9 +255,10 @@ export default {
             depositeAmount: '',
             isApplied: false,
             transactionHash: '',
-            perPage: 5,
-            currentPage: 1,
-            fields: [
+            tranferCurrentPage: 1,
+            tranferRows: 10,
+            tranferPerPage: 5,
+            tranferFields: [
                 { key: 'txn_hash', label: 'Txn Hash' },
                 { key: 'age', label: 'Age' },
                 { key: 'from', label: 'From' },
@@ -235,7 +266,7 @@ export default {
                 { key: 'to', label: 'To' },
                 { key: 'amount', label: 'Amount' }
             ],
-            items: [
+            tranferItems: [
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     age: '40',
@@ -316,6 +347,59 @@ export default {
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     amount: '0.46448'
                 }
+            ],
+            holdersCurrentPage: 1,
+            holdersRows: 7,
+            holdersPerPage: 5,
+            holdersFields: [
+                { key: 'rank', label: 'Rank' },
+                { key: 'address', label: 'Address' },
+                { key: 'amount', label: 'Amount' },
+                { key: 'percentage', label: 'Percentage (%)' }
+            ],
+            holdersItems: [
+                {
+                    rank: '1',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '2',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '3',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '4',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '5',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '6',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                },
+                {
+                    rank: '7',
+                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    amount: '0.46448',
+                    percentage: '50.62'
+                }
             ]
         }
     },
@@ -325,11 +409,7 @@ export default {
             minValue: minValue(10)
         }
     },
-    computed: {
-        rows () {
-            return this.items.length
-        }
-    },
+    computed: {},
     watch: {},
     updated () {},
     beforeDestroy () {},
@@ -352,7 +432,7 @@ export default {
             self.tokenName = data.name
             self.symbol = data.symbol
             self.tokenTxsCount = data.tokenTxs
-            self.holdersCount = data.tokenHolders
+            self.holdersCount = data.tokenholders
         },
         async applyToken () {
             try {
