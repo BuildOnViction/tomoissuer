@@ -14,16 +14,16 @@
                 <h2 class="tmp-title-big">TomoIssuer</h2>
                 <p>Issue your own token with fee paid by itself in minutes</p>
                 <div class="btn-box">
-                    <b-link
+                    <b-button
                         class="tmp-btn-blue"
                         to="/create">
                         Issue new token
-                    </b-link>
-                    <b-link
+                    </b-button>
+                    <b-button
                         class="tmp-btn-boder-blue"
                         to="/login">
                         Donate Txn fee
-                    </b-link>
+                    </b-button>
                 </div>
                 <div class="link-login">
                     <span>Already have your token?</span>

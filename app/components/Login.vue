@@ -7,7 +7,16 @@
             + (loading ? ' tomo-loading' : '')">
             <h4 class="color-white">Unlock your wallet</h4>
             <p>Start by choosing the wallet you would like to unlock</p>
-            <div class="login-page">
+            <p>
+                Using node at
+                <a
+                    href="rpc.tomochain.com"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    rpc.tomochain.com
+                </a>
+            </p>
+            <div class="content-page">
                 <b-tabs>
                     <b-tab active>
                         <template slot="title">
@@ -17,15 +26,6 @@
                             <span>TomoWallet</span>
                         </template>
                         <div class="content-tab tab-tomowallet">
-                            <p class="txt-node">
-                                Using node at
-                                <a
-                                    href="rpc.tomochain.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    rpc.tomochain.com
-                                </a>
-                            </p>
                             <div class="inner text-center">
                                 <p>
                                     <b-img
@@ -52,21 +52,12 @@
                             <span>Metamask</span>
                         </template>
                         <div class="content-tab tab-metamask">
-                            <p>
-                                Using node at
-                                <a
-                                    href="rpc.tomochain.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    rpc.tomochain.com
-                                </a>
-                            </p>
                             <div class="btn-box">
-                                <b-link
+                                <b-button
                                     class="tmp-btn-blue"
                                     to="/">
                                     Unlock your wallet
-                                </b-link>
+                                </b-button>
                             </div>
                         </div>
                     </b-tab>
@@ -78,21 +69,12 @@
                             <span>Trustwallet</span>
                         </template>
                         <div class="content-tab tab-trustwallet">
-                            <p>
-                                Using node at
-                                <a
-                                    href="rpc.tomochain.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    rpc.tomochain.com
-                                </a>
-                            </p>
                             <div class="btn-box">
-                                <b-link
+                                <b-button
                                     class="tmp-btn-blue"
                                     to="/">
                                     Unlock your wallet
-                                </b-link>
+                                </b-button>
                             </div>
                         </div>
                     </b-tab>
