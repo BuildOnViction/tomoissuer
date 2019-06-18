@@ -30,6 +30,10 @@ $font-roboto: 'Roboto', sans-serif;
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+.tomoissuer-icon-reddit:before {
+  content: "\e90f";
+}
 .tomoissuer-icon-angle-double-left:before {
   content: "\e900";
 }

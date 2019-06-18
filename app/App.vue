@@ -2,7 +2,6 @@
     <div id="app">
         <div class="page-layout">
             <b-navbar
-                v-if="isTomonet"
                 toggleable="lg"
                 type="light"
                 class="tomo-header"
@@ -15,6 +14,7 @@
                     </b-navbar-brand>
                     <!-- button menu SP -->
                     <b-navbar-toggle
+                        v-if="isTomonet"
                         target="nav-collapse"
                         class="btn-menu-sp"/>
                     <!-- /button menu SP -->
@@ -92,7 +92,7 @@
                                         href="https://github.com/tomochain/"
                                         target="_blank"><i class="tomoissuer-icon-github"/></a></li>
                                     <li><a href="#"><i class="tomoissuer-icon-linkedin"/></a></li>
-                                    <li><a href="#"><i class="tomoissuer-icon-email"/></a></li>
+                                    <li><a href="#"><i class="tomoissuer-icon-reddit"/></a></li>
                                 </ul>
                             </div>
                         </div>

@@ -1,61 +1,77 @@
 <template>
-    <div class="container">
+    <div class="container con_width">
+        <h4 class="color-white">Issue a new token</h4>
+        <p>Start by choosing the wallet you would like to unlock</p>
         <b-form
             novalidate
             @submit.prevent="validate()">
             <b-form-group
                 class="mb-4"
-                label="Token Type"
-                label-for="type">
-                <b-form-select
-                    id="type"
-                    v-model="type"
-                    class="form-control">
-                    <option
-                        value="trc20">TRC20</option>
-                    <option
-                        value="trc21">TRC21</option>
-                </b-form-select>
-            </b-form-group>
-            <b-form-group
-                class="mb-4"
-                label="Token Name"
-                label-for="tokenName">
+                label-for="tokenName"
+                description="Please use only Latin letters">
                 <b-form-input
                     v-model="tokenName"
-                    type="text" />
+                    type="text"
+                    placeholder="Token name"/>
             </b-form-group>
             <b-form-group
                 class="mb-4"
-                label="Token Symbol"
-                label-for="tokenSymbol">
+                label-for="tokenSymbol"
+                description="Please use only Latin letters">
                 <b-form-input
                     v-model="tokenSymbol"
-                    type="text" />
+                    type="text"
+                    placeholder="Token symbol"/>
             </b-form-group>
             <b-form-group
                 class="mb-4"
-                label="Total Supply"
-                label-for="totalSupply">
+                label-for="tokenSupply">
                 <b-form-input
-                    v-model="totalSupply"
-                    type="text" />
+                    v-model="tokenSupply"
+                    type="number"
+                    placeholder="Token supply"/>
             </b-form-group>
             <b-form-group
                 class="mb-4"
-                label="Decimals"
-                label-for="decimals">
+                label-for="decimals"
+                description="Please use the number from 0 to 18">
                 <b-form-input
                     v-model="decimals"
-                    type="text" />
+                    type="text"
+                    placeholder="Decimals"/>
             </b-form-group>
             <b-form-group
                 class="mb-4"
-                label="Minimum Transaction Fee"
                 label-for="minFee">
                 <b-form-input
                     v-model="minFee"
-                    type="text" />
+                    type="text"
+                    placeholder="Minimum Transaction Fee"/>
+            </b-form-group>
+            <b-form-group
+                class="mb-4"
+                label="Token Type"
+                label-for="type">
+                <b-form-radio-group
+                    id="radio-group-2"
+                    v-model="selected"
+                    name="radio-sub-component">
+                    <b-form-radio
+                        value="TRC20">
+                        TRC20
+                    </b-form-radio>
+                    <b-form-radio
+                        value="TRC21">
+                        TRC21
+                    </b-form-radio>
+                </b-form-radio-group>
+            </b-form-group>
+            <b-form-group
+                class="mb-4"
+                label="Issue fee"
+                label-for="type">
+                <b-form-input
+                    value="50 TOMO"/>
             </b-form-group>
             <div class="buttons text-right">
                 <b-button
@@ -76,7 +92,7 @@ export default {
             tokenSymbol: '',
             decimals: '',
             minFee: '',
-            totalSupply: 0,
+            tokenSupply: '',
             sourceCode: '',
             account: '',
             type: ''
@@ -97,7 +113,7 @@ export default {
                     symbol: this.tokenSymbol,
                     decimals: this.decimals,
                     type: this.type,
-                    totalSupply: this.totalSupply,
+                    tokenSupply: this.tokenSupply,
                     minFee: this.minFee
                 }
             })

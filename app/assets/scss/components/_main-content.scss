@@ -1,10 +1,15 @@
 // Common apply global
-
-.common-main-content {
-    padding-top: 2em;
-    min-height: calc(100vh - 62px - 105px);
-    @include media-breakpoint-down(md) {
-        min-height: calc(100vh - 62px - 182px);
+.common-main-content,
+.welcom-tomoissuer  {
+    padding: 2em 0;
+    min-height: calc(100vh - 62px - 106px);
+    @include media-breakpoint-only(md) {
+        min-height: calc(100vh - 62px - 133px);
+        padding: 1.5em 0;
+    }
+    @include media-breakpoint-down(sm) {
+        min-height: calc(100vh - 62px - 184px);
+        padding: 1.5em 0;
     }
 }
 .common_height_max {
@@ -16,6 +21,7 @@
     white-space: nowrap;
     display: block;
 }
+
 //common_tmp_page
 .common_tmp_page {
     ul {
@@ -60,5 +66,18 @@
                 }
             }
         }
+    }
+}
+
+//btn-box
+.btn-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 1em 0;
+    margin: 0 -10px;
+    a {
+        margin: 10px;
     }
 }
