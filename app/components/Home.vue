@@ -1,7 +1,6 @@
 <template>
     <list-token
-        v-if="account"
-        style="text-align: center; padding-top: 10em" />
+        v-if="account"/>
     <welcome v-else/>
 </template>
 

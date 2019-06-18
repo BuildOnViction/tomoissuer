@@ -51,7 +51,11 @@
                             <div class="col-6">
                                 <div class="box-item">
                                     <p class="tmp-title-medium">Total supply</p>
-                                    <p class="fsz-size text-blue">92528</p>
+                                    <p
+                                        class="fsz-size text-blue"
+                                        title="900,000,000,000">
+                                        9B
+                                    </p>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -77,7 +81,11 @@
                                         <li>
                                             <p>Profile summary</p>
                                             <p class="common_txt_ellipsis text-blue">
-                                                <a href="#">0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74</a>
+                                                <a
+                                                    href="#"
+                                                    title="0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74">
+                                                    0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74
+                                                </a>
                                             </p>
                                         </li>
                                         <li>
@@ -124,6 +132,7 @@
                         title="Transfer"
                         active>
                         <template>
+                            <p>A total of 822,078 transactions found (Showing the last 100K records)</p>
                             <div class="tomo_main_table">
                                 <b-table
                                     id="transfer_table"
@@ -136,7 +145,8 @@
                                         slot="txn_hash"
                                         slot-scope="data">
                                         <a
-                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">
+                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                            :title="data.value">
                                             {{ data.value }}
                                         </a>
                                     </template>
@@ -149,7 +159,8 @@
                                         slot="from"
                                         slot-scope="data">
                                         <a
-                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">
+                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                            :title="data.value">
                                             {{ data.value }}
                                         </a>
                                     </template>
@@ -162,7 +173,8 @@
                                         slot="to"
                                         slot-scope="data">
                                         <a
-                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">
+                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                            :title="data.value">
                                             {{ data.value }}
                                         </a>
                                     </template>
@@ -221,7 +233,7 @@ export default {
                 { key: 'from', label: 'From' },
                 { key: 'icon', label: '', variant: 'icon d-none d-lg-block' },
                 { key: 'to', label: 'To' },
-                { key: 'quantity', label: 'Quantity' }
+                { key: 'amount', label: 'Amount' }
             ],
             items: [
                 {
@@ -230,7 +242,7 @@ export default {
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    quantity: '0.46448'
+                    amount: '0.46448'
                 },
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
@@ -238,7 +250,7 @@ export default {
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    quantity: '0.46448'
+                    amount: '0.46448'
                 },
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
@@ -246,7 +258,7 @@ export default {
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    quantity: '0.46448'
+                    amount: '0.46448'
                 },
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
@@ -254,7 +266,7 @@ export default {
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    quantity: '0.46448'
+                    amount: '0.46448'
                 },
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
@@ -262,7 +274,7 @@ export default {
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    quantity: '0.46448'
+                    amount: '0.46448'
                 },
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
@@ -270,7 +282,7 @@ export default {
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    quantity: '0.46448'
+                    amount: '0.46448'
                 },
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
@@ -278,7 +290,7 @@ export default {
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    quantity: '0.46448'
+                    amount: '0.46448'
                 },
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
@@ -286,7 +298,7 @@ export default {
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    quantity: '0.46448'
+                    amount: '0.46448'
                 },
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
@@ -294,7 +306,7 @@ export default {
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    quantity: '0.46448'
+                    amount: '0.46448'
                 },
                 {
                     txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
@@ -302,7 +314,7 @@ export default {
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
                     to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    quantity: '0.46448'
+                    amount: '0.46448'
                 }
             ]
         }

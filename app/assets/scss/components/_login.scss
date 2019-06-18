@@ -1,4 +1,53 @@
-//welcome-tomoissuer
-.loginpage {
-    
+//login page
+.main-page-login {
+    h4 {
+        margin-bottom: .5em;
+    }
+    >p {
+        margin-bottom: 0px;
+    }
+    .content-page {
+        padding: 2em 0 1em;
+        ul.nav-tabs {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            border: 0;
+            li {
+                a {
+                    border-radius: 10px;
+                    color: $color-text-gray;
+                    border: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    flex-wrap: wrap;
+                    min-height: 150px;
+                    margin: 2px;
+                    height: 100%;
+                    width: 100%;
+                    max-width: 250px;
+                    padding: 1em;
+                    span {
+                        width: 100%;
+                    }
+                    &.active,
+                    &:hover {
+                        background: #fff;
+                        box-shadow: 0 10px 20px 0 rgba(23, 21, 48, 0.02);
+                    }
+                }
+            }
+        }
+        .tab-content {
+            padding: 5em 0 2em;
+        }
+    }
+}
+
+//width box
+.container.con_width {
+    max-width: 600px;
 }
