@@ -16,7 +16,7 @@
             border: 0;
             li {
                 a {
-                    border-radius: 10px;
+                    border-radius: $boderradius-default;
                     color: $color-text-gray;
                     border: 0;
                     display: flex;
@@ -36,7 +36,7 @@
                     &.active,
                     &:hover {
                         background: #fff;
-                        box-shadow: 0 10px 20px 0 rgba(23, 21, 48, 0.02);
+                        box-shadow: $boxshadow-default;
                     }
                 }
             }
@@ -45,9 +45,4 @@
             padding: 5em 0 2em;
         }
     }
-}
-
-//width box
-.container.con_width {
-    max-width: 600px;
 }

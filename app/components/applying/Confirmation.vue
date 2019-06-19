@@ -1,41 +1,71 @@
 <template>
-    <div class="container">
-        <div
-            v-if="account"
-            style="text-align: center; padding-top: 1em;padding-bottom: 1em;">
-            Welcome {{ account }}
-        </div>
-        <codemirror
-            ref="code"
-            v-model="sourceCode"
-            :options="{mode:'application/ld+json',styleActiveLine:false}"/>
-        <div class="buttons text-right">
-            <b-button
-                variant="primary"
-                @click="deploy">Create</b-button>
-        </div>
-        <div
-            v-if="loading"
-            class="mt-5">loading.....</div>
-        <div class="mt-5">
-            <b-form-group
-                v-if="transactionHash"
-                class="mb-4"
-                label="Transaction Hash"
-                label-for="transactionHash">
-                <b-form-input
-                    v-model="transactionHash"
-                    type="text" />
-            </b-form-group>
-            <b-form-group
-                v-if="contractAddress"
-                class="mb-4"
-                label="Contract Address"
-                label-for="contractAddress">
-                <b-form-input
-                    v-model="contractAddress"
-                    type="text" />
-            </b-form-group>
+    <div class="container container-min">
+        <div class="confirm-newtoken">
+            <div class="info-header text-center">
+                <p><i class="tomoissuer-icon-startup"/></p>
+                <h2 class="tmp-title-large">100,000,000.000000 TIIM </h2>
+            </div>
+            <table>
+                <tr>
+                    <td>Token name</td>
+                    <td>Triip Protocol</td>
+                </tr>
+                <tr>
+                    <td>Token symbol</td>
+                    <td>TIIM</td>
+                </tr>
+                <tr>
+                    <td>Type</td>
+                    <td>TRC-721</td>
+                </tr>
+                <tr>
+                    <td>Code review</td>
+                    <td>
+                        1.  name  TriipMiles string<br>
+                        2.  totalTeamAllocated  0 uint256<br>
+                        3.  totalSupply  500000000000000000000000000 uint256<br>
+                        4.  TIIM_UNIT  1000000000000000000 uint256<br>
+                        5.  decimals  18 uint256<br>
+                        6.  endTime  1554051599 uint256<br>
+                        7.  tiimEcosystemWallet  0x8a7A6E2BFc70E9AB0cC9eAeac542BE3D08f510cC address<br>
+                        8.  teamTranchesReleased  0 uint256<br>
+                        9.  teamWallet<br>
+                    </td>
+                </tr>
+            </table>
+            <div class="btn-box">
+                <b-button
+                    class="tmp-btn-boder-blue btn-min"
+                    to="create">
+                    Back
+                </b-button>
+                <b-button
+                    v-b-modal.modal-center
+                    class="tmp-btn-blue">
+                    Donate now
+                </b-button>
+            </div>
+            <b-modal
+                id="modal-center"
+                size="sm"
+                hide-header
+                hide-footer
+                centered>
+                <div class="tomo-modal-default">
+                    <div class="msg-txt">
+                        <i class="tomoissuer-icon-checkmark-outline"/>
+                        <h4>Successful</h4>
+                        <span>Token successfully issued</span>
+                    </div>
+                    <div class="btn-box">
+                        <b-button
+                            class="tmp-btn-blue"
+                            to="/"
+                            @click="hide()">View detail
+                        </b-button>
+                    </div>
+                </div>
+            </b-modal>
         </div>
     </div>
 </template>

@@ -23,6 +23,10 @@ strong {
     font-weight: 700;
 }
 
+small, .small {
+	@include fsz-cha(14);
+}
+
 img {
 	height: auto; /* Make sure images are scaled correctly. */
 	max-width: 100%; /* Adhere to container width. */
