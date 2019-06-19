@@ -92,6 +92,10 @@
                                             <p>Decimals</p>
                                             <p>9</p>
                                         </li>
+                                        <li>
+                                            <p>Transaction Fee</p>
+                                            <p>0.4334</p>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -125,7 +129,7 @@
                 </div>
             </div>
             <!-- /info_tiim -->
-            <div class="info_others">
+            <div class="tmp-table-one">
                 <b-tabs
                     content-class="mt-3">
                     <b-tab
@@ -225,7 +229,7 @@
                     </b-tab>
                 </b-tabs>
             </div>
-            <!-- /info_others -->
+            <!-- /tmp-table-one -->
         </div>
         <!-- /main-box-header -->
     </div>
@@ -257,7 +261,7 @@ export default {
             transactionHash: '',
             tranferCurrentPage: 1,
             tranferRows: 10,
-            tranferPerPage: 5,
+            tranferPerPage: 6,
             tranferFields: [
                 { key: 'txn_hash', label: 'Txn Hash' },
                 { key: 'age', label: 'Age' },
@@ -350,7 +354,7 @@ export default {
             ],
             holdersCurrentPage: 1,
             holdersRows: 7,
-            holdersPerPage: 5,
+            holdersPerPage: 6,
             holdersFields: [
                 { key: 'rank', label: 'Rank' },
                 { key: 'address', label: 'Address' },

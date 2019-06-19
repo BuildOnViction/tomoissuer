@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div>
+        <div class="d-none">
             <b-row v-if="loading">loading...</b-row>
             <b-row
                 align-v="center"
@@ -209,7 +209,7 @@
             v-if="!address"
             :class="'main-page-login'
             + (loading ? ' tomo-loading' : '')">
-            <h4 class="color-white">Unlock your wallet</h4>
+            <h2 class="tmp-title-large">Unlock your wallet</h2>
             <p>Start by choosing the wallet you would like to unlock</p>
             <p>
                 Using node at

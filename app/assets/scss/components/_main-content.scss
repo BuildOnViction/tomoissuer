@@ -1,7 +1,7 @@
 // Common apply global
 .common-main-content,
 .welcom-tomoissuer  {
-    padding: 2em 0;
+    padding: 3em 0 2em;
     min-height: calc(100vh - 62px - 106px);
     @include media-breakpoint-only(md) {
         min-height: calc(100vh - 62px - 133px);
@@ -62,7 +62,7 @@
                 a {
                     background: $background-white;
                     color: $color-text-gray;
-                    box-shadow: 0 10px 20px 0 rgba(23, 21, 48, 0.02);
+                    box-shadow: $boxshadow-default;
                 }
             }
         }

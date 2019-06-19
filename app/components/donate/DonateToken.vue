@@ -85,7 +85,7 @@
 
 <script>
 export default {
-    name: 'App',
+    name: 'Donate',
     components: { },
     data () {
         return {

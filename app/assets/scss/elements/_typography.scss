@@ -1,5 +1,4 @@
 // Begin style title
-
 .tmp-title-small {
 	@include fsz(10);
 	font-family: $font-quicksand;
@@ -19,7 +18,7 @@
 }
 
 .tmp-title-normal {
-	@include fsz(14);
+	@include fsz(16);
 	font-family: $font-quicksand;
 	color: $color-text-default;
 	font-weight: normal;
@@ -38,7 +37,7 @@
 }
 
 .tmp-title-medium {
-	@include fsz-cha(16,16,15);
+	@include fsz-cha(20,18,18);
 	font-family: $font-baijam;
 	color: $color-text-default;
 	&.oranges {
@@ -56,7 +55,7 @@
 }
 
 .tmp-title-large {
-	@include fsz(24);
+	@include fsz-cha(28,24,24);
 	font-family: $font-baijam;
 	color: $color-text-default;
 	&.oranges {

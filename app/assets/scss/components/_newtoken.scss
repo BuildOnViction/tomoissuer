@@ -1,0 +1,80 @@
+.container-min {
+    max-width: 600px!important;
+}
+
+// Page creat token
+.newtoken {
+    .form-new-token {
+        margin-top: 30px;
+    }
+    .form-text {
+        color: $color-text-blue!important;
+        margin-top: 10px;
+    }
+    .form-group {
+        >label {
+            margin: 0 25px 0 0;
+            font-weight: 500;
+            min-width: 100px;
+        }
+    }
+    .flex-box {
+        display: flex;
+        align-items: center;
+        .box-radio {
+            display: flex;
+            align-items: center;
+            label {
+                padding: 2px 0;
+            }
+        }
+    }
+}
+
+// Pge confirm
+.confirm-newtoken {
+    .info-header {
+        margin-bottom: 50px;
+        @include media-breakpoint-down (md) {
+            margin-bottom: 30px;
+        }
+    }
+    .tomoissuer-icon-startup {
+        @include fsz-cha(90,70,70);
+        color: $color-text-blue;
+    }
+    table {
+        tr {
+            display: grid;
+            grid-template-columns: 30% 70%;
+            td {
+                &:first-child {
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+}
+
+// Modal
+.modal-content {
+    border-radius: $boderradius-default;
+}
+.tomo-modal-default {
+    padding: 1em;
+    text-align: center;
+    .msg-txt {
+        @include fsz-cha(18);
+        i {
+            @include fsz-cha(50,40,40);
+            color: $color-text-blue;
+        }
+        h4 {
+            @include fsz-cha(18);
+            margin: 15px 0 0;
+        }
+    }
+    .btn-box {
+        padding-bottom: 0;
+    }
+}

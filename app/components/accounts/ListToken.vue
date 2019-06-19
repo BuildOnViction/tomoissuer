@@ -1,63 +1,65 @@
 <template>
     <div class="container">
-        <b-table
-            :items="tokens"
-            :fields="fields"
-            :per-page="perPage"
-            empty-text="There are no candidates to show"
-            stacked="lg">
-
-            <template
-                slot="hash"
-                slot-scope="data">
-                <router-link
-                    :to="'/token/' + data.item.hash">
-                    {{ truncate(data.item.hash, 20) }}
-                </router-link>
-            </template>
-
-            <template
-                slot="symbol"
-                slot-scope="data">{{ data.item.symbol }}
-            </template>
-        </b-table>
-        <b-pagination
-            v-if="totalRows > 0 && totalRows > perPage"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            v-model="currentPage"
-            align="center"
-            @change="pageChange">
-            <span
-                slot="first-text"
-                class="text-success">First</span>
-            <span
-                slot="prev-text"
-                class="text-danger">Prev</span>
-            <span
-                slot="next-text"
-                class="text-warning">Next</span>
-            <span
-                slot="last-text"
-                class="text-info">Last</span>
-            <div slot="ellipsis-text">
-                <b-spinner
-                    small
-                    type="grow"/>
-                <b-spinner
-                    small
-                    type="grow"/>
-                <b-spinner
-                    small
-                    type="grow"/>
-            </div>
-            <span
-                slot="page"
-                slot-scope="{ page, active }">
-                <b v-if="active">{{ page }}</b>
-                <i v-else>{{ page }}</i>
-            </span>
-        </b-pagination>
+        <h2 class="tmp-title-large">Issue token</h2>
+        <div class="tmp-table-one">
+            <b-tab
+                title="Transfer"
+                active>
+                <template>
+                    <div class="tomo_main_table colum-8">
+                        <b-table
+                            id="transfer_table"
+                            :per-page="listokenPerPage"
+                            :current-page="listokenCurrentPage"
+                            :fields="listokenFields"
+                            :items="listokenItems"
+                            stacked="lg">
+                            <template
+                                slot="token"
+                                slot-scope="data">
+                                <a
+                                    :href="`token/0x2f8fa62a62410febc56c96c3ceb8666e193a1be3`"
+                                    :title="data.value">
+                                    {{ data.value }}
+                                </a>
+                            </template>
+                            <template
+                                slot="age"
+                                slot-scope="data">
+                                {{ data.item.age }} mins ago
+                            </template>
+                            <template
+                                slot="transfertoken"
+                                slot-scope="data">
+                                <a
+                                    :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                    :title="data.value">
+                                    {{ data.value }}
+                                </a>
+                            </template>
+                            <template
+                                slot="applytomoz"
+                                slot-scope="data">
+                                <a
+                                    :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                    :title="data.value">
+                                    {{ data.value }}
+                                </a>
+                            </template>
+                        </b-table>
+                    </div>
+                </template>
+                <div class="mt-3 common_tmp_page">
+                    <b-pagination
+                        v-model="listokenCurrentPage"
+                        :total-rows="listokenRows"
+                        :per-page="listokenPerPage"
+                        aria-controls="transfer_table"
+                        align="center"/>
+                </div>
+            </b-tab>
+        </div>
+        <!-- /tmp-table-one -->
     </div>
 </template>
 
@@ -69,6 +71,121 @@ export default {
     components: { },
     data () {
         return {
+            listokenCurrentPage: 1,
+            listokenRows: 10,
+            listokenPerPage: 7,
+            listokenFields: [
+                { key: 'token', label: 'Token' },
+                { key: 'price', label: 'Price' },
+                { key: 'volume', label: 'Volume 24h' },
+                { key: 'totalsupply', label: 'Total supply' },
+                { key: 'overbalance', label: 'Over balance' },
+                { key: 'holders', label: 'Holders' },
+                { key: 'transfertoken', label: '', variant: 'sp-text-center' },
+                { key: 'applytomoz', label: '', variant: 'sp-text-center' }
+            ],
+            listokenItems: [
+                {
+                    token: 'TIIM (Triip Protocol)',
+                    price: 40,
+                    volume: '43443',
+                    totalsupply: '3424',
+                    overbalance: '54354',
+                    holders: '92',
+                    transfertoken: 'Transfer token',
+                    applytomoz: 'Apply TomoZ'
+                },
+                {
+                    token: 'TIMES (USA Invesment)',
+                    price: 21,
+                    volume: '43443',
+                    totalsupply: '3424',
+                    overbalance: '43443',
+                    holders: '92',
+                    transfertoken: 'Transfer token',
+                    applytomoz: 'Apply TomoZ'
+                },
+                {
+                    token: 'DAS (My Reload)',
+                    price: 89,
+                    volume: '43443',
+                    totalsupply: '3424',
+                    overbalance: '43443',
+                    holders: '92',
+                    transfertoken: 'Transfer token',
+                    applytomoz: 'Apply TomoZ'
+                },
+                {
+                    token: 'NIKO (NIKEN Company)',
+                    price: 40,
+                    volume: '43443',
+                    totalsupply: '3424',
+                    overbalance: '43443',
+                    holders: '92',
+                    transfertoken: 'Transfer token',
+                    applytomoz: 'Apply TomoZ'
+                },
+                {
+                    token: 'NIKO (NIKEN Company)',
+                    price: 29,
+                    volume: '43443',
+                    totalsupply: '3424',
+                    overbalance: '43443',
+                    holders: '92',
+                    transfertoken: 'Transfer token',
+                    applytomoz: 'Apply TomoZ'
+                },
+                {
+                    token: 'NIKO (NIKEN Company)',
+                    price: 40,
+                    volume: '43443',
+                    totalsupply: '3424',
+                    overbalance: '43443',
+                    holders: '92',
+                    transfertoken: 'Transfer token',
+                    applytomoz: 'Apply TomoZ'
+                },
+                {
+                    token: 'NIKO (NIKEN Company)',
+                    price: 21,
+                    volume: '43443',
+                    totalsupply: '3424',
+                    overbalance: '43443',
+                    holders: '92',
+                    transfertoken: 'Transfer token',
+                    applytomoz: 'Apply TomoZ'
+                },
+                {
+                    token: 'NIKO (NIKEN Company)',
+                    price: 89,
+                    volume: '43443',
+                    totalsupply: '3424',
+                    overbalance: '43443',
+                    holders: '92',
+                    transfertoken: 'Transfer token',
+                    applytomoz: 'Apply TomoZ'
+                },
+                {
+                    token: 'NIKO (NIKEN Company)',
+                    price: 40,
+                    volume: '43443',
+                    totalsupply: '3424',
+                    overbalance: '43443',
+                    holders: '92',
+                    transfertoken: 'Transfer token',
+                    applytomoz: 'Apply TomoZ'
+                },
+                {
+                    token: 'NIKO (NIKEN Company)',
+                    price: 29,
+                    volume: '43443',
+                    totalsupply: '3424',
+                    overbalance: '43443',
+                    holders: '92',
+                    transfertoken: 'Transfer token',
+                    applytomoz: 'Apply TomoZ'
+                }
+            ],
             address: store.get('address'),
             fields: [
                 {
