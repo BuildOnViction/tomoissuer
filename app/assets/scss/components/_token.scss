@@ -57,15 +57,15 @@
             }
         }
         ul {
-            padding: 1em 0 1em 1.2em;
+            padding: 0 0 0 1.2em;
             li {
                 list-style: disc;
-                margin-bottom: 1.5em;
+                margin-bottom: 1em;
                 &:last-child {
                     margin-bottom: 0;
                 }
                 p {
-                    margin-bottom: .5em;
+                    margin-bottom: .2em;
                     &:last-child {
                         font-weight: 500;
                     }
