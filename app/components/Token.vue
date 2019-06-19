@@ -92,6 +92,10 @@
                                             <p>Decimals</p>
                                             <p>{{ token.decimals }}</p>
                                         </li>
+                                        <li>
+                                            <p>Transaction Fee</p>
+                                            <p>0.4334</p>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
