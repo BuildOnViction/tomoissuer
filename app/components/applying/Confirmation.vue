@@ -3,33 +3,37 @@
         <div class="confirm-newtoken">
             <div class="info-header text-center">
                 <p><i class="tomoissuer-icon-startup"/></p>
-                <h2 class="tmp-title-large">100,000,000.000000 TIIM </h2>
+                <h2 class="tmp-title-large">{{ formatCurrencySymbol(formatNumber(totalSupply), tokenSymbol) }}</h2>
             </div>
             <table>
                 <tr>
                     <td>Token name</td>
-                    <td>Triip Protocol</td>
+                    <td>{{ tokenName }}</td>
                 </tr>
                 <tr>
                     <td>Token symbol</td>
-                    <td>TIIM</td>
+                    <td>{{ tokenSymbol }}</td>
                 </tr>
                 <tr>
                     <td>Type</td>
-                    <td>TRC-721</td>
+                    <td>{{ type.toUpperCase() }}</td>
                 </tr>
                 <tr>
                     <td>Code review</td>
                     <td>
-                        1.  name  TriipMiles string<br>
-                        2.  totalTeamAllocated  0 uint256<br>
-                        3.  totalSupply  500000000000000000000000000 uint256<br>
-                        4.  TIIM_UNIT  1000000000000000000 uint256<br>
-                        5.  decimals  18 uint256<br>
-                        6.  endTime  1554051599 uint256<br>
-                        7.  tiimEcosystemWallet  0x8a7A6E2BFc70E9AB0cC9eAeac542BE3D08f510cC address<br>
-                        8.  teamTranchesReleased  0 uint256<br>
-                        9.  teamWallet<br>
+                        <codemirror
+                            ref="code"
+                            v-model="sourceCode"
+                            :options="{mode:'application/ld+json',styleActiveLine:false}"/>
+                            <!-- 1.  name  TriipMiles string<br>
+                            2.  totalTeamAllocated  0 uint256<br>
+                            3.  totalSupply  500000000000000000000000000 uint256<br>
+                            4.  TIIM_UNIT  1000000000000000000 uint256<br>
+                            5.  decimals  18 uint256<br>
+                            6.  endTime  1554051599 uint256<br>
+                            7.  tiimEcosystemWallet  0x8a7A6E2BFc70E9AB0cC9eAeac542BE3D08f510cC address<br>
+                            8.  teamTranchesReleased  0 uint256<br>
+                            9.  teamWallet<br> -->
                     </td>
                 </tr>
             </table>
@@ -44,6 +48,32 @@
                     class="tmp-btn-blue">
                     Donate now
                 </b-button>
+                <b-button
+                    variant="primary"
+                    @click="deploy">Create</b-button>
+            </div>
+            <div
+                v-if="loading"
+                class="mt-5">loading.....</div>
+            <div class="mt-5">
+                <b-form-group
+                    v-if="transactionHash"
+                    class="mb-4"
+                    label="Transaction Hash"
+                    label-for="transactionHash">
+                    <b-form-input
+                        v-model="transactionHash"
+                        type="text" />
+                </b-form-group>
+                <b-form-group
+                    v-if="contractAddress"
+                    class="mb-4"
+                    label="Contract Address"
+                    label-for="contractAddress">
+                    <b-form-input
+                        v-model="contractAddress"
+                        type="text" />
+                </b-form-group>
             </div>
             <b-modal
                 id="modal-center"
@@ -213,6 +243,7 @@ export default {
                             nonce: web3.utils.toHex(nonce)
                         }
                     )
+                    console.log(data)
 
                     const signature = await self.signTransaction(data)
                     result = await self.sendSignedTransaction(dataTx, signature)

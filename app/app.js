@@ -10,6 +10,7 @@ import TokenDetail from './components/Token.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
+import TomoXListingAritfacts from '../build/contracts/TOMOXListing.json'
 
 import Web3 from 'web3'
 import BootstrapVue from 'bootstrap-vue'
@@ -77,6 +78,9 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
     if (wjs instanceof Web3) {
         Vue.prototype.web3 = wjs
         Vue.prototype.TRC21Issuer.setProvider(wjs.currentProvider.connection || wjs.currentProvider)
+        Vue.prototype.TomoXListing = new wjs.eth.Contract(
+            TomoXListingAritfacts.abi,
+            '0xe88E11b7312fF1194a8f61b1e7fC52C26EB9b216')
     }
 }
 

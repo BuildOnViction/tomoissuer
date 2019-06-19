@@ -108,14 +108,6 @@ export default {
             this.confirm()
         },
         confirm () {
-            console.log({
-                name: this.tokenName,
-                symbol: this.tokenSymbol,
-                decimals: this.decimals,
-                type: this.type,
-                totalSupply: this.totalSupply,
-                minFee: this.minFee
-                })
             this.$router.push({ name: 'Confirmation',
                 query: {
                     name: this.tokenName,

@@ -114,7 +114,7 @@
                                         <li>
                                             <p>Pooling fee</p>
                                             <div class="flex-box">
-                                                <span>2,000 TOMO</span>
+                                                <span>{{ poolingFee }} TOMO</span>
                                                 <span><a href="#">Deposit more</a></span>
                                             </div>
                                         </li>
@@ -261,6 +261,7 @@ export default {
             isApplied: false,
             transactionHash: '',
             ownerBalance: '',
+            poolingFee: '',
             tranferCurrentPage: 1,
             tranferRows: 10,
             tranferPerPage: 6,
@@ -423,6 +424,7 @@ export default {
         try {
             const self = this
             await self.getTokenDetail()
+            self.getPoolingFee()
             self.getTokenTransfer()
             self.getTokenHolders()
             self.getOwnerBalance()
@@ -512,6 +514,20 @@ export default {
                     this.$toatsed.show(error, { type: 'error' })
                 })
             }
+        },
+        getPoolingFee () {
+            this.getTRC21IssuerInstance().then(contract => {
+                contract.getTokenCapacity(this.address).then(capacity => {
+                    let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
+                    this.poolingFee = balance.div(10 ** this.token.decimals).toNumber()
+                }).catch(error => {
+                    console.log(error)
+                    this.$toatsed.show(error, { type: 'error' })
+                })
+            }).catch(error => {
+                console.log(error)
+                this.$toatsed.show(error, { type: 'error' })
+            })
         },
         async applyToken () {
             try {
