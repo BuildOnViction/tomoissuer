@@ -33,8 +33,8 @@
     }
     .box-item {
         background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 10px 20px 0 rgba(23, 21, 48, 0.02);
+        border-radius: $boderradius-default;
+        box-shadow: $boxshadow-default;
         padding: 1.2em;
         height: 100%;
         p {
@@ -76,85 +76,22 @@
             }
         }
     }
-    .info_others {
-        padding-top: 1em;
-        .nav-tabs {
-            border: 0;
-            li {
-                padding-right: 3em;
-                &:last-child {
-                    padding-right: 0;
-                }
-                .nav-link {
-                    background: transparent;
-                    border: 0;
-                    color: $color-text-gray;
-                    padding: .5em 0;
-                    &.active {
-                        font-weight: bold;
-                    }
-                }
-            }
-        }
-        .tab-content {
-            .tomo_main_table {
-                @include media-breakpoint-up(lg) {
-                    background: $background-white;
-                    border-radius: 10px;
-                    box-shadow: 0 10px 20px 0 rgba(23, 21, 48, 0.02);
-                    padding: 1em;
-                }
-                tbody {
-                    @include media-breakpoint-only(md) {
-                        display: grid;
-                        grid-template-columns: 50% 50%;
-                        grid-column-gap: 20px;
-                        margin-right: 20px;
-                    }
-                }
-                tr {
-                    @include media-breakpoint-down(md) {
-                        background: $background-white;
-                        border-radius: 10px;
-                        box-shadow: 0 10px 20px 0 rgba(23, 21, 48, 0.02);
-                        padding: 1em;
-                        margin-bottom: 15px;
-                    }
-                    th,td {
-                        border: 0;
-                        a {
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                            display: block;
-                        }
-                    }
-                    .table-icon {
-                        @include fsz(10);
-                        color: $color-link-default;
-                        text-align: center;
-                        div {
-                            padding-top: 5px;
-                        }
-                    }
-                }
-                &.colum-5 {
-                    tr {
-                        @include media-breakpoint-up(lg) {
-                            display: grid;
-                            grid-template-columns: 32% 12% 20% 4% 20% 12%;
-                        }
-                    }
-                }
-                &.colum-4 {
-                    tr {
-                        @include media-breakpoint-up(lg) {
-                            display: grid;
-                            grid-template-columns: 10% 60% 15% 15%;
-                        }
-                    }
-                }
-            }
-        }
-    }
+    .nav-tabs {
+		border: 0;
+		li {
+			padding-right: 3em;
+			&:last-child {
+				padding-right: 0;
+			}
+			.nav-link {
+				background: transparent;
+				border: 0;
+				color: $color-text-gray;
+				padding: .5em 0;
+				&.active {
+					font-weight: bold;
+				}
+			}
+		}
+	}
 }
