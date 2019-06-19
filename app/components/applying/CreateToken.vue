@@ -27,7 +27,7 @@
                 class="mb-4"
                 label-for="tokenSupply">
                 <b-form-input
-                    v-model="tokenSupply"
+                    v-model="totalSupply"
                     type="number"
                     placeholder="Token supply"/>
             </b-form-group>
@@ -54,14 +54,14 @@
                 label-for="type">
                 <b-form-radio-group
                     id="radio-group-2"
-                    v-model="selected"
+                    v-model="type"
                     name="radio-sub-component">
                     <b-form-radio
-                        value="TRC20">
+                        value="trc20">
                         TRC20
                     </b-form-radio>
                     <b-form-radio
-                        value="TRC21">
+                        value="trc21">
                         TRC21
                     </b-form-radio>
                 </b-form-radio-group>
@@ -91,8 +91,8 @@ export default {
             tokenName: '',
             tokenSymbol: '',
             decimals: '',
-            minFee: '',
-            tokenSupply: '',
+            minFee: 0,
+            totalSupply: '',
             sourceCode: '',
             account: '',
             type: ''
@@ -107,13 +107,21 @@ export default {
             this.confirm()
         },
         confirm () {
+            console.log({
+                name: this.tokenName,
+                symbol: this.tokenSymbol,
+                decimals: this.decimals,
+                type: this.type,
+                totalSupply: this.totalSupply,
+                minFee: this.minFee
+                })
             this.$router.push({ name: 'Confirmation',
                 query: {
                     name: this.tokenName,
                     symbol: this.tokenSymbol,
                     decimals: this.decimals,
                     type: this.type,
-                    tokenSupply: this.tokenSupply,
+                    totalSupply: this.totalSupply,
                     minFee: this.minFee
                 }
             })

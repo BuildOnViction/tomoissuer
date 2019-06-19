@@ -26,8 +26,8 @@
                         <ul>
                             <li>
                                 <b-link
-                                    class="tmp-btn-violet"
-                                    to="/create">
+                                    :to="'/apply/' + address"
+                                    class="tmp-btn-violet">
                                     <i class="tomoissuer-icon-tomoz"/>
                                     Apply to pay fee by token
                                 </b-link>
@@ -133,7 +133,8 @@
                         title="Transfer"
                         active>
                         <template>
-                            <p>A total of 822,078 transactions found (Showing the last 100K records)</p>
+                            <p>A total of {{ formatNumber(tokenTransfers) }} transactions found
+                            (Showing the last 100K records)</p>
                             <div class="tomo_main_table colum-5">
                                 <b-table
                                     id="transfer_table"
@@ -194,7 +195,8 @@
                     <b-tab
                         title="holders">
                         <template>
-                            <p>A total of 822,078 transactions found (Showing the last 100K records)</p>
+                            <p>A total of {{ formatNumber(tokenHolders) }} transactions found
+                            (Showing the last 100K records)</p>
                             <div class="tomo_main_table colum-4">
                                 <b-table
                                     id="holders_table"
@@ -423,9 +425,7 @@ export default {
             await self.getTokenDetail()
             self.getTokenTransfer()
             self.getTokenHolders()
-            // self.getOwnerBalance()
-            self.getTransferTable()
-            self.getHoldersTable()
+            self.getOwnerBalance()
             self.checkApplied()
         } catch (error) {
             console.log(error)
@@ -442,9 +442,25 @@ export default {
             self.symbol = data.symbol
         },
         getTokenTransfer () {
-            axios.get(`/api/token/txes/${this.address}`).then(response => {
-                if (response.data) {
-                    this.tokenTransfers = response.data.total
+            const self = this
+            const isTrc21 = self.token.type === 'trc21' ? 'trc21/' : ''
+            axios.get(`/api/token/txes/${isTrc21}${this.address}`).then(response => {
+                const data = response.data
+                if (data) {
+                    const items = []
+                    data.items.map(m => {
+                        items.push({
+                            txn_hash: m.transactionHash,
+                            age: moment(m.createdAt).fromNow(),
+                            from: m.from,
+                            to: m.to,
+                            amount: self.formatNumber(
+                                new BigNumber(m.value).div(10 ** self.token.decimals).toNumber())
+                        })
+                    })
+                    self.tranferItems = items
+                    self.tranferRows = data.total
+                    self.tokenTransfers = response.data.total
                 }
             }).catch(error => {
                 console.log(error)
@@ -452,9 +468,28 @@ export default {
             })
         },
         getTokenHolders () {
-            axios.get(`/api/token/holders/${this.address}`).then(response => {
-                if (response.data) {
-                    this.tokenHolders = response.data.total
+            const self = this
+            const params = {
+                page: self.holdersCurrentPage,
+                limit: self.holdersPerPage
+            }
+            const isTrc21 = self.token.type === 'trc21' ? 'trc21/' : ''
+            const query = self.serializeQuery(params)
+            axios.get(`/api/token/holders/${isTrc21}${this.address}?${query}`).then(response => {
+                const data = response.data
+                if (data) {
+                    const items = []
+                    data.items.map(m => {
+                        items.push({
+                            rank: m.rank,
+                            address: m.hash,
+                            amount: self.formatNumber(m.quantityNumber),
+                            percentage: m.percentage
+                        })
+                    })
+                    self.holdersItems = items
+                    self.holdersRows = data.total
+                    self.tokenHolders = response.data.total
                 }
             }).catch(error => {
                 console.log(error)
@@ -464,17 +499,19 @@ export default {
         getOwnerBalance () {
             const account = store.get('address').toLowerCase()
             const web3 = this.web3
-            // 0x70a08231 is mean balanceOf(address)
-            let data = '0x70a08231' +
-                '000000000000000000000000' +
-                account.substr(2) // chop off the 0x
-            web3.eth.call({ to: this.address, data: data }).then(result => {
-                let balance = new BigNumber(web3.utils.hexToNumberString(result))
-                this.ownerBalance = balance.div(10 ** this.token.decimals).toNumber()
-            }).catch(error => {
-                console.log(error)
-                this.$toatsed.show(error, { type: 'error' })
-            })
+            if (account && web3) {
+                // 0x70a08231 is mean balanceOf(address)
+                let data = '0x70a08231' +
+                    '000000000000000000000000' +
+                    account.substr(2) // chop off the 0x
+                web3.eth.call({ to: this.address, data: data }).then(result => {
+                    let balance = new BigNumber(web3.utils.hexToNumberString(result))
+                    this.ownerBalance = balance.div(10 ** this.token.decimals).toNumber()
+                }).catch(error => {
+                    console.log(error)
+                    this.$toatsed.show(error, { type: 'error' })
+                })
+            }
         },
         async applyToken () {
             try {
@@ -496,52 +533,6 @@ export default {
                 console.log(error)
                 this.$toasted.show(error, { type: 'error' })
             }
-        },
-        getTransferTable () {
-            const self = this
-            axios.get(`/api/token/txes/${self.address}`).then(response => {
-                const data = response.data
-                if (data) {
-                    const items = []
-                    data.items.map(m => {
-                        items.push({
-                            txn_hash: m.transactionHash,
-                            age: moment(m.createdAt).fromNow(),
-                            from: m.from,
-                            to: m.to,
-                            amount: self.formatNumber(
-                                new BigNumber(m.value).div(10 ** self.token.decimals).toNumber())
-                        })
-                    })
-                    self.tranferItems = items
-                    self.tranferRows = data.total
-                }
-            }).catch(error => {
-                console.log(error)
-                this.$toatsed.show(error, { type: 'error' })
-            })
-        },
-        getHoldersTable () {
-            const self = this
-            axios.get(`/api/token/holders/${self.address}`).then(response => {
-                const data = response.data
-                if (data) {
-                    const items = []
-                    data.items.map(m => {
-                        items.push({
-                            rank: m.rank,
-                            address: m.hash,
-                            amount: self.formatNumber(m.quantityNumber),
-                            percentage: m.percentage
-                        })
-                    })
-                    self.holdersItems = items
-                    self.tranferRows = data.total
-                }
-            }).catch(error => {
-                console.log(error)
-                this.$toatsed.show(error, { type: 'error' })
-            })
         },
         async checkApplied () {
             const contract = await this.getTRC21IssuerInstance()

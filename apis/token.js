@@ -120,11 +120,22 @@ router.post('/verifyContract', [
                 return next(Error('Cannot load remote version'))
             }
             const compiledContract = snapshot.compile(code, isOptimize)
+
             const contract = compiledContract.contracts[name] || compiledContract.contracts[':' + name]
             if (!contract) {
                 return next(Error('Contract Name is invalid'))
             }
             let runtimeBytecode = '0x' + contract.runtimeBytecode
+
+            console.log(`bytecode:
+            
+            
+            ${bytecode}`)
+
+            console.log(`runtime: 
+            
+            
+            ${runtimeBytecode}`)
 
             if (md5(runtimeBytecode.slice(0, -100)) !== md5(bytecode.slice(0, -100))) {
                 return next(Error(`Bytecode invalid
@@ -149,13 +160,39 @@ router.get('/:token', [], async (req, res, next) => {
     }
 })
 
+router.get('/holders/trc21/:token', [], async (req, res, next) => {
+    try {
+        const token = req.params.token || ''
+        const page = req.query.page || 1
+        const limit = req.query.limit || 20
+        const { data } = await axios.get(
+            urljoin(config.get('tomoscanUrl'), `/api/token-holders/trc21/?address=${token}&page=${page}&limit=${limit}`)
+        )
+        return res.json(data)
+    } catch (error) {
+        return next(error)
+    }
+})
 router.get('/holders/:token', [], async (req, res, next) => {
     try {
         const token = req.params.token || ''
         const page = req.query.page || 1
         const limit = req.query.limit || 20
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/token-holders?address=${token}&page=${page}&limit=${limit}`)
+            urljoin(config.get('tomoscanUrl'), `/api/token-holders/?address=${token}&page=${page}&limit=${limit}`)
+        )
+        return res.json(data)
+    } catch (error) {
+        return next(error)
+    }
+})
+router.get('/txes/:token', [], async (req, res, next) => {
+    try {
+        const token = req.params.token || ''
+        const page = req.query.page || 1
+        const limit = req.query.limit || 20
+        const { data } = await axios.get(
+            urljoin(config.get('tomoscanUrl'), `/api/token-txs/?token=${token}&page=${page}&limit=${limit}`)
         )
         return res.json(data)
     } catch (error) {
@@ -163,13 +200,13 @@ router.get('/holders/:token', [], async (req, res, next) => {
     }
 })
 
-router.get('/txes/:token', [], async (req, res, next) => {
+router.get('/txes/trc21/:token', [], async (req, res, next) => {
     try {
         const token = req.params.token || ''
         const page = req.query.page || 1
         const limit = req.query.limit || 20
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/token-txs?token=${token}&page=${page}&limit=${limit}`)
+            urljoin(config.get('tomoscanUrl'), `/api/token-txs/trc21/?token=${token}&page=${page}&limit=${limit}`)
         )
         return res.json(data)
     } catch (error) {
