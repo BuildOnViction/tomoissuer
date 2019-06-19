@@ -69,8 +69,8 @@
                 padding: 3px;
                 a {
                     background: $background-white;
-                    border-radius: 8px;
-                    box-shadow: 0 10px 20px 0 rgba(23, 21, 48, 0.02);
+                    border-radius: $boderradius-default;
+                    box-shadow: $boxshadow-default;
                     color: $color-text-gray;
                     display: flex;
                     align-items: center;

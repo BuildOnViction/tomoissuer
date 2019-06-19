@@ -73,7 +73,7 @@ input[type="submit"] {
         display: flex;
         align-items: center;
         justify-content: center;
-        min-width: 200px;
+        min-width: 220px;
         i {
             padding-right: 5px;
             font-weight: bold;
@@ -98,9 +98,12 @@ input {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: .8em 1.2em!important;
-        min-width: 200px;
+        padding: .7em 1.2em!important;
+        min-width: 220px;
         @include fsz(18);
+        &.btn-min {
+            min-width: 100px;
+        }
         i {
             padding-right: 5px;
             font-weight: bold;
@@ -120,9 +123,12 @@ input {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: .8em 1.2em!important;
-        min-width: 200px;
+        padding: .7em 1.2em!important;
+        min-width: 220px;
         @include fsz(18);
+        &.btn-min {
+            min-width: 100px;
+        }
         i {
             padding-right: 5px;
             font-weight: bold;
@@ -147,7 +153,7 @@ input {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: .8em 1.2em!important;
+        padding: .7em 1.2em!important;
         @include fsz(18);
         i {
             padding-right: 5px;

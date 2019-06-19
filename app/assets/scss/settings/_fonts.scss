@@ -30,7 +30,12 @@ $font-roboto: 'Roboto', sans-serif;
   -moz-osx-font-smoothing: grayscale;
 }
 
-
+.tomoissuer-icon-checkmark-outline:before {
+  content: "\e912";
+}
+.tomoissuer-icon-startup:before {
+  content: "\e911";
+}
 .tomoissuer-icon-next-right:before {
   content: "\e910";
 }
