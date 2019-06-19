@@ -92,6 +92,10 @@
                                             <p>Decimals</p>
                                             <p>9</p>
                                         </li>
+                                        <li>
+                                            <p>Transaction Fee</p>
+                                            <p>0.4334</p>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
