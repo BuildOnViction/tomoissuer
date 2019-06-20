@@ -98,8 +98,9 @@ input {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: .7em 1.2em!important;
+        padding: .5em 1.2em!important;
         min-width: 220px;
+        font-weight: 500;
         @include fsz(18);
         &.btn-min {
             min-width: 100px;
@@ -123,8 +124,9 @@ input {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: .7em 1.2em!important;
+        padding: .5em 1.2em!important;
         min-width: 220px;
+        font-weight: 500;
         @include fsz(18);
         &.btn-min {
             min-width: 100px;
@@ -153,7 +155,8 @@ input {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: .7em 1.2em!important;
+        padding: .5em 1.2em!important;
+        font-weight: 500;
         @include fsz(18);
         i {
             padding-right: 5px;

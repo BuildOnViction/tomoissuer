@@ -1,6 +1,9 @@
 .container {
-  transition: all .5s cubic-bezier(.55, 0, .1, 1);
-  @include media-breakpoint-up(lg) {
-    max-width: 1170px;
-  }
+    transition: all .5s cubic-bezier(.55, 0, .1, 1);
+        @include media-breakpoint-up(lg) {
+        max-width: 1170px;
+    }
+}
+.container-min {
+    max-width: 600px!important;
 }

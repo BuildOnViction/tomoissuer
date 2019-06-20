@@ -1,7 +1,3 @@
-.container-min {
-    max-width: 600px!important;
-}
-
 // Page creat token
 .newtoken {
     .form-new-token {
@@ -61,7 +57,9 @@
     border-radius: $boderradius-default;
 }
 .tomo-modal-default {
-    padding: 1em;
+    @include media-breakpoint-up(lg) {
+        padding: 1em;
+    }
     text-align: center;
     .msg-txt {
         @include fsz-cha(18);

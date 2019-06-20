@@ -10,7 +10,7 @@
     }
     .apply-trc {
         background: $background-blue;
-        @include fsz(10);
+        @include fsz(14);
         border-radius: 30px;
         padding: 2px 10px;
         color: #fff;
@@ -18,7 +18,7 @@
     }
     .apply-tomoz {
         background: $background-violet;
-        @include fsz(10);
+        @include fsz(14);
         border-radius: 30px;
         padding: 2px 10px;
         color: #fff;
