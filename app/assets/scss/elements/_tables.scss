@@ -109,7 +109,7 @@ table,
 	&.colum-2 {
 		tr {
 			display: grid;
-			grid-template-columns: 75% 25%;
+			grid-template-columns: 72% 28%;
 			@include media-breakpoint-down(md) {
 				grid-template-columns: 65% 35%;
 			}
