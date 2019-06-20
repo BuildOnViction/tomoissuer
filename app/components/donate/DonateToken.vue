@@ -67,6 +67,23 @@ export default {
     },
     destroyed () { },
     created: async function () {},
-    methods: {}
+    methods: {
+        validate: function () {
+            this.confirm()
+        },
+        confirm () {
+            console.log(1111)
+            this.$router.push({ name: 'ConfirmDonate',
+                query: {
+                    name: this.tokenName,
+                    symbol: this.tokenSymbol,
+                    decimals: this.decimals,
+                    type: this.type,
+                    tokenSupply: this.tokenSupply,
+                    minFee: this.minFee
+                }
+            })
+        }
+    }
 }
 </script>

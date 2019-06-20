@@ -22,7 +22,7 @@ textarea {
     display: block;
     width: 100%;
     padding: 1.7em 1em;
-    @include fsz-cha(16);
+    @include fsz(16);
 
 	&:focus {
 		outline: none;
@@ -39,4 +39,9 @@ textarea {
     &:-moz-placeholder { /* Firefox 18- */
         color: #ccc;
     }
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #01b2c8;
+    background-color: #01b2c8;
 }

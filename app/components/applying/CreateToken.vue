@@ -100,7 +100,7 @@ export default {
             this.confirm()
         },
         confirm () {
-            this.$router.push({ name: 'Confirmation',
+            this.$router.push({ name: 'ConfirmToken',
                 query: {
                     name: this.tokenName,
                     symbol: this.tokenSymbol,
