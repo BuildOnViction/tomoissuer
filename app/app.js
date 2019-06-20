@@ -3,11 +3,12 @@ import VueRouter from 'vue-router'
 import App from './App.vue'
 import Login from './components/Login.vue'
 import Home from './components/Home.vue'
-import Confirmation from './components/applying/Confirmation.vue'
 import CreateToken from './components/applying/CreateToken.vue'
 import VerifyContract from './components/applying/VerifyContract.vue'
+import ConfirmToken from './components/applying/ConfirmToken.vue'
 import TokenDetail from './components/Token.vue'
 import DonateToken from './components/donate/DonateToken.vue'
+import ConfirmDonate from './components/donate/ConfirmDonate.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
@@ -470,11 +471,12 @@ const router = new VueRouter({
     routes: [
         { path: '/', component: Home },
         { path: '/login', component: Login },
-        { path: '/confirm', component: Confirmation, name: 'Confirmation' },
+        { path: '/confirm', component: ConfirmToken, name: 'ConfirmToken' },
         { path: '/create', component: CreateToken },
         { path: '/verify', component: VerifyContract },
         { path: '/token/:address', component: TokenDetail },
-        { path: '/donate', component: DonateToken }
+        { path: '/donate', component: DonateToken },
+        { path: '/confirmdonate', component: ConfirmDonate, name: 'ConfirmDonate' }
     ]
 })
 

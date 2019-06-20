@@ -14,6 +14,7 @@
                     <b-form-input
                         v-model="tokenName"
                         type="text"
+                        autocomplete="off"
                         placeholder="Token name"/>
                 </b-form-group>
                 <b-form-group
@@ -22,6 +23,7 @@
                     description="Please use only Latin letters">
                     <b-form-input
                         v-model="tokenSymbol"
+                        autocomplete="off"
                         type="text"
                         placeholder="Token symbol"/>
                 </b-form-group>
@@ -30,6 +32,7 @@
                     label-for="totalSupply">
                     <b-form-input
                         v-model="totalSupply"
+                        autocomplete="off"
                         type="number"
                         placeholder="Token supply"/>
                 </b-form-group>
@@ -39,6 +42,7 @@
                     description="Please use the number from 0 to 18">
                     <b-form-input
                         v-model="decimals"
+                        autocomplete="off"
                         type="text"
                         placeholder="Decimals"/>
                 </b-form-group>
@@ -84,7 +88,7 @@ export default {
             tokenName: '',
             tokenSymbol: '',
             decimals: '',
-            minFee: '',
+            minFee: 0,
             totalSupply: '',
             sourceCode: '',
             account: '',
@@ -100,7 +104,7 @@ export default {
             this.confirm()
         },
         confirm () {
-            this.$router.push({ name: 'Confirmation',
+            this.$router.push({ name: 'ConfirmToken',
                 query: {
                     name: this.tokenName,
                     symbol: this.tokenSymbol,

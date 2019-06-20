@@ -171,8 +171,7 @@
                                         </a>
                                     </template>
                                     <template
-                                        slot="icon"
-                                        slot-scope="data">
+                                        slot="icon">
                                         <i class="tomoissuer-icon-next-right"/>
                                     </template>
                                     <template
@@ -449,8 +448,8 @@ export default {
         },
         getTokenTransfer () {
             const self = this
-            const isTrc21 = self.token.type === 'trc21' ? 'trc21/' : ''
-            axios.get(`/api/token/txes/${isTrc21}${this.address}`).then(response => {
+            const isTrc21 = self.token.type
+            axios.get(`/api/token/txes/${isTrc21}/${this.address}`).then(response => {
                 const data = response.data
                 if (data) {
                     const items = []

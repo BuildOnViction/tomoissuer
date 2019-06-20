@@ -10,7 +10,7 @@ html {
 
 body {
     @include fsz(14);
-	background-color: #F3F6FC;
+	background-color: #ffffff;
 	color: $color-text-default;
     font-family: $font-quicksand;
 }
@@ -24,7 +24,7 @@ strong {
 }
 
 small, .small {
-	@include fsz-cha(14);
+	@include fsz(14);
 }
 
 img {
