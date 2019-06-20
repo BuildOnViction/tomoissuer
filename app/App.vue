@@ -92,7 +92,9 @@
                                         href="https://github.com/tomochain/"
                                         target="_blank"><i class="tomoissuer-icon-github"/></a></li>
                                     <li><a href="#"><i class="tomoissuer-icon-linkedin"/></a></li>
-                                    <li><a href="#"><i class="tomoissuer-icon-reddit"/></a></li>
+                                    <li><a
+                                        href="https://www.reddit.com/r/Tomochain/"
+                                        target="_blank"><i class="tomoissuer-icon-reddit"/></a></li>
                                 </ul>
                             </div>
                         </div>
