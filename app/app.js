@@ -9,6 +9,9 @@ import ConfirmToken from './components/applying/ConfirmToken.vue'
 import TokenDetail from './components/Token.vue'
 import DonateToken from './components/donate/DonateToken.vue'
 import ConfirmDonate from './components/donate/ConfirmDonate.vue'
+import TomoZCondition from './components/applytomo/TomoZCondition.vue'
+import TomoZApplication from './components/applytomo/TomoZApplication.vue'
+import TomoZConfirm from './components/applytomo/TomoZConfirm.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
@@ -436,7 +439,10 @@ const router = new VueRouter({
         { path: '/verify', component: VerifyContract },
         { path: '/token/:address', component: TokenDetail },
         { path: '/donate', component: DonateToken },
-        { path: '/confirmdonate', component: ConfirmDonate, name: 'ConfirmDonate' }
+        { path: '/confirmdonate', component: ConfirmDonate, name: 'ConfirmDonate' },
+        { path: '/tomozcondition', component: TomoZCondition },
+        { path: '/tomozapplication', component: TomoZApplication },
+        { path: '/tomozconfirm', component: TomoZConfirm, name: 'TomoZConfirm' }
     ]
 })
 
