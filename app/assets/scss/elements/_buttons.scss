@@ -166,6 +166,10 @@ input {
         justify-content: center;
         padding: .5em 1.2em!important;
         font-weight: 500;
+        min-width: 220px;
+        @include media-breakpoint-down(sm) {
+            min-width: 180px;
+        }
         @include fsz(18);
         i {
             padding-right: 5px;
@@ -175,6 +179,36 @@ input {
         &.active {
             background: $background-violet-active;
             border: 1px solid $background-violet;
+        }
+    }
+    &.tmp-btn-boder-violet {
+        @include transit;
+        background: transparent;
+        border: 1px solid $background-violet;
+        color: $color-text-violet!important;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: .5em 1.2em!important;
+        font-weight: 500;
+        min-width: 220px;
+        @include media-breakpoint-down(sm) {
+            min-width: 180px;
+        }
+        @include fsz(18);
+        &.btn-min {
+            min-width: 100px;
+        }
+        i {
+            padding-right: 5px;
+            font-weight: bold;
+        }
+        &:hover,
+        .active {
+            background: $background-violet-active;
+            border: 1px solid $background-violet;
+            color: $color-text-white!important;
         }
     }
 }

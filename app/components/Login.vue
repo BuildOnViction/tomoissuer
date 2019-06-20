@@ -162,8 +162,7 @@
                         <div class="buttons text-right">
                             <b-button
                                 v-if="provider !== 'tomowallet'"
-                                type="submit"
-                                variant="primary">Save</b-button>
+                                type="submit">Save</b-button>
                         </div>
                     </b-form>
                 </b-card>
@@ -389,8 +388,7 @@
                                 <b-button
                                     v-b-modal.modal-trezorwallet
                                     class="tmp-btn-blue"
-                                    type="submit"
-                                    variant="primary">Connect</b-button>
+                                    type="submit">Connect</b-button>
                             </div>
                             <b-modal
                                 id="modal-trezorwallet"

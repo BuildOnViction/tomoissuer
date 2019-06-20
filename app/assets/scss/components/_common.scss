@@ -94,6 +94,7 @@
     border-radius: $boderradius-default;
 }
 .tomo-modal-default {
+    padding: 1em 0;
     @include media-breakpoint-up(lg) {
         padding: 1em;
     }
@@ -106,10 +107,21 @@
         }
         h4 {
             @include fsz(18);
-            margin: 15px 0 0;
+            margin: 15px 0;
+            font-family: $font-quicksand;
+        }
+        p {
+            margin-bottom: .5em;
         }
     }
     .btn-box {
         padding-bottom: 0;
+    }
+    &.icon-violet {
+        .msg-txt {
+            i {
+                color: $color-text-violet;
+            }
+        }
     }
 }
