@@ -63,11 +63,12 @@ This is where majority of our work takes place and our UI components are often c
 @import 'elements/typography';
 
 //Folder components
+@import 'components/container';
+@import 'components/common';
 @import 'components/header';
 @import 'components/footer';
 @import 'components/welcome';
 @import 'components/login';
-@import 'components/newtoken';
-@import 'components/container';
-@import 'components/main-content';
 @import 'components/token';
+@import 'components/newtoken';
+@import 'components/donate';

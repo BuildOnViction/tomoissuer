@@ -211,17 +211,17 @@
             + (loading ? ' tomo-loading' : '')">
             <h2 class="tmp-title-large">Unlock your wallet</h2>
             <p>Start by choosing the wallet you would like to unlock</p>
-            <p>
-                Using node at
-                <a
-                    href="rpc.tomochain.com"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    rpc.tomochain.com
-                </a>
-            </p>
             <div class="content-page">
                 <b-tabs>
+                    <p>
+                        Using node at
+                        <a
+                            href="rpc.tomochain.com"
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            rpc.tomochain.com
+                        </a>
+                    </p>
                     <b-tab active>
                         <template slot="title">
                             <b-img
@@ -229,7 +229,7 @@
                                 alt="logo-tomowallet.png"/>
                             <span>TomoWallet</span>
                         </template>
-                        <div class="content-tab tab-tomowallet">
+                        <div class="inner-content tab-tomowallet">
                             <div class="inner text-center">
                                 <p>
                                     <b-img
@@ -255,24 +255,7 @@
                                 alt="logo-metamask.png"/>
                             <span>Metamask</span>
                         </template>
-                        <div class="content-tab tab-metamask">
-                            <div class="btn-box">
-                                <b-button
-                                    class="tmp-btn-blue"
-                                    to="/">
-                                    Unlock your wallet
-                                </b-button>
-                            </div>
-                        </div>
-                    </b-tab>
-                    <b-tab>
-                        <template slot="title">
-                            <b-img
-                                src="/app/assets/images/logo-trustwallet.png"
-                                alt="logo-trustwallet.png"/>
-                            <span>Trustwallet</span>
-                        </template>
-                        <div class="content-tab tab-trustwallet">
+                        <div class="inner-content tab-metamask">
                             <div class="btn-box">
                                 <b-button
                                     class="tmp-btn-blue"
@@ -289,8 +272,106 @@
                                 alt="logo-ledgerwallet.png"/>
                             <span>Ledger Wallet</span>
                         </template>
-                        <div class="content-tab tab-ledgerwallet">
-                            ledgerwallet
+                        <div class="inner-content tab-ledgerwallet">
+                            <b-form
+                                class="form-login"
+                                novalidate
+                                @submit.prevent="validate()">
+                                <b-form-group
+                                    class="mb-4"
+                                    label="Select HD derivation path"
+                                    label-for="ledgerwallet">
+                                    <b-form-input
+                                        v-model="ledgerwallet"
+                                        type="text"
+                                        placeholder="m/44’/889’/0’/0"/>
+                                    <b-form-text>
+                                        To unlock the wallet, try paths <span>m/44'/60'/0'</span>
+                                        or <span>m/44'/60'/0'/0</span> with Ethereum App,
+                                        or try path <span>m/44'/889'/0'/0</span> with TomoChain App (on Ledger).
+                                    </b-form-text>
+                                </b-form-group>
+                                <div class="btn-box">
+                                    <b-button
+                                        v-b-modal.modal-ledgerwallet
+                                        class="tmp-btn-blue">
+                                        Connect
+                                    </b-button>
+                                </div>
+                            </b-form>
+                            <b-modal
+                                id="modal-ledgerwallet"
+                                size="md"
+                                hide-header
+                                hide-footer
+                                centered>
+                                <div class="tomo-modal-default text-left">
+                                    <h3 class="tmp-title-medium">Wallet Address</h3>
+                                    <div class="tmp-table-two colum-2">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <b-form-radio
+                                                        v-model="selected"
+                                                        name="some-radios">
+                                                        <span
+                                                            title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
+                                                            0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                                        </span>
+                                                    </b-form-radio>
+                                                </td>
+                                                <td><b>97602</b> TOMO</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b-form-radio
+                                                        v-model="selected"
+                                                        name="some-radios">
+                                                        <span
+                                                            title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
+                                                            0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                                        </span>
+                                                    </b-form-radio>
+                                                </td>
+                                                <td><b>97602</b> TOMO</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b-form-radio
+                                                        v-model="selected"
+                                                        name="some-radios">
+                                                        <span
+                                                            title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
+                                                            0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                                        </span>
+                                                    </b-form-radio>
+                                                </td>
+                                                <td><b>97602</b> TOMO</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b-form-radio
+                                                        v-model="selected"
+                                                        name="some-radios">
+                                                        <span
+                                                            title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
+                                                            0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                                        </span>
+                                                    </b-form-radio>
+                                                </td>
+                                                <td><b>97602</b> TOMO</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="btn-box">
+                                        <b-button
+                                            class="tmp-btn-blue"
+                                            to="/"
+                                            @click="hide()">Unlock
+                                        </b-button>
+                                    </div>
+                                </div>
+                            </b-modal>
                         </div>
                     </b-tab>
                     <b-tab>
@@ -300,8 +381,77 @@
                                 alt="logo-trezorwallet.png"/>
                             <span>Trezor Wallet</span>
                         </template>
-                        <div class="content-tab tab-trezorwallet">
-                            Trezor Wallet
+                        <div class="inner-content tab-trezorwallet">
+                            <p class="text-center">
+                                <strong>Select HD derivation path:</strong> m/44’/889’/0’/0
+                            </p>
+                            <div class="btn-box">
+                                <b-button
+                                    v-b-modal.modal-trezorwallet
+                                    class="tmp-btn-blue"
+                                    type="submit"
+                                    variant="primary">Connect</b-button>
+                            </div>
+                            <b-modal
+                                id="modal-trezorwallet"
+                                size="md"
+                                hide-header
+                                hide-footer
+                                centered>
+                                <div class="tomo-modal-default text-left">
+                                    <h3 class="tmp-title-medium">Wallet Address</h3>
+                                    <div class="tmp-table-two colum-2">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <b-form-radio
+                                                        v-model="selected"
+                                                        name="some-radios">
+                                                        <span
+                                                            title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
+                                                            0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                                        </span>
+                                                    </b-form-radio>
+                                                </td>
+                                                <td><b>97602</b> TOMO</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b-form-radio
+                                                        v-model="selected"
+                                                        name="some-radios">
+                                                        <span
+                                                            title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
+                                                            0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                                        </span>
+                                                    </b-form-radio>
+                                                </td>
+                                                <td><b>97602</b> TOMO</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b-form-radio
+                                                        v-model="selected"
+                                                        name="some-radios">
+                                                        <span
+                                                            title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
+                                                            0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                                        </span>
+                                                    </b-form-radio>
+                                                </td>
+                                                <td><b>97602</b> TOMO</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="btn-box">
+                                        <b-button
+                                            class="tmp-btn-blue"
+                                            to="/"
+                                            @click="hide()">Unlock
+                                        </b-button>
+                                    </div>
+                                </div>
+                            </b-modal>
                         </div>
                     </b-tab>
                     <b-tab>
@@ -311,8 +461,25 @@
                                 alt="logo-privatekey.png"/>
                             <span>Privatekey</span>
                         </template>
-                        <div class="content-tab tab-privatekey">
-                            Privatekey
+                        <div class="inner-content tab-privatekey">
+                            <b-form
+                                class="form-login"
+                                novalidate
+                                @submit.prevent="validate()">
+                                <b-form-group
+                                    class="mb-4"
+                                    label="Enter your PrivateKey"
+                                    label-for="privateKey">
+                                    <b-form-input
+                                        v-model="privateKey"
+                                        type="text"
+                                        placeholder="PrivateKey/ Mnemonic ..."/>
+                                </b-form-group>
+                                <div class="btn-box">
+                                    <b-button
+                                        class="tmp-btn-blue">Import</b-button>
+                                </div>
+                            </b-form>
                         </div>
                     </b-tab>
                     <b-tab>
@@ -322,8 +489,78 @@
                                 alt="logo-mnemonic.png"/>
                             <span>Mnemonic</span>
                         </template>
-                        <div class="content-tab tab-mnemonic">
-                            Mnemonic
+                        <div class="inner-content tab-mnemonic">
+                            <b-form
+                                class="form-login"
+                                novalidate
+                                @submit.prevent="validate()">
+                                <b-form-group
+                                    class="mb-4"
+                                    label="Select HD derivation path(MNEMONIC)"
+                                    label-for="ledgerwallet">
+                                    <b-form-input
+                                        v-model="ledgerwallet"
+                                        type="text"
+                                        placeholder="m/44’/889’/0’/0"/>
+                                    <b-form-text>
+                                        To unlock the wallet,
+                                        try paths <span>m/44'/60'/0'</span> or <span>m/44'/60'/0'/0</span>
+                                    </b-form-text>
+                                </b-form-group>
+                                <div class="btn-box">
+                                    <b-button
+                                        v-b-modal.modal-mnemonic
+                                        class="tmp-btn-blue">Connect</b-button>
+                                </div>
+                            </b-form>
+
+                            <b-modal
+                                id="modal-mnemonic"
+                                size="md"
+                                hide-header
+                                hide-footer
+                                centered>
+                                <div class="tomo-modal-default text-left">
+                                    <h3 class="tmp-title-medium">Wallet Address</h3>
+                                    <div class="tmp-table-two colum-2">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <b-form-radio
+                                                        v-model="selected"
+                                                        name="some-radios">
+                                                        <span
+                                                            title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
+                                                            0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                                        </span>
+                                                    </b-form-radio>
+                                                </td>
+                                                <td><b>97602</b> TOMO</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b-form-radio
+                                                        v-model="selected"
+                                                        name="some-radios">
+                                                        <span
+                                                            title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
+                                                            0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                                        </span>
+                                                    </b-form-radio>
+                                                </td>
+                                                <td><b>97602</b> TOMO</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="btn-box">
+                                        <b-button
+                                            class="tmp-btn-blue"
+                                            to="/"
+                                            @click="hide()">Unlock
+                                        </b-button>
+                                    </div>
+                                </div>
+                            </b-modal>
                         </div>
                     </b-tab>
                 </b-tabs>

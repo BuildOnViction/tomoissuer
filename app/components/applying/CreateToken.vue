@@ -1,7 +1,7 @@
 <template>
     <div class="container container-min">
         <div class="newtoken">
-            <h4 class="color-white">Issue a new token</h4>
+            <h2 class="tmp-title-large">Issue a new token</h2>
             <p>Start by choosing the wallet you would like to unlock</p>
             <b-form
                 class="form-new-token"
@@ -41,14 +41,6 @@
                         v-model="decimals"
                         type="text"
                         placeholder="Decimals"/>
-                </b-form-group>
-                <b-form-group
-                    class="mb-4"
-                    label-for="minFee">
-                    <b-form-input
-                        v-model="minFee"
-                        type="text"
-                        placeholder="Minimum Transaction Fee"/>
                 </b-form-group>
                 <b-form-group
                     class="flex-box mb-4"
@@ -96,7 +88,7 @@ export default {
             totalSupply: '',
             sourceCode: '',
             account: '',
-            type: ''
+            type: 'trc21'
         }
     },
     async updated () {
