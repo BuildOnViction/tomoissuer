@@ -5,10 +5,13 @@ table,
 	th,td {
 		overflow: hidden;
 		padding: 0.75rem;
+		@include media-breakpoint-down(md) {
+			padding: 0.5rem 0;
+		}
 	}
 }
 
-// teamplate table
+//tmp-table-one
 .tmp-table-one {
 	padding-top: 1em;
 	.tomo_main_table {
@@ -35,7 +38,8 @@ table,
 				margin-bottom: 15px;
 				overflow: hidden;
 			}
-			th,td {
+			th,
+			td {
 				border: 0;
 				a {
 					overflow: hidden;
@@ -45,14 +49,8 @@ table,
 				}
 				&.table-sp-text-center {
 					@include media-breakpoint-down(md) {
-						text-align: center;
-						float: left;
-						width: 50%;
-						padding-left: 2px;
-						padding-right: 2px;
-						div {
-							padding: 0!important;
-							width: 100%!important;
+						&::before {
+							float: none!important;
 						}
 					}
 				}
@@ -80,6 +78,40 @@ table,
 					display: grid;
 					grid-template-columns: 10% 60% 15% 15%;
 				}
+			}
+		}
+	}
+}
+
+//tmp-table-two
+.tmp-table-two {
+	label {
+		color: $color-link-default;
+		width: 100%;
+		span {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			display: block;
+			margin-top: 2px;
+		}
+	}
+	th,
+	td {
+		&:first-child {
+			padding-left: 0;
+		}
+		&:last-child{
+			text-align: right;
+			padding-right: 0;
+		}
+	}
+	&.colum-2 {
+		tr {
+			display: grid;
+			grid-template-columns: 75% 25%;
+			@include media-breakpoint-down(md) {
+				grid-template-columns: 65% 35%;
 			}
 		}
 	}

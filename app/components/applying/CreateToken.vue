@@ -1,7 +1,7 @@
 <template>
     <div class="container container-min">
         <div class="newtoken">
-            <h4 class="color-white">Issue a new token</h4>
+            <h2 class="tmp-title-large">Issue a new token</h2>
             <p>Start by choosing the wallet you would like to unlock</p>
             <b-form
                 class="form-new-token"
@@ -43,28 +43,20 @@
                         placeholder="Decimals"/>
                 </b-form-group>
                 <b-form-group
-                    class="mb-4"
-                    label-for="minFee">
-                    <b-form-input
-                        v-model="minFee"
-                        type="text"
-                        placeholder="Minimum Transaction Fee"/>
-                </b-form-group>
-                <b-form-group
                     class="flex-box mb-4"
                     label="Token Type"
                     label-for="type">
                     <b-form-radio-group
                         id="radio-group-2"
-                        v-model="selected"
+                        v-model="type"
                         class="box-radio"
                         name="radio-sub-component">
                         <b-form-radio
-                            value="TRC21">
+                            value="trc21">
                             TRC21
                         </b-form-radio>
                         <b-form-radio
-                            value="TRC20">
+                            value="trc20">
                             TRC20
                         </b-form-radio>
                     </b-form-radio-group>
@@ -96,7 +88,7 @@ export default {
             tokenSupply: '',
             sourceCode: '',
             account: '',
-            type: ''
+            type: 'trc21'
         }
     },
     async updated () {

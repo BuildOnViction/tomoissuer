@@ -5,11 +5,11 @@
     min-height: calc(100vh - 62px - 106px);
     @include media-breakpoint-only(md) {
         min-height: calc(100vh - 62px - 133px);
-        padding: 1.5em 0;
+        padding: 2em 0;
     }
     @include media-breakpoint-down(sm) {
         min-height: calc(100vh - 62px - 184px);
-        padding: 1.5em 0;
+        padding: 2em 0;
     }
 }
 .common_height_max {
