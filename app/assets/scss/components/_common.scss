@@ -77,7 +77,39 @@
     justify-content: center;
     padding: 1em 0;
     margin: 0 -10px;
-    a {
-        margin: 10px;
+    a,
+    button {
+        margin: 10px 10px 0;
+        @include media-breakpoint-down(sm) {
+            margin: 10px 5px 0;
+        }
+    }
+}
+
+// Modal
+.modal-dialog.modal-md {
+    max-width: 580px;
+}
+.modal-content {
+    border-radius: $boderradius-default;
+}
+.tomo-modal-default {
+    @include media-breakpoint-up(lg) {
+        padding: 1em;
+    }
+    text-align: center;
+    .msg-txt {
+        @include fsz(18);
+        i {
+            @include fsz-cha(50,40,40);
+            color: $color-text-blue;
+        }
+        h4 {
+            @include fsz(18);
+            margin: 15px 0 0;
+        }
+    }
+    .btn-box {
+        padding-bottom: 0;
     }
 }

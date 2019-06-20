@@ -2,52 +2,59 @@
     <div class="container container-min">
         <div class="confirm-newtoken">
             <div class="info-header text-center">
-                <p><i class="tomoissuer-icon-startup"/></p>
-                <h2 class="tmp-title-large">100,000,000.000000 TIIM </h2>
+                <h2 class="tmp-title-large">Donate TRC-21 transaction fee</h2>
             </div>
-            <table>
-                <tr>
-                    <td>Token name</td>
-                    <td>Triip Protocol</td>
-                </tr>
-                <tr>
-                    <td>Token symbol</td>
-                    <td>TIIM</td>
-                </tr>
-                <tr>
-                    <td>Type</td>
-                    <td>TRC-721</td>
-                </tr>
-                <tr>
-                    <td>Code review</td>
-                    <td>
-                        1.  name  TriipMiles string<br>
-                        2.  totalTeamAllocated  0 uint256<br>
-                        3.  totalSupply  500000000000000000000000000 uint256<br>
-                        4.  TIIM_UNIT  1000000000000000000 uint256<br>
-                        5.  decimals  18 uint256<br>
-                        6.  endTime  1554051599 uint256<br>
-                        7.  tiimEcosystemWallet  0x8a7A6E2BFc70E9AB0cC9eAeac542BE3D08f510cC address<br>
-                        8.  teamTranchesReleased  0 uint256<br>
-                        9.  teamWallet<br>
-                    </td>
-                </tr>
-            </table>
+            <div class="tmp-table-three">
+                <table>
+                    <tr>
+                        <td>From</td>
+                        <td>
+                            <b-link
+                                to="/"
+                                title="0x48c4eef517b79ff5259374fed4245359d8fb3ea9">
+                                0x48c4eef517b79ff5259374fed4245359d8fb3ea9
+                            </b-link>
+                            <br>
+                            <span>Owner address</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>To</td>
+                        <td>
+                            <b-link
+                                to="/"
+                                title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
+                                0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                            </b-link>
+                            <br>
+                            <span>TIIM SmartContract</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Amount of donation</td>
+                        <td>500 TOMO</td>
+                    </tr>
+                    <tr>
+                        <td>Transaction fee</td>
+                        <td>0.0001 TOMO</td>
+                    </tr>
+                </table>
+            </div>
             <div class="btn-box">
                 <b-button
                     class="tmp-btn-boder-blue btn-min"
-                    to="create">
+                    to="donate">
                     Back
                 </b-button>
                 <b-button
-                    v-b-modal.modal-center
+                    v-b-modal.modal-donate
                     class="tmp-btn-blue">
                     Donate now
                 </b-button>
             </div>
             <b-modal
-                id="modal-center"
-                size="sm"
+                id="modal-donate"
+                size="md"
                 hide-header
                 hide-footer
                 centered>
@@ -55,7 +62,15 @@
                     <div class="msg-txt">
                         <i class="tomoissuer-icon-checkmark-outline"/>
                         <h4>Successful</h4>
-                        <span>Token successfully issued</span>
+                        <p>Token successfully issued</p>
+                        <p>
+                            Transaction hash:
+                            <b-link
+                                to="/"
+                                title="0x88448943534324230030030">
+                                0x88448943534324230030030
+                            </b-link>
+                        </p>
                     </div>
                     <div class="btn-box">
                         <b-button
