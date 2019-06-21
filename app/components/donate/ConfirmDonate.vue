@@ -1,6 +1,6 @@
 <template>
-    <div class="container container-min">
-        <div class="confirm-newtoken">
+    <div class="container container-small">
+        <div class="confirm-table">
             <div class="info-header text-center">
                 <h2 class="tmp-title-large">Donate TRC-21 transaction fee</h2>
             </div>
@@ -14,7 +14,6 @@
                                 title="0x48c4eef517b79ff5259374fed4245359d8fb3ea9">
                                 0x48c4eef517b79ff5259374fed4245359d8fb3ea9
                             </b-link>
-                            <br>
                             <span>Owner address</span>
                         </td>
                     </tr>
@@ -26,7 +25,6 @@
                                 title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
                                 0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
                             </b-link>
-                            <br>
                             <span>TIIM SmartContract</span>
                         </td>
                     </tr>
@@ -39,6 +37,16 @@
                         <td>0.0001 TOMO</td>
                     </tr>
                 </table>
+            </div>
+            <div class="qr-code-donate text-center d-none">
+                <p>
+                    <b-img
+                        src="/app/assets/images/img-qrcode-tomowallet.png"
+                        alt="img-qrcode-tomowallet.png"/>
+                </p>
+                <p>
+                    <b>Scan QR code below using TomoWallet to donate</b>
+                </p>
             </div>
             <div class="btn-box">
                 <b-button
@@ -62,7 +70,7 @@
                     <div class="msg-txt">
                         <i class="tomoissuer-icon-checkmark-outline"/>
                         <h4>Successful</h4>
-                        <p>Token successfully issued</p>
+                        <p>You’ve succesfully donated 500 TOMO</p>
                         <p>
                             Transaction hash:
                             <b-link

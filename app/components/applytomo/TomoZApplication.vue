@@ -1,16 +1,9 @@
 <template>
     <div class="container container-small">
-        <div class="tomo-donate">
-            <h2 class="tmp-title-large">Donate TRC-21 transaction fee</h2>
-            <div class="box-desc">
-                <h6 class="tmp-title-normal weightbold">What is donation fee</h6>
-                <p>
-                    TomoChain is an innovative solution to scalability problem with the
-                    Ethereum blockchain, and other blockchain platforms.
-                    TomoChain features a 150-Masternodes architecture with
-                    Proof of Stake Voting (POSV) consensus for near-zero fee,
-                    and instant transaction confirmation.
-                </p>
+        <div class="tomo-apply">
+            <div class="info-header text-center">
+                <p><i class="tomoissuer-icon-tomoz"/></p>
+                <h2 class="tmp-title-large">TomoZ Protocol Application</h2>
             </div>
             <b-form
                 class="tmp-form-one"
@@ -18,28 +11,37 @@
                 @submit.prevent="validate()">
                 <b-form-group
                     class="mb-4"
-                    label="Enter your token name or contract address "
-                    label-for="tokenName">
+                    label="Deposit fee"
+                    label-for="depositFee"
+                    description="Min: 10 TOMO, Available balance: 200 TOMO">
+                    <span class="txt-fixed">TOMO</span>
                     <b-form-input
-                        v-model="tokenName"
+                        v-model="depositFee"
                         type="text"
-                        placeholder="Token name"/>
+                        placeholder="How much TOMO do you want to deposit? (TX fee: 0.0005 TOMO)..."/>
                 </b-form-group>
                 <b-form-group
                     class="mb-4"
-                    label="Donation amount"
-                    label-for="donationAmount"
-                    description="Available balance:  5,200 TOMO">
-                    <span class="txt-fixed">TOMO</span>
+                    label="Set transaction fee"
+                    label-for="setTransactionFee"
+                    description="This setting could be modified later">
+                    <span class="txt-fixed">TIIM</span>
                     <b-form-input
-                        v-model="DonationAmount"
+                        v-model="setTransactionFee"
                         type="text"
-                        placeholder="Donation amount"/>
+                        placeholder="How much fee for a transaction (unit: TIIM)..."/>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
-                        class="tmp-btn-blue"
-                        type="submit">Save & Review</b-button>
+                        class="tmp-btn-boder-violet btn-min"
+                        to="/tomozcondition">
+                        Back
+                    </b-button>
+                    <b-button
+                        class="tmp-btn-violet"
+                        type="submit">
+                        I understand
+                    </b-button>
                 </div>
             </b-form>
         </div>
@@ -48,8 +50,7 @@
 
 <script>
 export default {
-    name: 'Donate',
-    components: { },
+    name: 'TomoZApplication',
     data () {
         return {
             tokenName: '',
@@ -62,8 +63,7 @@ export default {
             type: ''
         }
     },
-    async updated () {
-    },
+    async updated () {},
     destroyed () { },
     created: async function () {},
     methods: {
@@ -72,7 +72,7 @@ export default {
         },
         confirm () {
             console.log(1111)
-            this.$router.push({ name: 'ConfirmDonate',
+            this.$router.push({ name: 'TomoZConfirm',
                 query: {
                     name: this.tokenName,
                     symbol: this.tokenSymbol,

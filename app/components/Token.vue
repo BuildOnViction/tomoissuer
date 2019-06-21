@@ -45,7 +45,7 @@
                             <div class="col-6">
                                 <div class="box-item">
                                     <p class="tmp-title-medium">Price</p>
-                                    <p class="fsz-size text-violet">$0.25</p>
+                                    <p class="fsz-size text-violet">---</p>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -94,7 +94,7 @@
                                         </li>
                                         <li>
                                             <p>Transaction Fee</p>
-                                            <p>0.4334</p>
+                                            <p>---</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -151,7 +151,7 @@
                                         slot="txn_hash"
                                         slot-scope="data">
                                         <a
-                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                            :href="`${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
                                             :title="data.value">
                                             {{ data.value }}
                                         </a>
@@ -265,6 +265,7 @@ export default {
             transactionHash: '',
             ownerBalance: '',
             poolingFee: '',
+            config: {},
             tranferCurrentPage: 1,
             tranferRows: 10,
             tranferPerPage: 6,
@@ -427,11 +428,17 @@ export default {
         try {
             const self = this
             await self.getTokenDetail()
-            self.getPoolingFee()
+            self.appConfig().then(result => {
+                self.config = result
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type :'error' })
+            })
             self.getTokenTransfer()
             self.getTokenHolders()
             self.getOwnerBalance()
-            self.checkApplied()
+            self.getPoolingFee()
+            self.checkAppliedZ()
         } catch (error) {
             console.log(error)
             this.$toasted.show(error, { type :'error' })
@@ -510,6 +517,7 @@ export default {
                     '000000000000000000000000' +
                     account.substr(2) // chop off the 0x
                 web3.eth.call({ to: this.address, data: data }).then(result => {
+                    console.log(result)
                     let balance = new BigNumber(web3.utils.hexToNumberString(result))
                     this.ownerBalance = balance.div(10 ** this.token.decimals).toNumber()
                 }).catch(error => {
@@ -519,14 +527,11 @@ export default {
             }
         },
         getPoolingFee () {
-            this.getTRC21IssuerInstance().then(contract => {
-                contract.getTokenCapacity(this.address).then(capacity => {
-                    let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
-                    this.poolingFee = balance.div(10 ** this.token.decimals).toNumber()
-                }).catch(error => {
-                    console.log(error)
-                    this.$toatsed.show(error, { type: 'error' })
-                })
+            const contract = this.TRC21Issuer
+            console.log(contract)
+            contract.methods.getTokenCapacity(this.address).call().then(capacity => {
+                let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
+                this.poolingFee = balance.div(10 ** this.token.decimals).toNumber()
             }).catch(error => {
                 console.log(error)
                 this.$toatsed.show(error, { type: 'error' })
@@ -553,13 +558,13 @@ export default {
                 this.$toasted.show(error, { type: 'error' })
             }
         },
-        async checkApplied () {
+        async checkAppliedZ () {
             const contract = await this.getTRC21IssuerInstance()
             const result = await contract.tokens()
             if (result && result.length > 0) {
                 const lowerCaseArr = result.map(m => m.toLowerCase())
                 if (lowerCaseArr.indexOf(this.address) > -1) {
-                    this.isApplied = true
+                    this.isAppliedZ = true
                 }
             }
         },

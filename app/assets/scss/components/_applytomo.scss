@@ -1,0 +1,30 @@
+
+// Page creat token
+.tomo-apply {
+    .about-tomoz {
+        margin: 3em 0!important;
+        @include media-breakpoint-down(md){
+            margin: 1.5em 0!important;
+        }
+        p {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+    .box-condition {
+        margin-bottom: 2em;
+        img {
+            width: 56px;
+        }
+        .col-6 {
+            margin-top: 2em;
+        }
+    }
+    .tomoissuer-icon-tomoz {
+        @include fsz-cha(70,50,50);
+        color: $color-text-violet;
+    }
+}
+
+// Pge confirm

@@ -1,6 +1,6 @@
 <template>
-    <div class="container container-min">
-        <div class="confirm-newtoken">
+    <div class="container container-small">
+        <div class="confirm-table">
             <div class="info-header text-center">
                 <p><i class="tomoissuer-icon-startup"/></p>
                 <h2 class="tmp-title-large">{{ formatCurrencySymbol(formatNumber(totalSupply), tokenSymbol) }}</h2>

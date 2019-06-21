@@ -23,25 +23,67 @@ textarea {
     width: 100%;
     padding: 1.7em 1em;
     @include fsz(16);
-
 	&:focus {
 		outline: none;
     }
-    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    &::-webkit-input-placeholder {
+        /* Chrome/Opera/Safari */
         color: #ccc;
     }
-    &::-moz-placeholder { /* Firefox 19+ */
+    &::-moz-placeholder {
+        /* Firefox 19+ */
         color: #ccc;
     }
-    &:-ms-input-placeholder { /* IE 10+ */
+    &:-ms-input-placeholder {
+        /* IE 10+ */
         color: #ccc;
     }
-    &:-moz-placeholder { /* Firefox 18- */
+    &:-moz-placeholder {
+        /* Firefox 18- */
         color: #ccc;
     }
 }
 
-.custom-control-input:checked ~ .custom-control-label::before {
+// Style input radio
+.custom-control-input:checked ~
+.custom-control-label::before {
     border-color: #01b2c8;
     background-color: #01b2c8;
+}
+
+//template style form
+.tmp-form-one {
+    margin-top: 3em!important;
+    @include media-breakpoint-down(md){
+        margin-top: 1.5em!important;
+    }
+    .form-text {
+        color: $color-text-default!important;
+        margin-top: 10px;
+        text-align: right;
+    }
+    .form-group {
+        margin-bottom: 3em!important;
+        @include media-breakpoint-down(md){
+            margin-bottom: 1.5em!important;
+        }
+        >label {
+            @include fsz(16);
+            font-family: $font-quicksand;
+            color: $color-text-default;
+            margin-bottom: 15px;
+            min-width: 100px;
+            font-weight: 500;
+        }
+        div {
+            position: relative;
+            .txt-fixed {
+                background: $background-white;
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                padding: 5px;
+            }
+        }
+    }
 }

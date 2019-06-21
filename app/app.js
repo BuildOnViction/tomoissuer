@@ -9,6 +9,9 @@ import ConfirmToken from './components/applying/ConfirmToken.vue'
 import TokenDetail from './components/Token.vue'
 import DonateToken from './components/donate/DonateToken.vue'
 import ConfirmDonate from './components/donate/ConfirmDonate.vue'
+import TomoZCondition from './components/applytomo/TomoZCondition.vue'
+import TomoZApplication from './components/applytomo/TomoZApplication.vue'
+import TomoZConfirm from './components/applytomo/TomoZConfirm.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
@@ -29,7 +32,7 @@ import Eth from '@ledgerhq/hw-app-eth'
 import VueCodeMirror from 'vue-codemirror'
 import Transaction from 'ethereumjs-tx'
 import * as ethUtils from 'ethereumjs-util'
-import * as contract from 'truffle-contract'
+// import * as contract from 'truffle-contract'
 
 Vue.use(BootstrapVue)
 Vue.use(VueRouter)
@@ -73,14 +76,18 @@ const store = new Vuex.Store({
         walletLoggedIn: null
     }
 })
+
 Vue.prototype.isElectron = !!(window && window.process && window.process.type)
 
 Vue.prototype.setupProvider = async function (provider, wjs) {
     Vue.prototype.NetworkProvider = provider
-    Vue.prototype.TRC21Issuer = contract(TRC21IssuerAritfacts)
+    // Vue.prototype.TRC21Issuer = contract(TRC21IssuerAritfacts)
     if (wjs instanceof Web3) {
         Vue.prototype.web3 = wjs
-        Vue.prototype.TRC21Issuer.setProvider(wjs.currentProvider.connection || wjs.currentProvider)
+        Vue.prototype.TRC21Issuer = new wjs.eth.Contract(
+            TRC21IssuerAritfacts.abi,
+            '0xa9254C2D00Bdd7dAfadE15A2A61D7592ba2C8eEA'
+        )
         Vue.prototype.TomoXListing = new wjs.eth.Contract(
             TomoXListingAritfacts.abi,
             '0xe88E11b7312fF1194a8f61b1e7fC52C26EB9b216')
@@ -476,7 +483,10 @@ const router = new VueRouter({
         { path: '/verify', component: VerifyContract },
         { path: '/token/:address', component: TokenDetail },
         { path: '/donate', component: DonateToken },
-        { path: '/confirmdonate', component: ConfirmDonate, name: 'ConfirmDonate' }
+        { path: '/confirmdonate', component: ConfirmDonate, name: 'ConfirmDonate' },
+        { path: '/tomozcondition', component: TomoZCondition },
+        { path: '/tomozapplication', component: TomoZApplication },
+        { path: '/tomozconfirm', component: TomoZConfirm, name: 'TomoZConfirm' }
     ]
 })
 
