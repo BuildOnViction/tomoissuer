@@ -3,7 +3,7 @@
         <div class="confirm-table">
             <div class="info-header text-center">
                 <p><i class="tomoissuer-icon-startup"/></p>
-                <h2 class="tmp-title-large">100,000,000 TIIM </h2>
+                <h2 class="tmp-title-large">100,000,000 TIIM</h2>
             </div>
             <div class="tmp-table-three">
                 <table>
@@ -16,8 +16,20 @@
                         <td>TIIM</td>
                     </tr>
                     <tr>
+                        <td>Token supply</td>
+                        <td>100,000,000 TIIM</td>
+                    </tr>
+                    <tr>
+                        <td>Decimal</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
                         <td>Type</td>
                         <td>TRC-721</td>
+                    </tr>
+                    <tr>
+                        <td>Issue fee</td>
+                        <td>5 TOMO</td>
                     </tr>
                     <tr>
                         <td>Code review</td>
