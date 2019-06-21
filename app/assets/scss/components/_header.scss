@@ -1,13 +1,93 @@
 // Style CSS Header
 .tomo-header {
     box-shadow: $boxshadow-default;
-    .navbar-nav {
-        align-items: center;
-        li {
-            margin-right: 10px;
-            &:last-child {
-                margin-right: 0;
+    .tmp-btn-transparent {
+        a.nav-link {
+            @include transit;
+            background: transparent;
+            color: $color-text-gray!important;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            padding: .5em 1.3em .5em 2em!important;
+            @include media-breakpoint-down(sm) {
+                padding: .5em 1.5em!important;
+            }
+            i {
+                padding-right: 10px;
+                font-weight: bold;
+            }
+            &.dropdown-toggle {
+                position: relative;
+                &::after {
+                    border: 0;
+                    content: "\e902";
+                    font-family: tomoissuer;
+                    font-size: 10px;
+                    position: absolute;
+                    right: 1px;
+                    top: 11px;
+                }
             }
         }
     }
+    .navbar-nav {
+        align-items: center;
+        @include media-breakpoint-down(sm) {
+            padding: 2em 0 0;
+        }
+        li {
+            margin-right: 10px;
+            @include media-breakpoint-down(sm) {
+                width: 100%;
+                margin: 5px 0;
+            }
+            &:last-child {
+                margin-right: 0;
+            }
+            &.tomo-wallet {
+                ul {
+                    border: 0;
+                    margin: 0;
+                    padding: 0;
+                    min-width: 220px;
+                    margin-top: 10px;
+                    @include fsz(16);
+                    @include media-breakpoint-up(lg) {
+                        border-radius: $boderradius-default;
+                        box-shadow: $boxshadow-default;
+                        padding: 1.5em 0;
+                    }
+                    li {
+                        margin: 0;
+                        padding: .5em 0;
+                        a,
+                        p {
+                            padding: 0 1.5em;
+                        }
+                        a {
+                            &:hover {
+                                color: $color-link-default-active;
+                            }
+                        }
+                        .flex_box {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        }
+                        &.sign_out {
+                            a {
+                                color: $color-text-oranges;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.btn-menu-sp {
+    border: 0;
+    padding: 0;
 }

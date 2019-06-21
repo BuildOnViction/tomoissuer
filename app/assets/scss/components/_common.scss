@@ -1,6 +1,7 @@
 // Common apply global
 .common-main-content,
 .welcom-tomoissuer  {
+    display: flex;
     padding: 3em 0 2em;
     min-height: calc(100vh - 62px - 106px);
     @include media-breakpoint-only(md) {
@@ -24,6 +25,32 @@
 .txt_note {
     margin-top: 2em;
     @include fsz(14);
+}
+
+//setting margin template
+.tmp-mgt-one {
+    margin-top: 1em;
+}
+
+.tmp-mgt-two {
+    margin-top: 2em;
+    @include media-breakpoint-down(md){
+        margin-top: 1.5em;
+    }
+}
+
+.tmp-mgt-three {
+    margin-top: 3em;
+    @include media-breakpoint-down(md){
+        margin-top: 2em;
+    }
+}
+
+.tmp-mgt-four {
+    margin-top: 4em;
+    @include media-breakpoint-down(md){
+        margin-top: 3em;
+    }
 }
 
 //common_tmp_page

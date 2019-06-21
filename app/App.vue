@@ -31,23 +31,34 @@
                             </b-nav-item>
                             <b-nav-item-dropdown
                                 v-if="isTomonet"
-                                class="tmp-btn-transparent"
+                                class="tmp-btn-transparent tomo-wallet"
                                 offset="25"
                                 right>
                                 <template
                                     slot="button-content"
                                     class="tmp-btn-transparent">
                                     <i class="tomoissuer-icon-wallet"/>
-                                    My Wallet
+                                    0x48c4eef...4fed42
                                 </template>
+                                <b-dropdown-text
+                                    class="flex_box">
+                                    <span>Balance:</span>
+                                    <strong>1000 TOMO</strong>
+                                </b-dropdown-text>
                                 <b-dropdown-item
-                                    :to="'/address/' + account">
-                                    {{ truncate(account, 20) }}
+                                    href="/donate">
+                                    Donate TRC-21 fee
                                 </b-dropdown-item>
-                                <b-dropdown-divider />
                                 <b-dropdown-item
+                                    href="/help">
+                                    Help
+                                </b-dropdown-item>
+                                <b-dropdown-item
+                                    class="sign_out"
                                     href="/"
-                                    @click="signOut">Sign out</b-dropdown-item>
+                                    @click="signOut">
+                                    Sign out
+                                </b-dropdown-item>
                             </b-nav-item-dropdown>
                         </b-navbar-nav>
                     </b-collapse>
