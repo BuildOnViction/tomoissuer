@@ -265,7 +265,6 @@ export default {
                             nonce: web3.utils.toHex(nonce)
                         }
                     )
-                    console.log(data)
 
                     const signature = await self.signTransaction(data)
                     result = await self.sendSignedTransaction(dataTx, signature)

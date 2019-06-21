@@ -127,16 +127,6 @@ router.post('/verifyContract', [
             }
             let runtimeBytecode = '0x' + contract.runtimeBytecode
 
-            console.log(`bytecode:
-            
-            
-            ${bytecode}`)
-
-            console.log(`runtime: 
-            
-            
-            ${runtimeBytecode}`)
-
             if (md5(runtimeBytecode.slice(0, -100)) !== md5(bytecode.slice(0, -100))) {
                 return next(Error(`Bytecode invalid
                     Try to turn ${isOptimize === '0' ? 'On' : 'Off'} Optimization`))

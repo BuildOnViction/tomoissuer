@@ -26,7 +26,7 @@
                         <ul>
                             <li>
                                 <b-link
-                                    v-if="isAppliedZ"
+                                    v-if="!isAppliedZ"
                                     :to="'/apply/' + address"
                                     class="tmp-btn-violet">
                                     <i class="tomoissuer-icon-tomoz"/>
@@ -101,7 +101,7 @@
                                                     <i class="tomoissuer-icon-edit-pencil"/>
                                                 </b-link>
                                             </p>
-                                            <p>---</p>
+                                            <p>{{ txFee || '---' }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -274,6 +274,7 @@ export default {
             transactionHash: '',
             ownerBalance: '',
             poolingFee: '',
+            txFee: '',
             config: {},
             tomoscanUrl: '',
             tranferCurrentPage: 1,
@@ -287,88 +288,7 @@ export default {
                 { key: 'to', label: 'To' },
                 { key: 'amount', label: 'Amount' }
             ],
-            tranferItems: [
-                {
-                    txn_hash: 'xf3032c1e82e198459a29272c446b9ec73ab979911bd1a471f3b1c648f2145619',
-                    age: '40',
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 21,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 89,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 40,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 29,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: '40',
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 21,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 89,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 40,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 29,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                }
-            ],
+            tranferItems: [],
             holdersCurrentPage: 1,
             holdersRows: 7,
             holdersPerPage: 6,
@@ -378,50 +298,7 @@ export default {
                 { key: 'amount', label: 'Amount' },
                 { key: 'percentage', label: 'Percentage (%)' }
             ],
-            holdersItems: [
-                {
-                    rank: '1',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '2',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '3',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '4',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '5',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '6',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '7',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                }
-            ]
+            holdersItems: []
         }
     },
     validations: {
@@ -437,19 +314,24 @@ export default {
     created: async function () {
         try {
             const self = this
-            self.config = await self.appConfig()
+            // self.config = await self.appConfig()
+            self.appConfig().then(result => {
+                self.config = result
+            })
             await self.getTokenDetail()
             self.getTokenTransfer()
             self.getTokenHolders()
             self.getOwnerBalance()
             self.getPoolingFee()
             self.checkAppliedZ()
+            self.getTransactionFee()
         } catch (error) {
             console.log(error)
             this.$toasted.show(error, { type :'error' })
         }
     },
-    mounted () {},
+    mounted: async function () {
+    },
     methods: {
         async getTokenDetail () {
             const self = this
@@ -517,12 +399,11 @@ export default {
             const account = store.get('address').toLowerCase()
             const web3 = this.web3
             if (account && web3) {
-                // 0x70a08231 is mean balanceOf(address)
+                // 0x70a08231 is balanceOf(address) function code
                 let data = '0x70a08231' +
                     '000000000000000000000000' +
                     account.substr(2) // chop off the 0x
                 web3.eth.call({ to: this.address, data: data }).then(result => {
-                    console.log(result)
                     let balance = new BigNumber(web3.utils.hexToNumberString(result))
                     this.ownerBalance = balance.div(10 ** this.token.decimals).toNumber()
                 }).catch(error => {
@@ -540,6 +421,22 @@ export default {
                 console.log(error)
                 this.$toatsed.show(error, { type: 'error' })
             })
+        },
+        getTransactionFee () {
+            const account = store.get('address').toLowerCase()
+            const web3 = this.web3
+            if (account && web3) {
+                // 0x24ec7590 is minFee function code
+                let data = '0x24ec7590' +
+                    '00000000000000000000000000000000000000000000000000000000'
+                web3.eth.call({ to: this.address, data: data }).then(result => {
+                    let balance = new BigNumber(web3.utils.hexToNumberString(result))
+                    this.txFee = balance.div(10 ** this.token.decimals).toNumber()
+                }).catch(error => {
+                    console.log(error)
+                    this.$toatsed.show(error, { type: 'error' })
+                })
+            }
         },
         async applyToken () {
             try {
