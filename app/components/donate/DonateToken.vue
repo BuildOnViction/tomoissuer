@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import store from 'store'
 export default {
     name: 'Donate',
     components: { },
@@ -65,6 +66,11 @@ export default {
     async updated () {
     },
     destroyed () { },
+    beforeRouteEnter (to, from, next) {
+        if (!store.get('address')) {
+            next('/login')
+        } else next()
+    },
     created: async function () {},
     methods: {
         validate: function () {

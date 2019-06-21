@@ -12,7 +12,7 @@
                 It looks like there are no tokens here.<br>
                 Maybe you would like to
                 <b-link
-                    to="/">
+                    to="/createToken">
                     issue a new one
                 </b-link>
             </p>
@@ -249,6 +249,11 @@ export default {
     async updated () {
     },
     destroyed () { },
+    beforeRouteEnter (to, from, next) {
+        if (!store.get('address')) {
+            next('/login')
+        } else next()
+    },
     created: async function () {
         await this.getTokens()
     },

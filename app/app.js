@@ -146,7 +146,7 @@ Vue.prototype.getAccount = async function () {
             payload,
             offset
         )
-        localStorage.set('trezorPayload', { xpub: payload.xpub })
+        Vue.prototype.trezorPayload = ''
         break
     default:
         break
@@ -231,7 +231,6 @@ Vue.prototype.loadTrezorWallets = async (offset, limit) => {
                     balance: parseFloat(web3.utils.fromWei(balance, 'ether')).toFixed(2)
                 }
             }
-            Vue.prototype.trezorPayload = ''
             return wallets
         } else {
             throw payload.error || 'Something went wrong'
@@ -483,14 +482,14 @@ const router = new VueRouter({
         { path: '/', component: Home },
         { path: '/login', component: Login },
         { path: '/confirm', component: ConfirmToken, name: 'ConfirmToken' },
-        { path: '/create', component: CreateToken },
+        { path: '/createToken', component: CreateToken },
         { path: '/verify', component: VerifyContract },
         { path: '/token/:address', component: TokenDetail },
         { path: '/donate', component: DonateToken },
         { path: '/confirmdonate', component: ConfirmDonate, name: 'ConfirmDonate' },
-        { path: '/tomozcondition', component: TomoZCondition },
-        { path: '/tomozapplication', component: TomoZApplication },
-        { path: '/tomozconfirm', component: TomoZConfirm, name: 'TomoZConfirm' },
+        { path: '/tomozcondition/:address', component: TomoZCondition },
+        { path: '/tomozapplication/:address', component: TomoZApplication },
+        { path: '/tomozconfirm/:address', component: TomoZConfirm, name: 'TomoZConfirm' },
         { path: '/depositfee', component: DepositFee },
         { path: '/depositconfirm', component: DepositConfirm, name: 'DepositConfirm' },
         { path: '/edittransactionsfee', component: EditTransactionsFee },

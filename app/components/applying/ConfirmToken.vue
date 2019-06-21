@@ -148,6 +148,11 @@ export default {
     },
     async updated () {},
     destroyed () { },
+    beforeRouteEnter (to, from, next) {
+        if (!store.get('address')) {
+            next('/login')
+        } else next()
+    },
     created: async function () {
         const self = this
         self.account = await self.getAccount()

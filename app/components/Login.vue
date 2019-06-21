@@ -94,7 +94,6 @@
                                     </b-form-group>
                                     <div class="btn-box">
                                         <b-button
-                                            v-b-modal.modal-ledgerwallet
                                             class="tmp-btn-blue"
                                             type="submit">
                                             Connect
@@ -188,6 +187,44 @@
                 </b-form>
             </div>
         </div>
+        <b-modal
+            ref="hdwalletModal"
+            title="Please select the address you would like to interact with"
+            centered
+            scrollable
+            size="md"
+            hide-header
+            hide-footer
+            @ok="setHdPath">
+            <div class="tomo-modal-default text-left">
+                <h3 class="tmp-title-medium">Wallet Address</h3>
+                <div class="tmp-table-two colum-2">
+                    <table>
+                        <tr
+                            v-for="(hdwallet, index) in hdWallets"
+                            :key="index">
+                            <td>
+                                <b-form-radio
+                                    :value="index"
+                                    name="hdWallet">
+                                    <span
+                                        :title="hdwallet.address">
+                                        {{ hdwallet.address }}
+                                    </span>
+                                </b-form-radio>
+                            </td>
+                            <td><b>{{ hdwallet.balance }}</b> {{ getCurrencySymbol() }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="btn-box">
+                    <b-button
+                        class="tmp-btn-blue"
+                        @click="setHdPath">Unlock
+                    </b-button>
+                </div>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -212,7 +249,7 @@ export default {
             hdPath: "m/44'/889'/0'/0", // HD DerivationPath of hardware wallet
             hdWallets: {}, // list of addresses in hardware wallet
             config: {},
-            provider: 'ledger',
+            provider: '',
             address: '',
             withdraws: [],
             wh: [],
@@ -314,9 +351,15 @@ export default {
                     store.set('address', self.address.toLowerCase())
                     store.set('network', self.provider)
                     self.$bus.$emit('logged', 'user logged')
-                    self.$router.push({
-                        path: '/'
-                    })
+                    if (store.get('redirectTo')) {
+                        self.$router.push({
+                            path: '/' + store.get('redirectTo')
+                        })
+                    } else {
+                        self.$router.push({
+                            path: '/'
+                        })
+                    }
                 } else {
                     self.$toasted.show(
                         'Couldn\'t get any accounts! Make sure ' +
