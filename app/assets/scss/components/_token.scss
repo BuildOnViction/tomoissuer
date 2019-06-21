@@ -45,6 +45,7 @@
                 @include fsz(24);
                 font-weight: bold;
                 letter-spacing: 2px;
+                font-family: $font-baijam;
             }
         }
         .flex-box {
@@ -53,6 +54,24 @@
                 &:first-child {
                     width: 60%;
                     font-weight: 500;
+                }
+                a {
+                    padding-right: 20px;
+                    position: relative;
+                    &::before {
+                        content: "\e910";
+                        position: absolute;
+                        right: 2px;
+                        top: 4px;
+                        font-family: tomoissuer;
+                        @include fsz(10);
+                        @extend %transit;
+                    }
+                    &:hover {
+                        &::before {
+                            right: -5px;
+                        }
+                    }
                 }
             }
         }

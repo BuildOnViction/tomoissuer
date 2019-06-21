@@ -26,22 +26,3 @@
         }
     }
 }
-
-// Pge confirm
-.confirm-newtoken {
-    .tomoissuer-icon-startup {
-        @include fsz-cha(90,70,70);
-        color: $color-text-blue;
-    }
-    table {
-        tr {
-            display: grid;
-            grid-template-columns: 30% 70%;
-            td {
-                &:first-child {
-                    font-weight: 500;
-                }
-            }
-        }
-    }
-}

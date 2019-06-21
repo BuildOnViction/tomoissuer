@@ -1,5 +1,5 @@
 <template>
-    <div class="container container-min">
+    <div class="container container-small">
         <div class="newtoken">
             <h2 class="tmp-title-large">Issue a new token</h2>
             <p>Start by choosing the wallet you would like to unlock</p>
@@ -67,8 +67,7 @@
                 <div class="btn-box">
                     <b-button
                         class="tmp-btn-blue"
-                        type="submit"
-                        variant="primary">Save & Review</b-button>
+                        type="submit">Save & Review</b-button>
                 </div>
             </b-form>
         </div>

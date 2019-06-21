@@ -1,17 +1,7 @@
 
 // Page creat token
 .tomo-donate {
-    .form-form-donate {
-        margin-top: 3em!important;
-        @include media-breakpoint-down(md){
-            margin-top: 1.5em!important;
-        }
-    }
-    .form-text {
-        color: $color-text-blue!important;
-        margin-top: 10px;
-    }
-    .txt-info {
+    .box-desc {
         margin-top: 3em!important;
         @include media-breakpoint-down(md){
             margin-top: 1.5em!important;
@@ -19,28 +9,6 @@
         p {
             &:last-child {
                 margin-bottom: 0;
-            }
-        }
-    }
-    .form-group {
-        margin-bottom: 3em!important;
-        @include media-breakpoint-down(md){
-            margin-bottom: 1.5em!important;
-        }
-        >label {
-            @include fsz(16);
-            font-family: $font-quicksand;
-            color: $color-text-default;
-            margin-bottom: 15px;
-            min-width: 100px;
-            font-weight: 500;
-        }
-        div {
-            position: relative;
-            .txt-fixed {
-                position: absolute;
-                right: 15px;
-                top: 15px;
             }
         }
     }

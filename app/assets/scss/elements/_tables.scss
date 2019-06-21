@@ -3,10 +3,9 @@ table,
 	margin: 0;
 	width: 100%;
 	th,td {
-		overflow: hidden;
 		padding: 0.75rem;
 		@include media-breakpoint-down(md) {
-			padding: 0.5rem 0;
+			padding: 0.75rem 0;
 		}
 	}
 }
@@ -123,4 +122,37 @@ table,
 	@include media-breakpoint-down (md) {
 		padding: 1em 0;
 	}
+}
+
+// Pge confirm
+.confirm-table {
+    .tomoissuer-icon-startup {
+        @include fsz-cha(90,70,70);
+        color: $color-text-blue;
+	}
+    .tomoissuer-icon-tomoz {
+        @include fsz-cha(70,50,50);
+        color: $color-text-violet;
+    }
+    table {
+        tr {
+            display: grid;
+			grid-template-columns: 30% 70%;
+			@include media-breakpoint-down(md) {
+				grid-template-columns: 40% 60%;
+			}
+            td {
+                &:first-child {
+					font-weight: 500;
+					padding-right: 10px;
+                }
+			}
+			a {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				display: block;
+			}
+        }
+    }
 }

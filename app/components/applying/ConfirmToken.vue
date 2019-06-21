@@ -1,9 +1,9 @@
 <template>
-    <div class="container container-min">
-        <div class="confirm-newtoken">
+    <div class="container container-small">
+        <div class="confirm-table">
             <div class="info-header text-center">
                 <p><i class="tomoissuer-icon-startup"/></p>
-                <h2 class="tmp-title-large">100,000,000.000000 TIIM </h2>
+                <h2 class="tmp-title-large">100,000,000 TIIM </h2>
             </div>
             <div class="tmp-table-three">
                 <table>
