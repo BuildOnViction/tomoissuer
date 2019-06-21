@@ -10,7 +10,7 @@
             align-items: center;
             font-weight: 500;
             padding: .5em 1.3em .5em 2em!important;
-            @include media-breakpoint-down(sm) {
+            @include media-breakpoint-down(md) {
                 padding: .5em 1.5em!important;
             }
             i {
@@ -33,12 +33,12 @@
     }
     .navbar-nav {
         align-items: center;
-        @include media-breakpoint-down(sm) {
+        @include media-breakpoint-down(md) {
             padding: 2em 0 0;
         }
         li {
             margin-right: 10px;
-            @include media-breakpoint-down(sm) {
+            @include media-breakpoint-down(md) {
                 width: 100%;
                 margin: 5px 0;
             }
@@ -52,6 +52,7 @@
                     padding: 0;
                     min-width: 220px;
                     margin-top: 10px;
+                    width: max-content;
                     @include fsz(16);
                     @include media-breakpoint-up(lg) {
                         border-radius: $boderradius-default;
@@ -74,6 +75,9 @@
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
+                            span {
+                                padding-right: 10px;
+                            }
                         }
                         &.sign_out {
                             a {
