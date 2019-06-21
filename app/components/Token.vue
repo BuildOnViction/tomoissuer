@@ -97,7 +97,7 @@
                                             <p>
                                                 Transactions fee
                                                 <b-link
-                                                    to="/edit">
+                                                    :to="`/edittransactionsfee/${address}`">
                                                     <i class="tomoissuer-icon-edit-pencil"/>
                                                 </b-link>
                                             </p>

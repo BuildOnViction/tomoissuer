@@ -3,7 +3,7 @@
         <div class="tomo-body-fullw">
             <div class="info-header">
                 <h2 class="tmp-title-large">Edit transaction fee</h2>
-                <p>Current fee: 0.0001 TIIM</p>
+                <p>Current fee: {{ currentFee }} {{ tokenSymbol }}</p>
             </div>
             <b-form
                 class="tmp-form-one"
@@ -11,18 +11,17 @@
                 @submit.prevent="validate()">
                 <b-form-group
                     class="mb-4"
-                    label-for="depositFee"
-                    description="Current fee: 0.0001 TIIM">
-                    <span class="txt-fixed">TIIM</span>
+                    label-for="newFee">
+                    <span class="txt-fixed">{{ tokenSymbol }}</span>
                     <b-form-input
-                        v-model="depositFee"
-                        type="text"
-                        placeholder="How much fee for a transaction (unit: TIIM)"/>
+                        :placeholder="`How much fee for a transaction (unit: ${tokenSymbol})`"
+                        v-model="newFee"
+                        type="text"/>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
-                        class="tmp-btn-boder-violet btn-min"
-                        to="/token/0x2f8fa62a62410febc56c96c3ceb8666e193a1be3">
+                        :to="'/token/' + address"
+                        class="tmp-btn-boder-violet btn-min">
                         Back
                     </b-button>
                     <b-button
@@ -42,14 +41,16 @@ export default {
     name: 'EditTransactionsFee',
     data () {
         return {
-            tokenName: '',
+            address: this.$route.params.address.toLowerCase(),
             tokenSymbol: '',
             decimals: '',
             minFee: '',
             tokenSupply: '',
             sourceCode: '',
             account: '',
-            type: ''
+            type: '',
+            newFee: '',
+            currentFee: ''
         }
     },
     async updated () {},
@@ -59,13 +60,15 @@ export default {
             next('/login')
         } else next()
     },
-    created: async function () {},
+    created: async function () {
+        console.log(this.$route)
+        console.log(this.tokenFee)
+    },
     methods: {
         validate: function () {
             this.confirm()
         },
         confirm () {
-            console.log(1111)
             this.$router.push({ name: 'EditTransactionsFeeConfirm',
                 query: {
                     name: this.tokenName,
