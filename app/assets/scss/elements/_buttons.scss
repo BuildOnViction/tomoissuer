@@ -143,7 +143,7 @@ input {
         @include media-breakpoint-down(sm) {
             min-width: 180px;
         }
-        @include fsz(18);
+        @include fsz(16);
         i {
             padding-right: 5px;
             font-weight: bold;
