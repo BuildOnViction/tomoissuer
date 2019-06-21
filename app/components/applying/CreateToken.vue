@@ -101,7 +101,7 @@ export default {
     beforeRouteEnter (to, from, next) {
         if (!store.get('address')) {
             next('/login')
-        }
+        } else next()
     },
     created: async function () {},
     methods: {
