@@ -59,8 +59,8 @@
             </div>
             <div class="btn-box">
                 <b-button
-                    class="tmp-btn-violet"
-                    to="/tomozapplication">
+                    :to="'/tomozapplication/' + address"
+                    class="tmp-btn-violet">
                     I understand
                 </b-button>
             </div>
@@ -69,11 +69,13 @@
 </template>
 
 <script>
+import store from 'store'
 export default {
     name: 'ApplyTomoZ',
     components: { },
     data () {
         return {
+            address: this.$route.params.address.toLowerCase(),
             tokenName: '',
             tokenSymbol: '',
             decimals: '',
@@ -87,6 +89,11 @@ export default {
     async updated () {
     },
     destroyed () { },
+    beforeRouteEnter (to, from, next) {
+        if (!store.get('address')) {
+            next('/login')
+        } else next()
+    },
     created: async function () {},
     methods: { }
 }

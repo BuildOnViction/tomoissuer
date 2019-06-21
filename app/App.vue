@@ -25,7 +25,7 @@
                             <b-nav-item
                                 v-if="isTomonet"
                                 class="tmp-btn-blue"
-                                to="/create">
+                                to="/createToken">
                                 <i class="tomoissuer-icon-plus"/>
                                 Issue new token
                             </b-nav-item>
@@ -38,12 +38,12 @@
                                     slot="button-content"
                                     class="tmp-btn-transparent">
                                     <i class="tomoissuer-icon-wallet"/>
-                                    0x48c4eef...4fed42
+                                    {{ truncate(account, 16) }}
                                 </template>
                                 <b-dropdown-text
                                     class="flex_box">
                                     <span>Balance:</span>
-                                    <strong>1000005.0000 TOMO</strong>
+                                    <strong>{{ balance }} TOMO</strong>
                                 </b-dropdown-text>
                                 <b-dropdown-item
                                     href="/donate">
@@ -92,12 +92,24 @@
                         <div class="col-md-5 col-lg-4">
                             <div class="tomo-social">
                                 <ul>
-                                    <li><a href="#"><i class="tomoissuer-icon-facebook"/></a></li>
-                                    <li><a href="#"><i class="tomoissuer-icon-twiter"/></a></li>
-                                    <li><a href="#"><i class="tomoissuer-icon-telegram"/></a></li>
-                                    <li><a href="#"><i class="tomoissuer-icon-github"/></a></li>
-                                    <li><a href="#"><i class="tomoissuer-icon-linkedin"/></a></li>
-                                    <li><a href="#"><i class="tomoissuer-icon-reddit"/></a></li>
+                                    <li><a
+                                        href="https://www.facebook.com/tomochainofficial"
+                                        target="_blank"><i class="tomoissuer-icon-facebook"/></a></li>
+                                    <li><a
+                                        href="https://twitter.com/TomoChainANN"
+                                        target="_blank"><i class="tomoissuer-icon-twiter"/></a></li>
+                                    <li><a
+                                        href="https://t.me/tomochain"
+                                        target="_blank"><i class="tomoissuer-icon-telegram"/></a></li>
+                                    <li><a
+                                        href="https://github.com/tomochain/"
+                                        target="_blank"><i class="tomoissuer-icon-github"/></a></li>
+                                    <li><a
+                                        href="https://www.linkedin.com/company/tomochain"
+                                        target="_blank"><i class="tomoissuer-icon-linkedin"/></a></li>
+                                    <li><a
+                                        href="https://www.reddit.com/r/Tomochain/"
+                                        target="_blank"><i class="tomoissuer-icon-reddit"/></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -110,6 +122,7 @@
 
 <script>
 import store from 'store'
+import BigNumber from 'bignumber.js'
 import pkg from '../package.json'
 
 export default {
@@ -120,13 +133,19 @@ export default {
             isReady: !!this.web3,
             isTomonet: false,
             account: '',
-            version: pkg.version
+            version: pkg.version,
+            balance: ''
         }
     },
     async updated () {
         await this.checkNetworkAndLogin()
     },
     destroyed () { },
+    beforeRouteEnter (to, from, next) {
+        if (!store.get('address')) {
+            next('/login')
+        }
+    },
     created: async function () {
         try {
             const self = this
@@ -153,6 +172,14 @@ export default {
                     }
                     if (self.account) {
                         self.isTomonet = true
+                    }
+                    if (self.web3) {
+                        self.web3.eth.getBalance(self.account).then(result => {
+                            let balance = new BigNumber(result)
+                            self.balance = balance.div(10 ** 18).toNumber().toFixed(4)
+                        }).catch(error => {
+                            console.log(error)
+                        })
                     }
                 } catch (error) {
                     console.log(error)

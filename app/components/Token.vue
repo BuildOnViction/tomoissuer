@@ -3,19 +3,19 @@
         <div class="main-box-header">
             <div class="row">
                 <div class="col-md-7">
-                    <h2 class="tmp-title-large">TIIM</h2>
+                    <h2 class="tmp-title-large">{{ token.name }}</h2>
                     <div class="under">
                         <span
                             v-if="!moreInfo">
-                            TriipProtocol
+                            {{ token.symbol }}
                         </span>
                         <span
-                            v-if="!moreInfo"
+                            v-if="token.type === 'trc21'"
                             class="apply-trc">
-                            TRC-721
+                            TRC-21
                         </span>
                         <span
-                            v-if="!moreInfo"
+                            v-if="isAppliedZ"
                             class="apply-tomoz">
                             TomoZ
                         </span>
@@ -26,8 +26,9 @@
                         <ul>
                             <li>
                                 <b-link
-                                    class="tmp-btn-violet"
-                                    to="/tomozcondition">
+                                    v-if="!isAppliedZ"
+                                    :to="'/tomozcondition/' + address"
+                                    class="tmp-btn-violet">
                                     <i class="tomoissuer-icon-tomoz"/>
                                     Apply to pay fee by token
                                 </b-link>
@@ -45,29 +46,29 @@
                             <div class="col-6">
                                 <div class="box-item">
                                     <p class="tmp-title-medium">Price</p>
-                                    <p class="fsz-size text-violet">$0.25</p>
+                                    <p class="fsz-size text-violet">---</p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
                                     <p class="tmp-title-medium">Total supply</p>
                                     <p
-                                        class="fsz-size text-blue"
-                                        title="900,000,000,000">
-                                        9B
+                                        :title="formatNumber(token.totalSupplyNumber)"
+                                        class="fsz-size text-blue">
+                                        {{ formatCapacity(token.totalSupplyNumber) }}
                                     </p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
                                     <p class="tmp-title-medium">Transfer</p>
-                                    <p class="fsz-size text-yellow">981</p>
+                                    <p class="fsz-size text-yellow">{{ tokenTransfers }}</p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
                                     <p class="tmp-title-medium">Holder</p>
-                                    <p class="fsz-size text-oranges">8678</p>
+                                    <p class="fsz-size text-oranges">{{ tokenHolders }}</p>
                                 </div>
                             </div>
                         </div>
@@ -82,15 +83,15 @@
                                             <p>Profile summary</p>
                                             <p class="common_txt_ellipsis text-blue">
                                                 <a
-                                                    href="#"
-                                                    title="0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74">
-                                                    0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74
+                                                    :title="token.hash"
+                                                    href="#">
+                                                    {{ token.hash }}
                                                 </a>
                                             </p>
                                         </li>
                                         <li>
                                             <p>Decimals</p>
-                                            <p>9</p>
+                                            <p>{{ token.decimals }}</p>
                                         </li>
                                         <li>
                                             <p>
@@ -100,7 +101,7 @@
                                                     <i class="tomoissuer-icon-edit-pencil"/>
                                                 </b-link>
                                             </p>
-                                            <p>0.4334</p>
+                                            <p>{{ txFee || '---' }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -116,25 +117,16 @@
                                         <li>
                                             <p>Owner balance</p>
                                             <div class="flex-box">
-                                                <span>100,000,000  TIIM</span>
-                                                <span>
-                                                    <b-link
-                                                        to="#">
-                                                        Transfer
-                                                    </b-link>
-                                                </span>
+                                                <span>{{ formatCurrencySymbol(
+                                                formatNumber(ownerBalance), token.symbol) }}</span>
+                                                <span><b-link to="#">Transfer</b-link></span>
                                             </div>
                                         </li>
                                         <li>
                                             <p>Pooling fee</p>
                                             <div class="flex-box">
-                                                <span>2,000 TOMO</span>
-                                                <span>
-                                                    <b-link
-                                                        to="/depositfee">
-                                                        Deposit more
-                                                    </b-link>
-                                                </span>
+                                                <span>{{ poolingFee }} TOMO</span>
+                                                <span><b-link to="/depositfee">Deposit more</b-link></span>
                                             </div>
                                         </li>
                                     </ul>
@@ -152,7 +144,8 @@
                         title="Transfer"
                         active>
                         <template>
-                            <p>A total of 822,078 transactions found (Showing the last 100K records)</p>
+                            <p>A total of {{ formatNumber(tokenTransfers) }} transactions found
+                            (Showing the last 100K records)</p>
                             <div class="tomo_main_table colum-5">
                                 <b-table
                                     id="transfer_table"
@@ -165,7 +158,8 @@
                                         slot="txn_hash"
                                         slot-scope="data">
                                         <a
-                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                            :href="config.tomoscanUrl + '/txs/' +
+                                            data.value.toLowerCase()"
                                             :title="data.value">
                                             {{ data.value }}
                                         </a>
@@ -173,7 +167,7 @@
                                     <template
                                         slot="age"
                                         slot-scope="data">
-                                        {{ data.item.age }} mins ago
+                                        {{ data.item.age }}
                                     </template>
                                     <template
                                         slot="from"
@@ -185,8 +179,7 @@
                                         </a>
                                     </template>
                                     <template
-                                        slot="icon"
-                                        slot-scope="data">
+                                        slot="icon">
                                         <i class="tomoissuer-icon-next-right"/>
                                     </template>
                                     <template
@@ -213,7 +206,9 @@
                     <b-tab
                         title="holders">
                         <template>
-                            <p>A total of 822,078 transactions found (Showing the last 100K records)</p>
+                            <p>A total of {{ formatNumber(tokenHolders) }}
+                                {{ tokenHolders > 1 ? 'holders' : 'holder' }} found
+                                (Showing the last 100K records)</p>
                             <div class="tomo_main_table colum-4">
                                 <b-table
                                     id="holders_table"
@@ -256,6 +251,8 @@ import { validationMixin } from 'vuelidate'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import { required, minValue } from 'vuelidate/lib/validators'
+import store from 'store'
+import moment from 'moment'
 
 export default {
     name: 'App',
@@ -265,16 +262,22 @@ export default {
         return {
             web3: this.web3,
             address: this.$route.params.address.toLowerCase(),
-            token: null,
+            account: '',
+            token: {},
             tokenName: null,
             symbol: null,
-            tokenTxsCount: 0,
-            holdersCount: 0,
+            tokenTransfers: 0,
+            tokenHolders: 0,
             moreInfo: '',
             loading: false,
             depositeAmount: '',
-            isApplied: false,
+            isAppliedZ: false,
             transactionHash: '',
+            ownerBalance: '',
+            poolingFee: '',
+            txFee: '',
+            config: {},
+            tomoscanUrl: '',
             tranferCurrentPage: 1,
             tranferRows: 10,
             tranferPerPage: 6,
@@ -286,88 +289,7 @@ export default {
                 { key: 'to', label: 'To' },
                 { key: 'amount', label: 'Amount' }
             ],
-            tranferItems: [
-                {
-                    txn_hash: 'xf3032c1e82e198459a29272c446b9ec73ab979911bd1a471f3b1c648f2145619',
-                    age: '40',
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 21,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 89,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 40,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 29,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: '40',
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 21,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 89,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 40,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                },
-                {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    age: 29,
-                    from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    icon: '->',
-                    to: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448'
-                }
-            ],
+            tranferItems: [],
             holdersCurrentPage: 1,
             holdersRows: 7,
             holdersPerPage: 6,
@@ -377,50 +299,7 @@ export default {
                 { key: 'amount', label: 'Amount' },
                 { key: 'percentage', label: 'Percentage (%)' }
             ],
-            holdersItems: [
-                {
-                    rank: '1',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '2',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '3',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '4',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '5',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '6',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                },
-                {
-                    rank: '7',
-                    address: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
-                    amount: '0.46448',
-                    percentage: '50.62'
-                }
-            ]
+            holdersItems: []
         }
     },
     validations: {
@@ -433,17 +312,35 @@ export default {
     watch: {},
     updated () {},
     beforeDestroy () {},
+    beforeRouteEnter (to, from, next) {
+        if (!store.get('address')) {
+            next('/login')
+        } else next()
+    },
     created: async function () {
         try {
             const self = this
-            self.getTokenDetail()
-            self.checkApplied()
+            // self.config = await self.appConfig()
+            self.appConfig().then(result => {
+                self.config = result
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            })
+            await self.getTokenDetail()
+            self.getTokenTransfer()
+            self.getTokenHolders()
+            self.getOwnerBalance()
+            self.getPoolingFee()
+            self.checkAppliedZ()
+            self.getTransactionFee()
         } catch (error) {
             console.log(error)
             this.$toasted.show(error, { type :'error' })
         }
     },
-    mounted () {},
+    mounted: async function () {
+    },
     methods: {
         async getTokenDetail () {
             const self = this
@@ -451,13 +348,110 @@ export default {
             self.token = data
             self.tokenName = data.name
             self.symbol = data.symbol
-            self.tokenTxsCount = data.tokenTxs
-            self.holdersCount = data.tokenholders
+        },
+        getTokenTransfer () {
+            const self = this
+            const isTrc21 = self.token.type
+            axios.get(`/api/token/txes/${isTrc21}/${this.address}`).then(response => {
+                const data = response.data
+                if (data) {
+                    const items = []
+                    data.items.map(m => {
+                        items.push({
+                            txn_hash: m.transactionHash,
+                            age: moment(m.createdAt).fromNow(),
+                            from: m.from,
+                            to: m.to,
+                            amount: self.formatNumber(
+                                new BigNumber(m.value).div(10 ** self.token.decimals).toNumber())
+                        })
+                    })
+                    self.tranferItems = items
+                    self.tranferRows = data.total
+                    self.tokenTransfers = response.data.total
+                }
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            })
+        },
+        getTokenHolders () {
+            const self = this
+            const params = {
+                page: self.holdersCurrentPage,
+                limit: self.holdersPerPage
+            }
+            const isTrc21 = self.token.type === 'trc21' ? 'trc21/' : ''
+            const query = self.serializeQuery(params)
+            axios.get(`/api/token/holders/${isTrc21}${this.address}?${query}`).then(response => {
+                const data = response.data
+                if (data) {
+                    const items = []
+                    data.items.map(m => {
+                        items.push({
+                            rank: m.rank,
+                            address: m.hash,
+                            amount: self.formatNumber(m.quantityNumber),
+                            percentage: m.percentage
+                        })
+                    })
+                    self.holdersItems = items
+                    self.holdersRows = data.total
+                    self.tokenHolders = response.data.total
+                }
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            })
+        },
+        getOwnerBalance () {
+            const account = store.get('address').toLowerCase()
+            const web3 = this.web3
+            if (account && web3) {
+                // 0x70a08231 is balanceOf(address) function code
+                let data = '0x70a08231' +
+                    '000000000000000000000000' +
+                    account.substr(2) // chop off the 0x
+                web3.eth.call({ to: this.address, data: data }).then(result => {
+                    let balance = new BigNumber(web3.utils.hexToNumberString(result))
+                    this.ownerBalance = balance.div(10 ** this.token.decimals).toNumber()
+                }).catch(error => {
+                    console.log(error)
+                    this.$toatsed.show(error, { type: 'error' })
+                })
+            }
+        },
+        getPoolingFee () {
+            const contract = this.TRC21Issuer
+            contract.methods.getTokenCapacity(this.address).call().then(capacity => {
+                let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
+                this.poolingFee = balance.div(10 ** this.token.decimals).toNumber()
+            }).catch(error => {
+                console.log(error)
+                this.$toatsed.show(error, { type: 'error' })
+            })
+        },
+        getTransactionFee () {
+            const account = store.get('address').toLowerCase()
+            const web3 = this.web3
+            if (account && web3) {
+                // 0x24ec7590 is minFee function code
+                let data = '0x24ec7590' +
+                    '00000000000000000000000000000000000000000000000000000000'
+                web3.eth.call({ to: this.address, data: data }).then(result => {
+                    let balance = new BigNumber(web3.utils.hexToNumberString(result))
+                    this.txFee = balance.div(10 ** this.token.decimals).toNumber()
+                }).catch(error => {
+                    console.log(error)
+                    this.$toatsed.show(error, { type: 'error' })
+                })
+            }
         },
         async applyToken () {
             try {
                 this.loading = true
-                const contract = await this.getTRC21IssuerInstance()
+                // const contract = await this.getTRC21IssuerInstance()
+                const contract = this.TRC21Issuer
                 const txParams = {
                     from: (await this.getAccount()).toLowerCase(),
                     value: this.web3.utils.toHex(new BigNumber(this.depositeAmount)
@@ -475,15 +469,20 @@ export default {
                 this.$toasted.show(error, { type: 'error' })
             }
         },
-        async checkApplied () {
-            const contract = await this.getTRC21IssuerInstance()
-            const result = await contract.tokens()
-            if (result && result.length > 0) {
-                const lowerCaseArr = result.map(m => m.toLowerCase())
-                if (lowerCaseArr.indexOf(this.address) > -1) {
-                    this.isApplied = true
-                }
-            }
+        checkAppliedZ () {
+            const contract = this.TRC21Issuer
+            contract.methods.tokens.call()
+                .then(result => {
+                    if (result && result.length > 0) {
+                        const lowerCaseArr = result.map(m => m.toLowerCase())
+                        if (lowerCaseArr.indexOf(this.address) > -1) {
+                            this.isAppliedZ = true
+                        }
+                    }
+                }).catch(error => {
+                    console.log(error)
+                    this.$toasted.show(error, { type: 'error' })
+                })
         },
         validate () {
             this.$v.$touch()
