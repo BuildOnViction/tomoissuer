@@ -97,7 +97,7 @@
                                             <p>
                                                 Transactions fee
                                                 <b-link
-                                                    to="/edit">
+                                                    to="/edittransactionsfee">
                                                     <i class="tomoissuer-icon-edit-pencil"/>
                                                 </b-link>
                                             </p>
@@ -119,14 +119,14 @@
                                             <div class="flex-box">
                                                 <span>{{ formatCurrencySymbol(
                                                 formatNumber(ownerBalance), token.symbol) }}</span>
-                                                <span><a href="#">Transfer</a></span>
+                                                <span><b-link to="#">Transfer</b-link></span>
                                             </div>
                                         </li>
                                         <li>
                                             <p>Pooling fee</p>
                                             <div class="flex-box">
                                                 <span>{{ poolingFee }} TOMO</span>
-                                                <span><a href="#">Deposit more</a></span>
+                                                <span><b-link to="/depositfee">Deposit more</b-link></span>
                                             </div>
                                         </li>
                                     </ul>
