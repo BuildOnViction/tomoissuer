@@ -4,10 +4,6 @@ table,
 	width: 100%;
 	th,td {
 		padding: 0.75rem;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		display: block;
 		@include media-breakpoint-down(md) {
 			padding: 0.75rem 0;
 		}
@@ -43,6 +39,9 @@ table,
 			}
 			th,
 			td {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 				border: 0;
 				a {
 					overflow: hidden;
@@ -125,6 +124,10 @@ table,
 	padding: 2em 0;
 	@include media-breakpoint-down (md) {
 		padding: 1em 0;
+	}
+	td {
+		padding-left: 0;
+		padding-right: 0;
 	}
 }
 

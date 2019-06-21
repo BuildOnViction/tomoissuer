@@ -61,6 +61,9 @@ textarea {
         color: $color-text-default!important;
         margin-top: 10px;
         text-align: right;
+        @include media-breakpoint-down(md){
+            text-align: left;
+        }
     }
     .form-group {
         margin-bottom: 3em!important;

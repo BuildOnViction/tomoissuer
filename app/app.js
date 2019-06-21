@@ -14,6 +14,8 @@ import TomoZApplication from './components/applytomo/TomoZApplication.vue'
 import TomoZConfirm from './components/applytomo/TomoZConfirm.vue'
 import DepositFee from './components/deposit/DepositFee.vue'
 import DepositConfirm from './components/deposit/DepositConfirm.vue'
+import EditTransactionsFee from './components/edittransactionsfee/EditTransactionsFee.vue'
+import EditTransactionsFeeConfirm from './components/edittransactionsfee/EditTransactionsFeeConfirm.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
@@ -446,7 +448,9 @@ const router = new VueRouter({
         { path: '/tomozapplication', component: TomoZApplication },
         { path: '/tomozconfirm', component: TomoZConfirm, name: 'TomoZConfirm' },
         { path: '/depositfee', component: DepositFee },
-        { path: '/DepositConfirm', component: DepositConfirm, name: 'DepositConfirm' }
+        { path: '/depositconfirm', component: DepositConfirm, name: 'DepositConfirm' },
+        { path: '/edittransactionsfee', component: EditTransactionsFee },
+        { path: '/editconfirm', component: EditTransactionsFeeConfirm, name: 'EditTransactionsFeeConfirm' }
     ]
 })
 
