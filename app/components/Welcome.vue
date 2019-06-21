@@ -16,12 +16,12 @@
                 <div class="btn-box">
                     <b-button
                         class="tmp-btn-blue"
-                        to="/create">
+                        @click="redirectTo('createToken')">
                         Issue new token
                     </b-button>
                     <b-button
                         class="tmp-btn-boder-blue"
-                        to="/login">
+                        @click="redirectTo('donate')">
                         Donate Txn fee
                     </b-button>
                 </div>
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import store from 'store'
+
 export default {
     name: 'App',
     components: {
@@ -53,6 +55,13 @@ export default {
     beforeDestroy () {},
     created: async function () {},
     mounted () {},
-    methods: {}
+    methods: {
+        redirectTo (page) {
+            store.set('redirectTo', page)
+            this.$router.push({
+                path: '/login'
+            })
+        }
+    }
 }
 </script>

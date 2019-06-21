@@ -228,6 +228,11 @@ export default {
     async updated () {
     },
     destroyed () { },
+    beforeRouteEnter (to, from, next) {
+        if (!store.get('address')) {
+            next('/login')
+        }
+    },
     created: async function () {
         await this.getTokens()
     },

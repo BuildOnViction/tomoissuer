@@ -27,7 +27,7 @@
                             <li>
                                 <b-link
                                     v-if="!isAppliedZ"
-                                    :to="'/apply/' + address"
+                                    :to="'/tomozcondition/' + address"
                                     class="tmp-btn-violet">
                                     <i class="tomoissuer-icon-tomoz"/>
                                     Apply to pay fee by token
@@ -262,6 +262,7 @@ export default {
         return {
             web3: this.web3,
             address: this.$route.params.address.toLowerCase(),
+            account: '',
             token: {},
             tokenName: null,
             symbol: null,
@@ -311,12 +312,20 @@ export default {
     watch: {},
     updated () {},
     beforeDestroy () {},
+    beforeRouteEnter (to, from, next) {
+        if (!store.get('address')) {
+            next('/login')
+        }
+    },
     created: async function () {
         try {
             const self = this
             // self.config = await self.appConfig()
             self.appConfig().then(result => {
                 self.config = result
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
             })
             await self.getTokenDetail()
             self.getTokenTransfer()

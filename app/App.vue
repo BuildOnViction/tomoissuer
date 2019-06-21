@@ -25,7 +25,7 @@
                             <b-nav-item
                                 v-if="isTomonet"
                                 class="tmp-btn-blue"
-                                to="/create">
+                                to="/createToken">
                                 <i class="tomoissuer-icon-plus"/>
                                 Issue new token
                             </b-nav-item>
