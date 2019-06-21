@@ -43,7 +43,7 @@
                                 <b-dropdown-text
                                     class="flex_box">
                                     <span>Balance:</span>
-                                    <strong>1000 TOMO</strong>
+                                    <strong>1000005.0000 TOMO</strong>
                                 </b-dropdown-text>
                                 <b-dropdown-item
                                     href="/donate">
