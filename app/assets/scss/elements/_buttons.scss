@@ -15,33 +15,6 @@ input[type="submit"] {
 
 // Begin style button
 
-.tmp-btn-transparent {
-    a.nav-link {
-        @include transit;
-        background: transparent;
-        color: $color-text-gray!important;
-        display: flex;
-        align-items: center;
-        padding: .5em 1.2em!important;
-        i {
-            padding-right: 5px;
-            font-weight: bold;
-        }
-        &.dropdown-toggle {
-            position: relative;
-            &::after {
-                border: 0;
-                content: "\e902";
-                font-family: tomoissuer;
-                font-size: 10px;
-                position: absolute;
-                right: 1px;
-                top: 12px;
-            }
-        }
-    }
-}
-
 // Style to link
 .tmp-btn-blue {
     a {
