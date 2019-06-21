@@ -10,12 +10,12 @@
                             {{ token.symbol }}
                         </span>
                         <span
-                            v-if="!moreInfo"
+                            v-if="token.type === 'trc21'"
                             class="apply-trc">
-                            TRC-721
+                            TRC-21
                         </span>
                         <span
-                            v-if="!moreInfo"
+                            v-if="isAppliedZ"
                             class="apply-tomoz">
                             TomoZ
                         </span>
@@ -26,6 +26,7 @@
                         <ul>
                             <li>
                                 <b-link
+                                    v-if="isAppliedZ"
                                     :to="'/apply/' + address"
                                     class="tmp-btn-violet">
                                     <i class="tomoissuer-icon-tomoz"/>
@@ -157,7 +158,8 @@
                                         slot="txn_hash"
                                         slot-scope="data">
                                         <a
-                                            :href="`${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                            :href="config.tomoscanUrl + '/txs/' +
+                                            data.value.toLowerCase()"
                                             :title="data.value">
                                             {{ data.value }}
                                         </a>
@@ -204,8 +206,9 @@
                     <b-tab
                         title="holders">
                         <template>
-                            <p>A total of {{ formatNumber(tokenHolders) }} transactions found
-                            (Showing the last 100K records)</p>
+                            <p>A total of {{ formatNumber(tokenHolders) }}
+                                {{ tokenHolders > 1 ? 'holders' : 'holder' }} found
+                                (Showing the last 100K records)</p>
                             <div class="tomo_main_table colum-4">
                                 <b-table
                                     id="holders_table"
@@ -267,11 +270,12 @@ export default {
             moreInfo: '',
             loading: false,
             depositeAmount: '',
-            isApplied: false,
+            isAppliedZ: false,
             transactionHash: '',
             ownerBalance: '',
             poolingFee: '',
             config: {},
+            tomoscanUrl: '',
             tranferCurrentPage: 1,
             tranferRows: 10,
             tranferPerPage: 6,
@@ -433,13 +437,8 @@ export default {
     created: async function () {
         try {
             const self = this
+            self.config = await self.appConfig()
             await self.getTokenDetail()
-            self.appConfig().then(result => {
-                self.config = result
-            }).catch(error => {
-                console.log(error)
-                this.$toasted.show(error, { type :'error' })
-            })
             self.getTokenTransfer()
             self.getTokenHolders()
             self.getOwnerBalance()
@@ -534,7 +533,6 @@ export default {
         },
         getPoolingFee () {
             const contract = this.TRC21Issuer
-            console.log(contract)
             contract.methods.getTokenCapacity(this.address).call().then(capacity => {
                 let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
                 this.poolingFee = balance.div(10 ** this.token.decimals).toNumber()
@@ -546,7 +544,8 @@ export default {
         async applyToken () {
             try {
                 this.loading = true
-                const contract = await this.getTRC21IssuerInstance()
+                // const contract = await this.getTRC21IssuerInstance()
+                const contract = this.TRC21Issuer
                 const txParams = {
                     from: (await this.getAccount()).toLowerCase(),
                     value: this.web3.utils.toHex(new BigNumber(this.depositeAmount)
@@ -564,15 +563,20 @@ export default {
                 this.$toasted.show(error, { type: 'error' })
             }
         },
-        async checkAppliedZ () {
-            const contract = await this.getTRC21IssuerInstance()
-            const result = await contract.tokens()
-            if (result && result.length > 0) {
-                const lowerCaseArr = result.map(m => m.toLowerCase())
-                if (lowerCaseArr.indexOf(this.address) > -1) {
-                    this.isAppliedZ = true
-                }
-            }
+        checkAppliedZ () {
+            const contract = this.TRC21Issuer
+            contract.methods.tokens.call()
+                .then(result => {
+                    if (result && result.length > 0) {
+                        const lowerCaseArr = result.map(m => m.toLowerCase())
+                        if (lowerCaseArr.indexOf(this.address) > -1) {
+                            this.isAppliedZ = true
+                        }
+                    }
+                }).catch(error => {
+                    console.log(error)
+                    this.$toasted.show(error, { type: 'error' })
+                })
         },
         validate () {
             this.$v.$touch()

@@ -186,13 +186,13 @@ router.get('/holders/:token', [], async (req, res, next) => {
         return next(error)
     }
 })
-router.get('/txes/:token', [], async (req, res, next) => {
+router.get('/txes/trc20/:token', [], async (req, res, next) => {
     try {
         const token = req.params.token || ''
         const page = req.query.page || 1
         const limit = req.query.limit || 20
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/token-txs/?token=${token}&page=${page}&limit=${limit}`)
+            urljoin(config.get('tomoscanUrl'), `/api/token-txs/trc20?token=${token}&page=${page}&limit=${limit}`)
         )
         return res.json(data)
     } catch (error) {
@@ -206,7 +206,7 @@ router.get('/txes/trc21/:token', [], async (req, res, next) => {
         const page = req.query.page || 1
         const limit = req.query.limit || 20
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/token-txs/trc21/?token=${token}&page=${page}&limit=${limit}`)
+            urljoin(config.get('tomoscanUrl'), `/api/token-txs/trc21?token=${token}&page=${page}&limit=${limit}`)
         )
         return res.json(data)
     } catch (error) {
