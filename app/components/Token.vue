@@ -27,7 +27,7 @@
                             <li>
                                 <b-link
                                     class="tmp-btn-violet"
-                                    to="/create">
+                                    to="/tomozcondition">
                                     <i class="tomoissuer-icon-tomoz"/>
                                     Apply to pay fee by token
                                 </b-link>
@@ -96,7 +96,7 @@
                                             <p>
                                                 Transactions fee
                                                 <b-link
-                                                    to="/edit">
+                                                    to="/edittransactionsfee">
                                                     <i class="tomoissuer-icon-edit-pencil"/>
                                                 </b-link>
                                             </p>
@@ -117,14 +117,24 @@
                                             <p>Owner balance</p>
                                             <div class="flex-box">
                                                 <span>100,000,000  TIIM</span>
-                                                <span><a href="#">Transfer</a></span>
+                                                <span>
+                                                    <b-link
+                                                        to="#">
+                                                        Transfer
+                                                    </b-link>
+                                                </span>
                                             </div>
                                         </li>
                                         <li>
                                             <p>Pooling fee</p>
                                             <div class="flex-box">
                                                 <span>2,000 TOMO</span>
-                                                <span><a href="#">Deposit more</a></span>
+                                                <span>
+                                                    <b-link
+                                                        to="/depositfee">
+                                                        Deposit more
+                                                    </b-link>
+                                                </span>
                                             </div>
                                         </li>
                                     </ul>

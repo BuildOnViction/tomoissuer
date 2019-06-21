@@ -1,6 +1,6 @@
 <template>
     <div
-        v-if="!listokenItems.length <= 0"
+        v-if="listokenItems.length <= 0"
         class="container container-medium flex-content-center">
         <div class="tomo-body-fullw text-center">
             <p>
@@ -12,7 +12,7 @@
                 It looks like there are no tokens here.<br>
                 Maybe you would like to
                 <b-link
-                    to="/">
+                    to="/create">
                     issue a new one
                 </b-link>
             </p>
@@ -62,7 +62,7 @@
                                 slot="applytomoz"
                                 slot-scope="data">
                                 <a
-                                    :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
+                                    :href="`/tomozcondition`"
                                     :title="data.value">
                                     {{ data.value }}
                                 </a>
