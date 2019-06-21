@@ -1,9 +1,8 @@
 <template>
-    <div class="container container-small">
-        <div class="confirm-table">
-            <div class="info-header text-center">
-                <p><i class="tomoissuer-icon-tomoz"/></p>
-                <h2 class="tmp-title-large">TomoZ Protocol Application</h2>
+    <div class="container container-small flex-content-center">
+        <div class="confirm-table tomo-body-fullw">
+            <div class="info-header">
+                <h2 class="tmp-title-large">Deposit more?</h2>
             </div>
             <div class="tmp-table-three">
                 <table>
@@ -31,28 +30,39 @@
                     </tr>
                     <tr>
                         <td>Amount of donation</td>
-                        <td>100 TOMO</td>
+                        <td>1000 TOMO</td>
                     </tr>
                     <tr>
                         <td>Transaction fee</td>
                         <td>1 TIIM/transaction</td>
                     </tr>
                 </table>
+                <p class="txt_note">*Your deposit amount will be locked and could not be withdrawed</p>
+            </div>
+            <div class="qr-code-donate text-center d-none">
+                <p>
+                    <b-img
+                        src="/app/assets/images/img-qrcode-tomowallet.png"
+                        alt="img-qrcode-tomowallet.png"/>
+                </p>
+                <p>
+                    <b>Scan QR code below using TomoWallet to donate</b>
+                </p>
             </div>
             <div class="btn-box">
                 <b-button
                     class="tmp-btn-boder-violet btn-min"
-                    to="/tomozapplication">
+                    to="/depositfee">
                     Back
                 </b-button>
                 <b-button
-                    v-b-modal.modal-tomoz
+                    v-b-modal.modal-deposit
                     class="tmp-btn-violet">
-                    Apply to pay fee by token
+                    Deposit now
                 </b-button>
             </div>
             <b-modal
-                id="modal-tomoz"
+                id="modal-deposit"
                 size="md"
                 hide-header
                 hide-footer
@@ -61,7 +71,7 @@
                     <div class="msg-txt">
                         <i class="tomoissuer-icon-checkmark-outline"/>
                         <h4>Successful</h4>
-                        <p>TIIM token successfully applied to TomoZ</p>
+                        <p>You’ve just successfully deposited 4000 TOMO</p>
                         <p>
                             Transaction hash:
                             <b-link

@@ -4,6 +4,10 @@ table,
 	width: 100%;
 	th,td {
 		padding: 0.75rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		display: block;
 		@include media-breakpoint-down(md) {
 			padding: 0.75rem 0;
 		}
@@ -137,7 +141,7 @@ table,
     table {
         tr {
             display: grid;
-			grid-template-columns: 30% 70%;
+			grid-template-columns: 35% 65%;
 			@include media-breakpoint-down(md) {
 				grid-template-columns: 40% 60%;
 			}

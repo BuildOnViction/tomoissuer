@@ -21,6 +21,10 @@
     white-space: nowrap;
     display: block;
 }
+.txt_note {
+    margin-top: 2em;
+    @include fsz(14);
+}
 
 //common_tmp_page
 .common_tmp_page {
@@ -83,6 +87,16 @@
         @include media-breakpoint-down(sm) {
             margin: 10px 5px 0;
         }
+    }
+}
+
+//flex-content-center
+.flex-content-center {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    .tomo-body-fullw {
+        width: 100%;
     }
 }
 

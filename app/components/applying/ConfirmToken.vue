@@ -16,8 +16,20 @@
                         <td>{{ tokenSymbol }}</td>
                     </tr>
                     <tr>
+                        <td>Token supply</td>
+                        <td>100,000,000 TIIM</td>
+                    </tr>
+                    <tr>
+                        <td>Decimal</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
                         <td>Type</td>
                         <td>{{ type.toUpperCase() }}</td>
+                    </tr>
+                    <tr>
+                        <td>Issue fee</td>
+                        <td>5 TOMO</td>
                     </tr>
                     <tr>
                         <td>Code review</td>

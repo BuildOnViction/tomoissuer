@@ -12,6 +12,8 @@ import ConfirmDonate from './components/donate/ConfirmDonate.vue'
 import TomoZCondition from './components/applytomo/TomoZCondition.vue'
 import TomoZApplication from './components/applytomo/TomoZApplication.vue'
 import TomoZConfirm from './components/applytomo/TomoZConfirm.vue'
+import DepositFee from './components/deposit/DepositFee.vue'
+import DepositConfirm from './components/deposit/DepositConfirm.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
@@ -486,7 +488,9 @@ const router = new VueRouter({
         { path: '/confirmdonate', component: ConfirmDonate, name: 'ConfirmDonate' },
         { path: '/tomozcondition', component: TomoZCondition },
         { path: '/tomozapplication', component: TomoZApplication },
-        { path: '/tomozconfirm', component: TomoZConfirm, name: 'TomoZConfirm' }
+        { path: '/tomozconfirm', component: TomoZConfirm, name: 'TomoZConfirm' },
+        { path: '/depositfee', component: DepositFee },
+        { path: '/DepositConfirm', component: DepositConfirm, name: 'DepositConfirm' }
     ]
 })
 

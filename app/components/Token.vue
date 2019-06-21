@@ -93,7 +93,13 @@
                                             <p>{{ token.decimals }}</p>
                                         </li>
                                         <li>
-                                            <p>Transaction Fee</p>
+                                            <p>
+                                                Transactions fee
+                                                <b-link
+                                                    to="/edit">
+                                                    <i class="tomoissuer-icon-edit-pencil"/>
+                                                </b-link>
+                                            </p>
                                             <p>---</p>
                                         </li>
                                     </ul>
@@ -279,7 +285,7 @@ export default {
             ],
             tranferItems: [
                 {
-                    txn_hash: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
+                    txn_hash: 'xf3032c1e82e198459a29272c446b9ec73ab979911bd1a471f3b1c648f2145619',
                     age: '40',
                     from: '0x999fdsf89dsf8d9sf8ds9fd9s8f4y7fcsjfh74',
                     icon: '->',
