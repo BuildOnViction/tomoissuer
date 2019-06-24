@@ -2,7 +2,7 @@
     <div class="container">
         <div class="main-box-header">
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-6">
                     <h2 class="tmp-title-large">{{ token.name }}</h2>
                     <div class="under">
                         <span
@@ -21,7 +21,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-md-5 text-right">
+                <div class="col-md-6 text-right">
                     <div class="tomo-btn">
                         <ul>
                             <li>
