@@ -21,7 +21,7 @@ textarea {
     border: none;
     display: block;
     width: 100%;
-    padding: 1.7em 1em;
+    padding: 2em 1em;
     @include fsz(16);
 	&:focus {
 		outline: none;
@@ -57,36 +57,36 @@ textarea {
     @include media-breakpoint-down(md){
         margin-top: 1.5em!important;
     }
-    .form-text {
-        color: $color-text-default!important;
-        margin-top: 10px;
-        text-align: right;
-        @include media-breakpoint-down(md){
-            text-align: left;
-        }
+}
+.form-text {
+    color: $color-text-default!important;
+    margin-top: 10px;
+    text-align: right;
+    @include media-breakpoint-down(md){
+        text-align: left;
     }
-    .form-group {
-        margin-bottom: 3em!important;
-        @include media-breakpoint-down(md){
-            margin-bottom: 1.5em!important;
-        }
-        >label {
-            @include fsz(16);
-            font-family: $font-quicksand;
-            color: $color-text-default;
-            margin-bottom: 15px;
-            min-width: 100px;
-            font-weight: 500;
-        }
-        div {
-            position: relative;
-            .txt-fixed {
-                background: $background-white;
-                position: absolute;
-                right: 10px;
-                top: 10px;
-                padding: 5px;
-            }
+}
+.form-group {
+    margin-bottom: 3em!important;
+    @include media-breakpoint-down(md){
+        margin-bottom: 1.5em!important;
+    }
+    >label {
+        @include fsz(16);
+        font-family: $font-quicksand;
+        color: $color-text-default;
+        margin-bottom: 20px;
+        min-width: 100px;
+        font-weight: 500;
+    }
+    div {
+        position: relative;
+        .txt-fixed {
+            background: $background-white;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            padding: 5px;
         }
     }
 }

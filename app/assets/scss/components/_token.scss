@@ -5,6 +5,10 @@
         ul {
             li {
                 display: inline-block;
+                @include media-breakpoint-down (md) {
+                    display: block;
+                    margin-top: 1em;
+                }
             }
         }
     }
