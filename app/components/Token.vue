@@ -119,14 +119,14 @@
                                             <div class="flex-box">
                                                 <span>{{ formatCurrencySymbol(
                                                 formatNumber(ownerBalance), token.symbol) }}</span>
-                                                <span><a href="#">Transfer</a></span>
+                                                <span><b-link to="#">Transfer</b-link></span>
                                             </div>
                                         </li>
                                         <li>
                                             <p>Pooling fee</p>
                                             <div class="flex-box">
                                                 <span>{{ poolingFee }} TOMO</span>
-                                                <span><a href="#">Deposit more</a></span>
+                                                <span><b-link to="/depositfee">Deposit more</b-link></span>
                                             </div>
                                         </li>
                                     </ul>
@@ -150,7 +150,6 @@
                                 <b-table
                                     id="transfer_table"
                                     :per-page="tranferPerPage"
-                                    :current-page="tranferCurrentPage"
                                     :fields="tranferFields"
                                     :items="tranferItems"
                                     stacked="lg">
@@ -213,7 +212,6 @@
                                 <b-table
                                     id="holders_table"
                                     :per-page="holdersPerPage"
-                                    :current-page="holdersCurrentPage"
                                     :fields="holdersFields"
                                     :items="holdersItems"
                                     stacked="lg">

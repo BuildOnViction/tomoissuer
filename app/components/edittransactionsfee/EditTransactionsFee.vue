@@ -61,8 +61,6 @@ export default {
         } else next()
     },
     created: async function () {
-        console.log(this.$route)
-        console.log(this.tokenFee)
     },
     methods: {
         validate: function () {
