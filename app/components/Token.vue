@@ -84,7 +84,8 @@
                                             <p class="common_txt_ellipsis text-blue">
                                                 <a
                                                     :title="token.hash"
-                                                    href="#">
+                                                    :href="config.tomoscanUrl + '/txs/' + address"
+                                                    target="_blank">
                                                     {{ token.hash }}
                                                 </a>
                                             </p>
@@ -174,8 +175,9 @@
                                         slot="from"
                                         slot-scope="data">
                                         <a
-                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
-                                            :title="data.value">
+                                            :href="config.tomoscanUrl + '/txs/' + data.value"
+                                            :title="data.value"
+                                            target="_blank">
                                             {{ data.value }}
                                         </a>
                                     </template>
@@ -187,8 +189,9 @@
                                         slot="to"
                                         slot-scope="data">
                                         <a
-                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
-                                            :title="data.value">
+                                            :href="config.tomoscanUrl + '/txs/' + data.value"
+                                            :title="data.value"
+                                            target="_blank">
                                             {{ data.value }}
                                         </a>
                                     </template>
@@ -221,8 +224,9 @@
                                         slot="address"
                                         slot-scope="data">
                                         <a
-                                            :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`"
-                                            :title="data.value">
+                                            :href="config.tomoscanUrl + '/txs/' + data.value"
+                                            :title="data.value"
+                                            target="_blank">
                                             {{ data.value }}
                                         </a>
                                     </template>

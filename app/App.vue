@@ -46,7 +46,7 @@
                                     <strong>{{ balance }} TOMO</strong>
                                 </b-dropdown-text>
                                 <b-dropdown-item
-                                    href="/donate">
+                                    href="/donateTxFee">
                                     Donate TRC-21 fee
                                 </b-dropdown-item>
                                 <b-dropdown-item
