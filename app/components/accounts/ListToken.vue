@@ -37,11 +37,11 @@
                             <template
                                 slot="token"
                                 slot-scope="data">
-                                <a
-                                    :href="`token/${data.item.hash}`"
+                                <router-link
+                                    :to="`token/${data.item.hash}`"
                                     :title="data.item.hash">
                                     {{ data.value }}
-                                </a>
+                                </router-link>
                             </template>
                             <template
                                 slot="price"

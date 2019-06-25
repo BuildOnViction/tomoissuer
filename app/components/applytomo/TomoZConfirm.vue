@@ -11,9 +11,9 @@
                         <td>From</td>
                         <td>
                             <b-link
-                                to="/"
-                                title="0x48c4eef517b79ff5259374fed4245359d8fb3ea9">
-                                0x48c4eef517b79ff5259374fed4245359d8fb3ea9
+                                :title="account"
+                                to="/">
+                                {{ account }}
                             </b-link>
                             <span>Owner address</span>
                         </td>
@@ -22,37 +22,38 @@
                         <td>To</td>
                         <td>
                             <b-link
-                                to="/"
-                                title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
-                                0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                :title="address"
+                                to="/">
+                                {{ address }}
                             </b-link>
-                            <span>TIIM SmartContract</span>
+                            <span>{{ token.name }} SmartContract</span>
                         </td>
                     </tr>
                     <tr>
                         <td>Amount of donation</td>
-                        <td>100 TOMO</td>
+                        <td>{{ formatNumber(depositeFee) }} TOMO</td>
                     </tr>
-                    <tr>
+                    <tr
+                        v-if="tokenTxFee">
                         <td>Transaction fee</td>
-                        <td>1 TIIM/transaction</td>
+                        <td>{{ tokenTxFee || 0 }} {{ token.symbol }}/transaction</td>
                     </tr>
                 </table>
             </div>
             <div class="btn-box">
                 <b-button
-                    class="tmp-btn-boder-violet btn-min"
-                    to="/tomozapplication">
+                    :to="'/tomozapplication/' + address"
+                    class="tmp-btn-boder-violet btn-min">
                     Back
                 </b-button>
                 <b-button
-                    v-b-modal.modal-tomoz
-                    class="tmp-btn-violet">
+                    class="tmp-btn-violet"
+                    @click="applyTomoZ">
                     Apply to pay fee by token
                 </b-button>
             </div>
             <b-modal
-                id="modal-tomoz"
+                ref="applyTomoZ"
                 size="md"
                 hide-header
                 hide-footer
@@ -61,22 +62,23 @@
                     <div class="msg-txt">
                         <i class="tomoissuer-icon-checkmark-outline"/>
                         <h4>Successful</h4>
-                        <p>TIIM token successfully applied to TomoZ</p>
+                        <p>{{ token.name }} token successfully applied to TomoZ</p>
                         <p>
                             Transaction hash:
-                            <b-link
-                                to="/"
-                                title="0x88448943534324230030030">
-                                0x88448943534324230030030
-                            </b-link>
+                            <a
+                                :href="config.tomoscanUrl + '/txs/' +
+                                transactionHash.toLowerCase()"
+                                :title="transactionHash"
+                                target="_blank">
+                                {{ truncate(transactionHash, 30) }}
+                            </a>
                         </p>
                     </div>
                     <div class="btn-box">
-                        <b-button
-                            class="tmp-btn-violet"
-                            to="/"
-                            @click="hide()">Token detail
-                        </b-button>
+                        <router-link
+                            :to="{ path: `/token/${address}` }"
+                            class="tmp-btn-violet">Token detail
+                        </router-link>
                     </div>
                 </div>
             </b-modal>
@@ -86,18 +88,18 @@
 
 <script>
 import store from 'store'
+import BigNumber from 'bignumber.js'
 export default {
     name: 'TomoZConfirm',
     data () {
         return {
-            tokenName: '',
-            tokenSymbol: '',
-            decimals: '',
-            minFee: '',
-            tokenSupply: '',
-            sourceCode: '',
+            address: this.$route.params.address.toLowerCase(),
             account: '',
-            type: ''
+            token: this.$route.params.token,
+            depositeFee: this.$route.params.depositFee,
+            tokenTxFee: this.$route.params.tokenTxFee,
+            config: {},
+            transactionHash: ''
         }
     },
     async updated () {},
@@ -107,7 +109,41 @@ export default {
             next('/login')
         } else next()
     },
-    created: async function () {},
-    methods: {}
+    created: async function () {
+        const self = this
+        self.account = store.get('address') || await self.getAccount()
+        self.appConfig().then(result => {
+            self.config = result
+        }).catch(error => {
+            console.log(error)
+            self.$toasted.show(error, { type: 'error' })
+        })
+    },
+    methods: {
+        async applyTomoZ () {
+            try {
+                this.loading = true
+                const contract = this.TRC21Issuer
+                const txParams = {
+                    from: (await this.getAccount()).toLowerCase(),
+                    value: this.web3.utils.toHex(new BigNumber(this.depositeFee)
+                        .multipliedBy(10 ** 18).toString(10)),
+                    gasPrice: this.web3.utils.toHex(10000000000000),
+                    gas: this.web3.utils.toHex(40000000),
+                    gasLimit: this.web3.utils.toHex(40000000)
+                }
+                await contract.methods.apply(this.address).send(txParams)
+                    .on('transactionHash', async (txHash) => {
+                        this.transactionHash = txHash
+                        self.loading = false
+                        this.$refs.applyTomoZ.show()
+                    })
+            } catch (error) {
+                this.loading = false
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            }
+        }
+    }
 }
 </script>

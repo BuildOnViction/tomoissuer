@@ -346,6 +346,8 @@ export default {
             self.token = data
             self.tokenName = data.name
             self.symbol = data.symbol
+
+            self.$store.state.token = data
         },
         getTokenTransfer () {
             const self = this
@@ -424,6 +426,7 @@ export default {
             contract.methods.getTokenCapacity(this.address).call().then(capacity => {
                 let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
                 this.poolingFee = balance.div(10 ** this.token.decimals).toNumber()
+                this.$store.state.token['poolingFee'] = this.poolingFee
             }).catch(error => {
                 console.log(error)
                 this.$toatsed.show(error, { type: 'error' })
@@ -439,6 +442,7 @@ export default {
                 web3.eth.call({ to: this.address, data: data }).then(result => {
                     let balance = new BigNumber(web3.utils.hexToNumberString(result))
                     this.txFee = balance.div(10 ** this.token.decimals).toNumber()
+                    this.$store.state.token['txFee'] = this.txFee
                 }).catch(error => {
                     console.log(error)
                     this.$toatsed.show(error, { type: 'error' })
