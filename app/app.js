@@ -146,7 +146,7 @@ Vue.prototype.getAccount = async function () {
             payload,
             offset
         )
-        Vue.prototype.trezorPayload = ''
+        localStorage.set('trezorPayload', { xpub: payload.xpub })
         break
     default:
         break
@@ -481,7 +481,7 @@ const router = new VueRouter({
     routes: [
         { path: '/', component: Home },
         { path: '/login', component: Login },
-        { path: '/confirm', component: ConfirmToken, name: 'ConfirmToken' },
+        { path: '/confirmToken', component: ConfirmToken, name: 'ConfirmToken' },
         { path: '/createToken', component: CreateToken },
         { path: '/verify', component: VerifyContract },
         { path: '/token/:address', component: TokenDetail },
@@ -493,7 +493,7 @@ const router = new VueRouter({
         { path: '/depositfee', component: DepositFee },
         { path: '/depositconfirm', component: DepositConfirm, name: 'DepositConfirm' },
         { path: '/edittransactionsfee/:address', component: EditTransactionsFee },
-        { path: '/editconfirm', component: EditTransactionsFeeConfirm, name: 'EditTransactionsFeeConfirm' }
+        { path: '/editconfirm/:address', component: EditTransactionsFeeConfirm, name: 'EditTransactionsFeeConfirm' }
     ]
 })
 

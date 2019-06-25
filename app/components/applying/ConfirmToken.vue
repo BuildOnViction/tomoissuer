@@ -17,11 +17,11 @@
                     </tr>
                     <tr>
                         <td>Token supply</td>
-                        <td>100,000,000 TIIM</td>
+                        <td>{{ formatNumber(totalSupply) }} {{ tokenSymbol }}</td>
                     </tr>
                     <tr>
                         <td>Decimal</td>
-                        <td>6</td>
+                        <td>{{ decimals }}</td>
                     </tr>
                     <tr>
                         <td>Type</td>
@@ -29,7 +29,7 @@
                     </tr>
                     <tr>
                         <td>Issue fee</td>
-                        <td>5 TOMO</td>
+                        <td>50 TOMO</td>
                     </tr>
                     <tr>
                         <td>Code review</td>
@@ -38,15 +38,6 @@
                                 ref="code"
                                 v-model="sourceCode"
                                 :options="{mode:'application/ld+json',styleActiveLine:false}"/>
-                                <!-- 1.  name  TriipMiles string<br>
-                                2.  totalTeamAllocated  0 uint256<br>
-                                3.  totalSupply  500000000000000000000000000 uint256<br>
-                                4.  TIIM_UNIT  1000000000000000000 uint256<br>
-                                5.  decimals  18 uint256<br>
-                                6.  endTime  1554051599 uint256<br>
-                                7.  tiimEcosystemWallet  0x8a7A6E2BFc70E9AB0cC9eAeac542BE3D08f510cC address<br>
-                                8.  teamTranchesReleased  0 uint256<br>
-                                9.  teamWallet<br> -->
                         </td>
                     </tr>
                 </table>
@@ -54,17 +45,14 @@
             <div class="btn-box">
                 <b-button
                     class="tmp-btn-boder-blue btn-min"
-                    to="create">
+                    to="createToken">
                     Back
                 </b-button>
                 <b-button
-                    v-b-modal.modal-newtoken
-                    class="tmp-btn-blue">
-                    Donate now
+                    class="tmp-btn-blue"
+                    @click="deploy">
+                    Issue Token
                 </b-button>
-                <b-button
-                    variant="primary"
-                    @click="deploy">Create</b-button>
             </div>
             <div
                 v-if="loading"
@@ -90,7 +78,7 @@
                 </b-form-group>
             </div>
             <b-modal
-                id="modal-newtoken"
+                ref="newtokenmodal"
                 size="md"
                 hide-header
                 hide-footer
@@ -102,19 +90,20 @@
                         <p>Token successfully issued</p>
                         <p>
                             Transaction hash:
-                            <b-link
-                                to="/"
-                                title="0x88448943534324230030030">
-                                0x88448943534324230030030
-                            </b-link>
+                            <a
+                                :href="config.tomoscanUrl + '/txs/' +
+                                transactionHash.toLowerCase()"
+                                :title="transactionHash"
+                                target="_blank">
+                                {{ truncate(transactionHash, 26) }}
+                            </a>
                         </p>
                     </div>
                     <div class="btn-box">
-                        <b-button
-                            class="tmp-btn-blue"
-                            to="/"
-                            @click="hide()">View detail
-                        </b-button>
+                        <router-link
+                            :to="'token/' + contractAddress"
+                            class="tmp-btn-blue">View detail
+                        </router-link>
                     </div>
                 </div>
             </b-modal>
@@ -129,21 +118,23 @@ import store from 'store'
 export default {
     name: 'App',
     components: { },
+    mixins: [],
     data () {
         return {
             web3: this.web3,
-            tokenName: this.$route.query.name,
-            tokenSymbol: this.$route.query.symbol,
-            decimals: this.$route.query.decimals,
-            minFee: this.$route.query.minFee,
-            totalSupply: this.$route.query.totalSupply,
-            type: this.$route.query.type,
+            tokenName: this.$route.params.name,
+            tokenSymbol: this.$route.params.symbol,
+            decimals: this.$route.params.decimals,
+            minFee: 0,
+            totalSupply: this.$route.params.totalSupply,
+            type: this.$route.params.type,
             sourceCode: 'Generating Contract...',
             transactionHash: '',
             contractAddress: '',
             account: '',
             provider: this.NetworkProvider,
-            loading: false
+            loading: false,
+            config: {}
         }
     },
     async updated () {},
@@ -155,9 +146,8 @@ export default {
     },
     created: async function () {
         const self = this
-        self.account = await self.getAccount()
-        const config = await self.appConfig()
-        self.chainConfig = config.blockchain
+        self.account = store.get('address') || await self.getAccount()
+        this.config = await self.appConfig()
         await self.createContract()
     },
     methods: {
@@ -217,7 +207,7 @@ export default {
                             self.tokenSymbol,
                             self.decimals,
                             (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
-                            (new BigNumber(1).multipliedBy(1e+18)).toString(10)
+                            (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
                         ]
                     }).send({
                         from: self.account.toLowerCase(),
@@ -233,6 +223,7 @@ export default {
                                     self.contractAddress = receipt.contractAddress
                                     self.loading = false
                                     check = false
+                                    self.$refs.newtokenmodal.show()
                                 }
                             }
                         })
@@ -245,7 +236,7 @@ export default {
                             self.tokenSymbol,
                             self.decimals,
                             (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
-                            (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
+                            self.minFee
                         ]
                     }).encodeABI()
 
@@ -253,15 +244,18 @@ export default {
                         data: deploy,
                         to: '0x'
                     }
+                    console.log(web3)
+                    console.log(self.account)
 
-                    let nonce = await self.web3.eth.getTransactionCount(self.account)
+                    let nonce = await web3.eth.getTransactionCount(self.account)
+                    const chainConfig = this.config.blockchain
                     const dataTx = {
-                        from: self.account.toLowerCase(),
+                        from: self.account,
                         gas: web3.utils.toHex(40000000),
                         gasPrice: web3.utils.toHex(10000000000000),
                         gasLimit: web3.utils.toHex(40000000),
                         value: '0x',
-                        chainId: self.chainConfig.networkId
+                        chainId: chainConfig.networkId
                     }
                     Object.assign(
                         data,
@@ -270,21 +264,24 @@ export default {
                             nonce: web3.utils.toHex(nonce)
                         }
                     )
+                    console.log(data)
 
                     const signature = await self.signTransaction(data)
                     result = await self.sendSignedTransaction(dataTx, signature)
                     if (result && result.contractAddress) {
                         self.transactionHash = result.transactionHash
                         self.contractAddress = result.contractAddress
+                        self.loading = false
+                        self.$refs.newtokenmodal.show()
                     }
                     break
                 default:
                     break
                 }
-                if (self.transactionHash && self.contractAddress) {
-                    self.$toasted.show('Successfull')
-                    self.loading = false
-                }
+                // if (self.transactionHash && self.contractAddress) {
+                //     self.$toasted.show('Successfull')
+                //     self.loading = false
+                // }
             } catch (error) {
                 self.loading = false
                 console.log(error)
