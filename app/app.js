@@ -96,7 +96,7 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
         )
         Vue.prototype.TomoXListing = new wjs.eth.Contract(
             TomoXListingAritfacts.abi,
-            chainConfig.tomoxAddress
+            chainConfig.tomoXAddress
         )
     }
 }
@@ -488,7 +488,7 @@ const router = new VueRouter({
         { path: '/createToken', component: CreateToken },
         { path: '/verify', component: VerifyContract },
         { path: '/token/:address', component: TokenDetail },
-        { path: '/donate', component: DonateToken },
+        { path: '/donateTxFee', component: DonateToken },
         { path: '/confirmdonate', component: ConfirmDonate, name: 'ConfirmDonate' },
         { path: '/tomozcondition/:address', component: TomoZCondition },
         { path: '/tomozapplication/:address', component: TomoZApplication },

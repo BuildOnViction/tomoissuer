@@ -80,7 +80,7 @@
                                 slot="applytomoz"
                                 slot-scope="data">
                                 <a
-                                    :href="`/tomozcondition`">
+                                    :href="`/tomozcondition/${data.item.hash}`">
                                     Apply TomoZ
                                 </a>
                             </template>

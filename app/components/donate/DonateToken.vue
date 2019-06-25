@@ -21,18 +21,17 @@
                     label="Enter your token name or contract address "
                     label-for="tokenName">
                     <b-form-input
-                        v-model="tokenName"
                         type="text"
                         placeholder="Token name"/>
                 </b-form-group>
                 <b-form-group
+                    :description="`Available balance:  ${balance} TOMO`"
                     class="mb-4"
                     label="Donation amount"
-                    label-for="donationAmount"
-                    description="Available balance:  5,200 TOMO">
+                    label-for="donationAmount">
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input
-                        v-model="DonationAmount"
+                        v-model="donationAmount"
                         type="text"
                         placeholder="Donation amount"/>
                 </b-form-group>
@@ -48,19 +47,15 @@
 
 <script>
 import store from 'store'
+import BigNumber from 'bignumber.js'
 export default {
     name: 'Donate',
     components: { },
     data () {
         return {
-            tokenName: '',
-            tokenSymbol: '',
-            decimals: '',
-            minFee: '',
-            tokenSupply: '',
-            sourceCode: '',
             account: '',
-            type: ''
+            balance: '',
+            donationAmount: ''
         }
     },
     async updated () {
@@ -71,13 +66,25 @@ export default {
             next('/login')
         } else next()
     },
-    created: async function () {},
+    created: async function () {
+        this.account = store.get('address') || await self.getAccount()
+        this.getBalance()
+    },
     methods: {
+        getBalance () {
+            const web3 = this.web3
+            web3.eth.getBalance(this.account).then(result => {
+                const balance = new BigNumber(result).div(10 ** 18)
+                this.balance = balance.toNumber().toFixed(4)
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            })
+        },
         validate: function () {
             this.confirm()
         },
         confirm () {
-            console.log(1111)
             this.$router.push({ name: 'ConfirmDonate',
                 query: {
                     name: this.tokenName,

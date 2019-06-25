@@ -10,7 +10,7 @@
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
-                    :description="`Min: 10 TOMOTX fee: 0.0005 TOMO, Available balance: ${balance} TOMO`"
+                    :description="`TX fee: 0.0005 TOMO, Available balance: ${balance} TOMO`"
                     class="mb-4"
                     label="Deposit fee"
                     label-for="depositFee">
@@ -18,7 +18,7 @@
                     <b-form-input
                         v-model="depositFee"
                         type="text"
-                        placeholder="How much TOMO do you want to deposit? (TX fee: 0.0005 TOMO)..."/>
+                        placeholder="How much TOMO do you want to deposit? (Min: 10 TOMO)..."/>
                     <span
                         v-if="$v.depositFee.$dirty && !$v.depositFee.required"
                         class="text-danger">Required field</span>
