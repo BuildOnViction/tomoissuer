@@ -88,13 +88,16 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
     // Vue.prototype.TRC21Issuer = contract(TRC21IssuerAritfacts)
     if (wjs instanceof Web3) {
         Vue.prototype.web3 = wjs
+        const config = await getConfig()
+        const chainConfig = config.blockchain
         Vue.prototype.TRC21Issuer = new wjs.eth.Contract(
             TRC21IssuerAritfacts.abi,
-            '0xa9254C2D00Bdd7dAfadE15A2A61D7592ba2C8eEA'
+            chainConfig.issuerAddress
         )
         Vue.prototype.TomoXListing = new wjs.eth.Contract(
             TomoXListingAritfacts.abi,
-            '0xe88E11b7312fF1194a8f61b1e7fC52C26EB9b216')
+            chainConfig.tomoxAddress
+        )
     }
 }
 
@@ -146,7 +149,7 @@ Vue.prototype.getAccount = async function () {
             payload,
             offset
         )
-        Vue.prototype.trezorPayload = ''
+        localStorage.set('trezorPayload', { xpub: payload.xpub })
         break
     default:
         break
@@ -481,7 +484,7 @@ const router = new VueRouter({
     routes: [
         { path: '/', component: Home },
         { path: '/login', component: Login },
-        { path: '/confirm', component: ConfirmToken, name: 'ConfirmToken' },
+        { path: '/confirmToken', component: ConfirmToken, name: 'ConfirmToken' },
         { path: '/createToken', component: CreateToken },
         { path: '/verify', component: VerifyContract },
         { path: '/token/:address', component: TokenDetail },
@@ -490,10 +493,10 @@ const router = new VueRouter({
         { path: '/tomozcondition/:address', component: TomoZCondition },
         { path: '/tomozapplication/:address', component: TomoZApplication },
         { path: '/tomozconfirm/:address', component: TomoZConfirm, name: 'TomoZConfirm' },
-        { path: '/depositfee', component: DepositFee },
-        { path: '/depositconfirm', component: DepositConfirm, name: 'DepositConfirm' },
+        { path: '/depositfee/:address', component: DepositFee },
+        { path: '/depositconfirm/:address', component: DepositConfirm, name: 'DepositConfirm' },
         { path: '/edittransactionsfee/:address', component: EditTransactionsFee },
-        { path: '/editconfirm', component: EditTransactionsFeeConfirm, name: 'EditTransactionsFeeConfirm' }
+        { path: '/editconfirm/:address', component: EditTransactionsFeeConfirm, name: 'EditTransactionsFeeConfirm' }
     ]
 })
 

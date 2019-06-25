@@ -70,7 +70,7 @@
                                 transactionHash.toLowerCase()"
                                 :title="transactionHash"
                                 target="_blank">
-                                {{ truncate(transactionHash, 30) }}
+                                {{ truncate(transactionHash, 26) }}
                             </a>
                         </p>
                     </div>

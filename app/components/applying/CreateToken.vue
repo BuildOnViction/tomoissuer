@@ -16,6 +16,9 @@
                         type="text"
                         autocomplete="off"
                         placeholder="Token name"/>
+                    <span
+                        v-if="$v.tokenName.$dirty && !$v.tokenName.required"
+                        class="text-danger">Required field</span>
                 </b-form-group>
                 <b-form-group
                     class="mb-4"
@@ -26,6 +29,9 @@
                         autocomplete="off"
                         type="text"
                         placeholder="Token symbol"/>
+                    <span
+                        v-if="$v.tokenSymbol.$dirty && !$v.tokenSymbol.required"
+                        class="text-danger">Required field</span>
                 </b-form-group>
                 <b-form-group
                     class="mb-4"
@@ -35,6 +41,9 @@
                         autocomplete="off"
                         type="number"
                         placeholder="Token supply"/>
+                    <span
+                        v-if="$v.totalSupply.$dirty && !$v.totalSupply.required"
+                        class="text-danger">Required field</span>
                 </b-form-group>
                 <b-form-group
                     class="mb-4"
@@ -45,6 +54,12 @@
                         autocomplete="off"
                         type="text"
                         placeholder="Decimals"/>
+                    <span
+                        v-if="$v.decimals.$dirty && !$v.decimals.required"
+                        class="text-danger">Required field</span>
+                    <span
+                        v-if="$v.decimals.$dirty && (!$v.decimals.minValue || !$v.decimals.maxValue)"
+                        class="text-danger">Please use the number from 0 to 18</span>
                 </b-form-group>
                 <b-form-group
                     class="flex-box mb-4"
@@ -80,20 +95,36 @@
 
 <script>
 import store from 'store'
+import { validationMixin } from 'vuelidate'
+import {
+    required,
+    minValue,
+    maxValue
+} from 'vuelidate/lib/validators'
 export default {
     name: 'App',
     components: { },
+    mixins: [validationMixin],
     data () {
         return {
             tokenName: '',
             tokenSymbol: '',
             decimals: '',
-            minFee: 0,
             totalSupply: '',
             sourceCode: '',
             account: '',
             type: 'trc21'
         }
+    },
+    validations: {
+        decimals: {
+            required,
+            minValue: minValue(0),
+            maxValue: maxValue(18)
+        },
+        tokenName: { required },
+        tokenSymbol: { required },
+        totalSupply: { required }
     },
     async updated () {
     },
@@ -103,20 +134,39 @@ export default {
             next('/login')
         } else next()
     },
-    created: async function () {},
+    created: async function () {
+        const vuexStore = this.$store.state
+        if (vuexStore.issueToken) {
+            const token = vuexStore.issueToken
+            this.tokenName = token.tokenName
+            this.tokenSymbol = token.tokenSymbol
+            this.decimals = token.decimals
+            this.totalSupply = token.totalSupply
+            this.type = token.type
+        }
+    },
     methods: {
         validate: function () {
-            this.confirm()
+            this.$v.$touch()
+            if (!this.$v.$invalid) {
+                this.confirm()
+            }
         },
         confirm () {
+            this.$store.state.issueToken = {
+                tokenName: this.tokenName,
+                tokenSymbol: this.tokenSymbol,
+                decimals: this.decimals,
+                type: this.type,
+                totalSupply: this.totalSupply
+            }
             this.$router.push({ name: 'ConfirmToken',
-                query: {
+                params: {
                     name: this.tokenName,
                     symbol: this.tokenSymbol,
                     decimals: this.decimals,
                     type: this.type,
-                    totalSupply: this.totalSupply,
-                    minFee: this.minFee
+                    totalSupply: this.totalSupply
                 }
             })
         }

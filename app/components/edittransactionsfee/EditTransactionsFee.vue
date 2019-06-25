@@ -3,7 +3,7 @@
         <div class="tomo-body-fullw">
             <div class="info-header">
                 <h2 class="tmp-title-large">Edit transaction fee</h2>
-                <p>Current fee: {{ currentFee }} {{ tokenSymbol }}</p>
+                <p>Current fee: {{ currentFee }} {{ token.symbol }}</p>
             </div>
             <b-form
                 class="tmp-form-one"
@@ -12,11 +12,14 @@
                 <b-form-group
                     class="mb-4"
                     label-for="newFee">
-                    <span class="txt-fixed">{{ tokenSymbol }}</span>
+                    <span class="txt-fixed">{{ token.symbol }}</span>
                     <b-form-input
-                        :placeholder="`How much fee for a transaction (unit: ${tokenSymbol})`"
+                        :placeholder="`How much fee for a transaction (unit: ${token.symbol})`"
                         v-model="newFee"
                         type="text"/>
+                    <span
+                        v-if="$v.newFee.$dirty && !$v.newFee.required"
+                        class="text-danger">Required field</span>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
@@ -37,20 +40,27 @@
 
 <script>
 import store from 'store'
+import BigNumber from 'bignumber.js'
+import axios from 'axios'
+import { validationMixin } from 'vuelidate'
+import {
+    required
+} from 'vuelidate/lib/validators'
 export default {
     name: 'EditTransactionsFee',
+    mixins: [validationMixin],
     data () {
         return {
             address: this.$route.params.address.toLowerCase(),
-            tokenSymbol: '',
-            decimals: '',
-            minFee: '',
-            tokenSupply: '',
-            sourceCode: '',
             account: '',
-            type: '',
             newFee: '',
-            currentFee: ''
+            currentFee: '',
+            token: {}
+        }
+    },
+    validations: {
+        newFee: {
+            required
         }
     },
     async updated () {},
@@ -61,20 +71,49 @@ export default {
         } else next()
     },
     created: async function () {
+        this.account = store.get('address').toLowerCase() || await this.getAccount()
+        await this.getData()
+        this.getCurrentFee()
     },
     methods: {
+        async getData () {
+            const self = this
+            const vuexStore = self.$store.state
+            if (vuexStore.token) {
+                self.token = vuexStore.token
+            } else {
+                const { data } = await axios.get(`/api/token/${self.address}`)
+                self.token = data
+            }
+        },
+        getCurrentFee () {
+            const account = store.get('address').toLowerCase()
+            const web3 = this.web3
+            if (account && web3) {
+                // 0x24ec7590 is minFee function code
+                let data = '0x24ec7590' +
+                    '00000000000000000000000000000000000000000000000000000000'
+                web3.eth.call({ to: this.address, data: data }).then(result => {
+                    let balance = new BigNumber(web3.utils.hexToNumberString(result))
+                    this.currentFee = balance.div(10 ** this.token.decimals).toNumber()
+                }).catch(error => {
+                    console.log(error)
+                    this.$toatsed.show(error, { type: 'error' })
+                })
+            }
+        },
         validate: function () {
-            this.confirm()
+            this.$v.$touch()
+            if (!this.$v.$invalid) {
+                this.confirm()
+            }
         },
         confirm () {
             this.$router.push({ name: 'EditTransactionsFeeConfirm',
-                query: {
-                    name: this.tokenName,
-                    symbol: this.tokenSymbol,
-                    decimals: this.decimals,
-                    type: this.type,
-                    tokenSupply: this.tokenSupply,
-                    minFee: this.minFee
+                params: {
+                    address: this.address,
+                    currentFee: this.currentFee,
+                    newFee: this.newFee
                 }
             })
         }

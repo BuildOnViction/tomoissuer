@@ -9,13 +9,13 @@
                     <tr>
                         <td>Current fee</td>
                         <td>
-                            0.0001 TIIM
+                            {{ currentFee }} {{ token.symbol }}
                         </td>
                     </tr>
                     <tr>
                         <td>New fee</td>
                         <td>
-                            0.0002 TIIM
+                            {{ newFee }} {{ token.symbol }}
                         </td>
                     </tr>
                 </table>
@@ -33,18 +33,18 @@
             </div>
             <div class="btn-box">
                 <b-button
-                    :to="'/edittransactionsfee' + address"
+                    :to="'/edittransactionsfee/' + address"
                     class="tmp-btn-boder-violet btn-min">
                     Back
                 </b-button>
                 <b-button
-                    v-b-modal.modal-transactionsfee
-                    class="tmp-btn-violet">
+                    class="tmp-btn-violet"
+                    @click="changeTXFee">
                     Change
                 </b-button>
             </div>
             <b-modal
-                id="modal-transactionsfee"
+                ref="transactionsFeeModal"
                 size="md"
                 hide-header
                 hide-footer
@@ -56,19 +56,20 @@
                         <p>You changed the transacion fee</p>
                         <p>
                             Transaction hash:
-                            <b-link
-                                to="/"
-                                title="0x88448943534324230030030">
-                                0x88448943534324230030030
-                            </b-link>
+                            <a
+                                :href="config.tomoscanUrl + '/txs/' +
+                                transactionHash.toLowerCase()"
+                                :title="transactionHash"
+                                target="_blank">
+                                {{ truncate(transactionHash, 26) }}
+                            </a>
                         </p>
                     </div>
                     <div class="btn-box">
-                        <b-button
-                            class="tmp-btn-violet"
-                            to="/"
-                            @click="hide()">Done
-                        </b-button>
+                        <router-link
+                            :to="{ path: `/token/${address}` }"
+                            class="tmp-btn-violet">Done
+                        </router-link>
                     </div>
                 </div>
             </b-modal>
@@ -78,18 +79,20 @@
 
 <script>
 import store from 'store'
+import axios from 'axios'
+import BigNumber from 'bignumber.js'
 export default {
     name: 'TomoZConfirm',
     data () {
         return {
-            tokenName: '',
-            tokenSymbol: '',
-            decimals: '',
-            minFee: '',
-            tokenSupply: '',
-            sourceCode: '',
+            address: this.$route.params.address.toLowerCase(),
+            loading: false,
             account: '',
-            type: ''
+            newFee: this.$route.params.newFee || '---',
+            currentFee: this.$route.params.currentFee || '---',
+            token: {},
+            transactionHash: '123',
+            config: {}
         }
     },
     async updated () {},
@@ -99,7 +102,101 @@ export default {
             next('/login')
         } else next()
     },
-    created: async function () {},
-    methods: {}
+    created: async function () {
+        this.account = (store.get('address') || await this.getAccount()).toLowerCase()
+        this.appConfig().then(result => {
+            this.config = result
+        }).catch(error => {
+            console.log(error)
+            this.$toasted.show(error, { type: 'error' })
+        })
+        this.getData()
+    },
+    methods: {
+        getData () {
+            const self = this
+            const vuexStore = self.$store.state
+            if (vuexStore.token) {
+                self.token = vuexStore.token
+            } else {
+                axios.get(`/api/token/${self.address}`).then(response => {
+                    self.token = response.data
+                }).catch(error => {
+                    console.log(error)
+                    self.$toasted.show(error, { type: 'error' })
+                })
+            }
+        },
+        async changeTXFee () {
+            try {
+                if (this.currentFee && this.newFee) {
+                    this.loading = true
+                    const txParams = {
+                        from: this.account,
+                        gasPrice: this.web3.utils.toHex(10000000000000),
+                        gas: this.web3.utils.toHex(40000000),
+                        gasLimit: this.web3.utils.toHex(40000000)
+                    }
+                    const { data } = await axios.get('/api/account/' + this.address)
+                    if (!data.contract) {
+                        this.loading = false
+                        this.$toasted.show('This contract is not verified. Please go to tomoscan to verify contract')
+                    } else {
+                        const tokenContract = new this.web3.eth.Contract(
+                            JSON.parse(data.contract.abiCode),
+                            this.address
+                        )
+                        const provider = this.NetworkProvider
+                        if (provider === 'ledger' || provider === 'trezor') {
+                            txParams.value = '0x'
+                            let data = await tokenContract.methods.setMinFee(
+                                (new BigNumber(this.newFee).multipliedBy(10 ** this.token.decimals)).toString(10)
+                            ).encodeABI()
+
+                            const dataTx = {
+                                data,
+                                to: this.address
+                            }
+                            let nonce = await this.web3.eth.getTransactionCount(this.account)
+                            Object.assign(
+                                dataTx,
+                                dataTx,
+                                txParams,
+                                {
+                                    nonce: this.web3.utils.toHex(nonce)
+                                }
+                            )
+                            let signature = await this.signTransaction(dataTx)
+                            const rs = await this.sendSignedTransaction(dataTx, signature)
+                            if (rs.transactionHash) {
+                                this.transactionHash = rs.transactionHash
+                                this.$refs.transactionsFeeModal.show()
+                            }
+                        } else {
+                            tokenContract.methods.setMinFee(
+                                (new BigNumber(this.newFee).multipliedBy(10 ** this.token.decimals)).toString(10)
+                            ).send(txParams)
+                                .on('transactionHash', async (txHash) => {
+                                    this.transactionHash = txHash
+                                    let check = true
+                                    while (check) {
+                                        const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                                        if (receipt) {
+                                            self.loading = false
+                                            check = false
+                                            this.$refs.transactionsFeeModal.show()
+                                        }
+                                    }
+                                })
+                        }
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+                this.loading = false
+                this.$toasted.show(error, { type: 'error' })
+            }
+        }
+    }
 }
 </script>

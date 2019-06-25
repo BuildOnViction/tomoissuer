@@ -10,9 +10,10 @@
                         <td>From</td>
                         <td>
                             <b-link
-                                to="/"
-                                title="0x48c4eef517b79ff5259374fed4245359d8fb3ea9">
-                                0x48c4eef517b79ff5259374fed4245359d8fb3ea9
+                                :href="config.tomoscanUrl + '/address/' + account"
+                                :title="account"
+                                target="_blank">
+                                {{ account }}
                             </b-link>
                             <span>Owner address</span>
                         </td>
@@ -21,20 +22,21 @@
                         <td>To</td>
                         <td>
                             <b-link
-                                to="/"
-                                title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
-                                0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                :href="config.tomoscanUrl + '/address/' + address"
+                                :title="address"
+                                target="_blank">
+                                {{ address }}
                             </b-link>
-                            <span>TIIM SmartContract</span>
+                            <span>{{ token.name }} SmartContract</span>
                         </td>
                     </tr>
                     <tr>
                         <td>Amount of donation</td>
-                        <td>1000 TOMO</td>
+                        <td>{{ depositFee }} TOMO</td>
                     </tr>
                     <tr>
                         <td>Transaction fee</td>
-                        <td>1 TIIM/transaction</td>
+                        <td>1 {{ token.symbol }}/transaction</td>
                     </tr>
                 </table>
                 <p class="txt_note">*Your deposit amount will be locked and could not be withdrawed</p>
@@ -51,18 +53,19 @@
             </div>
             <div class="btn-box">
                 <b-button
-                    class="tmp-btn-boder-violet btn-min"
-                    to="/depositfee">
+                    :to="'/depositfee/' + address"
+                    class="tmp-btn-boder-violet btn-min">
                     Back
                 </b-button>
                 <b-button
-                    v-b-modal.modal-deposit
-                    class="tmp-btn-violet">
+                    class="tmp-btn-violet"
+                    @click="deposit">
                     Deposit now
                 </b-button>
             </div>
             <b-modal
                 id="modal-deposit"
+                ref="poolingFeeModal"
                 size="md"
                 hide-header
                 hide-footer
@@ -71,21 +74,23 @@
                     <div class="msg-txt">
                         <i class="tomoissuer-icon-checkmark-outline"/>
                         <h4>Successful</h4>
-                        <p>You’ve just successfully deposited 4000 TOMO</p>
+                        <p>You’ve just successfully deposited {{ depositFee }} TOMO</p>
                         <p>
                             Transaction hash:
-                            <b-link
-                                to="/"
-                                title="0x88448943534324230030030">
-                                0x88448943534324230030030
-                            </b-link>
+                            <a
+                                :href="config.tomoscanUrl + '/txs/' +
+                                transactionHash.toLowerCase()"
+                                :title="transactionHash"
+                                target="_blank">
+                                {{ truncate(transactionHash, 26) }}
+                            </a>
                         </p>
                     </div>
                     <div class="btn-box">
                         <b-button
-                            class="tmp-btn-violet"
-                            to="/"
-                            @click="hide()">Token detail
+                            :to="'/token/' + address"
+                            class="tmp-btn-violet">
+                            Token detail
                         </b-button>
                     </div>
                 </div>
@@ -96,18 +101,19 @@
 
 <script>
 import store from 'store'
+import axios from 'axios'
+import BigNumber from 'bignumber.js'
 export default {
     name: 'TomoZConfirm',
     data () {
         return {
-            tokenName: '',
-            tokenSymbol: '',
-            decimals: '',
-            minFee: '',
-            tokenSupply: '',
-            sourceCode: '',
+            address: this.$route.params.address.toLowerCase(),
             account: '',
-            type: ''
+            transactionHash: '',
+            depositFee: this.$route.params.depositFee,
+            token: {},
+            config: {},
+            loading: false
         }
     },
     async updated () {},
@@ -117,7 +123,93 @@ export default {
             next('/login')
         } else next()
     },
-    created: async function () {},
-    methods: {}
+    created: async function () {
+        this.account = store.get('address') || await this.getAccount()
+        this.appConfig().then(config => {
+            this.config = config
+        }).catch(error => {
+            console.log(error)
+            this.$toasted.show(error, { type: 'error' })
+        })
+        this.getData()
+    },
+    methods: {
+        getData () {
+            const self = this
+            const vuexStore = self.$store.state
+            if (vuexStore.token) {
+                self.token = vuexStore.token
+            } else {
+                axios.get(`/api/token/${self.address}`).then(response => {
+                    self.token = response.data
+                }).catch(error => {
+                    console.log(error)
+                    self.$toasted.show(error, { type: 'error' })
+                })
+            }
+        },
+        async deposit () {
+            try {
+                if (this.depositFee) {
+                    this.loading = true
+                    const txParams = {
+                        from: this.account,
+                        gasPrice: this.web3.utils.toHex(10000000000000),
+                        gas: this.web3.utils.toHex(40000000),
+                        gasLimit: this.web3.utils.toHex(40000000),
+                        value: this.web3.utils.toHex(new BigNumber(this.depositFee).multipliedBy(10 ** 18)).toString(10)
+                    }
+
+                    const contract = this.TRC21Issuer
+                    const provider = this.NetworkProvider
+                    if (provider === 'ledger' || provider === 'trezor') {
+                        let data = await contract.methods.charge(
+                            this.address
+                        ).encodeABI()
+
+                        const dataTx = {
+                            data,
+                            to: this.config.blockchain.issuerAddress
+                        }
+                        let nonce = await this.web3.eth.getTransactionCount(this.account)
+                        Object.assign(
+                            dataTx,
+                            dataTx,
+                            txParams,
+                            {
+                                nonce: this.web3.utils.toHex(nonce)
+                            }
+                        )
+                        let signature = await this.signTransaction(dataTx)
+                        const rs = await this.sendSignedTransaction(dataTx, signature)
+                        if (rs.transactionHash) {
+                            this.transactionHash = rs.transactionHash
+                            this.$refs.poolingFeeModal.show()
+                        }
+                    } else {
+                        contract.methods.charge(
+                            this.address
+                        ).send(txParams)
+                            .on('transactionHash', async (txHash) => {
+                                this.transactionHash = txHash
+                                let check = true
+                                while (check) {
+                                    const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                                    if (receipt) {
+                                        self.loading = false
+                                        check = false
+                                        this.$refs.poolingFeeModal.show()
+                                    }
+                                }
+                            })
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+                this.loading = false
+                this.$toasted.show(error, { type: 'error' })
+            }
+        }
+    }
 }
 </script>

@@ -3,26 +3,35 @@
         <div class="tomo-body-fullw">
             <div class="info-header">
                 <h2 class="tmp-title-large">Deposit pooling fee</h2>
-                <p>Current TIIM pooling fee: 9.1 TOMO</p>
+                <p>Current {{ token.name }} pooling fee: {{ currentPoolingFee }} TOMO</p>
             </div>
             <b-form
                 class="tmp-form-one"
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
+                    :description="`Min: 10 TOMO, Available balance: ${balance} TOMO`"
                     class="mb-4"
-                    label-for="depositFee"
-                    description="Min: 10 TOMO, Available balance: 200 TOMO">
+                    label-for="depositFee">
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input
                         v-model="depositFee"
                         type="text"
                         placeholder="How much TOMO do you want to deposit? (TX fee: 0.0005 TOMO)..."/>
+                    <span
+                        v-if="$v.depositFee.$dirty && !$v.depositFee.required"
+                        class="text-danger">Required field</span>
+                    <span
+                        v-else-if="$v.depositFee.$dirty && !$v.depositFee.minValue"
+                        class="text-danger">Minimum of depositing is 10 TOMO</span>
+                    <span
+                        v-else-if="depositingError"
+                        class="text-danger">Not enough TOMO</span>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
-                        class="tmp-btn-boder-violet btn-min"
-                        to="/token/0x2f8fa62a62410febc56c96c3ceb8666e193a1be3">
+                        :to="'/token/' + address"
+                        class="tmp-btn-boder-violet btn-min">
                         Back
                     </b-button>
                     <b-button
@@ -38,18 +47,33 @@
 
 <script>
 import store from 'store'
+import axios from 'axios'
+import BigNumber from 'bignumber.js'
+import { validationMixin } from 'vuelidate'
+import {
+    required,
+    minValue
+} from 'vuelidate/lib/validators'
 export default {
     name: 'DepositFee',
+    mixins: [validationMixin],
     data () {
         return {
-            tokenName: '',
-            tokenSymbol: '',
-            decimals: '',
-            minFee: '',
-            tokenSupply: '',
-            sourceCode: '',
+            address: this.$route.params.address.toLowerCase(),
             account: '',
-            type: ''
+            config: {},
+            token: {},
+            loading: false,
+            currentPoolingFee: '',
+            depositFee: '',
+            balance: '',
+            depositingError: ''
+        }
+    },
+    validations: {
+        depositFee: {
+            required,
+            minValue: minValue(10)
         }
     },
     async updated () {},
@@ -59,21 +83,62 @@ export default {
             next('/login')
         } else next()
     },
-    created: async function () {},
+    created: async function () {
+        this.account = store.get('address') || await self.getAccount()
+        await this.getData()
+        this.getPoolingFee()
+        this.getBalance()
+    },
     methods: {
+        async getData () {
+            const self = this
+            const vuexStore = self.$store.state
+            if (vuexStore.token) {
+                self.token = vuexStore.token
+            } else {
+                const { data } = await axios.get(`/api/token/${self.address}`)
+                self.token = data
+            }
+        },
+        getPoolingFee () {
+            const contract = this.TRC21Issuer
+            contract.methods.getTokenCapacity(this.address).call().then(capacity => {
+                let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
+                this.currentPoolingFee = balance.div(10 ** this.token.decimals).toNumber().toFixed(2)
+            }).catch(error => {
+                console.log(error)
+                this.$toatsed.show(error, { type: 'error' })
+            })
+        },
+        getBalance () {
+            const web3 = this.web3
+            web3.eth.getBalance(this.account).then(result => {
+                const balance = new BigNumber(result).div(10 ** 18)
+                this.balance = balance.toNumber().toFixed(4)
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            })
+        },
         validate: function () {
-            this.confirm()
+            const self = this
+            self.depositFee = self.depositFee.replace(/,/g, '')
+            self.$v.$touch()
+            if (!self.$v.$invalid) {
+                if ((new BigNumber(self.depositFee)).isGreaterThanOrEqualTo(self.balance)) {
+                    self.depositingError = true
+                } else {
+                    self.depositingError = false
+                    self.confirm()
+                }
+            }
         },
         confirm () {
-            console.log(1111)
             this.$router.push({ name: 'DepositConfirm',
-                query: {
-                    name: this.tokenName,
-                    symbol: this.tokenSymbol,
-                    decimals: this.decimals,
-                    type: this.type,
-                    tokenSupply: this.tokenSupply,
-                    minFee: this.minFee
+                params: {
+                    address: this.address,
+                    currentPoolingFee: this.currentPoolingFee,
+                    depositFee: this.depositFee
                 }
             })
         }
