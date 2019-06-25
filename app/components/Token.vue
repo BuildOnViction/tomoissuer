@@ -126,7 +126,9 @@
                                             <p>Pooling fee</p>
                                             <div class="flex-box">
                                                 <span>{{ poolingFee }} TOMO</span>
-                                                <span><b-link to="/depositfee">Deposit more</b-link></span>
+                                                <span>
+                                                    <b-link :to="'/depositfee/' + address">Deposit more</b-link>
+                                                </span>
                                             </div>
                                         </li>
                                     </ul>

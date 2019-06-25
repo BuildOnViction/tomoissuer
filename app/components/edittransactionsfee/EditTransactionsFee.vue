@@ -72,22 +72,18 @@ export default {
     },
     created: async function () {
         this.account = store.get('address').toLowerCase() || await this.getAccount()
-        this.getData()
+        await this.getData()
         this.getCurrentFee()
     },
     methods: {
-        getData () {
+        async getData () {
             const self = this
             const vuexStore = self.$store.state
             if (vuexStore.token) {
                 self.token = vuexStore.token
             } else {
-                axios.get(`/api/token/${self.address}`).then(response => {
-                    self.token = response.data
-                }).catch(error => {
-                    console.log(error)
-                    self.$toasted.show(error, { type: 'error' })
-                })
+                const { data } = await axios.get(`/api/token/${self.address}`)
+                self.token = data
             }
         },
         getCurrentFee () {
@@ -99,7 +95,6 @@ export default {
                     '00000000000000000000000000000000000000000000000000000000'
                 web3.eth.call({ to: this.address, data: data }).then(result => {
                     let balance = new BigNumber(web3.utils.hexToNumberString(result))
-                    console.log(balance)
                     this.currentFee = balance.div(10 ** this.token.decimals).toNumber()
                 }).catch(error => {
                     console.log(error)
