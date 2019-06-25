@@ -10,26 +10,35 @@
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
+                    :description="`Min: 10 TOMOTX fee: 0.0005 TOMO, Available balance: ${balance} TOMO`"
                     class="mb-4"
                     label="Deposit fee"
-                    label-for="depositFee"
-                    description="Min: 10 TOMO, Available balance: 200 TOMO">
+                    label-for="depositFee">
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input
                         v-model="depositFee"
                         type="text"
                         placeholder="How much TOMO do you want to deposit? (TX fee: 0.0005 TOMO)..."/>
+                    <span
+                        v-if="$v.depositFee.$dirty && !$v.depositFee.required"
+                        class="text-danger">Required field</span>
+                    <span
+                        v-else-if="$v.depositFee.$dirty && !$v.depositFee.minValue"
+                        class="text-danger">Minimum of depositing is 10 TOMO</span>
+                    <span
+                        v-else-if="depositingError"
+                        class="text-danger">Not enough TOMO</span>
                 </b-form-group>
                 <b-form-group
                     class="mb-4"
                     label="Set transaction fee"
-                    label-for="setTransactionFee"
+                    label-for="tokenTxFee"
                     description="This setting could be modified later">
-                    <span class="txt-fixed">TIIM</span>
+                    <span class="txt-fixed">{{ token.symbol }}</span>
                     <b-form-input
-                        v-model="setTransactionFee"
-                        type="text"
-                        placeholder="How much fee for a transaction (unit: TIIM)..."/>
+                        v-model="tokenTxFee"
+                        :placeholder="`How much fee for a transaction (unit: ${token.symbol})...`"
+                        type="text"/>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
@@ -50,18 +59,32 @@
 
 <script>
 import store from 'store'
+import BigNumber from 'bignumber.js'
+import axios from 'axios'
+import { validationMixin } from 'vuelidate'
+import {
+    required,
+    minValue
+} from 'vuelidate/lib/validators'
 export default {
     name: 'TomoZApplication',
+    mixins: [validationMixin],
     data () {
         return {
-            tokenName: '',
-            tokenSymbol: '',
-            decimals: '',
-            minFee: '',
-            tokenSupply: '',
+            address: this.$route.params.address.toLowerCase(),
+            token: {},
             sourceCode: '',
             account: '',
-            type: ''
+            depositFee: '',
+            tokenTxFee: '',
+            balance: '',
+            depositingError: ''
+        }
+    },
+    validations: {
+        depositFee: {
+            required,
+            minValue: minValue(10)
         }
     },
     async updated () {},
@@ -71,21 +94,57 @@ export default {
             next('/login')
         } else next()
     },
-    created: async function () {},
+    created: async function () {
+        const self = this
+        self.account = store.get('address') || await self.getAccount()
+        self.getData()
+        self.getBalance()
+    },
     methods: {
+        getData () {
+            const self = this
+            const vuexStore = self.$store.state
+            if (vuexStore.token) {
+                self.token = vuexStore.token
+            } else {
+                axios.get(`/api/token/${self.address}`).then(response => {
+                    self.token = response.data
+                }).catch(error => {
+                    console.log(error)
+                    self.$toasted.show(error, { type: 'error' })
+                })
+            }
+        },
         validate: function () {
-            this.confirm()
+            const self = this
+            self.depositFee = self.depositFee.replace(/,/g, '')
+            self.$v.$touch()
+            if (!self.$v.$invalid) {
+                if ((new BigNumber(self.depositFee)).isGreaterThanOrEqualTo(self.balance)) {
+                    self.depositingError = true
+                } else {
+                    self.depositingError = false
+                    self.confirm()
+                }
+            }
+        },
+        getBalance () {
+            const web3 = this.web3
+            web3.eth.getBalance(this.account).then(result => {
+                const balance = new BigNumber(result).div(10 ** 18)
+                this.balance = balance.toNumber().toFixed(4)
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            })
         },
         confirm () {
-            console.log(1111)
             this.$router.push({ name: 'TomoZConfirm',
-                query: {
-                    name: this.tokenName,
-                    symbol: this.tokenSymbol,
-                    decimals: this.decimals,
-                    type: this.type,
-                    tokenSupply: this.tokenSupply,
-                    minFee: this.minFee
+                params: {
+                    address: this.address,
+                    token: this.token,
+                    depositFee: this.depositFee,
+                    tokenTxFee: this.tokenTxFee
                 }
             })
         }

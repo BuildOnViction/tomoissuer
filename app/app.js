@@ -492,7 +492,7 @@ const router = new VueRouter({
         { path: '/tomozconfirm/:address', component: TomoZConfirm, name: 'TomoZConfirm' },
         { path: '/depositfee', component: DepositFee },
         { path: '/depositconfirm', component: DepositConfirm, name: 'DepositConfirm' },
-        { path: '/edittransactionsfee', component: EditTransactionsFee },
+        { path: '/edittransactionsfee/:address', component: EditTransactionsFee },
         { path: '/editconfirm', component: EditTransactionsFeeConfirm, name: 'EditTransactionsFeeConfirm' }
     ]
 })

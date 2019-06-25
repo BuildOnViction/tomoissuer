@@ -33,8 +33,8 @@
             </div>
             <div class="btn-box">
                 <b-button
-                    class="tmp-btn-boder-violet btn-min"
-                    to="/edittransactionsfee">
+                    :to="'/edittransactionsfee' + address"
+                    class="tmp-btn-boder-violet btn-min">
                     Back
                 </b-button>
                 <b-button
