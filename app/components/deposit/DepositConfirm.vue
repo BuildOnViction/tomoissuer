@@ -181,10 +181,18 @@ export default {
                             }
                         )
                         let signature = await this.signTransaction(dataTx)
-                        const rs = await this.sendSignedTransaction(dataTx, signature)
-                        if (rs.transactionHash) {
-                            this.transactionHash = rs.transactionHash
-                            this.$refs.poolingFeeModal.show()
+                        const txHash = await this.sendSignedTransaction(dataTx, signature)
+                        if (txHash) {
+                            this.transactionHash = txHash
+                            let check = true
+                            while (check) {
+                                const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                                if (receipt) {
+                                    self.loading = false
+                                    check = false
+                                    this.$refs.poolingFeeModal.show()
+                                }
+                            }
                         }
                     } else {
                         contract.methods.charge(
