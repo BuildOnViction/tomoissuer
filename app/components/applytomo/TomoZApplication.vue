@@ -19,15 +19,15 @@
                         v-model="depositFee"
                         type="text"
                         placeholder="How much TOMO do you want to deposit? (Min: 10 TOMO)..."/>
-                    <span
+                    <div
                         v-if="$v.depositFee.$dirty && !$v.depositFee.required"
-                        class="text-danger">Required field</span>
-                    <span
+                        class="text-danger pt-2">Required field</div>
+                    <div
                         v-else-if="$v.depositFee.$dirty && !$v.depositFee.minValue"
-                        class="text-danger">Minimum of depositing is 10 TOMO</span>
-                    <span
+                        class="text-danger pt-2">Minimum of depositing is 10 TOMO</div>
+                    <div
                         v-else-if="depositingError"
-                        class="text-danger">Not enough TOMO</span>
+                        class="text-danger pt-2">Not enough TOMO</div>
                 </b-form-group>
                 <b-form-group
                     class="mb-4"

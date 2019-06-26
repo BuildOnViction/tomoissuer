@@ -21,11 +21,15 @@
                     label="Enter your token name or contract address "
                     label-for="tokenName">
                     <b-form-input
+                        v-model="tokenAddress"
                         type="text"
                         placeholder="Token name"/>
+                    <div
+                        v-if="$v.tokenAddress.$dirty && !$v.tokenAddress.required"
+                        class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
-                    :description="`Available balance:  ${balance} TOMO`"
+                    :description="`Min: 10 TOMO, Available balance:  ${balance} TOMO`"
                     class="mb-4"
                     label="Donation amount"
                     label-for="donationAmount">
@@ -34,6 +38,15 @@
                         v-model="donationAmount"
                         type="text"
                         placeholder="Donation amount"/>
+                    <div
+                        v-if="$v.donationAmount.$dirty && !$v.donationAmount.required"
+                        class="text-danger pt-2">Required field</div>
+                    <div
+                        v-else-if="$v.donationAmount.$dirty && !$v.donationAmount.minValue"
+                        class="text-danger pt-2">Minimum of depositing is 10 TOMO</div>
+                    <div
+                        v-else-if="depositingError"
+                        class="text-danger pt-2">Not enough TOMO</div>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
@@ -48,14 +61,31 @@
 <script>
 import store from 'store'
 import BigNumber from 'bignumber.js'
+import { validationMixin } from 'vuelidate'
+import {
+    required,
+    minValue
+} from 'vuelidate/lib/validators'
 export default {
     name: 'Donate',
     components: { },
+    mixins: [validationMixin],
     data () {
         return {
             account: '',
             balance: '',
-            donationAmount: ''
+            donationAmount: '',
+            tokenAddress: '',
+            depositingError: false
+        }
+    },
+    validations: {
+        tokenAddress: {
+            required
+        },
+        donationAmount: {
+            required,
+            minValue: minValue(10)
         }
     },
     async updated () {
@@ -82,17 +112,23 @@ export default {
             })
         },
         validate: function () {
-            this.confirm()
+            const self = this
+            self.donationAmount = self.donationAmount.replace(/,/g, '')
+            self.$v.$touch()
+            if (!self.$v.$invalid) {
+                if ((new BigNumber(self.donationAmount)).isGreaterThanOrEqualTo(self.balance)) {
+                    self.depositingError = true
+                } else {
+                    self.depositingError = false
+                    self.confirm()
+                }
+            }
         },
         confirm () {
             this.$router.push({ name: 'ConfirmDonate',
-                query: {
-                    name: this.tokenName,
-                    symbol: this.tokenSymbol,
-                    decimals: this.decimals,
-                    type: this.type,
-                    tokenSupply: this.tokenSupply,
-                    minFee: this.minFee
+                params: {
+                    address: this.tokenAddress,
+                    donationAmount: this.donationAmount
                 }
             })
         }

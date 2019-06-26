@@ -493,7 +493,7 @@ const router = new VueRouter({
         { path: '/verify', component: VerifyContract },
         { path: '/token/:address', component: TokenDetail },
         { path: '/donateTxFee', component: DonateToken },
-        { path: '/confirmdonate', component: ConfirmDonate, name: 'ConfirmDonate' },
+        { path: '/confirmdonate/:address', component: ConfirmDonate, name: 'ConfirmDonate' },
         { path: '/tomozcondition/:address', component: TomoZCondition },
         { path: '/tomozapplication/:address', component: TomoZApplication },
         { path: '/tomozconfirm/:address', component: TomoZConfirm, name: 'TomoZConfirm' },

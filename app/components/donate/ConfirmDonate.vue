@@ -10,9 +10,10 @@
                         <td>From</td>
                         <td>
                             <b-link
-                                to="/"
-                                title="0x48c4eef517b79ff5259374fed4245359d8fb3ea9">
-                                0x48c4eef517b79ff5259374fed4245359d8fb3ea9
+                                :href="config.tomoscanUrl + '/address/' + account"
+                                :title="account"
+                                target="_blank">
+                                {{ account }}
                             </b-link>
                             <span>Owner address</span>
                         </td>
@@ -21,16 +22,17 @@
                         <td>To</td>
                         <td>
                             <b-link
-                                to="/"
-                                title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8">
-                                0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8
+                                :href="config.tomoscanUrl + '/address/' + address"
+                                title="0x7e1e827c7c22834f31075b4530e9e0e2b7815ad8"
+                                target="_blank">
+                                {{ token.hash }}
                             </b-link>
-                            <span>TIIM SmartContract</span>
+                            <span>{{ token.name }} SmartContract</span>
                         </td>
                     </tr>
                     <tr>
                         <td>Amount of donation</td>
-                        <td>500 TOMO</td>
+                        <td>{{ formatNumber(donationAmount) }} TOMO</td>
                     </tr>
                     <tr>
                         <td>Transaction fee</td>
@@ -50,18 +52,19 @@
             </div>
             <div class="btn-box">
                 <b-button
-                    class="tmp-btn-boder-blue btn-min"
-                    to="donate">
+                    :to="'/donateTxFee'"
+                    class="tmp-btn-boder-blue btn-min">
                     Back
                 </b-button>
                 <b-button
-                    v-b-modal.modal-donate
-                    class="tmp-btn-blue">
+                    class="tmp-btn-blue"
+                    @click="deposit">
                     Donate now
                 </b-button>
             </div>
             <b-modal
                 id="modal-donate"
+                ref="modaldonate"
                 size="md"
                 hide-header
                 hide-footer
@@ -70,21 +73,23 @@
                     <div class="msg-txt">
                         <i class="tomoissuer-icon-checkmark-outline"/>
                         <h4>Successful</h4>
-                        <p>You’ve succesfully donated 500 TOMO</p>
+                        <p>You’ve succesfully donated {{ donationAmount }} TOMO</p>
                         <p>
                             Transaction hash:
-                            <b-link
-                                to="/"
-                                title="0x88448943534324230030030">
-                                0x88448943534324230030030
-                            </b-link>
+                            <a
+                                :href="config.tomoscanUrl + '/txs/' +
+                                transactionHash.toLowerCase()"
+                                :title="transactionHash"
+                                target="_blank">
+                                {{ truncate(transactionHash, 26) }}
+                            </a>
                         </p>
                     </div>
                     <div class="btn-box">
                         <b-button
-                            class="tmp-btn-blue"
-                            to="/"
-                            @click="hide()">View detail
+                            :to="'/token/' + address"
+                            class="tmp-btn-blue">
+                            View detail
                         </b-button>
                     </div>
                 </div>
@@ -95,16 +100,22 @@
 
 <script>
 import store from 'store'
+import axios from 'axios'
+import BigNumber from 'bignumber.js'
 export default {
     name: 'App',
     components: { },
     data () {
         return {
+            address: (this.$route.params.address || '').toLowerCase(),
+            donationAmount: this.$route.params.donationAmount,
             web3: this.web3,
             transactionHash: '',
             account: '',
             provider: this.NetworkProvider,
-            loading: false
+            loading: false,
+            config: {},
+            token: {}
         }
     },
     async updated () {},
@@ -115,8 +126,92 @@ export default {
         } else next()
     },
     created: async function () {
+        const self = this
+        self.account = store.get('address') || await self.getAccount()
+        self.appConfig().then(config => {
+            self.config = config
+        }).catch(error => {
+            console.log(error)
+            self.$toasted.show(error, { type: 'error' })
+        })
+        self.getData()
     },
     methods: {
+        async getData () {
+            const { data } = await axios.get(`/api/token/${this.address}`)
+            this.token = data
+        },
+        async deposit () {
+            try {
+                if (this.donationAmount) {
+                    this.loading = true
+                    const txParams = {
+                        from: this.account,
+                        gasPrice: this.web3.utils.toHex(10000000000000),
+                        gas: this.web3.utils.toHex(40000000),
+                        gasLimit: this.web3.utils.toHex(40000000),
+                        value: this.web3.utils.toHex(
+                            new BigNumber(this.donationAmount).multipliedBy(10 ** 18)).toString(10)
+                    }
+
+                    const contract = this.TRC21Issuer
+                    const provider = this.NetworkProvider
+                    if (provider === 'ledger' || provider === 'trezor') {
+                        let data = await contract.methods.charge(
+                            this.address
+                        ).encodeABI()
+
+                        const dataTx = {
+                            data,
+                            to: this.config.blockchain.issuerAddress
+                        }
+                        let nonce = await this.web3.eth.getTransactionCount(this.account)
+                        Object.assign(
+                            dataTx,
+                            dataTx,
+                            txParams,
+                            {
+                                nonce: this.web3.utils.toHex(nonce)
+                            }
+                        )
+                        let signature = await this.signTransaction(dataTx)
+                        const txHash = await this.sendSignedTransaction(dataTx, signature)
+                        if (txHash) {
+                            this.transactionHash = txHash
+                            let check = true
+                            while (check) {
+                                const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                                if (receipt) {
+                                    self.loading = false
+                                    check = false
+                                    this.$refs.modaldonate.show()
+                                }
+                            }
+                        }
+                    } else {
+                        contract.methods.charge(
+                            this.address
+                        ).send(txParams)
+                            .on('transactionHash', async (txHash) => {
+                                this.transactionHash = txHash
+                                let check = true
+                                while (check) {
+                                    const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                                    if (receipt) {
+                                        self.loading = false
+                                        check = false
+                                        this.$refs.modaldonate.show()
+                                    }
+                                }
+                            })
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+                this.loading = false
+                this.$toasted.show(error, { type: 'error' })
+            }
+        }
     }
 }
 </script>
