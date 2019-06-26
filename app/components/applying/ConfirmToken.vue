@@ -197,7 +197,6 @@ export default {
                     self.account = a.address
                 }
                 // deployment
-                let result
                 switch (self.provider) {
                 case 'custom':
                 case 'metamask':
@@ -244,8 +243,6 @@ export default {
                         data: deploy,
                         to: '0x'
                     }
-                    console.log(web3)
-                    console.log(self.account)
 
                     let nonce = await web3.eth.getTransactionCount(self.account)
                     const chainConfig = this.config.blockchain
@@ -264,15 +261,21 @@ export default {
                             nonce: web3.utils.toHex(nonce)
                         }
                     )
-                    console.log(data)
 
                     const signature = await self.signTransaction(data)
-                    result = await self.sendSignedTransaction(dataTx, signature)
-                    if (result && result.contractAddress) {
-                        self.transactionHash = result.transactionHash
-                        self.contractAddress = result.contractAddress
-                        self.loading = false
-                        self.$refs.newtokenmodal.show()
+                    const txHash = await self.sendSignedTransaction(dataTx, signature)
+                    if (txHash) {
+                        self.transactionHash = txHash
+                        let check = true
+                        while (check) {
+                            const receipt = await web3.eth.getTransactionReceipt(txHash)
+                            if (receipt) {
+                                self.contractAddress = receipt.contractAddress
+                                self.loading = false
+                                check = false
+                                self.$refs.newtokenmodal.show()
+                            }
+                        }
                     }
                     break
                 default:

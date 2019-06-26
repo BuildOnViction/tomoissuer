@@ -1,5 +1,10 @@
 <template>
-    <div class="container container-small">
+    <tomo-z-applied
+        v-if="isAppliedZ"
+        :address="address" />
+    <div
+        v-else
+        class="container container-small">
         <div class="confirm-table">
             <div class="info-header text-center">
                 <p><i class="tomoissuer-icon-tomoz"/></p>
@@ -89,8 +94,12 @@
 <script>
 import store from 'store'
 import BigNumber from 'bignumber.js'
+import TomoZApplied from './TomoZApplied.vue'
 export default {
     name: 'TomoZConfirm',
+    components: {
+        TomoZApplied
+    },
     data () {
         return {
             address: this.$route.params.address.toLowerCase(),
@@ -99,7 +108,8 @@ export default {
             depositeFee: this.$route.params.depositFee,
             tokenTxFee: this.$route.params.tokenTxFee,
             config: {},
-            transactionHash: ''
+            transactionHash: '',
+            isAppliedZ: false
         }
     },
     async updated () {},
@@ -112,6 +122,7 @@ export default {
     created: async function () {
         const self = this
         self.account = store.get('address') || await self.getAccount()
+        self.checkAppliedZ()
         self.appConfig().then(result => {
             self.config = result
         }).catch(error => {
@@ -120,24 +131,83 @@ export default {
         })
     },
     methods: {
+        checkAppliedZ () {
+            const contract = this.TRC21Issuer
+            contract.methods.tokens.call()
+                .then(result => {
+                    if (result && result.length > 0) {
+                        const lowerCaseArr = result.map(m => m.toLowerCase())
+                        if (lowerCaseArr.indexOf(this.address) > -1) {
+                            this.isAppliedZ = true
+                        }
+                    }
+                }).catch(error => {
+                    console.log(error)
+                    this.$toasted.show(error, { type: 'error' })
+                })
+        },
         async applyTomoZ () {
             try {
-                this.loading = true
-                const contract = this.TRC21Issuer
-                const txParams = {
-                    from: (await this.getAccount()).toLowerCase(),
-                    value: this.web3.utils.toHex(new BigNumber(this.depositeFee)
-                        .multipliedBy(10 ** 18).toString(10)),
-                    gasPrice: this.web3.utils.toHex(10000000000000),
-                    gas: this.web3.utils.toHex(40000000),
-                    gasLimit: this.web3.utils.toHex(40000000)
+                if (!this.isAppliedZ) {
+                    this.loading = true
+                    const contract = this.TRC21Issuer
+                    const txParams = {
+                        from: (await this.getAccount()).toLowerCase(),
+                        value: this.web3.utils.toHex(new BigNumber(this.depositeFee)
+                            .multipliedBy(10 ** 18).toString(10)),
+                        gasPrice: this.web3.utils.toHex(10000000000000),
+                        gas: this.web3.utils.toHex(40000000),
+                        gasLimit: this.web3.utils.toHex(40000000)
+                    }
+                    const provider = this.NetworkProvider
+                    if (provider === 'ledger' || provider === 'trezor') {
+                        let data = await contract.methods.apply(
+                            this.address
+                        ).encodeABI()
+
+                        const dataTx = {
+                            data,
+                            to: this.config.blockchain.issuerAddress
+                        }
+                        let nonce = await this.web3.eth.getTransactionCount(this.account)
+                        Object.assign(
+                            dataTx,
+                            dataTx,
+                            txParams,
+                            {
+                                nonce: this.web3.utils.toHex(nonce)
+                            }
+                        )
+                        let signature = await this.signTransaction(dataTx)
+                        const txHash = await this.sendSignedTransaction(dataTx, signature)
+                        if (txHash) {
+                            this.transactionHash = txHash
+                            let check = true
+                            while (check) {
+                                const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                                if (receipt) {
+                                    self.loading = false
+                                    check = false
+                                    this.$refs.applyTomoZ.show()
+                                }
+                            }
+                        }
+                    } else {
+                        await contract.methods.apply(this.address).send(txParams)
+                            .on('transactionHash', async (txHash) => {
+                                this.transactionHash = txHash
+                                let check = true
+                                while (check) {
+                                    const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                                    if (receipt) {
+                                        self.loading = false
+                                        check = false
+                                        this.$refs.applyTomoZ.show()
+                                    }
+                                }
+                            })
+                    }
                 }
-                await contract.methods.apply(this.address).send(txParams)
-                    .on('transactionHash', async (txHash) => {
-                        this.transactionHash = txHash
-                        self.loading = false
-                        this.$refs.applyTomoZ.show()
-                    })
             } catch (error) {
                 this.loading = false
                 console.log(error)

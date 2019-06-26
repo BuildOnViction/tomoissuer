@@ -254,7 +254,6 @@
 import { validationMixin } from 'vuelidate'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
-import { required, minValue } from 'vuelidate/lib/validators'
 import store from 'store'
 import moment from 'moment'
 
@@ -304,12 +303,6 @@ export default {
                 { key: 'percentage', label: 'Percentage (%)' }
             ],
             holdersItems: []
-        }
-    },
-    validations: {
-        depositeAmount: {
-            required,
-            minValue: minValue(10)
         }
     },
     computed: {},
@@ -455,28 +448,6 @@ export default {
                 })
             }
         },
-        async applyToken () {
-            try {
-                this.loading = true
-                // const contract = await this.getTRC21IssuerInstance()
-                const contract = this.TRC21Issuer
-                const txParams = {
-                    from: (await this.getAccount()).toLowerCase(),
-                    value: this.web3.utils.toHex(new BigNumber(this.depositeAmount)
-                        .multipliedBy(10 ** 18).toString(10)),
-                    gasPrice: this.web3.utils.toHex(10000000000000),
-                    gas: this.web3.utils.toHex(40000000),
-                    gasLimit: this.web3.utils.toHex(40000000)
-                }
-                const result = await contract.apply(this.address, txParams)
-                this.transactionHash = result.tx
-                this.loading = false
-            } catch (error) {
-                this.loading = false
-                console.log(error)
-                this.$toasted.show(error, { type: 'error' })
-            }
-        },
         checkAppliedZ () {
             const contract = this.TRC21Issuer
             contract.methods.tokens.call()
@@ -491,13 +462,6 @@ export default {
                     console.log(error)
                     this.$toasted.show(error, { type: 'error' })
                 })
-        },
-        validate () {
-            this.$v.$touch()
-
-            if (!this.$v.$invalid) {
-                this.applyToken()
-            }
         }
     }
 }

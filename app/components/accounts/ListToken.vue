@@ -1,25 +1,6 @@
 <template>
     <div
-        v-if="listokenItems.length <= 0"
-        class="container container-medium flex-content-center">
-        <div class="tomo-body-fullw text-center">
-            <p>
-                <b-img
-                    src="/app/assets/images/issuer-not-item.png"
-                    alt="issuer-not-item.png"/>
-            </p>
-            <p class="tmp-mgt-three">
-                It looks like there are no tokens here.<br>
-                Maybe you would like to
-                <b-link
-                    to="/createToken">
-                    issue a new one
-                </b-link>
-            </p>
-        </div>
-    </div>
-    <div
-        v-else
+        v-if="listokenItems.length > 0"
         class="container">
         <h2 class="tmp-title-large">Issue token</h2>
         <div class="tmp-table-one">
@@ -99,6 +80,25 @@
             </b-tab>
         </div>
         <!-- /tmp-table-one -->
+    </div>
+    <div
+        v-else
+        class="container container-medium flex-content-center">
+        <div class="tomo-body-fullw text-center">
+            <p>
+                <b-img
+                    src="/app/assets/images/issuer-not-item.png"
+                    alt="issuer-not-item.png"/>
+            </p>
+            <p class="tmp-mgt-three">
+                It looks like there are no tokens here.<br>
+                Maybe you would like to
+                <b-link
+                    to="/createToken">
+                    issue a new one
+                </b-link>
+            </p>
+        </div>
     </div>
 </template>
 
