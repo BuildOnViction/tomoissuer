@@ -16,9 +16,9 @@
                         type="text"
                         autocomplete="off"
                         placeholder="Token name"/>
-                    <span
+                    <div
                         v-if="$v.tokenName.$dirty && !$v.tokenName.required"
-                        class="text-danger">Required field</span>
+                        class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
                     class="mb-4"
@@ -29,9 +29,9 @@
                         autocomplete="off"
                         type="text"
                         placeholder="Token symbol"/>
-                    <span
+                    <div
                         v-if="$v.tokenSymbol.$dirty && !$v.tokenSymbol.required"
-                        class="text-danger">Required field</span>
+                        class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
                     class="mb-4"
@@ -41,9 +41,9 @@
                         autocomplete="off"
                         type="number"
                         placeholder="Token supply"/>
-                    <span
+                    <div
                         v-if="$v.totalSupply.$dirty && !$v.totalSupply.required"
-                        class="text-danger">Required field</span>
+                        class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
                     class="mb-4"
@@ -54,12 +54,12 @@
                         autocomplete="off"
                         type="text"
                         placeholder="Decimals"/>
-                    <span
+                    <div
                         v-if="$v.decimals.$dirty && !$v.decimals.required"
-                        class="text-danger">Required field</span>
-                    <span
+                        class="text-danger pt-2">Required field</div>
+                    <div
                         v-if="$v.decimals.$dirty && (!$v.decimals.minValue || !$v.decimals.maxValue)"
-                        class="text-danger">Please use the number from 0 to 18</span>
+                        class="text-danger pt-2">Please use the number from 0 to 18</div>
                 </b-form-group>
                 <b-form-group
                     class="flex-box mb-4"

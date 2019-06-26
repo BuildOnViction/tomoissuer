@@ -17,9 +17,9 @@
                         :placeholder="`How much fee for a transaction (unit: ${token.symbol})`"
                         v-model="newFee"
                         type="text"/>
-                    <span
+                    <div
                         v-if="$v.newFee.$dirty && !$v.newFee.required"
-                        class="text-danger">Required field</span>
+                        class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
