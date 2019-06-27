@@ -294,6 +294,12 @@ Vue.prototype.detectNetwork = async function (provider) {
                 break
             case 'trezor':
             case 'ledger':
+                if (provider === 'ledger') {
+                    if (!Vue.prototype.appEth) {
+                        let transport = await Transport.create()
+                        Vue.prototype.appEth = await new Eth(transport)
+                    }
+                }
                 wjs = new Web3(new Web3.providers.HttpProvider(chainConfig.rpc))
                 break
             default:
@@ -347,25 +353,29 @@ Vue.prototype.signTransaction = async function (txParams) {
  */
 Vue.prototype.sendSignedTransaction = function (txParams, signature) {
     return new Promise((resolve, reject) => {
-        // "hexify" the keys
-        Object.keys(signature).map((key, _) => {
-            if (signature[key].startsWith('0x')) {
-                return signature[key]
-            } else signature[key] = '0x' + signature[key]
-        })
-        let txObj = Object.assign({}, txParams, signature)
-        let tx = new Transaction(txObj)
-        let serializedTx = '0x' + tx.serialize().toString('hex')
-        // web3 v0.2, method name is sendRawTransaction
-        // You are using web3 v1.0. The method was renamed to sendSignedTransaction.
-        Vue.prototype.web3.eth.sendSignedTransaction(
-            serializedTx
-        ).on('transactionHash', (txHash) => {
-            resolve(txHash)
-        })
-        // if (!rs.tx && rs.transactionHash) {
-        //     rs.tx = rs.transactionHash
-        // }
+        try {
+            // "hexify" the keys
+            Object.keys(signature).map((key, _) => {
+                if (signature[key].startsWith('0x')) {
+                    return signature[key]
+                } else signature[key] = '0x' + signature[key]
+            })
+            let txObj = Object.assign({}, txParams, signature)
+            let tx = new Transaction(txObj)
+            let serializedTx = '0x' + tx.serialize().toString('hex')
+            // web3 v0.2, method name is sendRawTransaction
+            // You are using web3 v1.0. The method was renamed to sendSignedTransaction.
+            Vue.prototype.web3.eth.sendSignedTransaction(
+                serializedTx
+            ).on('transactionHash', (txHash) => {
+                resolve(txHash)
+            }).catch(error => reject(error))
+            // if (!rs.tx && rs.transactionHash) {
+            //     rs.tx = rs.transactionHash
+            // }
+        } catch (error) {
+            reject(error)
+        }
     })
 }
 

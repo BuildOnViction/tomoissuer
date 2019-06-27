@@ -87,8 +87,8 @@ export default {
                     value: this.web3.utils.toHex(new BigNumber(this.depositeAmount)
                         .multipliedBy(10 ** 18).toString(10)),
                     gasPrice: this.web3.utils.toHex(10000000000000),
-                    gas: this.web3.utils.toHex(40000000),
-                    gasLimit: this.web3.utils.toHex(40000000)
+                    gas: this.web3.utils.toHex(20000000),
+                    gasLimit: this.web3.utils.toHex(20000000)
                 }
                 const result = await contract.methods.apply(this.address).send(txParams)
                 console.log(result)
@@ -110,8 +110,8 @@ export default {
                         from: (await this.getAccount()).toLowerCase(),
                         value: this.web3.utils.toHex(),
                         gasPrice: this.web3.utils.toHex(10000000000000),
-                        gas: this.web3.utils.toHex(40000000),
-                        gasLimit: this.web3.utils.toHex(40000000)
+                        gas: this.web3.utils.toHex(20000000),
+                        gasLimit: this.web3.utils.toHex(20000000)
                     }
 
                     const result = await tomoXContract.methods.apply(this.address).send(txParams)

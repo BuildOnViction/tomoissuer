@@ -115,7 +115,8 @@ export default {
             provider: this.NetworkProvider,
             loading: false,
             config: {},
-            token: {}
+            token: {},
+            gasPrice: ''
         }
     },
     async updated () {},
@@ -128,8 +129,16 @@ export default {
     created: async function () {
         const self = this
         self.account = store.get('address') || await self.getAccount()
+
         self.appConfig().then(config => {
             self.config = config
+        }).catch(error => {
+            console.log(error)
+            self.$toasted.show(error, { type: 'error' })
+        })
+
+        self.web3.eth.getGasPrice().then(result => {
+            self.gasPrice = result
         }).catch(error => {
             console.log(error)
             self.$toasted.show(error, { type: 'error' })
@@ -145,11 +154,12 @@ export default {
             try {
                 if (this.donationAmount) {
                     this.loading = true
+                    const chainConfig = this.config.blockchain
                     const txParams = {
                         from: this.account,
-                        gasPrice: this.web3.utils.toHex(10000000000000),
-                        gas: this.web3.utils.toHex(40000000),
-                        gasLimit: this.web3.utils.toHex(40000000),
+                        gasPrice: this.web3.utils.toHex(this.gasPrice),
+                        gas: this.web3.utils.toHex(chainConfig.gas),
+                        gasLimit: this.web3.utils.toHex(chainConfig.gas),
                         value: this.web3.utils.toHex(
                             new BigNumber(this.donationAmount).multipliedBy(10 ** 18)).toString(10)
                     }
@@ -163,7 +173,7 @@ export default {
 
                         const dataTx = {
                             data,
-                            to: this.config.blockchain.issuerAddress
+                            to: chainConfig.issuerAddress
                         }
                         let nonce = await this.web3.eth.getTransactionCount(this.account)
                         Object.assign(
