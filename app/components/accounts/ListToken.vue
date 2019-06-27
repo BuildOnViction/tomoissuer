@@ -8,13 +8,22 @@
                 title="Transfer"
                 active>
                 <template>
-                    <div class="tomo_main_table colum-8">
+                    <div
+                        class="tomo_main_table colum-8">
                         <b-table
                             id="transfer_table"
                             :items="listokenItems"
                             :fields="listokenFields"
                             :per-page="listokenPerPage"
+                            :busy="loading"
                             stacked="lg">
+                            <template
+                                slot="table-busy">
+                                <div class="text-center text-danger my-2">
+                                    <b-spinner class="align-middle" />
+                                    <strong>Loading...</strong>
+                                </div>
+                            </template>
                             <template
                                 slot="token"
                                 slot-scope="data">
@@ -146,6 +155,7 @@ export default {
         async getTokens () {
             const self = this
             try {
+                self.loading = true
                 const params = {
                     limit: self.listokenPerPage,
                     page: self.listokenCurrentPage
@@ -166,7 +176,9 @@ export default {
                 })
                 self.listokenItems = items
                 self.listokenRows = data.total
+                self.loading = false
             } catch (error) {
+                self.loading = false
                 console.log(error)
                 self.$toasted.show(error, { type: 'error' })
             }
