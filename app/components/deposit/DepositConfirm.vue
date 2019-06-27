@@ -191,7 +191,6 @@ export default {
                             }
                         )
                         let signature = await this.signTransaction(dataTx)
-                        console.log(dataTx)
                         const txHash = await this.sendSignedTransaction(dataTx, signature)
                         if (txHash) {
                             this.transactionHash = txHash

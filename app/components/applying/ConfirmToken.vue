@@ -269,10 +269,6 @@ export default {
                             nonce: web3.utils.toHex(nonce)
                         }
                     )
-                    if (this.NetworkProvider === 'ledger') {
-                        // delete data.from
-                    }
-                    console.log(data)
 
                     const signature = await self.signTransaction(data)
                     const txHash = await self.sendSignedTransaction(data, signature)
