@@ -1,9 +1,8 @@
 <template>
-    <div class="container">
+    <div
+        class="container">
         <div
-            v-if="!address"
-            :class="'main-page-login'
-            + (loading ? ' tomo-loading' : '')">
+            class="main-page-login">
             <h2 class="tmp-title-large">Unlock your wallet</h2>
             <p>Start by choosing the wallet you would like to unlock</p>
             <div class="content-page">
@@ -225,6 +224,8 @@
                 </div>
             </div>
         </b-modal>
+        <div
+            :class="(loading ? 'tomo-loading' : '')"/>
     </div>
 </template>
 
@@ -302,6 +303,7 @@ export default {
         async login () {
             const self = this
             try {
+                self.loading = true
                 let wjs = false
                 let walletProvider
                 let offset
@@ -367,7 +369,9 @@ export default {
                             type : 'error'
                         })
                 }
+                self.loading = false
             } catch (error) {
+                self.loading = false
                 self.$toasted.show(
                     error, { type : 'error' }
                 )

@@ -88,6 +88,8 @@
                 </div>
             </b-modal>
         </div>
+        <div
+            :class="(loading ? 'tomo-loading' : '')"/>
     </div>
 </template>
 
@@ -110,7 +112,8 @@ export default {
             config: {},
             transactionHash: '',
             isAppliedZ: false,
-            gasPrice: ''
+            gasPrice: '',
+            loading: false
         }
     },
     async updated () {},
@@ -215,6 +218,11 @@ export default {
                                         this.$refs.applyTomoZ.show()
                                     }
                                 }
+                            })
+                            .catch(error => {
+                                this.loading = false
+                                console.log(error)
+                                this.$toasted.show(error, { type: 'error' })
                             })
                     }
                 }

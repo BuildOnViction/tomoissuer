@@ -74,6 +74,8 @@
                 </div>
             </b-modal>
         </div>
+        <div
+            :class="(loading ? 'tomo-loading' : '')"/>
     </div>
 </template>
 
@@ -206,9 +208,15 @@ export default {
                                         }
                                     }
                                 })
+                                .catch(error => {
+                                    console.log(error)
+                                    this.loading = false
+                                    this.$toasted.show(error, { type: 'error' })
+                                })
                         }
                     }
                 }
+                self.loading = false
             } catch (error) {
                 console.log(error)
                 this.loading = false

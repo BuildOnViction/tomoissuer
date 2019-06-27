@@ -96,6 +96,8 @@
                 </div>
             </b-modal>
         </div>
+        <div
+            :class="(loading ? 'tomo-loading' : '')"/>
     </div>
 </template>
 
@@ -219,6 +221,11 @@ export default {
                                         this.$refs.poolingFeeModal.show()
                                     }
                                 }
+                            })
+                            .catch(error => {
+                                console.log(error)
+                                this.loading = false
+                                this.$toasted.show(error, { type: 'error' })
                             })
                     }
                 }
