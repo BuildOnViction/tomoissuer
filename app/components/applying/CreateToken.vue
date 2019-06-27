@@ -52,7 +52,7 @@
                     <b-form-input
                         v-model="decimals"
                         autocomplete="off"
-                        type="text"
+                        type="number"
                         placeholder="Decimals"/>
                     <div
                         v-if="$v.decimals.$dirty && !$v.decimals.required"

@@ -74,6 +74,8 @@
                 </div>
             </b-modal>
         </div>
+        <div
+            :class="(loading ? 'tomo-loading' : '')"/>
     </div>
 </template>
 
@@ -88,11 +90,12 @@ export default {
             address: this.$route.params.address.toLowerCase(),
             loading: false,
             account: '',
-            newFee: this.$route.params.newFee || '---',
-            currentFee: this.$route.params.currentFee || '---',
+            newFee: this.$route.params.newFee,
+            currentFee: this.$route.params.currentFee,
             token: {},
             transactionHash: '123',
-            config: {}
+            config: {},
+            gasPrice: ''
         }
     },
     async updated () {},
@@ -106,6 +109,12 @@ export default {
         this.account = (store.get('address') || await this.getAccount()).toLowerCase()
         this.appConfig().then(result => {
             this.config = result
+        }).catch(error => {
+            console.log(error)
+            this.$toasted.show(error, { type: 'error' })
+        })
+        this.web3.eth.getGasPrice().then(result => {
+            this.gasPrice = result
         }).catch(error => {
             console.log(error)
             this.$toasted.show(error, { type: 'error' })
@@ -129,13 +138,15 @@ export default {
         },
         async changeTXFee () {
             try {
-                if (this.currentFee && this.newFee) {
+                if (this.newFee) {
                     this.loading = true
+                    const chainConfig = this.config.blockchain
                     const txParams = {
                         from: this.account,
-                        gasPrice: this.web3.utils.toHex(10000000000000),
-                        gas: this.web3.utils.toHex(40000000),
-                        gasLimit: this.web3.utils.toHex(40000000)
+                        gasPrice: this.web3.utils.toHex(this.gasPrice),
+                        gas: this.web3.utils.toHex(chainConfig.gas),
+                        gasLimit: this.web3.utils.toHex(chainConfig.gas),
+                        chainId: chainConfig.networkId
                     }
                     const { data } = await axios.get('/api/account/' + this.address)
                     if (!data.contract) {
@@ -148,7 +159,8 @@ export default {
                         )
                         const provider = this.NetworkProvider
                         if (provider === 'ledger' || provider === 'trezor') {
-                            txParams.value = '0x'
+                            txParams.value = this.web3.utils.toHex(0)
+
                             let data = await tokenContract.methods.setMinFee(
                                 (new BigNumber(this.newFee).multipliedBy(10 ** this.token.decimals)).toString(10)
                             ).encodeABI()
@@ -196,9 +208,15 @@ export default {
                                         }
                                     }
                                 })
+                                .catch(error => {
+                                    console.log(error)
+                                    this.loading = false
+                                    this.$toasted.show(error, { type: 'error' })
+                                })
                         }
                     }
                 }
+                self.loading = false
             } catch (error) {
                 console.log(error)
                 this.loading = false

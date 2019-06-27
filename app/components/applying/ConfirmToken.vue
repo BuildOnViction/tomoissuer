@@ -127,14 +127,15 @@ export default {
             decimals: this.$route.params.decimals,
             minFee: 0,
             totalSupply: this.$route.params.totalSupply,
-            type: this.$route.params.type,
+            type: this.$route.params.type || '',
             sourceCode: 'Generating Contract...',
             transactionHash: '',
             contractAddress: '',
             account: '',
             provider: this.NetworkProvider,
             loading: false,
-            config: {}
+            config: {},
+            gasPrice: ''
         }
     },
     async updated () {},
@@ -146,8 +147,21 @@ export default {
     },
     created: async function () {
         const self = this
+
+        self.web3.eth.getGasPrice().then(result => {
+            self.gasPrice = result
+        }).catch(error => {
+            console.log(error)
+            self.$toasted.show(error, { type: 'error' })
+        })
+
+        self.appConfig().then(result => {
+            self.config = result
+        }).catch(error => {
+            console.log(error)
+            self.$toasted.show(error, { type: 'error' })
+        })
         self.account = store.get('address') || await self.getAccount()
-        this.config = await self.appConfig()
         await self.createContract()
     },
     methods: {
@@ -180,9 +194,9 @@ export default {
         async deploy () {
             const self = this
             try {
+                const chainConfig = this.config.blockchain
                 const web3 = self.web3
                 self.loading = true
-                self.account = await self.getAccount()
                 const compiledContract = await axios.post('/api/token/compileContract', {
                     name: self.tokenName,
                     sourceCode: self.sourceCode
@@ -190,12 +204,7 @@ export default {
 
                 const contract = new web3.eth.Contract(
                     compiledContract.data.abi, null, { data: '0x' + compiledContract.data.bytecode })
-                if (self.provider === 'ledger') {
-                    const a = await self.appEth.getAddress(
-                        store.get('hdDerivationPath')
-                    )
-                    self.account = a.address
-                }
+
                 // deployment
                 switch (self.provider) {
                 case 'custom':
@@ -209,9 +218,9 @@ export default {
                             (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
                         ]
                     }).send({
-                        from: self.account.toLowerCase(),
-                        gas: web3.utils.toHex(40000000),
-                        gasPrice: web3.utils.toHex(10000000000000)
+                        from: self.account,
+                        gas: web3.utils.toHex(chainConfig.gas),
+                        gasPrice: web3.utils.toHex(self.gasPrice)
                     })
                         .on('transactionHash', async (txHash) => {
                             self.transactionHash = txHash
@@ -229,13 +238,13 @@ export default {
                     break
                 case 'ledger':
                 case 'trezor':
-                    const deploy = await contract.deploy({
+                    let deploy = await contract.deploy({
                         arguments: [
                             self.tokenName,
                             self.tokenSymbol,
                             self.decimals,
                             (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
-                            self.minFee
+                            (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
                         ]
                     }).encodeABI()
 
@@ -245,13 +254,12 @@ export default {
                     }
 
                     let nonce = await web3.eth.getTransactionCount(self.account)
-                    const chainConfig = this.config.blockchain
                     const dataTx = {
                         from: self.account,
-                        gas: web3.utils.toHex(40000000),
-                        gasPrice: web3.utils.toHex(10000000000000),
-                        gasLimit: web3.utils.toHex(40000000),
-                        value: '0x',
+                        gas: web3.utils.toHex(chainConfig.gas),
+                        gasPrice: web3.utils.toHex(self.gasPrice),
+                        gasLimit: web3.utils.toHex(chainConfig.gas),
+                        value: web3.utils.toHex(0),
                         chainId: chainConfig.networkId
                     }
                     Object.assign(
@@ -263,7 +271,7 @@ export default {
                     )
 
                     const signature = await self.signTransaction(data)
-                    const txHash = await self.sendSignedTransaction(dataTx, signature)
+                    const txHash = await self.sendSignedTransaction(data, signature)
                     if (txHash) {
                         self.transactionHash = txHash
                         let check = true
@@ -281,10 +289,6 @@ export default {
                 default:
                     break
                 }
-                // if (self.transactionHash && self.contractAddress) {
-                //     self.$toasted.show('Successfull')
-                //     self.loading = false
-                // }
             } catch (error) {
                 self.loading = false
                 console.log(error)

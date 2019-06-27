@@ -153,7 +153,7 @@ export default {
                 const query = self.serializeQuery(params)
                 const items = []
                 const { data } = await axios.get(`/api/account/${self.address}/listTokens?${query}`)
-                data.items.map(i => {
+                data.items.map(async i => {
                     items.push({
                         token: `${i.symbol}(${i.name})`,
                         hash: i.hash,
@@ -171,10 +171,10 @@ export default {
                 self.$toasted.show(error, { type: 'error' })
             }
         },
-        pageChange (page) {
+        async pageChange (page) {
             this.$store.state.listokenCurrentPage = page
             this.listokenCurrentPage = page
-            this.getTokens()
+            await this.getTokens()
         }
     }
 }

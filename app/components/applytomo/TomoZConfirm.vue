@@ -88,6 +88,8 @@
                 </div>
             </b-modal>
         </div>
+        <div
+            :class="(loading ? 'tomo-loading' : '')"/>
     </div>
 </template>
 
@@ -109,7 +111,9 @@ export default {
             tokenTxFee: this.$route.params.tokenTxFee,
             config: {},
             transactionHash: '',
-            isAppliedZ: false
+            isAppliedZ: false,
+            gasPrice: '',
+            loading: false
         }
     },
     async updated () {},
@@ -123,8 +127,16 @@ export default {
         const self = this
         self.account = store.get('address') || await self.getAccount()
         self.checkAppliedZ()
+
         self.appConfig().then(result => {
             self.config = result
+        }).catch(error => {
+            console.log(error)
+            self.$toasted.show(error, { type: 'error' })
+        })
+
+        self.web3.eth.getGasPrice().then(result => {
+            self.gasPrice = result
         }).catch(error => {
             console.log(error)
             self.$toasted.show(error, { type: 'error' })
@@ -150,14 +162,15 @@ export default {
             try {
                 if (!this.isAppliedZ) {
                     this.loading = true
+                    const chainConfig = this.config
                     const contract = this.TRC21Issuer
                     const txParams = {
                         from: (await this.getAccount()).toLowerCase(),
                         value: this.web3.utils.toHex(new BigNumber(this.depositeFee)
                             .multipliedBy(10 ** 18).toString(10)),
-                        gasPrice: this.web3.utils.toHex(10000000000000),
-                        gas: this.web3.utils.toHex(40000000),
-                        gasLimit: this.web3.utils.toHex(40000000)
+                        gasPrice: this.web3.utils.toHex(chainConfig.gas),
+                        gas: this.web3.utils.toHex(this.gasPrice),
+                        gasLimit: this.web3.utils.toHex(this.gasPrice)
                     }
                     const provider = this.NetworkProvider
                     if (provider === 'ledger' || provider === 'trezor') {
@@ -167,7 +180,7 @@ export default {
 
                         const dataTx = {
                             data,
-                            to: this.config.blockchain.issuerAddress
+                            to: chainConfig.issuerAddress
                         }
                         let nonce = await this.web3.eth.getTransactionCount(this.account)
                         Object.assign(
@@ -205,6 +218,11 @@ export default {
                                         this.$refs.applyTomoZ.show()
                                     }
                                 }
+                            })
+                            .catch(error => {
+                                this.loading = false
+                                console.log(error)
+                                this.$toasted.show(error, { type: 'error' })
                             })
                     }
                 }

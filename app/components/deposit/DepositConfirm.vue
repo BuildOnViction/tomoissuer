@@ -96,6 +96,8 @@
                 </div>
             </b-modal>
         </div>
+        <div
+            :class="(loading ? 'tomo-loading' : '')"/>
     </div>
 </template>
 
@@ -113,7 +115,8 @@ export default {
             depositFee: this.$route.params.depositFee,
             token: {},
             config: {},
-            loading: false
+            loading: false,
+            gasPrice: ''
         }
     },
     async updated () {},
@@ -125,8 +128,16 @@ export default {
     },
     created: async function () {
         this.account = store.get('address') || await this.getAccount()
+
         this.appConfig().then(config => {
             this.config = config
+        }).catch(error => {
+            console.log(error)
+            this.$toasted.show(error, { type: 'error' })
+        })
+
+        this.web3.eth.getGasPrice().then(result => {
+            this.gasPrice = result
         }).catch(error => {
             console.log(error)
             this.$toasted.show(error, { type: 'error' })
@@ -152,11 +163,12 @@ export default {
             try {
                 if (this.depositFee) {
                     this.loading = true
+                    const chainConfig = this.config.blockchain
                     const txParams = {
                         from: this.account,
-                        gasPrice: this.web3.utils.toHex(10000000000000),
-                        gas: this.web3.utils.toHex(40000000),
-                        gasLimit: this.web3.utils.toHex(40000000),
+                        gasPrice: this.web3.utils.toHex(this.gasPrice),
+                        gas: this.web3.utils.toHex(chainConfig.gas),
+                        gasLimit: this.web3.utils.toHex(chainConfig.gas),
                         value: this.web3.utils.toHex(new BigNumber(this.depositFee).multipliedBy(10 ** 18)).toString(10)
                     }
 
@@ -169,7 +181,7 @@ export default {
 
                         const dataTx = {
                             data,
-                            to: this.config.blockchain.issuerAddress
+                            to: chainConfig.issuerAddress
                         }
                         let nonce = await this.web3.eth.getTransactionCount(this.account)
                         Object.assign(
@@ -209,6 +221,11 @@ export default {
                                         this.$refs.poolingFeeModal.show()
                                     }
                                 }
+                            })
+                            .catch(error => {
+                                console.log(error)
+                                this.loading = false
+                                this.$toasted.show(error, { type: 'error' })
                             })
                     }
                 }
