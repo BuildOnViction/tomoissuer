@@ -1,6 +1,6 @@
 <template>
     <div
-        v-if="listokenItems.length > 0"
+        v-if="listokenItems"
         class="container">
         <h2 class="tmp-title-large">Issue token</h2>
         <div class="tmp-table-one">
@@ -20,7 +20,8 @@
                             <template
                                 slot="table-busy">
                                 <div class="text-center text-danger my-2">
-                                    <b-spinner class="align-middle" />
+                                    <b-spinner
+                                        class="align-middle" />
                                     <strong>Loading...</strong>
                                 </div>
                             </template>
@@ -59,8 +60,7 @@
                                 {{ data.item.holders || '---' }}
                             </template>
                             <template
-                                slot="transferToken"
-                                slot-scope="data">
+                                slot="transferToken">
                                 <b-link
                                     :to="`/transferToken`">
                                     Transfer Token
@@ -163,19 +163,21 @@ export default {
                 const query = self.serializeQuery(params)
                 const items = []
                 const { data } = await axios.get(`/api/account/${self.address}/listTokens?${query}`)
-                data.items.map(async i => {
-                    items.push({
-                        token: `${i.symbol}(${i.name})`,
-                        hash: i.hash,
-                        price: '---',
-                        volume: '---',
-                        totalSupply: i.totalSupplyNumber,
-                        overBalance: '---',
-                        holders: '---'
+                if (data.items.length > 0) {
+                    data.items.map(async i => {
+                        items.push({
+                            token: `${i.symbol}(${i.name})`,
+                            hash: i.hash,
+                            price: '---',
+                            volume: '---',
+                            totalSupply: i.totalSupplyNumber,
+                            overBalance: '---',
+                            holders: '---'
+                        })
                     })
-                })
-                self.listokenItems = items
-                self.listokenRows = data.total
+                    self.listokenItems = items
+                    self.listokenRows = data.total
+                } else { self.listokenItems = null }
                 self.loading = false
             } catch (error) {
                 self.loading = false

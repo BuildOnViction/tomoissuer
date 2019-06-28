@@ -38,11 +38,6 @@
                         <td>Amount of donation</td>
                         <td>{{ formatNumber(depositeFee) }} TOMO</td>
                     </tr>
-                    <tr
-                        v-if="tokenTxFee">
-                        <td>Transaction fee</td>
-                        <td>{{ tokenTxFee || 0 }} {{ token.symbol }}/transaction</td>
-                    </tr>
                 </table>
             </div>
             <div class="btn-box">
@@ -58,6 +53,7 @@
                 </b-button>
             </div>
             <b-modal
+                id="applyTomoZ"
                 ref="applyTomoZ"
                 size="md"
                 hide-header
@@ -108,7 +104,6 @@ export default {
             account: '',
             token: this.$route.params.token,
             depositeFee: this.$route.params.depositFee,
-            tokenTxFee: this.$route.params.tokenTxFee,
             config: {},
             transactionHash: '',
             isAppliedZ: false,
@@ -201,6 +196,7 @@ export default {
                                 if (receipt) {
                                     self.loading = false
                                     check = false
+                                    self.isAppliedZ = true
                                     this.$refs.applyTomoZ.show()
                                 }
                             }
@@ -215,6 +211,7 @@ export default {
                                     if (receipt) {
                                         self.loading = false
                                         check = false
+                                        self.isAppliedZ = true
                                         this.$refs.applyTomoZ.show()
                                     }
                                 }
