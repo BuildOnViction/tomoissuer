@@ -26,7 +26,6 @@
                         <ul>
                             <li>
                                 <b-link
-                                    v-if="!isAppliedZ"
                                     :to="'/tomozcondition/' + address"
                                     class="tmp-btn-violet">
                                     <i class="tomoissuer-icon-tomoz"/>
@@ -149,13 +148,21 @@
                         <template>
                             <p>A total of {{ formatNumber(tokenTransfers) }} transactions found
                             (Showing the last 100K records)</p>
-                            <div class="tomo_main_table colum-5">
+                            <div :class="'tomo_main_table' + (loading ? '' : ' colum-5')">
                                 <b-table
                                     id="transfer_table"
                                     :per-page="tranferPerPage"
                                     :fields="tranferFields"
                                     :items="tranferItems"
+                                    :busy="loading"
                                     stacked="lg">
+                                    <template
+                                        slot="table-busy">
+                                        <div class="text-center text-danger my-2">
+                                            <b-spinner class="align-middle" />
+                                            <strong>Loading...</strong>
+                                        </div>
+                                    </template>
                                     <template
                                         slot="txn_hash"
                                         slot-scope="data">
@@ -213,13 +220,21 @@
                             <p>A total of {{ formatNumber(tokenHolders) }}
                                 {{ tokenHolders > 1 ? 'holders' : 'holder' }} found
                                 (Showing the last 100K records)</p>
-                            <div class="tomo_main_table colum-4">
+                            <div :class="'tomo_main_table' + (loading ? '' : 'colum-4')">
                                 <b-table
                                     id="holders_table"
                                     :per-page="holdersPerPage"
                                     :fields="holdersFields"
                                     :items="holdersItems"
+                                    :busy="loading"
                                     stacked="lg">
+                                    <template
+                                        slot="table-busy">
+                                        <div class="text-center text-danger my-2">
+                                            <b-spinner class="align-middle" />
+                                            <strong>Loading...</strong>
+                                        </div>
+                                    </template>
                                     <template
                                         slot="address"
                                         slot-scope="data">
@@ -350,6 +365,7 @@ export default {
         },
         getTokenTransfer () {
             const self = this
+            self.loading = true
             const isTrc21 = self.token.type
             axios.get(`/api/token/txes/${isTrc21}/${this.address}`).then(response => {
                 const data = response.data
@@ -368,14 +384,17 @@ export default {
                     self.tranferItems = items
                     self.tranferRows = data.total
                     self.tokenTransfers = response.data.total
+                    self.loading = false
                 }
             }).catch(error => {
+                self.loading = false
                 console.log(error)
-                this.$toasted.show(error, { type: 'error' })
+                self.$toasted.show(error, { type: 'error' })
             })
         },
         getTokenHolders () {
             const self = this
+            self.loading = true
             const params = {
                 page: self.holdersCurrentPage,
                 limit: self.holdersPerPage
@@ -397,8 +416,10 @@ export default {
                     self.holdersItems = items
                     self.holdersRows = data.total
                     self.tokenHolders = response.data.total
+                    self.loading = false
                 }
             }).catch(error => {
+                self.loading = false
                 console.log(error)
                 this.$toasted.show(error, { type: 'error' })
             })

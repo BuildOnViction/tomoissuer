@@ -29,17 +29,6 @@
                         v-else-if="depositingError"
                         class="text-danger pt-2">Not enough TOMO</div>
                 </b-form-group>
-                <b-form-group
-                    class="mb-4"
-                    label="Set transaction fee"
-                    label-for="tokenTxFee"
-                    description="This setting could be modified later">
-                    <span class="txt-fixed">{{ token.symbol }}</span>
-                    <b-form-input
-                        v-model="tokenTxFee"
-                        :placeholder="`How much fee for a transaction (unit: ${token.symbol})...`"
-                        type="text"/>
-                </b-form-group>
                 <div class="btn-box">
                     <b-button
                         class="tmp-btn-boder-violet btn-min"
@@ -76,7 +65,6 @@ export default {
             sourceCode: '',
             account: '',
             depositFee: '',
-            tokenTxFee: '',
             balance: '',
             depositingError: ''
         }
@@ -143,8 +131,7 @@ export default {
                 params: {
                     address: this.address,
                     token: this.token,
-                    depositFee: this.depositFee,
-                    tokenTxFee: this.tokenTxFee
+                    depositFee: this.depositFee
                 }
             })
         }
