@@ -26,6 +26,7 @@
                         <ul>
                             <li>
                                 <b-link
+                                    v-if="!isAppliedZ"
                                     :to="'/tomozcondition/' + address"
                                     class="tmp-btn-violet">
                                     <i class="tomoissuer-icon-tomoz"/>
