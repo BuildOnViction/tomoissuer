@@ -56,8 +56,8 @@ router.get('/:account/listTokens', [
     try {
         const account = (req.params.account || '').toLowerCase()
         const params = {
-            limit: req.query.limit,
-            page: req.query.page
+            limit: req.query.limit || 1,
+            page: req.query.page || 1
         }
         const query = serializeQuery(params)
         const { data } = await axios.get(

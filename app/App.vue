@@ -85,7 +85,11 @@
                                     <li><a href="#">Need help?</a></li>
                                     <li><a href="#">Privacy Policy</a></li>
                                     <li><a href="#">Terms of Service</a></li>
-                                    <li><a href="#">API Documentation</a></li>
+                                    <li>
+                                        <a
+                                            href="/api-docs"
+                                            target="_blank">API Documentation</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
