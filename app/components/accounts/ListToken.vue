@@ -50,9 +50,9 @@
                                 {{ data.item.volume || '---' }}
                             </template>
                             <template
-                                slot="overBalance"
+                                slot="ownerBalance"
                                 slot-scope="data">
-                                {{ data.item.overBalance || '---' }}
+                                {{ data.item.ownerBalance || '---' }}
                             </template>
                             <template
                                 slot="holders"
@@ -70,6 +70,7 @@
                                 slot="applytomoz"
                                 slot-scope="data">
                                 <a
+                                    v-if="!data.value"
                                     :href="`/tomozcondition/${data.item.hash}`">
                                     Apply TomoZ
                                 </a>
@@ -114,6 +115,7 @@
 <script>
 import axios from 'axios'
 import store from 'store'
+import BigNumber from 'bignumber.js'
 export default {
     name: 'App',
     components: { },
@@ -127,7 +129,7 @@ export default {
                 { key: 'price', label: 'Price' },
                 { key: 'volume', label: 'Volume 24h' },
                 { key: 'totalSupply', label: 'Total supply' },
-                { key: 'overBalance', label: 'Over balance' },
+                { key: 'ownerBalance', label: 'Owner balance' },
                 { key: 'holders', label: 'Holders' },
                 { key: 'transferToken', label: '', variant: 'sp-text-center' },
                 { key: 'applytomoz', label: '', variant: 'sp-text-center' }
@@ -137,7 +139,9 @@ export default {
             sortBy: 'totalSupplyNumber',
             sortDesc: true,
             tokens: [],
-            loading: false
+            loading: false,
+            appliedList: [],
+            account: ''
         }
     },
     async updated () {
@@ -149,6 +153,7 @@ export default {
         } else next()
     },
     created: async function () {
+        this.account = store.get('address') || await this.getAccount()
         await this.getTokens()
     },
     methods: {
@@ -162,23 +167,26 @@ export default {
                 }
                 const query = self.serializeQuery(params)
                 const items = []
+                let promises = this.checkAppliedZ()
                 const { data } = await axios.get(`/api/account/${self.address}/listTokens?${query}`)
+                self.appliedList = await promises
                 if (data.items.length > 0) {
-                    data.items.map(async i => {
+                    await Promise.all(data.items.map(async i => {
                         items.push({
                             token: `${i.symbol}(${i.name})`,
                             hash: i.hash,
                             price: '---',
                             volume: '---',
                             totalSupply: i.totalSupplyNumber,
-                            overBalance: '---',
-                            holders: '---'
+                            ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
+                            holders: '---',
+                            applytomoz: (self.appliedList.indexOf(i.hash) > -1)
                         })
-                    })
+                    }))
                     self.listokenItems = items
                     self.listokenRows = data.total
+                    self.loading = false
                 } else { self.listokenItems = null }
-                self.loading = false
             } catch (error) {
                 self.loading = false
                 console.log(error)
@@ -189,6 +197,26 @@ export default {
             this.$store.state.listokenCurrentPage = page
             this.listokenCurrentPage = page
             await this.getTokens()
+        },
+        async checkAppliedZ () {
+            const contract = this.TRC21Issuer
+            const result = await contract.methods.tokens.call()
+            if (result && result.length > 0) {
+                const lowerCaseArr = result.map(m => m.toLowerCase())
+                return lowerCaseArr
+            } else return null
+        },
+        async getOwnerBalance (address, decimals) {
+            const web3 = this.web3
+            if (this.account && web3) {
+                // 0x70a08231 is balanceOf(address) function code
+                let data = '0x70a08231' +
+                    '000000000000000000000000' +
+                    this.account.substr(2) // chop off the 0x
+                const result = await web3.eth.call({ to: address, data: data })
+                let balance = new BigNumber(web3.utils.hexToNumberString(result))
+                return balance.div(10 ** decimals).toNumber()
+            }
         }
     }
 }
