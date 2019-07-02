@@ -10,8 +10,6 @@ contract TOMOXListing {
         bool isActive;
     }
 
-    constructor () public { }
-
     modifier onlyValidApplyNewToken(address token){
         require(token != address(0));
         require(tokensState[token].isActive != true);
