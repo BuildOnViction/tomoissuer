@@ -10,7 +10,9 @@ module.exports = function(deployer) {
         return deployer.deploy(MyTRC21, 'MyTRC21',
             'MyTRC21', 18, (new BigNumber(10000000).multipliedBy(1e+18)).toString(10),
             (new BigNumber(1).multipliedBy(1e+18)).toString(10)).then(() => {
-                return deployer.deploy(TOMOXListing)
+                return deployer.deploy(TOMOXListing).then(() => {
+                    return true
+                })
             })
     })
 };
