@@ -21,8 +21,8 @@
                     </b-button>
                     <b-button
                         class="tmp-btn-boder-blue"
-                        @click="redirectTo('donate')">
-                        Donate Txn fee
+                        @click="redirectTo('donateTxFee')">
+                        Donate TRC-21 fee
                     </b-button>
                 </div>
                 <div class="link-login">
