@@ -84,7 +84,7 @@
                                             <p class="common_txt_ellipsis text-blue">
                                                 <a
                                                     :title="token.hash"
-                                                    :href="config.tomoscanUrl + '/txs/' + address"
+                                                    :href="config.tomoscanUrl + '/address/' + address"
                                                     target="_blank">
                                                     {{ token.hash }}
                                                 </a>
@@ -183,7 +183,7 @@
                                         slot="from"
                                         slot-scope="data">
                                         <a
-                                            :href="config.tomoscanUrl + '/txs/' + data.value"
+                                            :href="config.tomoscanUrl + '/address/' + data.value"
                                             :title="data.value"
                                             target="_blank">
                                             {{ data.value }}
@@ -197,7 +197,7 @@
                                         slot="to"
                                         slot-scope="data">
                                         <a
-                                            :href="config.tomoscanUrl + '/txs/' + data.value"
+                                            :href="config.tomoscanUrl + '/address/' + data.value"
                                             :title="data.value"
                                             target="_blank">
                                             {{ data.value }}

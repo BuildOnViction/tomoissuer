@@ -17,7 +17,8 @@
                         <td>
                             <b-link
                                 :title="account"
-                                to="/">
+                                :href="config.tomoscanUrl + '/address/' + account"
+                                target="_blank">
                                 {{ account }}
                             </b-link>
                             <span>Owner address</span>
@@ -28,7 +29,8 @@
                         <td>
                             <b-link
                                 :title="address"
-                                to="/">
+                                :href="config.tomoscanUrl + '/address/' + address"
+                                target="_blank">
                                 {{ address }}
                             </b-link>
                             <span>{{ token.name }} SmartContract</span>
@@ -58,6 +60,8 @@
                 size="md"
                 hide-header
                 hide-footer
+                no-close-on-esc
+                no-close-on-backdrop
                 centered>
                 <div class="tomo-modal-default icon-violet">
                     <div class="msg-txt">
@@ -157,15 +161,15 @@ export default {
             try {
                 if (!this.isAppliedZ) {
                     this.loading = true
-                    const chainConfig = this.config
+                    const chainConfig = this.config.blockchain
                     const contract = this.TRC21Issuer
                     const txParams = {
                         from: (await this.getAccount()).toLowerCase(),
                         value: this.web3.utils.toHex(new BigNumber(this.depositeFee)
                             .multipliedBy(10 ** 18).toString(10)),
-                        gasPrice: this.web3.utils.toHex(chainConfig.gas),
-                        gas: this.web3.utils.toHex(this.gasPrice),
-                        gasLimit: this.web3.utils.toHex(this.gasPrice)
+                        gasPrice: this.web3.utils.toHex(this.gasPrice),
+                        gas: this.web3.utils.toHex(chainConfig.gas),
+                        gasLimit: this.web3.utils.toHex(chainConfig.gas)
                     }
                     const provider = this.NetworkProvider
                     if (provider === 'ledger' || provider === 'trezor') {
