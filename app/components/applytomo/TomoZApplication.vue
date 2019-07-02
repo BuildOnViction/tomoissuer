@@ -31,8 +31,8 @@
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
-                        class="tmp-btn-boder-violet btn-min"
-                        to="/tomozcondition">
+                        :to="'/tomozcondition/' + address"
+                        class="tmp-btn-boder-violet btn-min">
                         Back
                     </b-button>
                     <b-button

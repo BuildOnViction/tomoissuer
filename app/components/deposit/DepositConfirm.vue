@@ -69,7 +69,9 @@
                 size="md"
                 hide-header
                 hide-footer
-                centered>
+                centered
+                no-close-on-esc
+                no-close-on-backdrop>
                 <div class="tomo-modal-default icon-violet">
                     <div class="msg-txt">
                         <i class="tomoissuer-icon-checkmark-outline"/>

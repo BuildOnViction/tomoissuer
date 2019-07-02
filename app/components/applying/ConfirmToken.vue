@@ -54,35 +54,14 @@
                     Issue Token
                 </b-button>
             </div>
-            <div
-                v-if="loading"
-                class="mt-5">loading.....</div>
-            <div class="mt-5">
-                <b-form-group
-                    v-if="transactionHash"
-                    class="mb-4"
-                    label="Transaction Hash"
-                    label-for="transactionHash">
-                    <b-form-input
-                        v-model="transactionHash"
-                        type="text" />
-                </b-form-group>
-                <b-form-group
-                    v-if="contractAddress"
-                    class="mb-4"
-                    label="Contract Address"
-                    label-for="contractAddress">
-                    <b-form-input
-                        v-model="contractAddress"
-                        type="text" />
-                </b-form-group>
-            </div>
             <b-modal
                 ref="newtokenmodal"
                 size="md"
                 hide-header
                 hide-footer
-                centered>
+                centered
+                no-close-on-esc
+                no-close-on-backdrop>
                 <div class="tomo-modal-default">
                     <div class="msg-txt">
                         <i class="tomoissuer-icon-checkmark-outline"/>
@@ -108,6 +87,8 @@
                 </div>
             </b-modal>
         </div>
+        <div
+            :class="(loading ? 'tomo-loading' : '')"/>
     </div>
 </template>
 
@@ -135,7 +116,7 @@ export default {
             provider: this.NetworkProvider,
             loading: false,
             config: {},
-            gasPrice: ''
+            gasPrice: 10000000000000
         }
     },
     async updated () {},
@@ -147,13 +128,6 @@ export default {
     },
     created: async function () {
         const self = this
-
-        self.web3.eth.getGasPrice().then(result => {
-            self.gasPrice = result
-        }).catch(error => {
-            console.log(error)
-            self.$toasted.show(error, { type: 'error' })
-        })
 
         self.appConfig().then(result => {
             self.config = result
