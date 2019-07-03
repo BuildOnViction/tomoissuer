@@ -326,13 +326,15 @@ export default {
     updated () {},
     beforeDestroy () {},
     beforeRouteEnter (to, from, next) {
-        if (!store.get('address')) {
-            next('/login')
-        } else next()
+        next()
     },
     created: async function () {
         try {
             const self = this
+            self.account = store.get('address') || await self.getAccount()
+            if (!self.account) {
+                self.$router.push({ path: '/login' })
+            }
             // self.config = await self.appConfig()
             self.appConfig().then(result => {
                 self.config = result
@@ -426,13 +428,12 @@ export default {
             })
         },
         getOwnerBalance () {
-            const account = store.get('address').toLowerCase()
             const web3 = this.web3
-            if (account && web3) {
+            if (this.account && web3) {
                 // 0x70a08231 is balanceOf(address) function code
                 let data = '0x70a08231' +
                     '000000000000000000000000' +
-                    account.substr(2) // chop off the 0x
+                    this.account.substr(2) // chop off the 0x
                 web3.eth.call({ to: this.address, data: data }).then(result => {
                     let balance = new BigNumber(web3.utils.hexToNumberString(result))
                     this.ownerBalance = balance.div(10 ** this.token.decimals).toNumber()
@@ -454,9 +455,8 @@ export default {
             })
         },
         getTransactionFee () {
-            const account = store.get('address').toLowerCase()
             const web3 = this.web3
-            if (account && web3) {
+            if (this.account && web3) {
                 // 0x24ec7590 is minFee function code
                 let data = '0x24ec7590' +
                     '00000000000000000000000000000000000000000000000000000000'

@@ -11,15 +11,6 @@
                     novalidate
                     @submit.prevent="validate()">
                     <b-tabs v-model="tabIndex">
-                        <p>
-                            Using node at
-                            <a
-                                href="rpc.tomochain.com"
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                rpc.tomochain.com
-                            </a>
-                        </p>
                         <b-tab
                             disabled>
                             <template slot="title">
@@ -350,8 +341,10 @@ export default {
                 self.address = await self.getAccount()
 
                 if (self.address) {
-                    store.set('address', self.address.toLowerCase())
-                    store.set('network', self.provider)
+                    if (self.provider === 'metamask') {
+                        store.set('address', self.address.toLowerCase())
+                        store.set('network', self.provider)
+                    }
                     self.$bus.$emit('logged', 'user logged')
                     if (store.get('redirectTo')) {
                         self.$router.push({

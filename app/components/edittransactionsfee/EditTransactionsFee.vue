@@ -66,12 +66,13 @@ export default {
     async updated () {},
     destroyed () { },
     beforeRouteEnter (to, from, next) {
-        if (!store.get('address')) {
-            next('/login')
-        } else next()
+        next()
     },
     created: async function () {
         this.account = store.get('address').toLowerCase() || await this.getAccount()
+        if (!this.account) {
+            this.$router.push({ path: '/login' })
+        }
         await this.getData()
         this.getCurrentFee()
     },

@@ -145,11 +145,7 @@ export default {
         await this.checkNetworkAndLogin()
     },
     destroyed () { },
-    beforeRouteEnter (to, from, next) {
-        if (!store.get('address')) {
-            next('/login')
-        }
-    },
+    beforeRouteEnter (to, from, next) {},
     created: async function () {
         try {
             const self = this
@@ -168,12 +164,13 @@ export default {
             let self = this
             setTimeout(async () => {
                 try {
-                    if (store.get('address')) {
-                        self.account = store.get('address').toLowerCase()
-                    } else {
-                        self.account = this.$store.state.walletLoggedIn
-                            ? this.$store.state.walletLoggedIn : await self.getAccount()
-                    }
+                    self.account = store.get('address') || await self.getAccount()
+                    // if (store.get('address')) {
+                    //     self.account = .toLowerCase()
+                    // } else {
+                    //     self.account = this.$store.state.walletLoggedIn
+                    //         ? this.$store.state.walletLoggedIn : await self.getAccount()
+                    // }
                     if (self.account) {
                         self.isTomonet = true
                     }

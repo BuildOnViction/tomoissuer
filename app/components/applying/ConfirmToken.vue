@@ -122,12 +122,14 @@ export default {
     async updated () {},
     destroyed () { },
     beforeRouteEnter (to, from, next) {
-        if (!store.get('address')) {
-            next('/login')
-        } else next()
+        next()
     },
     created: async function () {
         const self = this
+        self.account = store.get('address') || await self.getAccount()
+        if (!self.account) {
+            self.$router.push({ path: '/login' })
+        }
 
         self.appConfig().then(result => {
             self.config = result
@@ -135,7 +137,6 @@ export default {
             console.log(error)
             self.$toasted.show(error, { type: 'error' })
         })
-        self.account = store.get('address') || await self.getAccount()
         await self.createContract()
     },
     methods: {

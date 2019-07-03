@@ -1,7 +1,7 @@
 <template>
     <div class="container container-medium">
         <div class="tomo-apply text-center">
-            <h2 class="tmp-title-large">Pay fee by TIIM token</h2>
+            <h2 class="tmp-title-large">Pay fee by {{ token.name }} token</h2>
             <div class="about-tomoz">
                 <h6 class="tmp-title-normal weightbold">What is TomoZ</h6>
                 <p>
@@ -70,31 +70,46 @@
 
 <script>
 import store from 'store'
+import axios from 'axios'
 export default {
     name: 'ApplyTomoZ',
     components: { },
     data () {
         return {
             address: this.$route.params.address.toLowerCase(),
-            tokenName: '',
-            tokenSymbol: '',
-            decimals: '',
-            minFee: '',
-            tokenSupply: '',
-            sourceCode: '',
             account: '',
-            type: ''
+            token: {}
         }
     },
     async updated () {
     },
     destroyed () { },
     beforeRouteEnter (to, from, next) {
-        if (!store.get('address')) {
-            next('/login')
-        } else next()
+        next()
     },
-    created: async function () {},
-    methods: { }
+    created: async function () {
+        const self = this
+        self.account = store.get('address') || await self.getAccount()
+        if (!self.account) {
+            self.$router.push({ path: '/login' })
+        }
+        self.getData()
+    },
+    methods: {
+        getData () {
+            const self = this
+            const vuexStore = self.$store.state
+            if (vuexStore.token) {
+                self.token = vuexStore.token
+            } else {
+                axios.get(`/api/token/${self.address}`).then(response => {
+                    self.token = response.data
+                }).catch(error => {
+                    console.log(error)
+                    self.$toasted.show(error, { type: 'error' })
+                })
+            }
+        }
+    }
 }
 </script>
