@@ -135,7 +135,6 @@ export default {
                 { key: 'applytomoz', label: '', variant: 'sp-text-center' }
             ],
             listokenItems: [],
-            address: store.get('address'),
             sortBy: 'totalSupplyNumber',
             sortDesc: true,
             tokens: [],
@@ -148,12 +147,13 @@ export default {
     },
     destroyed () { },
     beforeRouteEnter (to, from, next) {
-        if (!store.get('address')) {
-            next('/login')
-        } else next()
+        next()
     },
     created: async function () {
         this.account = store.get('address') || await this.getAccount()
+        if (!this.account) {
+            this.$router.push({ path: '/login' })
+        }
         await this.getTokens()
     },
     methods: {
@@ -168,7 +168,7 @@ export default {
                 const query = self.serializeQuery(params)
                 const items = []
                 let promises = this.checkAppliedZ()
-                const { data } = await axios.get(`/api/account/${self.address}/listTokens?${query}`)
+                const { data } = await axios.get(`/api/account/${self.account}/listTokens?${query}`)
                 self.appliedList = await promises
                 if (data.items.length > 0) {
                     await Promise.all(data.items.map(async i => {
@@ -213,7 +213,7 @@ export default {
                 let data = '0x70a08231' +
                     '000000000000000000000000' +
                     this.account.substr(2) // chop off the 0x
-                const result = await web3.eth.call({ to: address, data: data })
+                const result = await web3.eth.call({ to: this.account, data: data })
                 let balance = new BigNumber(web3.utils.hexToNumberString(result))
                 return balance.div(10 ** decimals).toNumber()
             }

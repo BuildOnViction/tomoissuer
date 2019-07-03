@@ -341,8 +341,10 @@ export default {
                 self.address = await self.getAccount()
 
                 if (self.address) {
-                    store.set('address', self.address.toLowerCase())
-                    store.set('network', self.provider)
+                    if (self.provider === 'metamask') {
+                        store.set('address', self.address.toLowerCase())
+                        store.set('network', self.provider)
+                    }
                     self.$bus.$emit('logged', 'user logged')
                     if (store.get('redirectTo')) {
                         self.$router.push({

@@ -126,19 +126,13 @@ export default {
     },
     destroyed () { },
     beforeRouteEnter (to, from, next) {
-        if (!store.get('address')) {
-            next('/login')
-        } else next()
+        next()
     },
     created: async function () {
-        const vuexStore = this.$store.state
-        if (vuexStore.issueToken) {
-            const token = vuexStore.issueToken
-            this.tokenName = token.tokenName
-            this.tokenSymbol = token.tokenSymbol
-            this.decimals = token.decimals
-            this.totalSupply = token.totalSupply
-            this.type = token.type
+        console.log(111)
+        this.account = store.get('address') || await this.getAccount()
+        if (!this.account) {
+            this.$router.push({ path: '/login' })
         }
     },
     methods: {

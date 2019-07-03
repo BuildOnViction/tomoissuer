@@ -78,13 +78,14 @@ export default {
     async updated () {},
     destroyed () { },
     beforeRouteEnter (to, from, next) {
-        if (!store.get('address')) {
-            next('/login')
-        } else next()
+        next()
     },
     created: async function () {
         const self = this
         self.account = store.get('address') || await self.getAccount()
+        if (!self.account) {
+            self.$router.push({ path: '/login' })
+        }
         self.getData()
         self.getBalance()
     },
@@ -118,13 +119,15 @@ export default {
         },
         getBalance () {
             const web3 = this.web3
-            web3.eth.getBalance(this.account).then(result => {
-                const balance = new BigNumber(result).div(10 ** 18)
-                this.balance = balance.toNumber().toFixed(4)
-            }).catch(error => {
-                console.log(error)
-                this.$toasted.show(error, { type: 'error' })
-            })
+            if (this.account && web3) {
+                web3.eth.getBalance(this.account).then(result => {
+                    const balance = new BigNumber(result).div(10 ** 18)
+                    this.balance = balance.toNumber().toFixed(4)
+                }).catch(error => {
+                    console.log(error)
+                    this.$toasted.show(error, { type: 'error' })
+                })
+            }
         },
         confirm () {
             this.$router.push({ name: 'TomoZConfirm',

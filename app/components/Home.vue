@@ -27,7 +27,7 @@ export default {
     updated () {},
     beforeDestroy () {},
     created: async function () {
-        this.account = store.get('address')
+        this.account = store.get('address') || await this.getAccount()
     },
     mounted () {},
     methods: {}

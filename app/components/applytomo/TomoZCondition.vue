@@ -85,12 +85,15 @@ export default {
     },
     destroyed () { },
     beforeRouteEnter (to, from, next) {
-        if (!store.get('address')) {
-            next('/login')
-        } else next()
+        next()
     },
     created: async function () {
-        this.getData()
+        const self = this
+        self.account = store.get('address') || await self.getAccount()
+        if (!self.account) {
+            self.$router.push({ path: '/login' })
+        }
+        self.getData()
     },
     methods: {
         getData () {
