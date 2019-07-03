@@ -35,7 +35,7 @@ router.get('/:account', [
     try {
         const account = req.params.account.toLowerCase()
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/accounts/${account}`)
+            urljoin(config.get('tomoscanAPI'), `/api/accounts/${account}`)
         )
         return res.json(data)
     } catch (error) {
@@ -61,7 +61,7 @@ router.get('/:account/listTokens', [
         }
         const query = serializeQuery(params)
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/accounts/${account}/listTokens?${query}`)
+            urljoin(config.get('tomoscanAPI'), `/api/accounts/${account}/listTokens?${query}`)
         )
         return res.json(data)
     } catch (error) {

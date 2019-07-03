@@ -2,7 +2,6 @@
     <div class="container container-small">
         <div class="newtoken">
             <h2 class="tmp-title-large">Issue a new token</h2>
-            <p>Start by choosing the wallet you would like to unlock</p>
             <b-form
                 class="form-new-token"
                 novalidate
@@ -38,9 +37,10 @@
                     label-for="totalSupply">
                     <b-form-input
                         v-model="totalSupply"
+                        type="text"
                         autocomplete="off"
-                        type="number"
-                        placeholder="Token supply"/>
+                        placeholder="Token supply"
+                        @change="onChangeSupply"/>
                     <div
                         v-if="$v.totalSupply.$dirty && !$v.totalSupply.required"
                         class="text-danger pt-2">Required field</div>
@@ -70,10 +70,11 @@
                         v-model="type"
                         class="box-radio"
                         name="radio-sub-component">
-                        <b-form-radio
+                        TRC21
+                        <!-- <b-form-radio
                             value="trc21">
                             TRC21
-                        </b-form-radio>
+                        </b-form-radio> -->
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group mb-4">
@@ -109,7 +110,8 @@ export default {
             totalSupply: '',
             sourceCode: '',
             account: '',
-            type: 'trc21'
+            type: 'trc21',
+            inputType: ''
         }
     },
     validations: {
@@ -122,6 +124,7 @@ export default {
         tokenSymbol: { required },
         totalSupply: { required }
     },
+    watch : { },
     async updated () {
     },
     destroyed () { },
@@ -136,6 +139,7 @@ export default {
     },
     methods: {
         validate: function () {
+            console.log(this.$v)
             this.$v.$touch()
             if (!this.$v.$invalid) {
                 this.confirm()
@@ -158,6 +162,12 @@ export default {
                     totalSupply: this.totalSupply
                 }
             })
+        },
+        onChangeSupply (newValue) {
+            const value = newValue.replace(/[^0-9.]/g, '')
+            const result = value.replace(/\D/g, '')
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            this.totalSupply = result
         }
     }
 }
