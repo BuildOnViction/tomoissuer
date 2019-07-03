@@ -11,15 +11,6 @@
                     novalidate
                     @submit.prevent="validate()">
                     <b-tabs v-model="tabIndex">
-                        <p>
-                            Using node at
-                            <a
-                                href="rpc.tomochain.com"
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                rpc.tomochain.com
-                            </a>
-                        </p>
                         <b-tab
                             disabled>
                             <template slot="title">

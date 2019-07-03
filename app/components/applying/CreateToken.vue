@@ -74,10 +74,6 @@
                             value="trc21">
                             TRC21
                         </b-form-radio>
-                        <b-form-radio
-                            value="trc20">
-                            TRC20
-                        </b-form-radio>
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group mb-4">
