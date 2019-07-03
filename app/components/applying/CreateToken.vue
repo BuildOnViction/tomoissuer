@@ -129,7 +129,6 @@ export default {
         next()
     },
     created: async function () {
-        console.log(111)
         this.account = store.get('address') || await this.getAccount()
         if (!this.account) {
             this.$router.push({ path: '/login' })
