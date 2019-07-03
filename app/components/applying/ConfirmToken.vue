@@ -32,8 +32,11 @@
                         <td>50 TOMO</td>
                     </tr>
                     <tr>
-                        <td>Code review</td>
-                        <td>
+                        <td >Code review</td>
+                        <td/>
+                    </tr>
+                    <tr style="grid-template-columns: 100%;">
+                        <td colspan="2">
                             <codemirror
                                 ref="code"
                                 v-model="sourceCode"
@@ -107,7 +110,7 @@ export default {
             tokenSymbol: this.$route.params.symbol,
             decimals: this.$route.params.decimals,
             minFee: 0,
-            totalSupply: this.$route.params.totalSupply,
+            totalSupply: this.$route.params.totalSupply.replace(/,/g, ''),
             type: this.$route.params.type || '',
             sourceCode: 'Generating Contract...',
             transactionHash: '',

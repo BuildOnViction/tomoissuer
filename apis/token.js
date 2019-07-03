@@ -142,7 +142,7 @@ router.get('/:token', [], async (req, res, next) => {
     try {
         const token = req.params.token || ''
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/tokens/${token}`)
+            urljoin(config.get('tomoscanAPI'), `/api/tokens/${token}`)
         )
         return res.json(data)
     } catch (error) {
@@ -156,7 +156,7 @@ router.get('/holders/trc21/:token', [], async (req, res, next) => {
         const page = req.query.page || 1
         const limit = req.query.limit || 20
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/token-holders/trc21/?address=${token}&page=${page}&limit=${limit}`)
+            urljoin(config.get('tomoscanAPI'), `/api/token-holders/trc21/?address=${token}&page=${page}&limit=${limit}`)
         )
         return res.json(data)
     } catch (error) {
@@ -169,7 +169,7 @@ router.get('/holders/:token', [], async (req, res, next) => {
         const page = req.query.page || 1
         const limit = req.query.limit || 20
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/token-holders/?address=${token}&page=${page}&limit=${limit}`)
+            urljoin(config.get('tomoscanAPI'), `/api/token-holders/?address=${token}&page=${page}&limit=${limit}`)
         )
         return res.json(data)
     } catch (error) {
@@ -182,7 +182,7 @@ router.get('/txes/trc20/:token', [], async (req, res, next) => {
         const page = req.query.page || 1
         const limit = req.query.limit || 20
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/token-txs/trc20?token=${token}&page=${page}&limit=${limit}`)
+            urljoin(config.get('tomoscanAPI'), `/api/token-txs/trc20?token=${token}&page=${page}&limit=${limit}`)
         )
         return res.json(data)
     } catch (error) {
@@ -196,7 +196,7 @@ router.get('/txes/trc21/:token', [], async (req, res, next) => {
         const page = req.query.page || 1
         const limit = req.query.limit || 20
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanUrl'), `/api/token-txs/trc21?token=${token}&page=${page}&limit=${limit}`)
+            urljoin(config.get('tomoscanAPI'), `/api/token-txs/trc21?token=${token}&page=${page}&limit=${limit}`)
         )
         return res.json(data)
     } catch (error) {
