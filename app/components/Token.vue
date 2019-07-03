@@ -170,7 +170,8 @@
                                         <a
                                             :href="config.tomoscanUrl + '/txs/' +
                                             data.value.toLowerCase()"
-                                            :title="data.value">
+                                            :title="data.value"
+                                            target="_blank">
                                             {{ data.value }}
                                         </a>
                                     </template>
@@ -240,7 +241,7 @@
                                         slot="address"
                                         slot-scope="data">
                                         <a
-                                            :href="config.tomoscanUrl + '/txs/' + data.value"
+                                            :href="config.tomoscanUrl + '/address/' + data.value"
                                             :title="data.value"
                                             target="_blank">
                                             {{ data.value }}
