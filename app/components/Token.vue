@@ -120,7 +120,11 @@
                                             <div class="flex-box">
                                                 <span>{{ formatCurrencySymbol(
                                                 formatNumber(ownerBalance), token.symbol) }}</span>
-                                                <span><b-link to="#">Transfer</b-link></span>
+                                                <span>
+                                                    <b-link
+                                                        :href="config.tomowalletUrl + '/trc21/' + address"
+                                                        target="_blank">Transfer</b-link>
+                                                </span>
                                             </div>
                                         </li>
                                         <li>
