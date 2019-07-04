@@ -20,10 +20,12 @@
                     class="mb-4"
                     label="Enter your token name or contract address "
                     label-for="tokenName">
-                    <b-form-input
+                    <auto-complete
+                        :page="this"/>
+                    <!-- <b-form-input
                         v-model="tokenAddress"
                         type="text"
-                        placeholder="Token name"/>
+                        placeholder="Token name"/> -->
                     <div
                         v-if="$v.tokenAddress.$dirty && !$v.tokenAddress.required"
                         class="text-danger pt-2">Required field</div>
@@ -66,9 +68,12 @@ import {
     required,
     minValue
 } from 'vuelidate/lib/validators'
+import AutoComplete from '../Searching.vue'
 export default {
     name: 'Donate',
-    components: { },
+    components: {
+        AutoComplete
+    },
     mixins: [validationMixin],
     data () {
         return {
@@ -88,6 +93,7 @@ export default {
             minValue: minValue(10)
         }
     },
+    watch: {},
     async updated () {
     },
     destroyed () { },

@@ -1,0 +1,88 @@
+.search-form {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin-top: 5px;
+
+    input.form-control {
+        border-radius: 100px;
+        padding: 4px 40px 4px 20px;
+    }
+
+    .btn {
+        position: absolute;
+        right: 15px;
+        top: 0;
+        font-size: 0;
+        font-weight: 400;
+        height: 100%;
+        border-radius: 100px;
+        color: #7573a6;
+        border-color: transparent;
+        background-color: transparent;
+        padding: 0;
+        pointer-events: none;
+
+        &:before {
+            content: '\e90a';
+            font-size: 16px;
+
+            @extend %tm-icon;
+        }
+    }
+
+    @include media-breakpoint-up(sm) {
+        width: auto;
+
+        input.form-control {
+            width: 100%;
+        }
+    }
+
+    @include media-breakpoint-up(lg) {
+
+        input.form-control {
+            width: 350px;
+        }
+    }
+
+    @include media-breakpoint-up(xl) {
+
+        input.form-control {
+            width: 400px;
+        }
+    }
+}
+
+.autocomplete {
+    position: relative;
+}
+.autocomplete-results {
+    background: #fff;
+    border-radius:  0 0 10px 10px;
+    box-shadow: $boxshadow-default;
+    list-style: none;
+    margin: 0;
+    max-height: 268px;
+    overflow: auto;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 5;
+}
+.autocomplete-result {
+    cursor: pointer;
+    color: #7573a6;
+    border-bottom: 1px solid #f2f2f2;
+    padding: 1em;
+    transition: .3s all ease-in;
+
+    small {
+        padding: 8px;
+    }
+}
+.autocomplete-result.is-active,
+.autocomplete-result:hover {
+        background-color: $background-blue;
+        color: $color-text-white;
+}

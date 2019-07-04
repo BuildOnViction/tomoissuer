@@ -106,11 +106,11 @@ export default {
     data () {
         return {
             web3: this.web3,
-            tokenName: this.$route.params.name,
-            tokenSymbol: this.$route.params.symbol,
-            decimals: this.$route.params.decimals,
+            tokenName: this.$route.params.name || '',
+            tokenSymbol: this.$route.params.symbol || '',
+            decimals: this.$route.params.decimals || '',
             minFee: 0,
-            totalSupply: this.$route.params.totalSupply.replace(/,/g, ''),
+            totalSupply: (this.$route.params.totalSupply || '').replace(/,/g, ''),
             type: this.$route.params.type || '',
             sourceCode: 'Generating Contract...',
             transactionHash: '',
@@ -129,18 +129,21 @@ export default {
     },
     created: async function () {
         const self = this
+        if (!self.tokenName || !self.tokenSymbol) {
+            self.$router.push({ path: '/createToken' })
+        } else {
+            self.appConfig().then(result => {
+                self.config = result
+            }).catch(error => {
+                console.log(error)
+                self.$toasted.show(error, { type: 'error' })
+            })
+            await self.createContract()
+        }
         self.account = store.get('address') || await self.getAccount()
         if (!self.account) {
             self.$router.push({ path: '/login' })
         }
-
-        self.appConfig().then(result => {
-            self.config = result
-        }).catch(error => {
-            console.log(error)
-            self.$toasted.show(error, { type: 'error' })
-        })
-        await self.createContract()
     },
     methods: {
         async createContract () {
