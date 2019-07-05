@@ -10,7 +10,7 @@
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
-                    :description="`Min: 10 TOMO, Available balance: ${balance} TOMO`"
+                    :description="`Available balance: ${balance} TOMO`"
                     class="mb-4"
                     label-for="depositFee">
                     <span class="txt-fixed">TOMO</span>
@@ -23,7 +23,7 @@
                         class="text-danger pt-2">Required field</div>
                     <div
                         v-else-if="$v.depositFee.$dirty && !$v.depositFee.minValue"
-                        class="text-danger pt-2">Minimum of depositing is 10 TOMO</div>
+                        class="text-danger pt-2">Deposit amount should be more than 0 TOMO</div>
                     <div
                         v-else-if="depositingError"
                         class="text-danger pt-2">Not enough TOMO</div>
@@ -73,7 +73,7 @@ export default {
     validations: {
         depositFee: {
             required,
-            minValue: minValue(10)
+            minValue: minValue(0.1)
         }
     },
     async updated () {},

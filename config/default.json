@@ -11,6 +11,7 @@
     ],
     "tomoscanUrl": "http://localhost:3003",
     "tomoscanAPI": "https://scan.tomochain.com",
+    "tomowalletUrl": "",
     "blockchain": {
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",

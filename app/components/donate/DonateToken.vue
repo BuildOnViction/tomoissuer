@@ -20,16 +20,18 @@
                     class="mb-4"
                     label="Enter your token name or contract address "
                     label-for="tokenName">
-                    <b-form-input
+                    <auto-complete
+                        :page="this"/>
+                    <!-- <b-form-input
                         v-model="tokenAddress"
                         type="text"
-                        placeholder="Token name"/>
+                        placeholder="Token name"/> -->
                     <div
                         v-if="$v.tokenAddress.$dirty && !$v.tokenAddress.required"
                         class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
-                    :description="`Min: 10 TOMO, Available balance:  ${balance} TOMO`"
+                    :description="`Available balance:  ${balance} TOMO`"
                     class="mb-4"
                     label="Donation amount"
                     label-for="donationAmount">
@@ -43,7 +45,7 @@
                         class="text-danger pt-2">Required field</div>
                     <div
                         v-else-if="$v.donationAmount.$dirty && !$v.donationAmount.minValue"
-                        class="text-danger pt-2">Minimum of depositing is 10 TOMO</div>
+                        class="text-danger pt-2">Deposit amount should be more than 0 TOMO</div>
                     <div
                         v-else-if="depositingError"
                         class="text-danger pt-2">Not enough TOMO</div>
@@ -66,9 +68,12 @@ import {
     required,
     minValue
 } from 'vuelidate/lib/validators'
+import AutoComplete from '../Searching.vue'
 export default {
     name: 'Donate',
-    components: { },
+    components: {
+        AutoComplete
+    },
     mixins: [validationMixin],
     data () {
         return {
@@ -85,9 +90,10 @@ export default {
         },
         donationAmount: {
             required,
-            minValue: minValue(10)
+            minValue: minValue(0)
         }
     },
+    watch: {},
     async updated () {
     },
     destroyed () { },

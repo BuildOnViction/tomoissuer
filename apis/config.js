@@ -11,6 +11,11 @@ router.get('/', async function (req, res, next) {
         tomoscanUrl = tomoscanUrl.substr(0, tomoscanUrl.length - 1)
     }
     appConfig.tomoscanUrl = tomoscanUrl
+    let tomowallet = config.get('tomowalletUrl')
+    if (tomowallet[tomowallet.length - 1] === '/') {
+        tomowallet = tomowallet.substr(0, tomowallet.length - 1)
+    }
+    appConfig.tomowalletUrl = tomowallet
     return res.json(appConfig)
 })
 

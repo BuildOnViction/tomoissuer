@@ -110,12 +110,10 @@ export default {
         if (!this.account) {
             this.$router.push({ path: '/login' })
         }
-        this.appConfig().then(result => {
-            this.config = result
-        }).catch(error => {
-            console.log(error)
-            this.$toasted.show(error, { type: 'error' })
-        })
+        if (!this.newFee) {
+            this.$router.push({ path: '/edittransactionsfee/' + this.address })
+        }
+        this.config = store.get('config') || await this.appConfig()
         this.web3.eth.getGasPrice().then(result => {
             this.gasPrice = result
         }).catch(error => {
@@ -151,13 +149,13 @@ export default {
                         gasLimit: this.web3.utils.toHex(chainConfig.gas),
                         chainId: chainConfig.networkId
                     }
-                    const { data } = await axios.get('/api/account/' + this.address)
-                    if (!data.contract) {
+                    const { data } = await axios.get('/api/token/getABI')
+                    if (!data.abi) {
                         this.loading = false
                         this.$toasted.show('This contract is not verified. Please go to tomoscan to verify contract')
                     } else {
                         const tokenContract = new this.web3.eth.Contract(
-                            JSON.parse(data.contract.abiCode),
+                            data.abi,
                             this.address
                         )
                         const provider = this.NetworkProvider

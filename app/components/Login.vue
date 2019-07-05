@@ -285,7 +285,7 @@ export default {
     created: async function () {
         const self = this
         self.hdWallets = self.hdWallets || {}
-        self.config = await self.appConfig()
+        self.config = store.get('config') || await self.appConfig()
         self.chainConfig = self.config.blockchain || {}
         self.networks.rpc = self.chainConfig.rpc
     },

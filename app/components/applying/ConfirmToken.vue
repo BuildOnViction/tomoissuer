@@ -106,11 +106,11 @@ export default {
     data () {
         return {
             web3: this.web3,
-            tokenName: this.$route.params.name,
-            tokenSymbol: this.$route.params.symbol,
-            decimals: this.$route.params.decimals,
+            tokenName: this.$route.params.name || '',
+            tokenSymbol: this.$route.params.symbol || '',
+            decimals: this.$route.params.decimals || '',
             minFee: 0,
-            totalSupply: this.$route.params.totalSupply.replace(/,/g, ''),
+            totalSupply: (this.$route.params.totalSupply || '').replace(/,/g, ''),
             type: this.$route.params.type || '',
             sourceCode: 'Generating Contract...',
             transactionHash: '',
@@ -119,7 +119,9 @@ export default {
             provider: this.NetworkProvider,
             loading: false,
             config: {},
-            gasPrice: 10000000000000
+            gasPrice: 10000000000000,
+            balance: 0,
+            txFee: 0
         }
     },
     async updated () {},
@@ -133,16 +135,25 @@ export default {
         if (!self.account) {
             self.$router.push({ path: '/login' })
         }
-
-        self.appConfig().then(result => {
-            self.config = result
-        }).catch(error => {
-            console.log(error)
-            self.$toasted.show(error, { type: 'error' })
-        })
-        await self.createContract()
+        if (!self.tokenName || !self.tokenSymbol) {
+            self.$router.push({ path: '/createToken' })
+        } else {
+            self.config = store.get('config') || await self.appConfig()
+            await self.createContract()
+            self.getBalance()
+        }
     },
     methods: {
+        getBalance () {
+            const web3 = this.web3
+            web3.eth.getBalance(this.account).then(result => {
+                const balance = new BigNumber(result).div(10 ** 18)
+                this.balance = balance.toNumber().toFixed(4)
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            })
+        },
         async createContract () {
             const self = this
             try {
@@ -161,7 +172,6 @@ export default {
                     // token source code
                     self.sourceCode = tokenContract.data.contractCode.toString()
                     self.$refs.code.codemirror = tokenContract.data.contractCode
-                    // push to confirmation page
                 }
             } catch (error) {
                 self.$toasted.show(
@@ -175,32 +185,87 @@ export default {
                 const chainConfig = this.config.blockchain
                 const web3 = self.web3
                 self.loading = true
-                const compiledContract = await axios.post('/api/token/compileContract', {
-                    name: self.tokenName,
-                    sourceCode: self.sourceCode
-                })
-
-                const contract = new web3.eth.Contract(
-                    compiledContract.data.abi, null, { data: '0x' + compiledContract.data.bytecode })
-
-                // deployment
-                switch (self.provider) {
-                case 'custom':
-                case 'metamask':
-                    await contract.deploy({
-                        arguments: [
-                            self.tokenName,
-                            self.tokenSymbol,
-                            self.decimals,
-                            (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
-                            (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
-                        ]
-                    }).send({
-                        from: self.account,
-                        gas: web3.utils.toHex(chainConfig.gas),
-                        gasPrice: web3.utils.toHex(self.gasPrice)
+                self.txFee = new BigNumber(chainConfig.gas * self.gasPrice).div(10 ** 18).toString(10)
+                if (self.balance < self.txFee) {
+                    self.loading = false
+                    self.$toasted.show('Not enough TOMO', { type: 'error' })
+                } else {
+                    const compiledContract = await axios.post('/api/token/compileContract', {
+                        name: self.tokenName,
+                        sourceCode: self.sourceCode
                     })
-                        .on('transactionHash', async (txHash) => {
+
+                    const contract = new web3.eth.Contract(
+                        compiledContract.data.abi, null, { data: '0x' + compiledContract.data.bytecode })
+
+                    // deployment
+                    switch (self.provider) {
+                    case 'custom':
+                    case 'metamask':
+                        await contract.deploy({
+                            arguments: [
+                                self.tokenName,
+                                self.tokenSymbol,
+                                self.decimals,
+                                (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
+                                (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
+                            ]
+                        }).send({
+                            from: self.account,
+                            gas: web3.utils.toHex(chainConfig.gas),
+                            gasPrice: web3.utils.toHex(self.gasPrice)
+                        })
+                            .on('transactionHash', async (txHash) => {
+                                self.transactionHash = txHash
+                                let check = true
+                                while (check) {
+                                    const receipt = await web3.eth.getTransactionReceipt(txHash)
+                                    if (receipt) {
+                                        self.contractAddress = receipt.contractAddress
+                                        self.loading = false
+                                        check = false
+                                        self.$refs.newtokenmodal.show()
+                                    }
+                                }
+                            })
+                        break
+                    case 'ledger':
+                    case 'trezor':
+                        let deploy = await contract.deploy({
+                            arguments: [
+                                self.tokenName,
+                                self.tokenSymbol,
+                                self.decimals,
+                                (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
+                                (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
+                            ]
+                        }).encodeABI()
+
+                        const data = {
+                            data: deploy,
+                            to: '0x'
+                        }
+
+                        let nonce = await web3.eth.getTransactionCount(self.account)
+                        const dataTx = {
+                            from: self.account,
+                            gas: web3.utils.toHex(chainConfig.gas),
+                            gasPrice: web3.utils.toHex(self.gasPrice),
+                            gasLimit: web3.utils.toHex(chainConfig.gas),
+                            value: web3.utils.toHex(0),
+                            chainId: chainConfig.networkId
+                        }
+                        Object.assign(
+                            data,
+                            dataTx,
+                            {
+                                nonce: web3.utils.toHex(nonce)
+                            }
+                        )
+
+                        const signature = await self.signTransaction(data)
+                        const txHash = await self.sendSignedTransaction(data, signature)
+                        if (txHash) {
                             self.transactionHash = txHash
                             let check = true
                             while (check) {
@@ -212,60 +277,11 @@ export default {
                                     self.$refs.newtokenmodal.show()
                                 }
                             }
-                        })
-                    break
-                case 'ledger':
-                case 'trezor':
-                    let deploy = await contract.deploy({
-                        arguments: [
-                            self.tokenName,
-                            self.tokenSymbol,
-                            self.decimals,
-                            (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
-                            (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
-                        ]
-                    }).encodeABI()
-
-                    const data = {
-                        data: deploy,
-                        to: '0x'
-                    }
-
-                    let nonce = await web3.eth.getTransactionCount(self.account)
-                    const dataTx = {
-                        from: self.account,
-                        gas: web3.utils.toHex(chainConfig.gas),
-                        gasPrice: web3.utils.toHex(self.gasPrice),
-                        gasLimit: web3.utils.toHex(chainConfig.gas),
-                        value: web3.utils.toHex(0),
-                        chainId: chainConfig.networkId
-                    }
-                    Object.assign(
-                        data,
-                        dataTx,
-                        {
-                            nonce: web3.utils.toHex(nonce)
                         }
-                    )
-
-                    const signature = await self.signTransaction(data)
-                    const txHash = await self.sendSignedTransaction(data, signature)
-                    if (txHash) {
-                        self.transactionHash = txHash
-                        let check = true
-                        while (check) {
-                            const receipt = await web3.eth.getTransactionReceipt(txHash)
-                            if (receipt) {
-                                self.contractAddress = receipt.contractAddress
-                                self.loading = false
-                                check = false
-                                self.$refs.newtokenmodal.show()
-                            }
-                        }
+                        break
+                    default:
+                        break
                     }
-                    break
-                default:
-                    break
                 }
             } catch (error) {
                 self.loading = false

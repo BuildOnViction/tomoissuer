@@ -60,9 +60,11 @@
                                 {{ data.item.holders || '---' }}
                             </template>
                             <template
-                                slot="transferToken">
+                                slot="transferToken"
+                                slot-scope="data">
                                 <b-link
-                                    :to="`/transferToken`">
+                                    :href="config.tomowalletUrl + '/trc21/' + data.item.hash"
+                                    target="_blank">
                                     Transfer Token
                                 </b-link>
                             </template>
@@ -140,7 +142,8 @@ export default {
             tokens: [],
             loading: false,
             appliedList: [],
-            account: ''
+            account: '',
+            config: {}
         }
     },
     async updated () {
@@ -154,6 +157,7 @@ export default {
         if (!this.account) {
             this.$router.push({ path: '/login' })
         }
+        this.config = store.get('config') || await this.appConfig()
         await this.getTokens()
     },
     methods: {
