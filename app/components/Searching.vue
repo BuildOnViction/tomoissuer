@@ -62,10 +62,13 @@ export default {
     },
     watch: {
         search: async function (newValue) {
-            if (newValue !== '' && newValue.length < 40) {
+            if (newValue !== '' && !this.page.tokenAddress) {
                 this.doSearch()
             } else {
                 this.results = []
+            }
+            if (newValue === '') {
+                this.page.tokenAddress = ''
             }
         }
     },
@@ -112,9 +115,8 @@ export default {
             }
         },
         setResult (result) {
-            this.search = ''
             this.isOpen = false
-            this.search = result.name + ' ' + result.hash
+            this.search = result.name
             this.page.tokenAddress = result.hash
         },
         onArrowDown () {
@@ -134,9 +136,8 @@ export default {
                 this.search = ''
                 this.isOpen = false
                 this.arrowCounter = -1
-                this.$router.push({
-                    path: `/candidate/${result.address}`
-                })
+                this.search = result.name
+                this.page.tokenAddress = result.hash
                 document.getElementById('search-input').blur()
             }
         },
@@ -154,7 +155,6 @@ export default {
         async doSearch () {
             const { data } = await axios.get('/api/token/search?q=' + this.search || '')
             this.results = data.items
-            this.page.tokenAddress = ''
             this.isOpen = true
         }
     }
