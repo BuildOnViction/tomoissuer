@@ -62,7 +62,7 @@ export default {
     },
     watch: {
         search: async function (newValue) {
-            if (newValue) {
+            if (newValue !== '' && newValue.length < 40) {
                 this.doSearch()
             } else {
                 this.results = []
@@ -154,6 +154,7 @@ export default {
         async doSearch () {
             const { data } = await axios.get('/api/token/search?q=' + this.search || '')
             this.results = data.items
+            this.page.tokenAddress = ''
             this.isOpen = true
         }
     }
