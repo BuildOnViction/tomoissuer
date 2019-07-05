@@ -1,7 +1,7 @@
 <template>
     <div class="container container-small">
         <div class="newtoken">
-            <h2 class="tmp-title-large">Issue a new token</h2>
+            <h2 class="tmp-title-large">Token Issuance</h2>
             <b-form
                 class="form-new-token"
                 novalidate
@@ -78,7 +78,13 @@
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group mb-4">
-                    <label>Issue fee</label><span>50 TOMO</span>
+                    <label>Issuance fee</label><span>50 TOMO</span>
+                </div>
+                <div
+                    v-if="!isEnoughTOMO"
+                    class="text-center">
+                    <span variant="danger">
+                        Not enought TOMO</span>
                 </div>
                 <div class="btn-box">
                     <b-button
@@ -98,6 +104,7 @@ import {
     minValue,
     maxValue
 } from 'vuelidate/lib/validators'
+import BigNumber from 'bignumber.js'
 export default {
     name: 'App',
     components: { },
@@ -108,10 +115,12 @@ export default {
             tokenSymbol: '',
             decimals: '',
             totalSupply: '',
-            sourceCode: '',
             account: '',
             type: 'trc21',
-            inputType: ''
+            balance: 0,
+            txFee: 0,
+            gasPrice: 10000000000000,
+            isEnoughTOMO: true
         }
     },
     validations: {
@@ -132,15 +141,29 @@ export default {
         next()
     },
     created: async function () {
-        this.account = store.get('address') || await this.getAccount()
+        this.account = store.get('address') ||
+        this.$store.state.address || await this.getAccount()
         if (!this.account) {
             this.$router.push({ path: '/login' })
         }
+        await this.getBalance()
+        this.config = store.get('config') || await this.appConfig()
+        const chainConfig = this.config.blockchain
+        this.txFee = new BigNumber(chainConfig.gas * this.gasPrice).div(10 ** 18).toString(10)
+        if (this.balance < this.txFee) {
+            this.isEnoughTOMO = false
+        }
     },
     methods: {
+        async getBalance () {
+            const web3 = this.web3
+            const result = await web3.eth.getBalance(this.account)
+            const balance = new BigNumber(result).div(10 ** 18)
+            this.balance = balance.toNumber().toFixed(4)
+        },
         validate: function () {
             this.$v.$touch()
-            if (!this.$v.$invalid) {
+            if (!this.$v.$invalid && this.isEnoughTOMO) {
                 this.confirm()
             }
         },

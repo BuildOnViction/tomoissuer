@@ -130,7 +130,7 @@
                                         <li>
                                             <p>Pooling fee</p>
                                             <div class="flex-box">
-                                                <span>{{ poolingFee }} TOMO</span>
+                                                <span>{{ formatNumber(poolingFee) }} TOMO</span>
                                                 <span>
                                                     <b-link :to="'/depositfee/' + address">Deposit more</b-link>
                                                 </span>
@@ -336,7 +336,8 @@ export default {
     created: async function () {
         try {
             const self = this
-            self.account = store.get('address') || await self.getAccount()
+            self.account = store.get('address') ||
+                self.$store.state.address || await self.getAccount()
             if (!self.account) {
                 self.$router.push({ path: '/login' })
             }

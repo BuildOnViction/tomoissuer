@@ -178,14 +178,14 @@
             </div>
         </div>
         <b-modal
+            id="hdwalletModal"
             ref="hdwalletModal"
             title="Please select the address you would like to interact with"
             centered
             scrollable
             size="md"
             hide-header
-            hide-footer
-            @ok="setHdPath">
+            hide-footer>
             <div class="tomo-modal-default text-left">
                 <h3 class="tmp-title-medium">Wallet Address</h3>
                 <div class="tmp-table-two colum-2">
@@ -341,6 +341,7 @@ export default {
                 self.address = await self.getAccount()
 
                 if (self.address) {
+                    self.$store.state.address = self.address.toLowerCase()
                     if (self.provider === 'metamask') {
                         store.set('address', self.address.toLowerCase())
                         store.set('network', self.provider)
@@ -437,6 +438,7 @@ export default {
             document.getElementById('hdwalletModal').style.display = 'none'
         },
         async setHdPath () {
+            this.$refs.hdwalletModal.hide()
             await this.login()
         },
         async moreHdAddresses () {
