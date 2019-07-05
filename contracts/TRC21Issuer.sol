@@ -103,7 +103,7 @@ contract TRC21Issuer {
         emit Apply(msg.sender, token, msg.value);
     }
 
-    function charge(address token) public payable onlyValidCapacity(token) {
+    function charge(address token) public payable {
         tokensState[token] = tokensState[token].add(msg.value);
         emit Charge(msg.sender, token, msg.value);
     }

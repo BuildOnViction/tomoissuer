@@ -11,6 +11,12 @@
     ],
     "tomoscanUrl": "http://localhost:3003",
     "tomoscanAPI": "https://scan.tomochain.com",
+    "redis": {
+        "host": "localhost",
+        "port": "6379",
+        "password": null,
+        "prefix": "TomoB"
+    },
     "blockchain": {
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",
