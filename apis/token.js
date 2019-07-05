@@ -33,8 +33,9 @@ function createContract (name) {
     try {
         const p = path.resolve(__dirname, '../contracts', 'TRC21.sol')
         const contractTemplate = fs.readFileSync(p, 'UTF-8')
-        const newContract = contractTemplate.replace('MyTRC21', name)
-        return newContract
+        // const newContract = contractTemplate.replace('MyTRC21', name)
+        // return newContract
+        return contractTemplate
     } catch (error) {
         throw error
     }
@@ -74,7 +75,6 @@ router.post('/createToken', [
 })
 
 router.post('/compileContract', [
-    check('name').exists().withMessage("'name' is required"),
     check('sourceCode').exists().withMessage("'sourceCode is required")
 ], async (req, res, next) => {
     const errors = validationResult(req)
@@ -82,10 +82,9 @@ router.post('/compileContract', [
         return next(errors.array())
     }
     try {
-        const name = req.body.name
         const sourceCode = req.body.sourceCode
         const compiledContract = solc.compile(sourceCode, 1)
-        let contract = compiledContract.contracts[name] || compiledContract.contracts[':' + name]
+        let contract = compiledContract.contracts['MyTRC21'] || compiledContract.contracts[':' + 'MyTRC21']
         const bytecode = contract.bytecode
         const abi = JSON.parse(contract.interface)
 
@@ -94,6 +93,21 @@ router.post('/compileContract', [
             abi
         })
     } catch (error) {
+        return next(error)
+    }
+})
+
+router.get('/getABI', [], async (req, res, next) => {
+    try {
+        const p = path.resolve(__dirname, '../build/contracts', 'MyTRC21.json')
+        const data = fs.readFileSync(p, 'UTF-8')
+        if (data) {
+            return res.json({
+                abi: JSON.parse(data).abi
+            })
+        }
+    } catch (error) {
+        console.log(error)
         return next(error)
     }
 })
