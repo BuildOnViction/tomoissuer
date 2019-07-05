@@ -165,7 +165,8 @@ export default {
             let self = this
             setTimeout(async () => {
                 try {
-                    self.account = store.get('address') || await self.getAccount()
+                    self.account = store.get('address') ||
+                        self.$store.state.address || await self.getAccount()
                     // if (store.get('address')) {
                     //     self.account = .toLowerCase()
                     // } else {

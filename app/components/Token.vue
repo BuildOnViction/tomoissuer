@@ -336,7 +336,8 @@ export default {
     created: async function () {
         try {
             const self = this
-            self.account = store.get('address') || await self.getAccount()
+            self.account = store.get('address') ||
+                self.$store.state.address || await self.getAccount()
             if (!self.account) {
                 self.$router.push({ path: '/login' })
             }
