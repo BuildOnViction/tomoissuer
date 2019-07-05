@@ -156,9 +156,9 @@
                             <div :class="'tomo_main_table' + (loading ? '' : ' colum-5')">
                                 <b-table
                                     id="transfer_table"
-                                    :per-page="tranferPerPage"
-                                    :fields="tranferFields"
-                                    :items="tranferItems"
+                                    :per-page="transferPerPage"
+                                    :fields="transferFields"
+                                    :items="transferItems"
                                     :busy="loading"
                                     stacked="lg">
                                     <template
@@ -213,9 +213,9 @@
                         </template>
                         <div class="mt-3 common_tmp_page">
                             <b-pagination
-                                v-model="tranferCurrentPage"
-                                :total-rows="tranferRows"
-                                :per-page="tranferPerPage"
+                                v-model="transferCurrentPage"
+                                :total-rows="transferRows"
+                                :per-page="transferPerPage"
                                 aria-controls="transfer_table"
                                 align="center"/>
                         </div>
@@ -302,10 +302,10 @@ export default {
             txFee: '',
             config: {},
             tomoscanUrl: '',
-            tranferCurrentPage: 1,
-            tranferRows: 10,
-            tranferPerPage: 6,
-            tranferFields: [
+            transferCurrentPage: 1,
+            transferRows: 10,
+            transferPerPage: 6,
+            transferFields: [
                 { key: 'txn_hash', label: 'Txn Hash' },
                 { key: 'age', label: 'Age' },
                 { key: 'from', label: 'From' },
@@ -313,7 +313,7 @@ export default {
                 { key: 'to', label: 'To' },
                 { key: 'amount', label: 'Amount' }
             ],
-            tranferItems: [],
+            transferItems: [],
             holdersCurrentPage: 1,
             holdersRows: 7,
             holdersPerPage: 6,
@@ -340,13 +340,7 @@ export default {
             if (!self.account) {
                 self.$router.push({ path: '/login' })
             }
-            // self.config = await self.appConfig()
-            self.appConfig().then(result => {
-                self.config = result
-            }).catch(error => {
-                console.log(error)
-                this.$toasted.show(error, { type: 'error' })
-            })
+            self.config = store.get('config') || await self.appConfig()
             await self.getTokenDetail()
             self.getTokenTransfer()
             self.getTokenHolders()
@@ -389,8 +383,8 @@ export default {
                                 new BigNumber(m.value).div(10 ** self.token.decimals).toNumber())
                         })
                     })
-                    self.tranferItems = items
-                    self.tranferRows = data.total
+                    self.transferItems = items
+                    self.transferRows = data.total
                     self.tokenTransfers = response.data.total
                     self.loading = false
                 }

@@ -132,12 +132,7 @@ export default {
         if (!self.tokenName || !self.tokenSymbol) {
             self.$router.push({ path: '/createToken' })
         } else {
-            self.appConfig().then(result => {
-                self.config = result
-            }).catch(error => {
-                console.log(error)
-                self.$toasted.show(error, { type: 'error' })
-            })
+            self.config = store.get('config') || await self.appConfig()
             await self.createContract()
         }
         self.account = store.get('address') || await self.getAccount()

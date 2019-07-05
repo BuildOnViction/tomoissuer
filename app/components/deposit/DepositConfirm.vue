@@ -132,12 +132,7 @@ export default {
             this.$router.push({ path: '/login' })
         }
 
-        this.appConfig().then(config => {
-            this.config = config
-        }).catch(error => {
-            console.log(error)
-            this.$toasted.show(error, { type: 'error' })
-        })
+        this.config = store.get('config') || await this.appConfig()
 
         this.web3.eth.getGasPrice().then(result => {
             this.gasPrice = result

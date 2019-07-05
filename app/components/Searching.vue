@@ -6,8 +6,6 @@
             type="text"
             class="form-control"
             placeholder="Token name or address"
-            @input="onChange"
-            @focus="onChange"
             @keydown.enter="onEnter"
             @keydown.esc="onEsc"
             @keydown.down="onArrowDown"
@@ -80,6 +78,23 @@ export default {
         // document.removeEventListener('click', this.focusSearchInput)
     },
     methods: {
+        filterResults () {
+            // first uncapitalize all the things
+            if (this.search) {
+                this.results = this.items.filter((item) => {
+                    // search by name
+                    let found = item.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+
+                    // search by address
+                    if (!found) {
+                        found = item.address.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+                    }
+
+                    return found
+                })
+                this.results = this.results.slice(0, 5)
+            }
+        },
         onChange () {
             // Let's warn the parent that a change was made
             this.$emit('input', this.search)

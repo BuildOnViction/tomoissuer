@@ -89,7 +89,8 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
     // Vue.prototype.TRC21Issuer = contract(TRC21IssuerAritfacts)
     if (wjs instanceof Web3) {
         Vue.prototype.web3 = wjs
-        const config = await getConfig()
+        const config = localStorage.get('config') || await getConfig()
+        localStorage.set('config', config)
         const chainConfig = config.blockchain
         Vue.prototype.TRC21Issuer = new wjs.eth.Contract(
             TRC21IssuerAritfacts.abi,
@@ -282,7 +283,7 @@ const getConfig = Vue.prototype.appConfig = async function () {
 Vue.prototype.detectNetwork = async function (provider) {
     try {
         let wjs = this.web3
-        const config = await getConfig()
+        const config = localStorage.get('config') || await getConfig()
         const chainConfig = config.blockchain
         if (!wjs) {
             switch (provider) {
@@ -322,7 +323,7 @@ Vue.prototype.signTransaction = async function (txParams) {
         const provider = Vue.prototype.NetworkProvider
         let signature
         if (provider === 'ledger') {
-            const config = await getConfig()
+            const config = localStorage.get('config') || await getConfig()
             const chainConfig = config.blockchain
             const rawTx = new Transaction(txParams)
             rawTx.v = Buffer.from([chainConfig.networkId])
