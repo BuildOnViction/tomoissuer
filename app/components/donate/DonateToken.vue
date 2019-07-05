@@ -29,6 +29,21 @@
                     <div
                         v-if="$v.tokenAddress.$dirty && !$v.tokenAddress.required"
                         class="text-danger pt-2">Required field</div>
+                    <div
+                        v-if="tokenAddress"
+                        class="pt-2">
+                        <div>
+                            Contract address:
+                            <b-link
+                                :href="config.tomoscanUrl + '/address/' + tokenAddress"
+                                target="_blank">
+                                {{ tokenAddress }}
+                            </b-link>
+                        </div>
+                        <div>
+                            Pooling fee balance: {{ formatNumber(poolingFee) }} TOMO
+                        </div>
+                    </div>
                 </b-form-group>
                 <b-form-group
                     :description="`Available balance:  ${balance} TOMO`"
@@ -63,12 +78,14 @@
 <script>
 import store from 'store'
 import BigNumber from 'bignumber.js'
+import axios from 'axios'
 import { validationMixin } from 'vuelidate'
 import {
     required,
     minValue
 } from 'vuelidate/lib/validators'
 import AutoComplete from '../Searching.vue'
+const regexAddress = /^0x[a-fA-F0-9]{40}$/
 export default {
     name: 'Donate',
     components: {
@@ -80,8 +97,10 @@ export default {
             account: '',
             balance: '',
             donationAmount: '',
+            depositingError: false,
             tokenAddress: '',
-            depositingError: false
+            config: {},
+            poolingFee: ''
         }
     },
     validations: {
@@ -93,7 +112,15 @@ export default {
             minValue: minValue(0)
         }
     },
-    watch: {},
+    computed: {},
+    watch: {
+        tokenAddress: async function (newValue) {
+            if (regexAddress.test(newValue)) {
+                await this.getData()
+                this.getPoolingFee()
+            }
+        }
+    },
     async updated () {
     },
     destroyed () { },
@@ -106,9 +133,26 @@ export default {
         if (!this.account) {
             this.$router.push({ path: '/login' })
         }
+        this.config = store.get('config') ||
+            this.appConfig().then(result => {
+                this.config = result
+            }).catch(error => {
+                console.log(error)
+                this.$toasted.show(error, { type: 'error' })
+            })
         this.getBalance()
     },
     methods: {
+        async getData () {
+            const self = this
+            const vuexStore = self.$store.state
+            if (vuexStore.token) {
+                self.token = vuexStore.token
+            } else {
+                const { data } = await axios.get(`/api/token/${self.tokenAddress}`)
+                self.token = data
+            }
+        },
         getBalance () {
             const web3 = this.web3
             web3.eth.getBalance(this.account).then(result => {
@@ -117,6 +161,16 @@ export default {
             }).catch(error => {
                 console.log(error)
                 this.$toasted.show(error, { type: 'error' })
+            })
+        },
+        getPoolingFee () {
+            const contract = this.TRC21Issuer
+            contract.methods.getTokenCapacity(this.tokenAddress).call().then(capacity => {
+                let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
+                this.poolingFee = balance.div(10 ** this.token.decimals).toNumber()
+            }).catch(error => {
+                console.log(error)
+                this.$toatsed.show(error, { type: 'error' })
             })
         },
         validate: function () {
