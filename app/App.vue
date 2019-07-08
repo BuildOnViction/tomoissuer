@@ -47,11 +47,12 @@
                                 </b-dropdown-text>
                                 <b-dropdown-divider />
                                 <b-dropdown-item
-                                    href="/donateTxFee">
+                                    to="/donateTxFee">
                                     Donate TRC-21 fee
                                 </b-dropdown-item>
                                 <b-dropdown-item
-                                    href="/help">
+                                    href="/help"
+                                    target="_blank">
                                     Help
                                 </b-dropdown-item>
                                 <b-dropdown-item
