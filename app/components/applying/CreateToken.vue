@@ -80,16 +80,16 @@
                 <div class="form-group mb-4">
                     <label>Issuance fee</label><span>50 TOMO</span>
                 </div>
-                <div
-                    v-if="!isEnoughTOMO"
-                    class="text-center">
-                    <span variant="danger">
-                        Not enought TOMO</span>
-                </div>
                 <div class="btn-box">
                     <b-button
                         class="tmp-btn-blue"
                         type="submit">Save & Review</b-button>
+                </div>
+                <div
+                    v-if="!isEnoughTOMO"
+                    class="text-center text-danger">
+                    <span>
+                        Your balance is not enough to pay the inssuance fee</span>
                 </div>
             </b-form>
         </div>

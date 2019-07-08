@@ -38,7 +38,7 @@
                     <b-button
                         class="tmp-btn-violet"
                         type="submit">
-                        I understand
+                        Submit
                     </b-button>
                 </div>
             </b-form>

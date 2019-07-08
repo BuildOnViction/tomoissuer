@@ -348,8 +348,10 @@ export default {
                     }
                     self.$bus.$emit('logged', 'user logged')
                     if (store.get('redirectTo')) {
+                        const redirectTo = store.get('redirectTo')
+                        store.remove('redirectTo')
                         self.$router.push({
-                            path: '/' + store.get('redirectTo')
+                            path: '/' + redirectTo
                         })
                     } else {
                         self.$router.push({
