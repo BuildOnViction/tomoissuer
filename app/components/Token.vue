@@ -55,7 +55,7 @@
                                     <p
                                         :title="formatNumber(token.totalSupplyNumber)"
                                         class="fsz-size text-blue">
-                                        {{ formatCapacity(token.totalSupplyNumber) }}
+                                        {{ formatNumber(formatCapacity(token.totalSupplyNumber)) }}
                                     </p>
                                 </div>
                             </div>
