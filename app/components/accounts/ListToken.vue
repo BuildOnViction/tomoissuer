@@ -184,7 +184,7 @@ export default {
                             volume: '---',
                             totalSupply: i.totalSupplyNumber,
                             ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
-                            holders: '---',
+                            holders: i.holders || '---',
                             applytomoz: (self.appliedList.indexOf(i.hash) > -1)
                         })
                     }))
