@@ -262,6 +262,40 @@ paths:
           description: Not Acceptable
         '500':
           description: Server Internal Error
+  /api/token/search:
+    get:
+      tags:
+        - Token
+      summary: Search token(calling TomoScan API)
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: Token name
+          required: true
+        - name: type
+          in: query
+          type: string
+          description: 'Token type, hardcode: trc21'
+        - name: limit
+          in: query
+          type: string
+          description: 'Number of records return, hardcode: 20'
+        - name: page
+          in: query
+          type: string
+          description: 'page number, hardcode: 1'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '406':
+          description: Not Acceptable
+        '500':
+          description: Server Internal Error
 definitions:
   token:
     type: object

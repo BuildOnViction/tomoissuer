@@ -172,7 +172,7 @@ router.post('/verifyContract', [
 
 router.get('/search', [], async (req, res, next) => {
     try {
-        const query = req.query.q || ''
+        const query = req.query.query || ''
         const callQuery = {
             query,
             type: 'trc21',

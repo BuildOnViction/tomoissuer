@@ -153,7 +153,7 @@ export default {
             }
         },
         async doSearch () {
-            const { data } = await axios.get('/api/token/search?q=' + this.search || '')
+            const { data } = await axios.get('/api/token/search?query=' + this.search || '')
             this.results = data.items
             this.isOpen = true
         }
