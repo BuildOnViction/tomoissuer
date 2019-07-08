@@ -14,7 +14,9 @@
                         v-model="tokenName"
                         type="text"
                         autocomplete="off"
+                        maxlength="20"
                         placeholder="Token name"/>
+                    <small class="float-right mt-2">Character left: {{ nameLeft }}</small>
                     <div
                         v-if="$v.tokenName.$dirty && !$v.tokenName.required"
                         class="text-danger pt-2">Required field</div>
@@ -27,7 +29,9 @@
                         v-model="tokenSymbol"
                         autocomplete="off"
                         type="text"
+                        maxlength="5"
                         placeholder="Token symbol"/>
+                    <small class="float-right mt-2">Character left: {{ symbolLeft }}</small>
                     <div
                         v-if="$v.tokenSymbol.$dirty && !$v.tokenSymbol.required"
                         class="text-danger pt-2">Required field</div>
@@ -132,6 +136,14 @@ export default {
         tokenName: { required },
         tokenSymbol: { required },
         totalSupply: { required }
+    },
+    computed: {
+        nameLeft: function () {
+            return 20 - this.tokenName.length
+        },
+        symbolLeft: function () {
+            return 5 - this.tokenSymbol.length
+        }
     },
     watch : { },
     async updated () {
