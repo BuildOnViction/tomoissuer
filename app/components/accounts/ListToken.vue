@@ -184,7 +184,7 @@ export default {
                             volume: '---',
                             totalSupply: i.totalSupplyNumber,
                             ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
-                            holders: '---',
+                            holders: i.holders || '---',
                             applytomoz: (self.appliedList.indexOf(i.hash) > -1)
                         })
                     }))
@@ -218,7 +218,7 @@ export default {
                 let data = '0x70a08231' +
                     '000000000000000000000000' +
                     this.account.substr(2) // chop off the 0x
-                const result = await web3.eth.call({ to: this.account, data: data })
+                const result = await web3.eth.call({ to: address, data: data })
                 let balance = new BigNumber(web3.utils.hexToNumberString(result))
                 return balance.div(10 ** decimals).toNumber()
             }
