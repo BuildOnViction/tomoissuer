@@ -82,9 +82,9 @@
                 </div>
                 <div
                     v-if="!isEnoughTOMO"
-                    class="text-center">
-                    <span variant="danger">
-                        Not enought TOMO</span>
+                    class="text-center text-danger">
+                    <span>
+                        Your balance is not enough to pay the inssuance fee</span>
                 </div>
                 <div class="btn-box">
                     <b-button
