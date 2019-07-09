@@ -88,5 +88,13 @@ textarea {
             top: 15px;
             padding: 5px;
         }
+
+        .txt-fixed-behind {
+            background: $background-white;
+            position: absolute;
+            right: -40px;
+            top: 15px;
+            padding: 5px;
+        }
     }
 }
