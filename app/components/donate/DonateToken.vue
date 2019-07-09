@@ -30,7 +30,7 @@
                         v-if="$v.tokenAddress.$dirty && !$v.tokenAddress.required"
                         class="text-danger pt-2">Required field</div>
                     <div
-                        v-if="tokenAddress"
+                        v-if="token.hash"
                         class="pt-2">
                         <div>
                             Contract address:
@@ -44,6 +44,9 @@
                             TRC-21 fee fund: {{ formatNumber(poolingFee) }} TOMO
                         </div>
                     </div>
+                    <div
+                        v-if="!tokenExist"
+                        class="text-danger pt-2">Token not found</div>
                 </b-form-group>
                 <b-form-group
                     :description="`Available balance:  ${balance} TOMO`"
@@ -100,7 +103,9 @@ export default {
             depositingError: false,
             tokenAddress: '',
             config: {},
-            poolingFee: ''
+            poolingFee: '',
+            token: {},
+            tokenExist: true
         }
     },
     validations: {
@@ -145,12 +150,24 @@ export default {
     methods: {
         async getData () {
             const self = this
-            const vuexStore = self.$store.state
-            if (vuexStore.token) {
-                self.token = vuexStore.token
-            } else {
-                const { data } = await axios.get(`/api/token/${self.tokenAddress}`)
-                self.token = data
+            try {
+                const vuexStore = self.$store.state
+                if (vuexStore.token) {
+                    self.token = vuexStore.token
+                } else {
+                    const { data } = await axios.get(`/api/token/${self.tokenAddress}`)
+                    if (data) {
+                        self.token = data
+                        self.tokenExist = true
+                    } else {
+                        self.token = {}
+                        self.tokenExist = false
+                    }
+                }
+            } catch (error) {
+                self.token = {}
+                self.tokenExist = false
+                self.tokenAddress = ''
             }
         },
         getBalance () {

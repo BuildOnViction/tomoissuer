@@ -30,6 +30,7 @@
 
 <script>
 import axios from 'axios'
+const regexAddress = /^0x[a-fA-F0-9]{40}$/
 export default {
     name: 'AutoComplete',
 
@@ -61,9 +62,11 @@ export default {
         }
     },
     watch: {
-        search: async function (newValue) {
+        search: async function (newValue, oldValue) {
             if (newValue !== '' && !this.page.tokenAddress) {
-                this.doSearch()
+                if (regexAddress.test(newValue)) {
+                    this.page.tokenAddress = newValue
+                } else { this.doSearch() }
             } else {
                 this.results = []
             }
