@@ -10,7 +10,7 @@
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
-                    class="mb-4"
+                    :class="'mb-4' + ($v.newFee.$dirty ? ' input-warn' : '')"
                     label-for="newFee">
                     <span class="txt-fixed">{{ token.symbol }}</span>
                     <b-form-input

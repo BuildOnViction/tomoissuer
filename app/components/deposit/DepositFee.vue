@@ -11,7 +11,7 @@
                 @submit.prevent="validate()">
                 <b-form-group
                     :description="`Available balance: ${balance} TOMO`"
-                    class="mb-4"
+                    :class="'mb-4' + ($v.depositFee.$dirty ? ' input-warn' : '')"
                     label-for="depositFee">
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input

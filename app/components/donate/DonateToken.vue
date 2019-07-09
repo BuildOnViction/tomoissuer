@@ -50,7 +50,7 @@
                 </b-form-group>
                 <b-form-group
                     :description="`Available balance:  ${balance} TOMO`"
-                    class="mb-4"
+                    :class="'mb-4' + ($v.donationAmount.$dirty ? ' input-warn' : '')"
                     label="Donation amount"
                     label-for="donationAmount">
                     <span class="txt-fixed">TOMO</span>
