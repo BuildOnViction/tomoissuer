@@ -15,11 +15,24 @@
                         type="text"
                         autocomplete="off"
                         maxlength="20"
-                        placeholder="Token name"/>
+                        placeholder="Token name"
+                        @change="onChangeName"/>
+                    <div
+                        v-if="checkName"
+                        class="txt-fixed-behind">
+                        <span class="checkmark">
+                            <div class="checkmark_circle" />
+                            <div class="checkmark_stem" />
+                            <div class="checkmark_kick" />
+                        </span>
+                    </div>
                     <small class="float-right mt-2">Character left: {{ nameLeft }}</small>
                     <div
                         v-if="$v.tokenName.$dirty && !$v.tokenName.required"
                         class="text-danger pt-2">Required field</div>
+                    <div
+                        v-if="$v.tokenName.$dirty && !$v.tokenName.latin"
+                        class="text-danger pt-2">Required latin characters</div>
                 </b-form-group>
                 <b-form-group
                     class="mb-4"
@@ -30,7 +43,17 @@
                         autocomplete="off"
                         type="text"
                         maxlength="5"
-                        placeholder="Token symbol"/>
+                        placeholder="Token symbol"
+                        @change="onChangeSymbol"/>
+                    <div
+                        v-if="checkSymbol"
+                        class="txt-fixed-behind">
+                        <span class="checkmark">
+                            <div class="checkmark_circle" />
+                            <div class="checkmark_stem" />
+                            <div class="checkmark_kick" />
+                        </span>
+                    </div>
                     <small class="float-right mt-2">Character left: {{ symbolLeft }}</small>
                     <div
                         v-if="$v.tokenSymbol.$dirty && !$v.tokenSymbol.required"
@@ -46,6 +69,15 @@
                         placeholder="Token supply"
                         @change="onChangeSupply"/>
                     <div
+                        v-if="checkSupply"
+                        class="txt-fixed-behind">
+                        <span class="checkmark">
+                            <div class="checkmark_circle" />
+                            <div class="checkmark_stem" />
+                            <div class="checkmark_kick" />
+                        </span>
+                    </div>
+                    <div
                         v-if="$v.totalSupply.$dirty && !$v.totalSupply.required"
                         class="text-danger pt-2">Required field</div>
                 </b-form-group>
@@ -57,7 +89,17 @@
                         v-model="decimals"
                         autocomplete="off"
                         type="number"
-                        placeholder="Decimals"/>
+                        placeholder="Decimals"
+                        @change="onChangeDecimals"/>
+                    <div
+                        v-if="checkDecimals"
+                        class="txt-fixed-behind">
+                        <span class="checkmark">
+                            <div class="checkmark_circle" />
+                            <div class="checkmark_stem" />
+                            <div class="checkmark_kick" />
+                        </span>
+                    </div>
                     <div
                         v-if="$v.decimals.$dirty && !$v.decimals.required"
                         class="text-danger pt-2">Required field</div>
@@ -106,9 +148,13 @@ import { validationMixin } from 'vuelidate'
 import {
     required,
     minValue,
-    maxValue
+    maxValue,
+    helpers
 } from 'vuelidate/lib/validators'
 import BigNumber from 'bignumber.js'
+
+const regex = /^[a-zA-Z0-9_.-]*$/
+const latin = helpers.regex('latin', /^[a-zA-Z0-9_.-]*$/)
 export default {
     name: 'App',
     components: { },
@@ -124,7 +170,11 @@ export default {
             balance: 0,
             txFee: 0,
             gasPrice: 10000000000000,
-            isEnoughTOMO: true
+            isEnoughTOMO: true,
+            checkName: false,
+            checkSymbol: false,
+            checkSupply: false,
+            checkDecimals: false
         }
     },
     validations: {
@@ -133,8 +183,8 @@ export default {
             minValue: minValue(0),
             maxValue: maxValue(18)
         },
-        tokenName: { required },
-        tokenSymbol: { required },
+        tokenName: { required, latin },
+        tokenSymbol: { required, latin },
         totalSupply: { required }
     },
     computed: {
@@ -202,6 +252,26 @@ export default {
             const result = value.replace(/\D/g, '')
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             this.totalSupply = result
+            if (this.totalSupply.length !== 0) {
+                this.checkSupply = true
+            } else { this.checkSupply = false }
+        },
+        onChangeName () {
+            if (this.tokenName.length !== 0 &&
+                regex.test(this.tokenName)) {
+                this.checkName = true
+            } else { this.checkName = false }
+        },
+        onChangeSymbol () {
+            if (this.tokenSymbol.length !== 0 &&
+                regex.test(this.tokenSymbol)) {
+                this.checkSymbol = true
+            } else { this.checkSymbol = false }
+        },
+        onChangeDecimals () {
+            if (this.decimals.length !== 0) {
+                this.checkDecimals = true
+            } else { this.checkDecimals = false }
         }
     }
 }
