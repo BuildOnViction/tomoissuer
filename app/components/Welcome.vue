@@ -12,7 +12,9 @@
             </div>
             <div class="step-login">
                 <h2 class="tmp-title-big">TomoIssuer</h2>
-                <p>Issue your own token with fee paid by itself in minutes</p>
+                <p class="custom-welcome-title">
+                    Issue your own token with fee paid by itself in minutes
+                </p>
                 <div class="btn-box">
                     <b-button
                         class="tmp-btn-blue"
@@ -25,7 +27,8 @@
                         Donate TRC-21 fee
                     </b-button>
                 </div>
-                <div class="link-login">
+                <div
+                    class="link-login">
                     <span>Already have your token?</span>
                     <b-link
                         to="/login">

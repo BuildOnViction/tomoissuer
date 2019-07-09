@@ -7,9 +7,9 @@
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
-                    class="mb-4"
+                    :class="'mb-4' + ($v.tokenName.$dirty && !checkName ? ' input-warn' : '')"
                     label-for="tokenName"
-                    description="Please use only Latin letters">
+                    description="Please use only Latin letters and numbers">
                     <b-form-input
                         v-model="tokenName"
                         type="text"
@@ -35,9 +35,9 @@
                         class="text-danger pt-2">Required latin characters</div>
                 </b-form-group>
                 <b-form-group
-                    class="mb-4"
+                    :class="'mb-4' + ($v.tokenSymbol.$dirty && !checkSymbol ? ' input-warn' : '')"
                     label-for="tokenSymbol"
-                    description="Please use only Latin letters">
+                    description="Please use only Latin letters and numbers">
                     <b-form-input
                         v-model="tokenSymbol"
                         autocomplete="off"
@@ -60,7 +60,7 @@
                         class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
-                    class="mb-4"
+                    :class="'mb-4' + ($v.totalSupply.$dirty && !checkSupply ? ' input-warn' : '')"
                     label-for="totalSupply">
                     <b-form-input
                         v-model="totalSupply"
@@ -82,7 +82,7 @@
                         class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
-                    class="mb-4"
+                    :class="'mb-4' + ($v.decimals.$dirty && !checkDecimals ? ' input-warn' : '')"
                     label-for="decimals"
                     description="Please use the number from 0 to 18">
                     <b-form-input

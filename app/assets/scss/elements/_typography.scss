@@ -43,6 +43,8 @@
 	@include fsz-cha(20,18,18);
 	font-family: $font-quicksand;
 	color: $color-text-default;
+	font-weight: 600;
+	font-size: 100%;
 	&.oranges {
 		color: $color-text-oranges;
 	}
@@ -61,6 +63,7 @@
 	@include fsz-cha(28,24,24);
 	font-family: $font-baijam;
 	color: $color-text-default;
+	font-weight: 650;
 	&.oranges {
 		color: $color-text-oranges;
 	}
@@ -79,6 +82,7 @@
 	@include fsz-cha(90,50,30);
 	font-family: $font-baijam;
 	color: $color-text-default;
+	font-weight: 650;
 	&.oranges {
 		color: $color-text-oranges;
 	}
@@ -91,4 +95,13 @@
 	&.yellow {
 		color: $color-text-yellow;
 	}
+}
+
+.title-small {
+	font-weight: 500;
+}
+
+.custom-welcome-title {
+	margin-bottom: 1.5em;
+	font-size: 20px
 }

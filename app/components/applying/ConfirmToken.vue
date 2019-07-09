@@ -3,18 +3,10 @@
         <div class="confirm-table">
             <div class="info-header text-center">
                 <p><i class="tomoissuer-icon-startup"/></p>
-                <h2 class="tmp-title-large">{{ formatCurrencySymbol(formatNumber(totalSupply), tokenSymbol) }}</h2>
+                <h2 class="tmp-title-large">{{ `${tokenName} (${tokenSymbol})` }}</h2>
             </div>
             <div class="tmp-table-three">
                 <table>
-                    <tr>
-                        <td>Token name</td>
-                        <td>{{ tokenName }}</td>
-                    </tr>
-                    <tr>
-                        <td>Token symbol</td>
-                        <td>{{ tokenSymbol }}</td>
-                    </tr>
                     <tr>
                         <td>Token supply</td>
                         <td>{{ formatNumber(totalSupply) }} {{ tokenSymbol }}</td>

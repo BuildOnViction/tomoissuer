@@ -26,8 +26,11 @@
                                 v-if="isTomonet"
                                 class="tmp-btn-blue"
                                 to="/createToken">
-                                <i class="tomoissuer-icon-plus"/>
-                                Issue new token
+                                <i
+                                    class="tomoissuer-icon-plus text-center"/>
+                                <div
+                                    class="text-center issue-text"
+                                    style="margin-right:11px">Issue new token</div>
                             </b-nav-item>
                             <b-nav-item-dropdown
                                 v-if="isTomonet"

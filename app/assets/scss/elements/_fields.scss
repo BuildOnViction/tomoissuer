@@ -24,7 +24,7 @@ textarea {
     padding: 2em 1em;
     @include fsz(16);
 	&:focus {
-		outline: none;
+        outline: none;
     }
     &::-webkit-input-placeholder {
         /* Chrome/Opera/Safari */
@@ -96,5 +96,10 @@ textarea {
             top: 15px;
             padding: 5px;
         }
+    }
+}
+.input-warn {
+    input {
+        box-shadow: 0 0 0 0.1rem rgba(red, 0.25) !important;
     }
 }
