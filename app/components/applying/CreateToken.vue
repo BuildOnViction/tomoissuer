@@ -9,7 +9,7 @@
                 <b-form-group
                     class="mb-4"
                     label-for="tokenName"
-                    description="Please use only Latin letters">
+                    description="Please use only Latin letters and numbers">
                     <b-form-input
                         v-model="tokenName"
                         type="text"
@@ -37,7 +37,7 @@
                 <b-form-group
                     class="mb-4"
                     label-for="tokenSymbol"
-                    description="Please use only Latin letters">
+                    description="Please use only Latin letters and numbers">
                     <b-form-input
                         v-model="tokenSymbol"
                         autocomplete="off"
@@ -171,7 +171,7 @@ export default {
             txFee: 0,
             gasPrice: 10000000000000,
             isEnoughTOMO: true,
-            checkName: false,
+            checkName: '',
             checkSymbol: false,
             checkSupply: false,
             checkDecimals: false

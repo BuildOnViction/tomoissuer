@@ -61,7 +61,7 @@
             span {
                 &:first-child {
                     width: 60%;
-                    font-weight: 500;
+                    font-weight: normal;
                 }
                 a {
                     padding-right: 20px;
@@ -94,7 +94,7 @@
                 p {
                     margin-bottom: .2em;
                     &:last-child {
-                        font-weight: 500;
+                        font-weight: normal;
                     }
                     a {
                         font-weight: normal;

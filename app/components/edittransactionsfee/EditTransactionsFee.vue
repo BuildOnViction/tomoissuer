@@ -14,7 +14,7 @@
                     label-for="newFee">
                     <span class="txt-fixed">{{ token.symbol }}</span>
                     <b-form-input
-                        :placeholder="`How much fee for a transaction (unit: ${token.symbol})`"
+                        :placeholder="`How much fee for a transaction`"
                         v-model="newFee"
                         type="text"/>
                     <div

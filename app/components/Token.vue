@@ -28,8 +28,9 @@
                                 <b-link
                                     v-if="!isAppliedZ"
                                     :to="'/tomozcondition/' + address"
-                                    class="tmp-btn-violet">
-                                    <i class="tomoissuer-icon-tomoz"/>
+                                    class="tmp-btn-violet"
+                                    style="width: 270px">
+                                    <i class="tomoissuer-icon-tomoz mr-1"/>
                                     Apply to pay fee by token
                                 </b-link>
                             </li>
@@ -80,22 +81,24 @@
                                     <p class="tmp-title-medium">Profile summary</p>
                                     <ul>
                                         <li>
-                                            <p>Profile summary</p>
+                                            <p class="title-small">
+                                                Contract address
+                                            </p>
                                             <p class="common_txt_ellipsis text-blue">
                                                 <a
                                                     :title="token.hash"
-                                                    :href="config.tomoscanUrl + '/address/' + address"
+                                                    :href="config.tomoscanUrl + '/tokens/' + address"
                                                     target="_blank">
                                                     {{ token.hash }}
                                                 </a>
                                             </p>
                                         </li>
                                         <li>
-                                            <p>Decimals</p>
+                                            <p class="title-small">Decimals</p>
                                             <p>{{ token.decimals }}</p>
                                         </li>
-                                        <li>
-                                            <p>
+                                        <li v-if="isAppliedZ">
+                                            <p class="title-small">
                                                 Transactions fee
                                                 <b-link
                                                     :to="`/edittransactionsfee/${address}`">
@@ -116,7 +119,7 @@
                                     <p class="tmp-title-medium">Balance</p>
                                     <ul>
                                         <li>
-                                            <p>Owner balance</p>
+                                            <p class="title-small">Owner balance</p>
                                             <div class="flex-box">
                                                 <span>{{ formatCurrencySymbol(
                                                 formatNumber(ownerBalance), token.symbol) }}</span>
@@ -127,8 +130,8 @@
                                                 </span>
                                             </div>
                                         </li>
-                                        <li>
-                                            <p>Pooling fee</p>
+                                        <li v-if="isAppliedZ">
+                                            <p class="title-small">TRC-21 fee fund</p>
                                             <div class="flex-box">
                                                 <span>{{ formatNumber(poolingFee) }} TOMO</span>
                                                 <span>
@@ -213,6 +216,7 @@
                         </template>
                         <div class="mt-3 common_tmp_page">
                             <b-pagination
+                                v-if="transferRows > 2"
                                 v-model="transferCurrentPage"
                                 :total-rows="transferRows"
                                 :per-page="transferPerPage"
@@ -221,7 +225,7 @@
                         </div>
                     </b-tab>
                     <b-tab
-                        title="holders">
+                        title="Holders">
                         <template>
                             <p>A total of {{ formatNumber(tokenHolders) }}
                                 {{ tokenHolders > 1 ? 'holders' : 'holder' }} found
@@ -256,6 +260,7 @@
                         </template>
                         <div class="mt-3 common_tmp_page">
                             <b-pagination
+                                v-if="holdersRows > 2"
                                 v-model="holdersCurrentPage"
                                 :total-rows="holdersRows"
                                 :per-page="holdersPerPage"
@@ -303,7 +308,7 @@ export default {
             config: {},
             tomoscanUrl: '',
             transferCurrentPage: 1,
-            transferRows: 10,
+            transferRows: 0,
             transferPerPage: 6,
             transferFields: [
                 { key: 'txn_hash', label: 'Txn Hash' },
@@ -315,7 +320,7 @@ export default {
             ],
             transferItems: [],
             holdersCurrentPage: 1,
-            holdersRows: 7,
+            holdersRows: 0,
             holdersPerPage: 6,
             holdersFields: [
                 { key: 'rank', label: 'Rank' },

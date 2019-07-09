@@ -2,7 +2,7 @@
     <div
         v-if="listokenItems"
         class="container">
-        <h2 class="tmp-title-large">Issue token</h2>
+        <h2 class="tmp-title-large">Token List</h2>
         <div class="tmp-table-one">
             <b-tab
                 title="Transfer"
@@ -82,6 +82,7 @@
                 </template>
                 <div class="mt-3 common_tmp_page">
                     <b-pagination
+                        v-if="listokenRows > 2"
                         v-model="listokenCurrentPage"
                         :total-rows="listokenRows"
                         :per-page="listokenPerPage"
@@ -124,7 +125,7 @@ export default {
     data () {
         return {
             listokenCurrentPage: this.$store.state.listokenCurrentPage || 1,
-            listokenRows: 10,
+            listokenRows: 0,
             listokenPerPage: 7,
             listokenFields: [
                 { key: 'token', label: 'Token' },
@@ -178,7 +179,7 @@ export default {
                 if (data.items.length > 0) {
                     await Promise.all(data.items.map(async i => {
                         items.push({
-                            token: `${i.symbol}(${i.name})`,
+                            token: `${i.symbol} (${i.name})`,
                             hash: i.hash,
                             price: '---',
                             volume: '---',

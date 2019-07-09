@@ -2,8 +2,8 @@
     <div class="container container-small flex-content-center">
         <div class="tomo-body-fullw">
             <div class="info-header">
-                <h2 class="tmp-title-large">Deposit pooling fee</h2>
-                <p>Current {{ token.name }} pooling fee: {{ currentPoolingFee }} TOMO</p>
+                <h2 class="tmp-title-large">Deposit TRC-21 fee</h2>
+                <p>Current {{ token.name }} TRC-21 fee fund: {{ currentPoolingFee }} TOMO</p>
             </div>
             <b-form
                 class="tmp-form-one"

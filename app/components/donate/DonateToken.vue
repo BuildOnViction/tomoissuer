@@ -35,13 +35,13 @@
                         <div>
                             Contract address:
                             <b-link
-                                :href="config.tomoscanUrl + '/address/' + tokenAddress"
+                                :href="config.tomoscanUrl + '/tokens/' + tokenAddress"
                                 target="_blank">
                                 {{ tokenAddress }}
                             </b-link>
                         </div>
                         <div>
-                            Pooling fee balance: {{ formatNumber(poolingFee) }} TOMO
+                            TRC-21 fee fund: {{ formatNumber(poolingFee) }} TOMO
                         </div>
                     </div>
                 </b-form-group>
