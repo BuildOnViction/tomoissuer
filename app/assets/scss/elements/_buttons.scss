@@ -23,13 +23,13 @@ button {
     a {
         @include transit;
         background: $background-blue;
-        border: 1px solid $background-blue;
+        border: 2px solid $background-blue;
         color: $color-text-white!important;
         border-radius: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: .5em 1.2em!important;
+        padding: .3em 1.2em!important;
         i {
             padding-right: 5px;
             font-weight: bold;
@@ -44,7 +44,7 @@ button {
     a {
         @include transit;
         background: $background-violet;
-        border: 1px solid $background-violet;
+        border: 2px solid $background-violet;
         color: $color-text-white!important;
         display: flex;
         align-items: center;
@@ -71,13 +71,13 @@ input {
     &.tmp-btn-blue {
         @include transit;
         background: $background-blue;
-        border: 1px solid $background-blue;
+        border: 2px solid $background-blue;
         color: $color-text-white!important;
         border-radius: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: .5em 1.2em!important;
+        padding: .3em 1.2em!important;
         font-weight: 500;
         min-width: 220px;
         @include media-breakpoint-down(sm) {
@@ -94,7 +94,7 @@ input {
         &:hover,
         .active {
             background: $background-blue-active;
-            border: 1px solid $background-blue;
+            border: 2px solid $background-blue;
         }
     }
     &.tmp-btn-boder-blue {
@@ -106,7 +106,7 @@ input {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: .5em 1.2em!important;
+        padding: .3em 1.2em!important;
         font-weight: 500;
         min-width: 220px;
         @include media-breakpoint-down(sm) {
@@ -123,7 +123,7 @@ input {
         &:hover,
         .active {
             background: $background-blue-active;
-            border: 1px solid $background-blue;
+            border: 2px solid $background-blue;
             color: $color-text-white!important;
         }
     }
@@ -134,7 +134,7 @@ input {
     &.tmp-btn-violet {
         @include transit;
         background: $background-violet;
-        border: 1px solid $background-violet;
+        border: 2px solid $background-violet;
         color: $color-text-white!important;
         border-radius: 30px;
         display: flex;
@@ -143,10 +143,10 @@ input {
         padding: .5em 1.2em!important;
         font-weight: 500;
         min-width: 220px;
+        line-height: 1;
         @include media-breakpoint-down(sm) {
             min-width: 180px;
         }
-        @include fsz(16);
         i {
             padding-right: 5px;
             font-weight: bold;
@@ -154,13 +154,13 @@ input {
         &:hover,
         &.active {
             background: $background-violet-active;
-            border: 1px solid $background-violet;
+            border: 2px solid $background-violet;
         }
     }
     &.tmp-btn-boder-violet {
         @include transit;
         background: transparent;
-        border: 1px solid $background-violet;
+        border: 2px solid $background-violet;
         color: $color-text-violet!important;
         border-radius: 30px;
         display: flex;
@@ -169,10 +169,10 @@ input {
         padding: .5em 1.2em!important;
         font-weight: 500;
         min-width: 220px;
+        line-height: 1;
         @include media-breakpoint-down(sm) {
             min-width: 180px;
         }
-        @include fsz(18);
         &.btn-min {
             min-width: 100px;
         }
@@ -183,7 +183,7 @@ input {
         &:hover,
         .active {
             background: $background-violet-active;
-            border: 1px solid $background-violet;
+            border: 2px solid $background-violet;
             color: $color-text-white!important;
         }
     }

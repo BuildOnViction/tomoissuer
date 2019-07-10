@@ -21,7 +21,7 @@ textarea {
     border: none;
     display: block;
     width: 100%;
-    padding: 2em 1em;
+    padding: 1.5em 1em;
     @include fsz(16);
 	&:focus {
         outline: none;
@@ -85,7 +85,7 @@ textarea {
             background: $background-white;
             position: absolute;
             right: 10px;
-            top: 15px;
+            top: 7px;
             padding: 5px;
         }
 
@@ -93,7 +93,7 @@ textarea {
             background: $background-white;
             position: absolute;
             right: -40px;
-            top: 15px;
+            top: 7px;
             padding: 5px;
         }
     }

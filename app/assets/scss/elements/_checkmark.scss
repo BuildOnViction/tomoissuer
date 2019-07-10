@@ -1,7 +1,7 @@
 .checkmark {
     display:inline-block !important;
-    width: 22px;
-    height:22px;
+    width: 18px;
+    height:18px;
     -ms-transform: rotate(45deg); /* IE 9 */
     -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
     transform: rotate(45deg);
@@ -9,8 +9,8 @@
 
 .checkmark_circle {
     position: absolute !important;
-    width:22px;
-    height:22px;
+    width:18px;
+    height:18px;
     background-color: $background-blue;
     border-radius:11px;
     left:0;
