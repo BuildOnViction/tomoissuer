@@ -20,11 +20,7 @@
                     <div
                         v-if="checkName"
                         class="txt-fixed-behind">
-                        <span class="checkmark">
-                            <div class="checkmark_circle" />
-                            <div class="checkmark_stem" />
-                            <div class="checkmark_kick" />
-                        </span>
+                        <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
                     </div>
                     <small class="float-right mt-2">Character left: {{ nameLeft }}</small>
                     <div
@@ -48,11 +44,7 @@
                     <div
                         v-if="checkSymbol"
                         class="txt-fixed-behind">
-                        <span class="checkmark">
-                            <div class="checkmark_circle" />
-                            <div class="checkmark_stem" />
-                            <div class="checkmark_kick" />
-                        </span>
+                        <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
                     </div>
                     <small class="float-right mt-2">Character left: {{ symbolLeft }}</small>
                     <div
@@ -71,11 +63,7 @@
                     <div
                         v-if="checkSupply"
                         class="txt-fixed-behind">
-                        <span class="checkmark">
-                            <div class="checkmark_circle" />
-                            <div class="checkmark_stem" />
-                            <div class="checkmark_kick" />
-                        </span>
+                        <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
                     </div>
                     <div
                         v-if="$v.totalSupply.$dirty && !$v.totalSupply.required"
@@ -94,11 +82,7 @@
                     <div
                         v-if="checkDecimals"
                         class="txt-fixed-behind">
-                        <span class="checkmark">
-                            <div class="checkmark_circle" />
-                            <div class="checkmark_stem" />
-                            <div class="checkmark_kick" />
-                        </span>
+                        <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
                     </div>
                     <div
                         v-if="$v.decimals.$dirty && !$v.decimals.required"
