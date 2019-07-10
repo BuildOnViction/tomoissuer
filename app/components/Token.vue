@@ -105,7 +105,7 @@
                                                     <i class="tomoissuer-icon-edit-pencil"/>
                                                 </b-link>
                                             </p>
-                                            <p>{{ txFee || '---' }}</p>
+                                            <p>{{ txFee }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -468,6 +468,7 @@ export default {
                 web3.eth.call({ to: this.address, data: data }).then(result => {
                     let balance = new BigNumber(web3.utils.hexToNumberString(result))
                     this.txFee = balance.div(10 ** this.token.decimals).toNumber()
+                    console.log(this.txFee)
                     this.$store.state.token['txFee'] = this.txFee
                 }).catch(error => {
                     console.log(error)
