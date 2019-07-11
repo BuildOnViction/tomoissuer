@@ -21,7 +21,10 @@
                             <b-img
                                 src="/app/assets/images/img_condition_1@3x.png"/>
                         </p>
-                        <p>You have to deposit a minimum of 10 TOMO as transaction fee</p>
+                        <p>
+                            The token issuer has to deposit a minimum amount of 10 TOMO to apply
+                            to the TomoZ protocol. The deposit cannot be withdrawn.
+                        </p>
                     </b-col>
                     <b-col
                         cols="6">
@@ -29,7 +32,10 @@
                             <b-img
                                 src="/app/assets/images/img_condition_2@3x.png"/>
                         </p>
-                        <p>Your deposit can't be withdrawed</p>
+                        <p>
+                            The deposited amount is deducted to pay masternodes for transaction
+                            processing whenever a token transaction from token holders is processed.
+                        </p>
                     </b-col>
                     <b-col
                         cols="6">
@@ -38,9 +44,8 @@
                                 src="/app/assets/images/img_condition_3@3x.png"/>
                         </p>
                         <p>
-                            The amount of deposit will be deducted whenever a
-                            transaction from the user token is generated,
-                            token users will pay the transaction fee through that token.
+                            The token issuer will receive an amount of tokens from token
+                            holders as compensation for the deposit.
                         </p>
                     </b-col>
                     <b-col
@@ -50,9 +55,9 @@
                                 src="/app/assets/images/img_condition_4@3x.png"/>
                         </p>
                         <p>
-                            When your token smart contract is not enough TOMO to
-                            make transaction fee, the token user will not be
-                            able to execute the transaction.
+                            Token transactions will not be processed if the TOMO deposit is not
+                            enough for paying masternodes. In that case, any one can donate
+                            TOMO to resume the token transaction processing.
                         </p>
                     </b-col>
                 </b-row>

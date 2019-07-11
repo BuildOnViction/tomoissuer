@@ -230,7 +230,7 @@
                             <p>A total of {{ formatNumber(tokenHolders) }}
                                 {{ tokenHolders > 1 ? 'holders' : 'holder' }} found
                                 (Showing the last 100K records)</p>
-                            <div :class="'tomo_main_table' + (loading ? '' : 'colum-4')">
+                            <div :class="'tomo_main_table' + (loading ? '' : ' colum-4')">
                                 <b-table
                                     id="holders_table"
                                     :per-page="holdersPerPage"

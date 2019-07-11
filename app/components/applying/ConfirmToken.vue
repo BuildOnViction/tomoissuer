@@ -20,8 +20,8 @@
                         <td>{{ type.toUpperCase() }}</td>
                     </tr>
                     <tr>
-                        <td>Issue fee</td>
-                        <td>50 TOMO</td>
+                        <td>Issuance fee</td>
+                        <td>10 TOMO</td>
                     </tr>
                     <tr>
                         <td >Code review</td>

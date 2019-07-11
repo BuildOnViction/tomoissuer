@@ -37,7 +37,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Amount of donation</td>
+                        <td>Deposit amount</td>
                         <td>{{ formatNumber(depositeFee) }} TOMO</td>
                     </tr>
                 </table>

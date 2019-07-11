@@ -2,6 +2,7 @@
     <div id="app">
         <div class="page-layout">
             <b-navbar
+                v-if="isTomonet"
                 toggleable="lg"
                 type="light"
                 class="tomo-header"
@@ -14,7 +15,7 @@
                     </b-navbar-brand>
                     <!-- button menu SP -->
                     <b-navbar-toggle
-                        v-if="isTomonet"
+                        v-if="!isTomonet"
                         target="nav-collapse"
                         class="btn-menu-sp"/>
                     <!-- /button menu SP -->
