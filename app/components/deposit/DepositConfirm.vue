@@ -185,7 +185,8 @@ export default {
                         gasPrice: this.web3.utils.toHex(this.gasPrice),
                         gas: this.web3.utils.toHex(chainConfig.gas),
                         gasLimit: this.web3.utils.toHex(chainConfig.gas),
-                        value: this.web3.utils.toHex(new BigNumber(this.depositFee).multipliedBy(10 ** 18)).toString(10)
+                        value: this.web3.utils.toHex(new BigNumber(this.depositFee)
+                            .multipliedBy(10 ** 18)).toString(10)
                     }
 
                     const contract = this.TRC21Issuer

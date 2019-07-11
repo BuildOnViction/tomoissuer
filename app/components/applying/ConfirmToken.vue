@@ -98,8 +98,8 @@ export default {
     data () {
         return {
             web3: this.web3,
-            tokenName: this.$route.params.name || '',
-            tokenSymbol: this.$route.params.symbol || '',
+            tokenName: (this.$route.params.name || '').trim(),
+            tokenSymbol: (this.$route.params.symbol || '').trim(),
             decimals: this.$route.params.decimals || '',
             minFee: 0,
             totalSupply: (this.$route.params.totalSupply || '').replace(/,/g, ''),
@@ -178,7 +178,7 @@ export default {
                 const chainConfig = this.config.blockchain
                 const web3 = self.web3
                 self.loading = true
-                self.txFee = new BigNumber(chainConfig.gas * self.gasPrice).div(10 ** 18).toString(10)
+                self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18).toString(10)
                 if (self.balance < self.txFee) {
                     self.loading = false
                     self.$toasted.show('Not enough TOMO', { type: 'error' })
@@ -200,13 +200,13 @@ export default {
                                 self.tokenName,
                                 self.tokenSymbol,
                                 self.decimals,
-                                (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
-                                (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
+                                (new BigNumber(self.totalSupply).multipliedBy(10 ** self.decimals)).toString(10),
+                                (new BigNumber(self.minFee).multipliedBy(10 ** self.decimals)).toString(10)
                             ]
                         }).send({
                             from: self.account,
                             gas: web3.utils.toHex(chainConfig.gas),
-                            gasPrice: web3.utils.toHex(self.gasPrice)
+                            gasPrice: web3.utils.toHex(chainConfig.deployPrice)
                         })
                             .on('transactionHash', async (txHash) => {
                                 self.transactionHash = txHash
@@ -243,7 +243,7 @@ export default {
                         const dataTx = {
                             from: self.account,
                             gas: web3.utils.toHex(chainConfig.gas),
-                            gasPrice: web3.utils.toHex(self.gasPrice),
+                            gasPrice: web3.utils.toHex(chainConfig.deployPrice),
                             gasLimit: web3.utils.toHex(chainConfig.gas),
                             value: web3.utils.toHex(0),
                             chainId: chainConfig.networkId

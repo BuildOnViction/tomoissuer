@@ -51,7 +51,7 @@
                 <b-button
                     class="tmp-btn-violet"
                     @click="applyTomoZ">
-                    Apply to pay fee by token
+                    Apply to TomoZ protocol
                 </b-button>
             </div>
             <b-modal
@@ -82,7 +82,11 @@
                     <div class="btn-box">
                         <router-link
                             :to="{ path: `/token/${address}` }"
-                            class="tmp-btn-violet">Token detail
+                            class="btn tmp-btn-boder-violet btn-secondary">Token detail
+                        </router-link>
+                        <router-link
+                            :to="{ path: `/edittransactionsfee/${address}` }"
+                            class="btn tmp-btn-violet btn-secondary">Edit Tx fee
                         </router-link>
                     </div>
                 </div>

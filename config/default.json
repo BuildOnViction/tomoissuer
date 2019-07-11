@@ -11,12 +11,13 @@
     ],
     "tomoscanUrl": "http://localhost:3003",
     "tomoscanAPI": "https://scan.tomochain.com",
-    "tomowalletUrl": "",
+    "tomowalletUrl": "https://wallet.testnet.tomochain.com",
     "blockchain": {
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",
         "networkId": 89,
         "gas": 2000000,
+        "deployPrice": 10000000000000,
         "issuerAddress": "",
         "tomoXAddress": ""
     },

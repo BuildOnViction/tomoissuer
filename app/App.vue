@@ -2,7 +2,6 @@
     <div id="app">
         <div class="page-layout">
             <b-navbar
-                v-if="isTomonet"
                 toggleable="lg"
                 type="light"
                 class="tomo-header"

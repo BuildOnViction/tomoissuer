@@ -105,7 +105,7 @@
                                                     <i class="tomoissuer-icon-edit-pencil"/>
                                                 </b-link>
                                             </p>
-                                            <p>{{ txFee }}</p>
+                                            <p>{{ formatNumber(txFee) }} {{ token.symbol }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -452,7 +452,7 @@ export default {
             const contract = this.TRC21Issuer
             contract.methods.getTokenCapacity(this.address).call().then(capacity => {
                 let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
-                this.poolingFee = balance.div(10 ** this.token.decimals).toNumber()
+                this.poolingFee = balance.div(10 ** 18).toNumber()
                 this.$store.state.token['poolingFee'] = this.poolingFee
             }).catch(error => {
                 console.log(error)
@@ -468,7 +468,6 @@ export default {
                 web3.eth.call({ to: this.address, data: data }).then(result => {
                     let balance = new BigNumber(web3.utils.hexToNumberString(result))
                     this.txFee = balance.div(10 ** this.token.decimals).toNumber()
-                    console.log(this.txFee)
                     this.$store.state.token['txFee'] = this.txFee
                 }).catch(error => {
                     console.log(error)

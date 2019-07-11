@@ -5,11 +5,11 @@
             <div class="about-tomoz">
                 <h6 class="tmp-title-normal weightbold">What is TomoZ</h6>
                 <p>
-                    TomoChain is an innovative solution to scalability problem with
-                    the Ethereum blockchain, and other blockchain platforms.
-                    TomoChain features a 150-Masternodes architecture with
-                    Proof of Stake Voting (POSV) consensus for near-zero fee,
-                    and instant transaction confirmation.
+                    TomoZ - the first on-chain protocol that offers the ability for any user
+                    to pay transaction fees with the same token the user is holding. Along with
+                    the TomoZ protocol, TRC21 is also proposed as a new smart contract-based
+                    token standard that allows users to pay fees of any transaction sent to a
+                    TRC21 smart contract in terms of the TRC21 token itself, without holding TOMO in their wallet.
                 </p>
             </div>
             <div class="box-condition">

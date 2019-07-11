@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <td>Transaction fee</td>
-                        <td>0.0001 TOMO</td>
+                        <td>{{ txFee }} {{ token.symbol }}</td>
                     </tr>
                 </table>
             </div>
@@ -89,9 +89,14 @@
                     </div>
                     <div class="btn-box">
                         <b-button
-                            :to="'/token/' + address"
+                            to="/"
+                            class="btn tmp-btn-boder-blue btn-secondary">
+                            Back to Homepage
+                        </b-button>
+                        <b-button
+                            to="/donateTxFee"
                             class="tmp-btn-blue">
-                            View detail
+                            Another donation
                         </b-button>
                     </div>
                 </div>
@@ -120,7 +125,8 @@ export default {
             loading: false,
             config: {},
             token: {},
-            gasPrice: ''
+            gasPrice: '',
+            txFee: ''
         }
     },
     async updated () {},
@@ -145,11 +151,27 @@ export default {
             self.$toasted.show(error, { type: 'error' })
         })
         self.getData()
+        self.getTransactionFee()
     },
     methods: {
         async getData () {
             const { data } = await axios.get(`/api/token/${this.address}`)
             this.token = data
+        },
+        getTransactionFee () {
+            const web3 = this.web3
+            if (this.account && web3) {
+                // 0x24ec7590 is minFee function code
+                let data = '0x24ec7590' +
+                    '00000000000000000000000000000000000000000000000000000000'
+                web3.eth.call({ to: this.address, data: data }).then(result => {
+                    let balance = new BigNumber(web3.utils.hexToNumberString(result))
+                    this.txFee = balance.div(10 ** this.token.decimals).toNumber()
+                }).catch(error => {
+                    console.log(error)
+                    this.$toatsed.show(error, { type: 'error' })
+                })
+            }
         },
         async deposit () {
             try {
