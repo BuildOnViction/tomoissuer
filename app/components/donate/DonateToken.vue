@@ -3,13 +3,11 @@
         <div class="tomo-donate">
             <h2 class="tmp-title-large">Donate TRC-21 transaction fee</h2>
             <div class="box-desc">
-                <h6 class="tmp-title-normal weightbold">What is donation fee</h6>
+                <h6 class="tmp-title-normal weightbold">Why do we need to donate TRC-21 transaction fee?</h6>
                 <p>
-                    TomoChain is an innovative solution to scalability problem with the
-                    Ethereum blockchain, and other blockchain platforms.
-                    TomoChain features a 150-Masternodes architecture with
-                    Proof of Stake Voting (POSV) consensus for near-zero fee,
-                    and instant transaction confirmation.
+                    Token transactions will not be processed if the remaining deposit is not
+                    enough to pay transaction fees. In such a case, to resume the processing
+                    of token transactions, any TOMO holder can deposit/donate TOMO to the TomoIssuer smart contract.
                 </p>
             </div>
             <b-form
@@ -18,7 +16,7 @@
                 @submit.prevent="validate()">
                 <b-form-group
                     class="mb-4"
-                    label="Enter your token name or contract address "
+                    label="Enter the token name or contract address you would like to donate"
                     label-for="tokenName">
                     <auto-complete
                         :page="this"/>
@@ -184,7 +182,7 @@ export default {
             const contract = this.TRC21Issuer
             contract.methods.getTokenCapacity(this.tokenAddress).call().then(capacity => {
                 let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
-                this.poolingFee = balance.div(10 ** this.token.decimals).toNumber()
+                this.poolingFee = balance.div(10 ** 18).toNumber()
             }).catch(error => {
                 console.log(error)
                 this.$toatsed.show(error, { type: 'error' })

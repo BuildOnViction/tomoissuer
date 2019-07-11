@@ -8,8 +8,7 @@
                 @submit.prevent="validate()">
                 <b-form-group
                     :class="'mb-4' + ($v.tokenName.$dirty && !checkName ? ' input-warn' : '')"
-                    label-for="tokenName"
-                    description="Please use only Latin letters and numbers">
+                    label-for="tokenName">
                     <b-form-input
                         v-model="tokenName"
                         type="text"
@@ -22,7 +21,15 @@
                         class="txt-fixed-behind">
                         <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
                     </div>
-                    <small class="float-right mt-2">Character left: {{ nameLeft }}</small>
+                    <small
+                        tabindex="-1"
+                        class="form-text text-muted">
+                        Please use only Latin letters and numbers, e.g. “TomoChain”
+                    </small>
+                    <small
+                        class="float-right txt-fixed-description">
+                        Character left: {{ nameLeft }}
+                    </small>
                     <div
                         v-if="$v.tokenName.$dirty && !$v.tokenName.required"
                         class="text-danger pt-2">Required field</div>
@@ -31,9 +38,8 @@
                         class="text-danger pt-2">Required latin characters</div>
                 </b-form-group>
                 <b-form-group
-                    :class="'mb-4' + ($v.tokenSymbol.$dirty && !checkSymbol ? ' input-warn' : '')"
-                    label-for="tokenSymbol"
-                    description="Please use only Latin letters and numbers">
+                    :class="'mb-4 form-group' + ($v.tokenSymbol.$dirty && !checkSymbol ? ' input-warn' : '')"
+                    label-for="tokenSymbol">
                     <b-form-input
                         v-model="tokenSymbol"
                         autocomplete="off"
@@ -46,13 +52,21 @@
                         class="txt-fixed-behind">
                         <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
                     </div>
-                    <small class="float-right mt-2">Character left: {{ symbolLeft }}</small>
+                    <small
+                        tabindex="-1"
+                        class="form-text text-muted">
+                        Please use only Latin letters and numbers, e.g. “TOMO”
+                    </small>
+                    <small
+                        class="float-right txt-fixed-description">
+                        Character left: {{ symbolLeft }}
+                    </small>
                     <div
                         v-if="$v.tokenSymbol.$dirty && !$v.tokenSymbol.required"
                         class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
-                    :class="'mb-4' + ($v.totalSupply.$dirty && !checkSupply ? ' input-warn' : '')"
+                    :class="'mb-4 form-group' + ($v.totalSupply.$dirty && !checkSupply ? ' input-warn' : '')"
                     label-for="totalSupply">
                     <b-form-input
                         v-model="totalSupply"
@@ -65,20 +79,29 @@
                         class="txt-fixed-behind">
                         <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
                     </div>
+                    <small
+                        tabindex="-1"
+                        class="form-text text-muted">
+                        Please use only number
+                    </small>
                     <div
                         v-if="$v.totalSupply.$dirty && !$v.totalSupply.required"
                         class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
                     :class="'mb-4' + ($v.decimals.$dirty && !checkDecimals ? ' input-warn' : '')"
-                    label-for="decimals"
-                    description="Please use the number from 0 to 18">
+                    label-for="decimals">
                     <b-form-input
                         v-model="decimals"
                         autocomplete="off"
                         type="number"
                         placeholder="Decimals"
                         @change="onChangeDecimals"/>
+                    <small
+                        tabindex="-1"
+                        class="form-text text-muted">
+                        Please use the number from 0 to 18
+                    </small>
                     <div
                         v-if="checkDecimals"
                         class="txt-fixed-behind">
@@ -108,7 +131,7 @@
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group mb-4">
-                    <label>Issuance fee</label><span>50 TOMO</span>
+                    <label>Issuance fee</label><span>10 TOMO</span>
                 </div>
                 <div class="btn-box">
                     <b-button
@@ -137,8 +160,10 @@ import {
 } from 'vuelidate/lib/validators'
 import BigNumber from 'bignumber.js'
 
-const regex = /^[a-zA-Z0-9_.-]*$/
-const latin = helpers.regex('latin', /^[a-zA-Z0-9_.-]*$/)
+const regexName = /^[a-zA-Z0-9\s]*$/
+const regexSymbol = /^[a-zA-Z0-9]*$/
+const latin = helpers.regex('latin', regexName)
+const checkSymbol = helpers.regex('latin', regexSymbol)
 export default {
     name: 'App',
     components: { },
@@ -168,7 +193,7 @@ export default {
             maxValue: maxValue(18)
         },
         tokenName: { required, latin },
-        tokenSymbol: { required, latin },
+        tokenSymbol: { required, checkSymbol },
         totalSupply: { required }
     },
     computed: {
@@ -242,20 +267,26 @@ export default {
         },
         onChangeName () {
             if (this.tokenName.length !== 0 &&
-                regex.test(this.tokenName)) {
+                regexName.test(this.tokenName)) {
                 this.checkName = true
             } else { this.checkName = false }
+            this.getDescriptionCssClass(this.checkName)
         },
         onChangeSymbol () {
             if (this.tokenSymbol.length !== 0 &&
-                regex.test(this.tokenSymbol)) {
+                regexSymbol.test(this.tokenSymbol)) {
                 this.checkSymbol = true
             } else { this.checkSymbol = false }
         },
         onChangeDecimals () {
-            if (this.decimals.length !== 0) {
+            if (this.decimals.length !== 0 && (this.decimals > 0 && this.decimals < 18)) {
                 this.checkDecimals = true
             } else { this.checkDecimals = false }
+        },
+        getDescriptionCssClass (check) {
+            if (check) {
+                this.getDescriptionCssClass = ''
+            } else { this.descriptionClass = 'text-danger' }
         }
     }
 }

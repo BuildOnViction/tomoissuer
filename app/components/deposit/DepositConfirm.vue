@@ -31,12 +31,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Amount of donation</td>
-                        <td>{{ depositFee }} TOMO</td>
+                        <td>Deposit amount</td>
+                        <td>{{ formatNumber(depositFee) }} TOMO</td>
                     </tr>
                     <tr>
                         <td>Transaction fee</td>
-                        <td>1 {{ token.symbol }}/transaction</td>
+                        <td>{{ formatNumber(txFee) }} {{ token.symbol }}/transaction</td>
                     </tr>
                 </table>
                 <p class="txt_note">*Your deposit amount will be locked and could not be withdrawed</p>
@@ -118,7 +118,8 @@ export default {
             token: {},
             config: {},
             loading: false,
-            gasPrice: ''
+            gasPrice: '',
+            txFee: ''
         }
     },
     async updated () {},
@@ -142,6 +143,7 @@ export default {
             this.$toasted.show(error, { type: 'error' })
         })
         this.getData()
+        this.getTransactionFee()
     },
     methods: {
         getData () {
@@ -158,6 +160,21 @@ export default {
                 })
             }
         },
+        getTransactionFee () {
+            const web3 = this.web3
+            if (this.account && web3) {
+                // 0x24ec7590 is minFee function code
+                let data = '0x24ec7590' +
+                    '00000000000000000000000000000000000000000000000000000000'
+                web3.eth.call({ to: this.address, data: data }).then(result => {
+                    let balance = new BigNumber(web3.utils.hexToNumberString(result))
+                    this.txFee = balance.div(10 ** this.token.decimals).toNumber()
+                }).catch(error => {
+                    console.log(error)
+                    this.$toatsed.show(error, { type: 'error' })
+                })
+            }
+        },
         async deposit () {
             try {
                 if (this.depositFee) {
@@ -168,7 +185,8 @@ export default {
                         gasPrice: this.web3.utils.toHex(this.gasPrice),
                         gas: this.web3.utils.toHex(chainConfig.gas),
                         gasLimit: this.web3.utils.toHex(chainConfig.gas),
-                        value: this.web3.utils.toHex(new BigNumber(this.depositFee).multipliedBy(10 ** 18)).toString(10)
+                        value: this.web3.utils.toHex(new BigNumber(this.depositFee)
+                            .multipliedBy(10 ** 18)).toString(10)
                     }
 
                     const contract = this.TRC21Issuer

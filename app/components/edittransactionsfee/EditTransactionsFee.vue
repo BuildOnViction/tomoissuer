@@ -3,18 +3,18 @@
         <div class="tomo-body-fullw">
             <div class="info-header">
                 <h2 class="tmp-title-large">Edit transaction fee</h2>
-                <p>Current fee: {{ currentFee }} {{ token.symbol }}</p>
             </div>
             <b-form
                 class="tmp-form-one"
                 novalidate
                 @submit.prevent="validate()">
+                <p>Current Tx fee is {{ currentFee }} {{ token.symbol }}</p>
                 <b-form-group
                     :class="'mb-4' + ($v.newFee.$dirty ? ' input-warn' : '')"
                     label-for="newFee">
                     <span class="txt-fixed">{{ token.symbol }}</span>
                     <b-form-input
-                        :placeholder="`How much fee for a transaction`"
+                        :placeholder="`Enter the new transaction fee`"
                         v-model="newFee"
                         type="text"/>
                     <div
@@ -89,9 +89,8 @@ export default {
             }
         },
         getCurrentFee () {
-            const account = store.get('address').toLowerCase()
             const web3 = this.web3
-            if (account && web3) {
+            if (this.account && web3) {
                 // 0x24ec7590 is minFee function code
                 let data = '0x24ec7590' +
                     '00000000000000000000000000000000000000000000000000000000'

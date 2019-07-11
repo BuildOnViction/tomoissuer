@@ -10,14 +10,14 @@
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
-                    :description="`Available balance: ${balance} TOMO`"
+                    :description="`TX fee: 0.0005 TOMO, Available balance: ${balance} TOMO`"
                     :class="'mb-4' + ($v.depositFee.$dirty ? ' input-warn' : '')"
                     label-for="depositFee">
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input
                         v-model="depositFee"
                         type="text"
-                        placeholder="How much TOMO do you want to deposit? (TX fee: 0.0005 TOMO)..."/>
+                        placeholder="How much TOMO do you want to deposit?..."/>
                     <div
                         v-if="$v.depositFee.$dirty && !$v.depositFee.required"
                         class="text-danger pt-2">Required field</div>
@@ -106,7 +106,7 @@ export default {
             const contract = this.TRC21Issuer
             contract.methods.getTokenCapacity(this.address).call().then(capacity => {
                 let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
-                this.currentPoolingFee = balance.div(10 ** this.token.decimals).toNumber().toFixed(2)
+                this.currentPoolingFee = balance.div(10 ** 18).toNumber().toFixed(2)
             }).catch(error => {
                 console.log(error)
                 this.$toatsed.show(error, { type: 'error' })

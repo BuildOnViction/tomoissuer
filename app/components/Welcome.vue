@@ -11,9 +11,14 @@
                 <span id="yellow-semicircle"/>
             </div>
             <div class="step-login">
-                <h2 class="tmp-title-big">TomoIssuer</h2>
+                <b-img
+                    src="../app/assets/images/logo-tomoissuer.svg"
+                    alt="logo tomoissuer"
+                    class="mb-5"
+                    style="width: 21%"/>
+                <h2 class="tmp-title-big">Issue Your Own Token in Minutes!</h2>
                 <p class="custom-welcome-title">
-                    Issue your own token with fee paid by itself in minutes
+                    Create TRC21 tokens and let token holders pay transaction fees in the token itself
                 </p>
                 <div class="btn-box">
                     <b-button

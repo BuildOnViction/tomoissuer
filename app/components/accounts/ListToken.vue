@@ -71,11 +71,11 @@
                             <template
                                 slot="applytomoz"
                                 slot-scope="data">
-                                <a
+                                <router-link
                                     v-if="!data.value"
-                                    :href="`/tomozcondition/${data.item.hash}`">
+                                    :to="`/tomozcondition/${data.item.hash}`">
                                     Apply TomoZ
-                                </a>
+                                </router-link>
                             </template>
                         </b-table>
                     </div>
