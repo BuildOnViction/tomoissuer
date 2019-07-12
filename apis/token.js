@@ -75,18 +75,28 @@ router.post('/createToken', [
 })
 
 router.post('/compileContract', [
-    check('sourceCode').exists().withMessage("'sourceCode is required")
+    check('sourceCode').exists().withMessage("'sourceCode' is required"),
+    check('estimate').optional().isBoolean().withMessage("'estimate mus be true of false")
 ], async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return next(errors.array())
     }
     try {
-        const sourceCode = req.body.sourceCode
+        const estimate = req.body.estimate
+        let sourceCode
+        let bytecode
+        let abi
+        if (estimate) {
+            const p = path.resolve(__dirname, '../contracts', 'TRC21.sol')
+            sourceCode = fs.readFileSync(p, 'UTF-8')
+        } else {
+            sourceCode = req.body.sourceCode
+        }
         const compiledContract = solc.compile(sourceCode, 1)
         let contract = compiledContract.contracts['MyTRC21'] || compiledContract.contracts[':' + 'MyTRC21']
-        const bytecode = contract.bytecode
-        const abi = JSON.parse(contract.interface)
+        bytecode = contract.bytecode
+        abi = JSON.parse(contract.interface)
 
         return res.json({
             bytecode,

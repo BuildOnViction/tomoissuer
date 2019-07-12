@@ -132,6 +132,7 @@
 
 <script>
 import store from 'store'
+import BigNumber from 'bignumber.js'
 import pkg from '../package.json'
 
 export default {
@@ -185,6 +186,14 @@ export default {
 
                     if (self.isTomonet) {
                         self.display = true
+                        if (self.web3) {
+                            self.web3.eth.getBalance(self.account).then(result => {
+                                let balance = new BigNumber(result)
+                                self.balance = balance.div(10 ** 18).toNumber().toFixed(4)
+                            }).catch(error => {
+                                console.log(error)
+                            })
+                        }
                     } else if (self.$route.path === '/login') {
                         self.display = true
                     } else {

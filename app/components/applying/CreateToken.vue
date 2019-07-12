@@ -131,7 +131,7 @@
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group mb-4">
-                    <label>Issuance fee</label><span>10 TOMO</span>
+                    <label>Issuance fee</label><span>~ {{ issueFee }} TOMO</span>
                 </div>
                 <div class="btn-box">
                     <b-button
@@ -151,6 +151,7 @@
 
 <script>
 import store from 'store'
+import axios from 'axios'
 import { validationMixin } from 'vuelidate'
 import {
     required,
@@ -183,7 +184,8 @@ export default {
             checkName: false,
             checkSymbol: false,
             checkSupply: false,
-            checkDecimals: false
+            checkDecimals: false,
+            issueFee: ''
         }
     },
     validations: {
@@ -224,6 +226,7 @@ export default {
         if (this.balance.isLessThan(this.txFee)) {
             this.isEnoughTOMO = false
         }
+        this.estimateGas()
     },
     methods: {
         async getBalance () {
@@ -238,20 +241,14 @@ export default {
             }
         },
         confirm () {
-            this.$store.state.issueToken = {
-                tokenName: this.tokenName,
-                tokenSymbol: this.tokenSymbol,
-                decimals: this.decimals,
-                type: this.type,
-                totalSupply: this.totalSupply
-            }
             this.$router.push({ name: 'ConfirmToken',
                 params: {
                     name: this.tokenName,
                     symbol: this.tokenSymbol,
                     decimals: this.decimals,
                     type: this.type,
-                    totalSupply: this.totalSupply
+                    totalSupply: this.totalSupply,
+                    issueFee: this.issueFee
                 }
             })
         },
@@ -278,7 +275,7 @@ export default {
             } else { this.checkSymbol = false }
         },
         onChangeDecimals () {
-            if (this.decimals.length !== 0 && (this.decimals > 0 && this.decimals < 18)) {
+            if (this.decimals.length !== 0 && (this.decimals > 0 && this.decimals <= 18)) {
                 this.checkDecimals = true
             } else { this.checkDecimals = false }
         },
@@ -286,6 +283,33 @@ export default {
             if (check) {
                 this.getDescriptionCssClass = ''
             } else { this.descriptionClass = 'text-danger' }
+        },
+        estimateGas () {
+            const web3 = this.web3
+            const chainConfig = this.config.blockchain
+            if (this.account && web3) {
+                axios.post('/api/token/compileContract', {
+                    sourceCode: '',
+                    estimate: true
+                }).then(async response => {
+                    const contract = new web3.eth.Contract(
+                        response.data.abi, null, { data: '0x' + response.data.bytecode })
+                    const estimatedAmount = await contract.deploy({
+                        arguments: [
+                            'example',
+                            'example',
+                            18,
+                            (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
+                            (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
+                        ]
+                    }).estimateGas()
+                    this.issueFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
+                        .div(10 ** 18).toNumber().toFixed(2)
+                }).catch(error => {
+                    console.log(error)
+                    this.$toasted.show(error, { type: 'error' })
+                })
+            }
         }
     }
 }
