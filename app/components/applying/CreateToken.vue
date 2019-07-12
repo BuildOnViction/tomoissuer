@@ -220,8 +220,8 @@ export default {
         await this.getBalance()
         this.config = store.get('config') || await this.appConfig()
         const chainConfig = this.config.blockchain
-        this.txFee = new BigNumber(chainConfig.gas).multipliedBy(chainConfig.deployPrice).div(10 ** 18).toString(10)
-        if (this.balance < this.txFee) {
+        this.txFee = new BigNumber(chainConfig.gas).multipliedBy(chainConfig.deployPrice).div(10 ** 18)
+        if (this.balance.isLessThan(this.txFee)) {
             this.isEnoughTOMO = false
         }
     },
@@ -229,8 +229,7 @@ export default {
         async getBalance () {
             const web3 = this.web3
             const result = await web3.eth.getBalance(this.account)
-            const balance = new BigNumber(result).div(10 ** 18)
-            this.balance = balance.toNumber().toFixed(4)
+            this.balance = new BigNumber(result).div(10 ** 18)
         },
         validate: function () {
             this.$v.$touch()
