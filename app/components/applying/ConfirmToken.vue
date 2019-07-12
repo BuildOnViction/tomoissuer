@@ -140,8 +140,7 @@ export default {
         getBalance () {
             const web3 = this.web3
             web3.eth.getBalance(this.account).then(result => {
-                const balance = new BigNumber(result).div(10 ** 18)
-                this.balance = balance.toNumber().toFixed(4)
+                this.balance = new BigNumber(result).div(10 ** 18)
             }).catch(error => {
                 console.log(error)
                 this.$toasted.show(error, { type: 'error' })
@@ -178,8 +177,9 @@ export default {
                 const chainConfig = this.config.blockchain
                 const web3 = self.web3
                 self.loading = true
-                self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18).toString(10)
-                if (self.balance < self.txFee) {
+                self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18)
+                console.log(self.balance.isLessThan(self.txFee))
+                if (self.balance.isLessThan(self.txFee)) {
                     self.loading = false
                     self.$toasted.show('Not enough TOMO', { type: 'error' })
                 } else {
