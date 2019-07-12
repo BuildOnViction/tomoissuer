@@ -2,6 +2,7 @@
     <div id="app">
         <div class="page-layout">
             <b-navbar
+                v-if="display"
                 toggleable="lg"
                 type="light"
                 class="tomo-header"
@@ -70,7 +71,7 @@
                 </section>
             </b-navbar>
             <div
-                :class="`${isTomonet === true ? 'common-main-content' : 'welcom-tomoissuer'}`">
+                :class="`${display === true ? 'common-main-content' : 'welcom-tomoissuer'}`">
                 <router-view/>
             </div>
             <footer
@@ -131,19 +132,20 @@
 
 <script>
 import store from 'store'
-import BigNumber from 'bignumber.js'
 import pkg from '../package.json'
 
 export default {
     name: 'App',
-    components: { },
+    components: {
+    },
     data () {
         return {
             isReady: !!this.web3,
             isTomonet: false,
             account: '',
             version: pkg.version,
-            balance: ''
+            balance: '',
+            display: false
         }
     },
     async updated () {
@@ -180,13 +182,13 @@ export default {
                     if (self.account) {
                         self.isTomonet = true
                     }
-                    if (self.web3) {
-                        self.web3.eth.getBalance(self.account).then(result => {
-                            let balance = new BigNumber(result)
-                            self.balance = balance.div(10 ** 18).toNumber().toFixed(4)
-                        }).catch(error => {
-                            console.log(error)
-                        })
+
+                    if (self.isTomonet) {
+                        self.display = true
+                    } else if (self.$route.path === '/login') {
+                        self.display = true
+                    } else {
+                        self.display = false
                     }
                 } catch (error) {
                     console.log(error)

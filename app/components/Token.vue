@@ -449,15 +449,18 @@ export default {
             }
         },
         getPoolingFee () {
-            const contract = this.TRC21Issuer
-            contract.methods.getTokenCapacity(this.address).call().then(capacity => {
-                let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
-                this.poolingFee = balance.div(10 ** 18).toNumber()
-                this.$store.state.token['poolingFee'] = this.poolingFee
-            }).catch(error => {
-                console.log(error)
-                this.$toatsed.show(error, { type: 'error' })
-            })
+            const web3 = this.web3
+            if (this.account && web3) {
+                const contract = this.TRC21Issuer
+                contract.methods.getTokenCapacity(this.address).call().then(capacity => {
+                    let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
+                    this.poolingFee = balance.div(10 ** 18).toNumber()
+                    this.$store.state.token['poolingFee'] = this.poolingFee
+                }).catch(error => {
+                    console.log(error)
+                    this.$toatsed.show(error, { type: 'error' })
+                })
+            }
         },
         getTransactionFee () {
             const web3 = this.web3
