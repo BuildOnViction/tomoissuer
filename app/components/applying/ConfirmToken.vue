@@ -21,7 +21,7 @@
                     </tr>
                     <tr>
                         <td>Issuance fee</td>
-                        <td>10 TOMO</td>
+                        <td>~ {{ issueFee }} TOMO</td>
                     </tr>
                     <tr>
                         <td >Code review</td>
@@ -101,6 +101,7 @@ export default {
             tokenName: (this.$route.params.name || '').trim(),
             tokenSymbol: (this.$route.params.symbol || '').trim(),
             decimals: this.$route.params.decimals || '',
+            issueFee: this.$route.params.issueFee || '',
             minFee: 0,
             totalSupply: (this.$route.params.totalSupply || '').replace(/,/g, ''),
             type: this.$route.params.type || '',

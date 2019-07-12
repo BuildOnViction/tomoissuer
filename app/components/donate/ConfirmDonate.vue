@@ -150,7 +150,7 @@ export default {
             console.log(error)
             self.$toasted.show(error, { type: 'error' })
         })
-        self.getData()
+        await self.getData()
         self.getTransactionFee()
     },
     methods: {

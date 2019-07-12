@@ -122,6 +122,9 @@ export default {
                 await this.getData()
                 this.getPoolingFee()
             }
+            if (newValue === '') {
+                this.token = {}
+            }
         }
     },
     async updated () {
