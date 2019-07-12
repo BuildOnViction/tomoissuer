@@ -178,7 +178,6 @@ export default {
                 const web3 = self.web3
                 self.loading = true
                 self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18)
-                console.log(self.balance.isLessThan(self.txFee))
                 if (self.balance.isLessThan(self.txFee)) {
                     self.loading = false
                     self.$toasted.show('Not enough TOMO', { type: 'error' })
