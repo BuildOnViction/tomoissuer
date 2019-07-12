@@ -220,7 +220,7 @@ export default {
         await this.getBalance()
         this.config = store.get('config') || await this.appConfig()
         const chainConfig = this.config.blockchain
-        this.txFee = new BigNumber(chainConfig.gas * this.gasPrice).div(10 ** 18).toString(10)
+        this.txFee = new BigNumber(chainConfig.gas).multipliedBy(chainConfig.deployPrice).div(10 ** 18).toString(10)
         if (this.balance < this.txFee) {
             this.isEnoughTOMO = false
         }
