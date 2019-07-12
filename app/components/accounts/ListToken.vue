@@ -186,7 +186,7 @@ export default {
                             totalSupply: i.totalSupplyNumber,
                             ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
                             holders: i.holders || '---',
-                            applytomoz: (self.appliedList.indexOf(i.hash) > -1)
+                            applytomoz: ((self.appliedList || []).indexOf(i.hash) > -1)
                         })
                     }))
                     self.listokenItems = items
@@ -208,7 +208,7 @@ export default {
             const contract = this.TRC21Issuer
             const result = await contract.methods.tokens.call()
             if (result && result.length > 0) {
-                const lowerCaseArr = result.map(m => m.toLowerCase())
+                let lowerCaseArr = result.map(m => m.toLowerCase())
                 return lowerCaseArr
             } else return null
         },
