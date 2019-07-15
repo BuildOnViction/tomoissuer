@@ -138,8 +138,8 @@
                         <b-tab>
                             <template slot="title">
                                 <b-img
-                                    src="/app/assets/images/logo-mnemonic.png"
-                                    alt="logo-mnemonic.png"/>
+                                    src="/app/assets/images/logo-privatekey.png"
+                                    alt="logo-privatekey.png"/>
                                 <span>Mnemonic</span>
                             </template>
                             <div class="inner-content tab-mnemonic">
