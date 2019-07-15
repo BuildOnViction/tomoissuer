@@ -61,7 +61,7 @@
         .tab-content {
             padding: 2em 0;
             @include media-breakpoint-down(md) {
-                display: none;
+                // display: none;
             }
         }
         .inner-content {

@@ -17,7 +17,8 @@
                                 <b-img
                                     src="/app/assets/images/logo-tomowallet.png"
                                     style="opacity: 0.4"
-                                    alt="logo-tomowallet.png"/>
+                                    alt="logo-tomowallet.png"
+                                    @click="changeView"/>
                                 <span>TomoWallet</span>
                             </template>
                             <div class="inner-content tab-tomowallet">
@@ -43,7 +44,8 @@
                             <template slot="title">
                                 <b-img
                                     src="/app/assets/images/logo-metamask.png"
-                                    alt="logo-metamask.png"/>
+                                    alt="logo-metamask.png"
+                                    @click="changeView"/>
                                 <span>Metamask</span>
                             </template>
                             <div class="inner-content tab-metamask">
@@ -60,7 +62,8 @@
                             <template slot="title">
                                 <b-img
                                     src="/app/assets/images/logo-ledgerwallet.png"
-                                    alt="logo-ledgerwallet.png"/>
+                                    alt="logo-ledgerwallet.png"
+                                    @click="changeView"/>
                                 <span>Ledger Wallet</span>
                             </template>
                             <div class="inner-content tab-ledgerwallet">
@@ -96,7 +99,8 @@
                             <template slot="title">
                                 <b-img
                                     src="/app/assets/images/logo-trezorwallet.png"
-                                    alt="logo-trezorwallet.png"/>
+                                    alt="logo-trezorwallet.png"
+                                    @click="changeView"/>
                                 <span>Trezor Wallet</span>
                             </template>
                             <div class="inner-content tab-trezorwallet">
@@ -114,7 +118,8 @@
                             <template slot="title">
                                 <b-img
                                     src="/app/assets/images/logo-privatekey.png"
-                                    alt="logo-privatekey.png"/>
+                                    alt="logo-privatekey.png"
+                                    @click="changeView"/>
                                 <span>Privatekey</span>
                             </template>
                             <div class="inner-content tab-privatekey">
@@ -139,7 +144,8 @@
                             <template slot="title">
                                 <b-img
                                     src="/app/assets/images/logo-privatekey.png"
-                                    alt="logo-privatekey.png"/>
+                                    alt="logo-privatekey.png"
+                                    @click="changeView"/>
                                 <span>Mnemonic</span>
                             </template>
                             <div class="inner-content tab-mnemonic">
@@ -189,7 +195,7 @@
             <div class="tomo-modal-default text-left">
                 <h3 class="tmp-title-medium">Wallet Address</h3>
                 <div class="tmp-table-two colum-2">
-                    <table>
+                    <table style="display: block">
                         <tr
                             v-for="(hdwallet, index) in hdWallets"
                             :key="index">
@@ -278,7 +284,13 @@ export default {
             minLength: minLength(12)
         }
     },
-    computed: {},
+    computed: {
+        mobileCheck: () => {
+            const isAndroid = navigator.userAgent.match(/Android/i)
+            const isIOS = navigator.userAgent.match(/iPhone|iPad|iPod/i)
+            return (isAndroid || isIOS)
+        }
+    },
     watch: {},
     updated () {},
     beforeDestroy () {},
@@ -469,6 +481,11 @@ export default {
                 //     clearInterval(this.interval)
                 // }
                 break
+            }
+        },
+        changeView () {
+            if (this.mobileCheck) {
+                window.scrollTo(0, 160)
             }
         }
     }
