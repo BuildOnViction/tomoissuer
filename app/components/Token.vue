@@ -26,7 +26,7 @@
                         <ul>
                             <li>
                                 <b-link
-                                    v-if="!isAppliedZ"
+                                    v-if="!isAppliedZ && account === contractCreation"
                                     :to="'/tomozcondition/' + address"
                                     class="tmp-btn-violet"
                                     style="width: 270px">
@@ -101,6 +101,7 @@
                                             <p class="title-small">
                                                 Transactions fee
                                                 <b-link
+                                                    v-if="account === contractCreation"
                                                     :to="`/edittransactionsfee/${address}`">
                                                     <i class="tomoissuer-icon-edit-pencil"/>
                                                 </b-link>
@@ -328,7 +329,8 @@ export default {
                 { key: 'amount', label: 'Amount' },
                 { key: 'percentage', label: 'Percentage (%)' }
             ],
-            holdersItems: []
+            holdersItems: [],
+            contractCreation: ''
         }
     },
     computed: {},
@@ -364,10 +366,12 @@ export default {
     methods: {
         async getTokenDetail () {
             const self = this
-            const { data } = await axios.get(`/api/token/${self.address}`)
-            self.token = data
-            self.tokenName = data.name
-            self.symbol = data.symbol
+            const { data } = await axios.get(`/api/account/${self.address}`)
+            const token = data.token
+            self.token = token || {}
+            self.tokenName = token.name
+            self.symbol = token.symbol
+            self.contractCreation = data.contractCreation
 
             self.$store.state.token = data
         },
@@ -434,11 +438,11 @@ export default {
         },
         getOwnerBalance () {
             const web3 = this.web3
-            if (this.account && web3) {
+            if (this.contractCreation && web3) {
                 // 0x70a08231 is balanceOf(address) function code
                 let data = '0x70a08231' +
                     '000000000000000000000000' +
-                    this.account.substr(2) // chop off the 0x
+                    this.contractCreation.substr(2) // chop off the 0x
                 web3.eth.call({ to: this.address, data: data }).then(result => {
                     let balance = new BigNumber(web3.utils.hexToNumberString(result))
                     this.ownerBalance = balance.div(10 ** this.token.decimals).toNumber()
@@ -450,7 +454,7 @@ export default {
         },
         getPoolingFee () {
             const web3 = this.web3
-            if (this.account && web3) {
+            if (web3) {
                 const contract = this.TRC21Issuer
                 contract.methods.getTokenCapacity(this.address).call().then(capacity => {
                     let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
@@ -464,7 +468,7 @@ export default {
         },
         getTransactionFee () {
             const web3 = this.web3
-            if (this.account && web3) {
+            if (web3) {
                 // 0x24ec7590 is minFee function code
                 let data = '0x24ec7590' +
                     '00000000000000000000000000000000000000000000000000000000'
