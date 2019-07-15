@@ -88,9 +88,21 @@
                             </div>
                             <div class="tomo-meta-links">
                                 <ul>
-                                    <li><a href="#">Need help?</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Terms of Service</a></li>
+                                    <li>
+                                        <a
+                                            href="https://docs.tomochain.com/products/tomoissuer/"
+                                            target="_blank">Need help?</a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://docs.tomochain.com/products/tomoissuer/policyprivacy/"
+                                            target="_blank">Privacy Policy</a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://docs.tomochain.com/products/tomoissuer/termofcondition/"
+                                            target="_blank">Terms of Service</a>
+                                    </li>
                                     <li>
                                         <a
                                             href="/api-docs"
