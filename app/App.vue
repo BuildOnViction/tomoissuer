@@ -15,7 +15,7 @@
                     </b-navbar-brand>
                     <!-- button menu SP -->
                     <b-navbar-toggle
-                        v-if="!isTomonet"
+                        v-if="isTomonet"
                         target="nav-collapse"
                         class="btn-menu-sp"/>
                     <!-- /button menu SP -->
