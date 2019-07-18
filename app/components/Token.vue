@@ -373,7 +373,7 @@ export default {
             self.symbol = token.symbol
             self.contractCreation = data.contractCreation
 
-            self.$store.state.token = data
+            self.$store.state.token = data.token
         },
         getTokenTransfer () {
             const self = this
