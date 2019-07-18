@@ -95,6 +95,9 @@
 	&.yellow {
 		color: $color-text-yellow;
 	}
+	@include media-breakpoint-down(md){
+        @include fsz-cha(70, 40, 20);
+    }
 }
 
 .title-small {
