@@ -6,6 +6,7 @@
 
 <script>
 import store from 'store'
+import Web3 from 'web3'
 import Welcome from './Welcome.vue'
 import ListToken from './accounts/ListToken.vue'
 
@@ -27,8 +28,19 @@ export default {
     updated () {},
     beforeDestroy () {},
     created: async function () {
-        this.account = store.get('address') ||
-            this.$store.state.address || await this.getAccount()
+        if (window.web3.currentProvider.isTomoWallet) {
+            const wjs = new Web3(window.web3.currentProvider)
+            this.setupProvider('metamask', wjs)
+            this.account = await this.getAccount()
+            if (this.account) {
+                store.set('address', this.account.toLowerCase())
+                this.$bus.$emit('logged', 'user logged')
+                store.set('network', 'metamask')
+            }
+        } else {
+            this.account = store.get('address') ||
+                this.$store.state.address || await this.getAccount()
+        }
     },
     mounted () {},
     methods: {}
