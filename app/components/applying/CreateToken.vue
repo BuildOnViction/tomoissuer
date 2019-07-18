@@ -185,7 +185,8 @@ export default {
             checkSymbol: false,
             checkSupply: false,
             checkDecimals: false,
-            issueFee: ''
+            issueFee: '',
+            estimatedAmount: ''
         }
     },
     validations: {
@@ -248,7 +249,8 @@ export default {
                     decimals: this.decimals,
                     type: this.type,
                     totalSupply: this.totalSupply,
-                    issueFee: this.issueFee
+                    issueFee: this.issueFee,
+                    estimatedAmount: this.estimatedAmount
                 }
             })
         },
@@ -303,6 +305,7 @@ export default {
                             (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
                         ]
                     }).estimateGas()
+                    this.estimatedAmount = estimatedAmount
                     this.issueFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
                         .div(10 ** 18).toNumber().toFixed(2)
                 }).catch(error => {
