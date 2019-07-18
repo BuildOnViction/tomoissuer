@@ -6,7 +6,7 @@ const merge = require('webpack-merge')
 const webpackConfig = merge(commonConfig, {
     mode: 'development',
     output: {
-        path: path.resolve(__dirname, './build'),
+        path: path.resolve(__dirname, '../build'),
         publicPath: '/build/',
         filename: appName
         // chunkFilename: 'chunks/[chunkhash].js',
