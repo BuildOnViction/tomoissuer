@@ -113,6 +113,9 @@ Vue.prototype.getAccount = async function () {
         await window.ethereum.enable()
         account = (await wjs.eth.getAccounts())[0]
         break
+    case 'tomowallet':
+        account = (await wjs.eth.getAccounts())[0]
+        break
     case 'custom':
         account = (await wjs.eth.getAccounts())[0]
         // if (wjs.currentProvider.address) {

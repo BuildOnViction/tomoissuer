@@ -28,14 +28,16 @@ export default {
     updated () {},
     beforeDestroy () {},
     created: async function () {
-        if (window.web3.currentProvider.isTomoWallet) {
-            const wjs = new Web3(window.web3.currentProvider)
-            this.setupProvider('metamask', wjs)
-            this.account = await this.getAccount()
-            if (this.account) {
-                store.set('address', this.account.toLowerCase())
-                this.$bus.$emit('logged', 'user logged')
-                store.set('network', 'metamask')
+        if (window.web3 && window.web3.currentProvider) {
+            if (window.web3.currentProvider.isTomoWallet) {
+                const wjs = new Web3(window.web3.currentProvider)
+                this.setupProvider('tomowallet', wjs)
+                this.account = await this.getAccount()
+                if (this.account) {
+                    store.set('address', this.account.toLowerCase())
+                    this.$bus.$emit('logged', 'user logged')
+                    store.set('network', 'tomowallet')
+                }
             }
         } else {
             this.account = store.get('address') ||
