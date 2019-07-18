@@ -37,9 +37,14 @@ app.use(require('./apis'))
 
 // error handler
 app.use(require('./middlewares/error'))
-
+let p
+if (process.env.NODE_ENV === 'development') {
+    p = path.resolve(__dirname, 'index.html')
+} else {
+    p = path.resolve(__dirname, './build', 'index.html')
+}
 app.get('*', function (req, res) {
-    return res.sendFile(path.join(__dirname, 'index.html'))
+    return res.sendFile(p)
 })
 
 // start server
