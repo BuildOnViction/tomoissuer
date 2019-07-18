@@ -158,8 +158,10 @@ contract TRC21 is ITRC21 {
         require(to != address(0));
         require(value <= total);
         _transfer(msg.sender, to, value);
-        _transfer(msg.sender, _issuer, _minFee);
-        emit Fee(msg.sender, to, _issuer, _minFee);
+        if (_minFee > 0) {
+            _transfer(msg.sender, _issuer, _minFee);
+            emit Fee(msg.sender, to, _issuer, _minFee);
+        }
         return true;
     }
 
@@ -174,7 +176,7 @@ contract TRC21 is ITRC21 {
      */
     function approve(address spender, uint256 value) public returns (bool) {
         require(spender != address(0));
-        require(_balances[msg.sender]>=_minFee);
+        require(_balances[msg.sender] >= _minFee);
         _allowed[msg.sender][spender] = value;
         _transfer(msg.sender, _issuer, _minFee);
         emit Approval(msg.sender, spender, value);
