@@ -28,7 +28,7 @@ export default {
     updated () {},
     beforeDestroy () {},
     created: async function () {
-        if (window.web3 && window.web3.currentProvider) {
+        if (window.web3 && window.web3.currentProvider.isTomoWallet) {
             if (window.web3.currentProvider.isTomoWallet) {
                 const wjs = new Web3(window.web3.currentProvider)
                 this.setupProvider('tomowallet', wjs)
