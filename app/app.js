@@ -89,7 +89,7 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
     // Vue.prototype.TRC21Issuer = contract(TRC21IssuerAritfacts)
     if (wjs instanceof Web3) {
         Vue.prototype.web3 = wjs
-        const config = localStorage.get('config') || await getConfig()
+        const config = await getConfig()
         localStorage.set('config', config)
         const chainConfig = config.blockchain
         Vue.prototype.TRC21Issuer = new wjs.eth.Contract(
@@ -286,8 +286,6 @@ const getConfig = Vue.prototype.appConfig = async function () {
 Vue.prototype.detectNetwork = async function (provider) {
     try {
         let wjs = this.web3
-        const config = localStorage.get('config') || await getConfig()
-        const chainConfig = config.blockchain
         if (!wjs) {
             switch (provider) {
             case 'metamask':
@@ -304,13 +302,15 @@ Vue.prototype.detectNetwork = async function (provider) {
                         Vue.prototype.appEth = await new Eth(transport)
                     }
                 }
+                const config = localStorage.get('config') || await getConfig()
+                const chainConfig = config.blockchain
                 wjs = new Web3(new Web3.providers.HttpProvider(chainConfig.rpc))
                 break
             default:
                 break
             }
+            await this.setupProvider(provider, wjs)
         }
-        await this.setupProvider(provider, wjs)
     } catch (error) {
         console.log(error)
     }
