@@ -102,7 +102,6 @@ export default {
             tokenSymbol: (this.$route.params.symbol || '').trim(),
             decimals: this.$route.params.decimals || '',
             issueFee: this.$route.params.issueFee || '',
-            estimatedAmount: this.$route.params.estimatedAmount || '',
             minFee: 0,
             totalSupply: (this.$route.params.totalSupply || '').replace(/,/g, ''),
             type: this.$route.params.type || '',
@@ -207,7 +206,7 @@ export default {
                             ]
                         }).send({
                             from: self.account,
-                            gas: web3.utils.toHex(this.estimatedAmount || chainConfig.gas),
+                            gas: web3.utils.toHex(chainConfig.gas),
                             gasPrice: web3.utils.toHex(chainConfig.deployPrice)
                         })
                             .on('transactionHash', async (txHash) => {
