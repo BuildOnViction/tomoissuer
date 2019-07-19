@@ -185,8 +185,7 @@ export default {
             checkSymbol: false,
             checkSupply: false,
             checkDecimals: false,
-            issueFee: '',
-            estimatedAmount: ''
+            issueFee: ''
         }
     },
     validations: {
@@ -305,9 +304,9 @@ export default {
                             (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
                         ]
                     }).estimateGas()
-                    this.estimatedAmount = estimatedAmount
                     this.issueFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
-                        .div(10 ** 18).toNumber().toFixed(2)
+                        .div(10 ** 18).toNumber()
+                    this.issueFee = Math.round(this.issueFee)
                 }).catch(error => {
                     console.log(error)
                     this.$toasted.show(error, { type: 'error' })
