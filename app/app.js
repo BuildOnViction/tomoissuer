@@ -288,6 +288,7 @@ Vue.prototype.detectNetwork = async function (provider) {
         let wjs = this.web3
         if (!wjs) {
             switch (provider) {
+            case 'tomowallet':
             case 'metamask':
                 if (window.web3) {
                     var p = window.web3.currentProvider
