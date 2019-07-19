@@ -60,6 +60,7 @@
                                     Help
                                 </b-dropdown-item>
                                 <b-dropdown-item
+                                    v-if="!mobileCheck"
                                     class="sign_out"
                                     href="/"
                                     @click="signOut">
@@ -159,6 +160,14 @@ export default {
             version: pkg.version,
             balance: '',
             display: false
+        }
+    },
+    computed: {
+        mobileCheck: () => {
+            if (window.web3 && window.web3.currentProvider &&
+                window.web3.currentProvider.isTomoWallet) {
+                return true
+            } else return false
         }
     },
     async updated () {
