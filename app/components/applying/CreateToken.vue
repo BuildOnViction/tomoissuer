@@ -248,7 +248,8 @@ export default {
                     decimals: this.decimals,
                     type: this.type,
                     totalSupply: this.totalSupply,
-                    issueFee: this.issueFee
+                    issueFee: this.issueFee,
+                    estimatedAmount: this.estimatedAmount
                 }
             })
         },
@@ -304,7 +305,8 @@ export default {
                         ]
                     }).estimateGas()
                     this.issueFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
-                        .div(10 ** 18).toNumber().toFixed(2)
+                        .div(10 ** 18).toNumber()
+                    this.issueFee = Math.round(this.issueFee)
                 }).catch(error => {
                     console.log(error)
                     this.$toasted.show(error, { type: 'error' })

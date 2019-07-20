@@ -80,9 +80,19 @@
                                             type="text"
                                             placeholder="m/44’/889’/0’/0"/>
                                         <b-form-text>
-                                            To unlock the wallet, try paths <span>m/44'/60'/0'</span>
-                                            or <span>m/44'/60'/0'/0</span> with Ethereum App,
-                                            or try path <span>m/44'/889'/0'/0</span> with TomoChain App (on Ledger).
+                                            To unlock the wallet, try paths
+                                            <span
+                                                class="hd-path"
+                                                @click="changePath(`m/44'/60'/0'`)">m/44'/60'/0'</span>
+                                            or <span
+                                                class="hd-path"
+                                                @click="changePath(`m/44'/60'/0'/0`)">m/44'/60'/0'/0</span>
+                                            with Ethereum App,
+                                            or try path
+                                            <span
+                                                class="hd-path"
+                                                @click="changePath(`m/44'/889'/0'/0`)">m/44'/889'/0'/0</span>
+                                            with TomoChain App (on Ledger).
                                         </b-form-text>
                                     </b-form-group>
                                     <div class="btn-box">
@@ -169,7 +179,17 @@
                                         placeholder="m/44’/889’/0’/0"/>
                                     <b-form-text>
                                         To unlock the wallet,
-                                        try paths <span>m/44'/60'/0'</span> or <span>m/44'/60'/0'/0</span>
+                                        try paths <span
+                                            class="hd-path"
+                                            @click="changePath(`m/44'/60'/0'`)">m/44'/60'/0'</span> or
+                                        <span
+                                            class="hd-path"
+                                            @click="changePath(`m/44'/60'/0'/0`)">m/44'/60'/0'/0</span>
+                                        for Etherium path or
+                                        <span
+                                            class="hd-path"
+                                            @click="changePath(`m/44'/889'/0'/0`)">m/44'/889'/0'/0</span>
+                                        for TomoChain path.
                                     </b-form-text>
                                 </b-form-group>
                                 <div class="btn-box">
@@ -487,6 +507,9 @@ export default {
             if (this.mobileCheck) {
                 window.scrollTo(0, 160)
             }
+        },
+        changePath (path) {
+            this.hdPath = path
         }
     }
 }

@@ -50,9 +50,9 @@
                     border: 0;
                     margin: 0;
                     padding: 0;
-                    min-width: 220px;
+                    min-width: max-content;
                     margin-top: 10px;
-                    width: max-content;
+                    width: 100%;
                     @include fsz(16);
                     @include media-breakpoint-up(lg) {
                         border-radius: $boderradius-default;

@@ -89,7 +89,7 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
     // Vue.prototype.TRC21Issuer = contract(TRC21IssuerAritfacts)
     if (wjs instanceof Web3) {
         Vue.prototype.web3 = wjs
-        const config = localStorage.get('config') || await getConfig()
+        const config = await getConfig()
         localStorage.set('config', config)
         const chainConfig = config.blockchain
         Vue.prototype.TRC21Issuer = new wjs.eth.Contract(
@@ -111,6 +111,9 @@ Vue.prototype.getAccount = async function () {
     case 'metamask':
         // Request account access if needed - for metamask
         await window.ethereum.enable()
+        account = (await wjs.eth.getAccounts())[0]
+        break
+    case 'tomowallet':
         account = (await wjs.eth.getAccounts())[0]
         break
     case 'custom':
@@ -283,10 +286,9 @@ const getConfig = Vue.prototype.appConfig = async function () {
 Vue.prototype.detectNetwork = async function (provider) {
     try {
         let wjs = this.web3
-        const config = localStorage.get('config') || await getConfig()
-        const chainConfig = config.blockchain
         if (!wjs) {
             switch (provider) {
+            case 'tomowallet':
             case 'metamask':
                 if (window.web3) {
                     var p = window.web3.currentProvider
@@ -301,13 +303,15 @@ Vue.prototype.detectNetwork = async function (provider) {
                         Vue.prototype.appEth = await new Eth(transport)
                     }
                 }
+                const config = localStorage.get('config') || await getConfig()
+                const chainConfig = config.blockchain
                 wjs = new Web3(new Web3.providers.HttpProvider(chainConfig.rpc))
                 break
             default:
                 break
             }
+            await this.setupProvider(provider, wjs)
         }
-        await this.setupProvider(provider, wjs)
     } catch (error) {
         console.log(error)
     }

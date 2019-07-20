@@ -65,6 +65,9 @@ textarea {
     @include media-breakpoint-down(md){
         text-align: left;
     }
+    @include media-breakpoint-down(sm) {
+        max-width: 70%;
+    }
 }
 .form-group {
     margin-bottom: 3em!important;

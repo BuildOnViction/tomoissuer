@@ -195,6 +195,7 @@ export default {
                     switch (self.provider) {
                     case 'custom':
                     case 'metamask':
+                    case 'tomowallet':
                         await contract.deploy({
                             arguments: [
                                 self.tokenName,
