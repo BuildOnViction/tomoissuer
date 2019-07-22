@@ -21,7 +21,8 @@ textarea {
     border: none;
     display: block;
     width: 100%;
-    padding: 1.5em 1em;
+    padding: .8em 1em;
+    height: auto;
     @include fsz(16);
 	&:focus {
         outline: none;
@@ -98,11 +99,20 @@ textarea {
             right: -40px;
             top: 7px;
             padding: 5px;
+            @include media-breakpoint-down (sm) {
+                right: 5px;
+            }
         }
         .txt-fixed-description {
             position: absolute;
             right: -5px;
             top: 48px;
+            padding: 5px;
+        }
+        .button-fixed {
+            position: absolute;
+            right: -40px;
+            top: -9px;
             padding: 5px;
         }
     }

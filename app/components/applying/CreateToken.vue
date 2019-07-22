@@ -89,6 +89,7 @@
                         class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
+                    v-if="isEditDecimals"
                     :class="'mb-4' + ($v.decimals.$dirty && !checkDecimals ? ' input-warn' : '')"
                     label-for="decimals">
                     <b-form-input
@@ -113,6 +114,18 @@
                     <div
                         v-if="$v.decimals.$dirty && (!$v.decimals.minValue || !$v.decimals.maxValue)"
                         class="text-danger pt-2">Please use the number from 0 to 18</div>
+                </b-form-group>
+                <b-form-group
+                    v-if="!isEditDecimals"
+                    class="flex-box mb-4"
+                    label="Decimals"
+                    label-for="decimals">
+                    {{ decimals }}
+                    <b-button
+                        v-if="!isEditDecimals"
+                        class="ml-2 text-decoration-none button-fixed text-blue"
+                        variant="link"
+                        @click="editDecimals">Edit</b-button>
                 </b-form-group>
                 <b-form-group
                     class="flex-box mb-4"
@@ -173,7 +186,7 @@ export default {
         return {
             tokenName: '',
             tokenSymbol: '',
-            decimals: '',
+            decimals: 18,
             totalSupply: '',
             account: '',
             type: 'trc21',
@@ -185,7 +198,8 @@ export default {
             checkSymbol: false,
             checkSupply: false,
             checkDecimals: false,
-            issueFee: ''
+            issueFee: '',
+            isEditDecimals: false
         }
     },
     validations: {
@@ -312,6 +326,9 @@ export default {
                     this.$toasted.show(error, { type: 'error' })
                 })
             }
+        },
+        editDecimals () {
+            this.isEditDecimals = true
         }
     }
 }
