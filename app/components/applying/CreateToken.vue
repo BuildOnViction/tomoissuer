@@ -123,7 +123,7 @@
                     {{ decimals }}
                     <b-button
                         v-if="!isEditDecimals"
-                        class="ml-2 text-decoration-none button-fixed text-blue"
+                        class="text-decoration-none button-fixed text-blue"
                         variant="link"
                         @click="editDecimals">Edit</b-button>
                 </b-form-group>
