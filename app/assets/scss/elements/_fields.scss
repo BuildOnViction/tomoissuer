@@ -111,10 +111,13 @@ textarea {
         }
         .button-fixed {
             position: absolute;
-            right: -40px;
-            top: -9px;
+            right: -45px;
+            top: -6px;
             padding: 5px;
         }
+         button {
+             @include fsz(16);
+         }
     }
 }
 .input-warn {
