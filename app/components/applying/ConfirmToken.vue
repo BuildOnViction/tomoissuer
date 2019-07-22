@@ -1,15 +1,23 @@
 <template>
     <div class="container container-small">
-        <div class="confirm-table">
+        <div class="confirm-table issue-confirm">
             <div class="info-header text-center">
                 <p><i class="tomoissuer-icon-startup"/></p>
                 <h2 class="tmp-title-large">{{ `${tokenName} (${tokenSymbol})` }}</h2>
             </div>
-            <div class="tmp-table-three">
+            <div class="tmp-table-three issue-confirm">
                 <table>
                     <tr>
+                        <td>Token name</td>
+                        <td>{{ tokenName }}</td>
+                    </tr>
+                    <tr>
+                        <td>Token symbol</td>
+                        <td>{{ tokenSymbol }}</td>
+                    </tr>
+                    <tr>
                         <td>Token supply</td>
-                        <td>{{ formatNumber(totalSupply) }} {{ tokenSymbol }}</td>
+                        <td>{{ formatNumber(totalSupply) }}</td>
                     </tr>
                     <tr>
                         <td>Decimal</td>
@@ -23,7 +31,7 @@
                         <td>Issuance fee</td>
                         <td>~ {{ issueFee }} TOMO</td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td >Code review</td>
                         <td/>
                     </tr>
@@ -34,7 +42,7 @@
                                 v-model="sourceCode"
                                 :options="{mode:'application/ld+json',styleActiveLine:false}"/>
                         </td>
-                    </tr>
+                    </tr> -->
                 </table>
             </div>
             <div class="btn-box">
@@ -164,7 +172,7 @@ export default {
                 if (tokenContract && tokenContract.data) {
                     // token source code
                     self.sourceCode = tokenContract.data.contractCode.toString()
-                    self.$refs.code.codemirror = tokenContract.data.contractCode
+                    // self.$refs.code.codemirror = tokenContract.data.contractCode
                 }
             } catch (error) {
                 self.$toasted.show(
