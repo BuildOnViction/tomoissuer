@@ -114,7 +114,7 @@ export default {
         if (!this.newFee) {
             this.$router.push({ path: '/edittransactionsfee/' + this.address })
         }
-        this.config = store.get('config') || await this.appConfig()
+        this.config = store.get('configIssuer') || await this.appConfig()
         this.web3.eth.getGasPrice().then(result => {
             this.gasPrice = result
         }).catch(error => {

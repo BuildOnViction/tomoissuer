@@ -159,7 +159,7 @@ export default {
         if (!this.account) {
             this.$router.push({ path: '/login' })
         }
-        this.config = store.get('config') || await this.appConfig()
+        this.config = store.get('configIssuer') || await this.appConfig()
         await this.getTokens()
     },
     methods: {

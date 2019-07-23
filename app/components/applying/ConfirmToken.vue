@@ -140,7 +140,7 @@ export default {
         if (!self.tokenName || !self.tokenSymbol) {
             self.$router.push({ path: '/createToken' })
         } else {
-            self.config = store.get('config') || await self.appConfig()
+            self.config = store.get('configIssuer') || await self.appConfig()
             await self.createContract()
             self.getBalance()
         }

@@ -139,7 +139,7 @@ export default {
         if (!this.account) {
             this.$router.push({ path: '/login' })
         }
-        this.config = store.get('config') ||
+        this.config = store.get('configIssuer') ||
             this.appConfig().then(result => {
                 this.config = result
             }).catch(error => {

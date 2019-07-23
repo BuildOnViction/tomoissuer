@@ -142,7 +142,7 @@ export default {
             self.$router.push({ path: '/login' })
         }
 
-        self.config = store.get('config') || await self.appConfig()
+        self.config = store.get('configIssuer') || await self.appConfig()
 
         self.web3.eth.getGasPrice().then(result => {
             self.gasPrice = result
