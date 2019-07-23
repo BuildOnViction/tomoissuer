@@ -234,7 +234,7 @@ export default {
             this.$router.push({ path: '/login' })
         }
         await this.getBalance()
-        this.config = store.get('config') || await this.appConfig()
+        this.config = store.get('configIssuer') || await this.appConfig()
         const chainConfig = this.config.blockchain
         this.txFee = new BigNumber(chainConfig.gas).multipliedBy(chainConfig.deployPrice).div(10 ** 18)
         if (this.balance.isLessThan(this.txFee)) {
