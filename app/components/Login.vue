@@ -22,8 +22,8 @@
                             <div class="inner-content tab-tomowallet">
                                 <div class="btn-box">
                                     <b-button
-                                        href="tomochain://dapp?url=https://issuer.testnet.tomochain.com"
-                                        class="tmp-btn-blue">
+                                        class="tmp-btn-blue"
+                                        @click="loginWallet">
                                         Unlock
                                     </b-button>
                                 </div>
@@ -515,6 +515,15 @@ export default {
         },
         changePath (path) {
             this.hdPath = path
+        },
+        loginWallet () {
+            if (this.mobileCheck) {
+                window.open('tomochain://dapp?url=https://issuer.testnet.tomochain.com')
+            } else {
+                if (confirm('Download TomoWallet to open in app')) {
+                    window.open('https://play.google.com/store/apps/details?id=com.tomochain.wallet&hl=en')
+                }
+            }
         }
     }
 }
