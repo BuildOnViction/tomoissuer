@@ -16,7 +16,7 @@
                     <b-form-input
                         :placeholder="`Enter the new transaction fee`"
                         v-model="newFee"
-                        type="text"/>
+                        type="number"/>
                     <div
                         v-if="$v.newFee.$dirty && !$v.newFee.required"
                         class="text-danger pt-2">Required field</div>

@@ -54,7 +54,7 @@
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input
                         v-model="donationAmount"
-                        type="text"
+                        type="number"
                         placeholder="Donation amount"/>
                     <div
                         v-if="$v.donationAmount.$dirty && !$v.donationAmount.required"
