@@ -11,18 +11,23 @@
                     novalidate
                     @submit.prevent="validate()">
                     <b-tabs v-model="tabIndex">
-                        <b-tab
-                            disabled>
+                        <b-tab>
                             <template slot="title">
                                 <b-img
                                     src="/app/assets/images/logo-tomowallet.png"
-                                    style="opacity: 0.4"
                                     alt="logo-tomowallet.png"
                                     @click="changeView"/>
                                 <span>TomoWallet</span>
                             </template>
                             <div class="inner-content tab-tomowallet">
-                                <div class="inner text-center">
+                                <div class="btn-box">
+                                    <b-button
+                                        class="tmp-btn-blue"
+                                        @click="loginWallet">
+                                        Unlock
+                                    </b-button>
+                                </div>
+                                <!-- <div class="inner text-center">
                                     <p>
                                         <b-img
                                             src="/app/assets/images/img-qrcode-tomowallet.png"
@@ -37,7 +42,7 @@
                                             Click here
                                         </b-link>
                                     </p>
-                                </div>
+                                </div> -->
                             </div>
                         </b-tab>
                         <b-tab>
@@ -510,6 +515,15 @@ export default {
         },
         changePath (path) {
             this.hdPath = path
+        },
+        loginWallet () {
+            if (this.mobileCheck) {
+                window.open('tomochain://dapp?url=https://issuer.testnet.tomochain.com')
+            } else {
+                if (confirm('Download TomoWallet to open in app')) {
+                    window.open('https://play.google.com/store/apps/details?id=com.tomochain.wallet&hl=en')
+                }
+            }
         }
     }
 }

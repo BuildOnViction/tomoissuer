@@ -172,13 +172,12 @@ export default {
                     page: self.listokenCurrentPage
                 }
                 const query = self.serializeQuery(params)
-                const items = []
                 let promises = this.checkAppliedZ()
                 const { data } = await axios.get(`/api/account/${self.account}/listTokens?${query}`)
                 self.appliedList = await promises
                 if (data.items.length > 0) {
-                    await Promise.all(data.items.map(async i => {
-                        items.push({
+                    const map = await Promise.all(data.items.map(async i => {
+                        return {
                             token: `${i.symbol} (${i.name})`,
                             hash: i.hash,
                             price: '---',
@@ -187,9 +186,9 @@ export default {
                             ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
                             holders: i.holders || '---',
                             applytomoz: ((self.appliedList || []).indexOf(i.hash) > -1)
-                        })
+                        }
                     }))
-                    self.listokenItems = items
+                    self.listokenItems = map
                     self.listokenRows = data.total
                     self.loading = false
                 } else { self.listokenItems = null }

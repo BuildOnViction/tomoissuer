@@ -16,7 +16,7 @@
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input
                         v-model="depositFee"
-                        type="text"
+                        type="number"
                         placeholder="How much TOMO do you want to deposit?..."/>
                     <div
                         v-if="$v.depositFee.$dirty && !$v.depositFee.required"
