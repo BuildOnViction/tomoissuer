@@ -11,18 +11,23 @@
                     novalidate
                     @submit.prevent="validate()">
                     <b-tabs v-model="tabIndex">
-                        <b-tab
-                            disabled>
+                        <b-tab>
                             <template slot="title">
                                 <b-img
                                     src="/app/assets/images/logo-tomowallet.png"
-                                    style="opacity: 0.4"
                                     alt="logo-tomowallet.png"
                                     @click="changeView"/>
                                 <span>TomoWallet</span>
                             </template>
                             <div class="inner-content tab-tomowallet">
-                                <div class="inner text-center">
+                                <div class="btn-box">
+                                    <b-button
+                                        href="tomochain://dapp?url=https://issuer.testnet.tomochain.com"
+                                        class="tmp-btn-blue">
+                                        Unlock
+                                    </b-button>
+                                </div>
+                                <!-- <div class="inner text-center">
                                     <p>
                                         <b-img
                                             src="/app/assets/images/img-qrcode-tomowallet.png"
@@ -37,7 +42,7 @@
                                             Click here
                                         </b-link>
                                     </p>
-                                </div>
+                                </div> -->
                             </div>
                         </b-tab>
                         <b-tab>
