@@ -16,6 +16,12 @@ router.get('/', async function (req, res, next) {
         tomowallet = tomowallet.substr(0, tomowallet.length - 1)
     }
     appConfig.tomowalletUrl = tomowallet
+
+    let tomorelayerAPI = config.get('tomorelayerAPI')
+    if (tomorelayerAPI[tomorelayerAPI.length - 1] === '/') {
+        tomorelayerAPI = tomorelayerAPI.substr(0, tomorelayerAPI.length - 1)
+    }
+    appConfig.tomorelayerAPI = tomorelayerAPI
     return res.json(appConfig)
 })
 

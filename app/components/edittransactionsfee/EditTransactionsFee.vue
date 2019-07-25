@@ -65,9 +65,6 @@ export default {
     },
     async updated () {},
     destroyed () { },
-    beforeRouteEnter (to, from, next) {
-        next()
-    },
     created: async function () {
         this.account = store.get('address') ||
             this.$store.state.address || await this.getAccount()

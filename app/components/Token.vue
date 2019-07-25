@@ -55,7 +55,7 @@
                                     <p class="tmp-title-medium">Total supply</p>
                                     <p
                                         :title="formatNumber(token.totalSupplyNumber)"
-                                        class="fsz-size text-blue">
+                                        class="fsz-size text-blue common_txt_ellipsis">
                                         {{ formatNumber(formatCapacity(token.totalSupplyNumber)) }}
                                     </p>
                                 </div>
@@ -337,9 +337,6 @@ export default {
     watch: {},
     updated () {},
     beforeDestroy () {},
-    beforeRouteEnter (to, from, next) {
-        next()
-    },
     created: async function () {
         try {
             const self = this

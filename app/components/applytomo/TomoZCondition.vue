@@ -89,9 +89,6 @@ export default {
     async updated () {
     },
     destroyed () { },
-    beforeRouteEnter (to, from, next) {
-        next()
-    },
     created: async function () {
         const self = this
         self.account = store.get('address') ||

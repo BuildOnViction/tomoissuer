@@ -175,7 +175,6 @@ export default {
         await this.checkNetworkAndLogin()
     },
     destroyed () { },
-    beforeRouteEnter (to, from, next) {},
     created: async function () {
         try {
             const self = this
