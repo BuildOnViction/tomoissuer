@@ -199,6 +199,32 @@ router.get('/search', [], async (req, res, next) => {
     }
 })
 
+router.post('/announceRelayer', [
+    check('tokenName').exists().withMessage("'tokenName' is required"),
+    check('tokenSymbol').exists().withMessage("'tokenSymbol' is required"),
+    check('totalSupply').isInt().exists().withMessage("'totalSupply' is required"),
+    check('address').exists().isLength({ min: 42, max: 42 }).withMessage("'address' is required")
+], async (req, res, next) => {
+    try {
+        const name = req.body.tokenName || ''
+        const symbol = req.body.tokenSymbol || ''
+        const totalSupply = req.body.totalSupply || ''
+        const address = req.body.address || ''
+        const { data } = await axios.post(
+            urljoin(config.get('tomorelayerAPI'), '/api/token'),
+            {
+                name,
+                symbol,
+                total_supply: totalSupply,
+                address
+            }
+        )
+        return res.json(data)
+    } catch (error) {
+        return next(error)
+    }
+})
+
 router.get('/:token', [], async (req, res, next) => {
     try {
         const token = req.params.token || ''
