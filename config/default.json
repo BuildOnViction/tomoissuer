@@ -13,6 +13,7 @@
     "tomoscanAPI": "https://scan.tomochain.com",
     "tomowalletUrl": "https://wallet.testnet.tomochain.com",
     "tomorelayerAPI": "https://relayer.testnet.tomochain.com",
+    "relayerAuthorityKey": "",
     "blockchain": {
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",

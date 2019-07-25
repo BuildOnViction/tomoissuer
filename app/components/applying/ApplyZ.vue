@@ -49,6 +49,8 @@
 
 <script>
 import BigNumber from 'bignumber.js'
+import axios from 'axios'
+import store from 'store'
 export default {
     name: 'App',
     components: {
@@ -64,7 +66,9 @@ export default {
             loading: false,
             txFee: '',
             issuerContract: this.TRC21Issuer,
-            tomoXContract: this.TomoXListing
+            tomoXContract: this.TomoXListing,
+            config: {},
+            token: {}
         }
     },
     validations: {},
@@ -73,11 +77,18 @@ export default {
     updated () {},
     beforeDestroy () {},
     created: async function () {
+        this.config = store.get('configIssuer') || await this.appConfig()
+        await this.getData()
         await this.checkAppliedX()
         await this.checkAppliedZ()
     },
     mounted () {},
     methods: {
+        async getData () {
+            const self = this
+            const { data } = await axios.get(`/api/token/${self.address}`)
+            self.token = data
+        },
         async applyTomoZ () {
             try {
                 this.loading = true
@@ -115,9 +126,19 @@ export default {
                     }
 
                     const result = await tomoXContract.methods.apply(this.address).send(txParams)
-                    this.transactionHash = result.tx
+                    this.transactionHash = result.transactionHash
                     this.loading = false
                     this.isAppliedX = true
+                    if (this.transactionHash.length > 0 && this.isAppliedX) {
+                        console.log(1111)
+                        const { data } = await axios.post('/api/token/announceRelayer', {
+                            tokenName: this.token.name,
+                            tokenSymbol: this.token.symbol,
+                            totalSupply: this.token.totalSypplyNumber,
+                            address: this.token.hash
+                        })
+                        console.log(data)
+                    }
                 }
             } catch (error) {
                 this.loading = false

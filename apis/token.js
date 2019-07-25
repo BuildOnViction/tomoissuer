@@ -210,14 +210,21 @@ router.post('/announceRelayer', [
         const symbol = req.body.tokenSymbol || ''
         const totalSupply = req.body.totalSupply || ''
         const address = req.body.address || ''
+        const body = {
+            name,
+            symbol,
+            total_supply: totalSupply,
+            address
+        }
+        const requestConfig = {
+            headers: {
+                Authorization: 'Bearer ' + config.get('relayerAuthorityKey')
+            }
+        }
         const { data } = await axios.post(
             urljoin(config.get('tomorelayerAPI'), '/api/token'),
-            {
-                name,
-                symbol,
-                total_supply: totalSupply,
-                address
-            }
+            body,
+            requestConfig
         )
         return res.json(data)
     } catch (error) {
