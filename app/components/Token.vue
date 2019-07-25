@@ -337,9 +337,6 @@ export default {
     watch: {},
     updated () {},
     beforeDestroy () {},
-    beforeRouteEnter (to, from, next) {
-        next()
-    },
     created: async function () {
         try {
             const self = this
