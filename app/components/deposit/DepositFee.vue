@@ -10,14 +10,15 @@
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
-                    :description="`TX fee: 0.0005 TOMO, Available balance: ${balance} TOMO`"
-                    :class="'mb-4' + ($v.depositFee.$dirty ? ' input-warn' : '')"
+                    :description="`TX fee: 0.0005 TOMO, Available balance: ${balance.toNumber().toFixed(4) } TOMO`"
+                    :class="'mb-4' + ($v.depositFee.$dirty ? ' input-warn' : '') + warningClass"
                     label-for="depositFee">
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input
                         v-model="depositFee"
                         type="number"
-                        placeholder="How much TOMO do you want to deposit?..."/>
+                        placeholder="How much TOMO do you want to deposit?..."
+                        @input="onChange"/>
                     <div
                         v-if="$v.depositFee.$dirty && !$v.depositFee.required"
                         class="text-danger pt-2">Required field</div>
@@ -67,7 +68,8 @@ export default {
             currentPoolingFee: '',
             depositFee: '',
             balance: '',
-            depositingError: ''
+            depositingError: '',
+            warningClass: ''
         }
     },
     validations: {
@@ -113,7 +115,7 @@ export default {
             const web3 = this.web3
             web3.eth.getBalance(this.account).then(result => {
                 const balance = new BigNumber(result).div(10 ** 18)
-                this.balance = balance.toNumber().toFixed(4)
+                this.balance = balance
             }).catch(error => {
                 console.log(error)
                 this.$toasted.show(error, { type: 'error' })
@@ -130,6 +132,16 @@ export default {
                     self.depositingError = false
                     self.confirm()
                 }
+            }
+        },
+        onChange () {
+            const self = this
+            if ((new BigNumber(self.depositFee)).isGreaterThanOrEqualTo(self.balance)) {
+                self.depositingError = true
+                self.warningClass = ' input-warn'
+            } else {
+                self.depositingError = false
+                self.warningClass = ''
             }
         },
         confirm () {

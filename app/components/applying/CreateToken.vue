@@ -7,7 +7,7 @@
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
-                    :class="'mb-4' + ($v.tokenName.$dirty && !checkName ? ' input-warn' : '')"
+                    :class="'mb-4 ' + ($v.tokenName.$dirty && !checkName ? 'input-warn' : '') + warningName"
                     label-for="tokenName">
                     <b-form-input
                         v-model="tokenName"
@@ -15,6 +15,7 @@
                         autocomplete="off"
                         maxlength="20"
                         placeholder="Token name"
+                        @input="onChangeName"
                         @change="onChangeName"/>
                     <div
                         v-if="checkName"
@@ -33,12 +34,10 @@
                     <div
                         v-if="$v.tokenName.$dirty && !$v.tokenName.required"
                         class="text-danger pt-2">Required field</div>
-                    <div
-                        v-if="$v.tokenName.$dirty && !$v.tokenName.latin"
-                        class="text-danger pt-2">Required latin characters</div>
                 </b-form-group>
                 <b-form-group
-                    :class="'mb-4 form-group' + ($v.tokenSymbol.$dirty && !checkSymbol ? ' input-warn' : '')"
+                    :class="'mb-4 form-group' +
+                    ($v.tokenSymbol.$dirty && !checkSymbol ? ' input-warn' : '') + warningSymbol"
                     label-for="tokenSymbol">
                     <b-form-input
                         v-model="tokenSymbol"
@@ -46,6 +45,7 @@
                         type="text"
                         maxlength="5"
                         placeholder="Token symbol"
+                        @input="onChangeSymbol"
                         @change="onChangeSymbol"/>
                     <div
                         v-if="checkSymbol"
@@ -72,7 +72,8 @@
                         v-model="totalSupply"
                         type="text"
                         autocomplete="off"
-                        placeholder="Token supply"
+                        placeholder="Token Supply"
+                        @input="onChangeSupply"
                         @change="onChangeSupply"/>
                     <div
                         v-if="checkSupply"
@@ -90,13 +91,14 @@
                 </b-form-group>
                 <b-form-group
                     v-if="isEditDecimals"
-                    :class="'mb-4' + ($v.decimals.$dirty && !checkDecimals ? ' input-warn' : '')"
+                    :class="'mb-4' + ($v.decimals.$dirty && !checkDecimals ? ' input-warn' : '') + warningDecimals"
                     label-for="decimals">
                     <b-form-input
                         v-model="decimals"
                         autocomplete="off"
                         type="number"
                         placeholder="Decimals"
+                        @input="onChangeDecimals"
                         @change="onChangeDecimals"/>
                     <small
                         tabindex="-1"
@@ -111,9 +113,6 @@
                     <div
                         v-if="$v.decimals.$dirty && !$v.decimals.required"
                         class="text-danger pt-2">Required field</div>
-                    <div
-                        v-if="$v.decimals.$dirty && (!$v.decimals.minValue || !$v.decimals.maxValue)"
-                        class="text-danger pt-2">Please use the number from 0 to 18</div>
                 </b-form-group>
                 <b-form-group
                     v-if="!isEditDecimals"
@@ -199,7 +198,10 @@ export default {
             checkSupply: false,
             checkDecimals: false,
             issueFee: '',
-            isEditDecimals: false
+            isEditDecimals: false,
+            warningName: '',
+            warningSymbol: '',
+            warningDecimals: ''
         }
     },
     validations: {
@@ -224,9 +226,6 @@ export default {
     async updated () {
     },
     destroyed () { },
-    beforeRouteEnter (to, from, next) {
-        next()
-    },
     created: async function () {
         this.account = store.get('address') ||
         this.$store.state.address || await this.getAccount()
@@ -276,28 +275,34 @@ export default {
                 this.checkSupply = true
             } else { this.checkSupply = false }
         },
-        onChangeName () {
-            if (this.tokenName.length !== 0 &&
-                regexName.test(this.tokenName)) {
+        onChangeName (name) {
+            if (name.length !== 0 &&
+                regexName.test(name)) {
                 this.checkName = true
-            } else { this.checkName = false }
-            this.getDescriptionCssClass(this.checkName)
+                this.warningName = ''
+            } else {
+                this.checkName = false
+                this.warningName = ' input-warn'
+            }
         },
         onChangeSymbol () {
             if (this.tokenSymbol.length !== 0 &&
                 regexSymbol.test(this.tokenSymbol)) {
                 this.checkSymbol = true
-            } else { this.checkSymbol = false }
+                this.warningSymbol = ''
+            } else {
+                this.checkSymbol = false
+                this.warningSymbol = ' input-warn'
+            }
         },
         onChangeDecimals () {
             if (this.decimals.length !== 0 && (this.decimals > 0 && this.decimals <= 18)) {
                 this.checkDecimals = true
-            } else { this.checkDecimals = false }
-        },
-        getDescriptionCssClass (check) {
-            if (check) {
-                this.getDescriptionCssClass = ''
-            } else { this.descriptionClass = 'text-danger' }
+                this.warningDecimals = ''
+            } else {
+                this.checkDecimals = false
+                this.warningDecimals = ' input-warn'
+            }
         },
         estimateGas () {
             const web3 = this.web3
@@ -329,6 +334,7 @@ export default {
         },
         editDecimals () {
             this.isEditDecimals = true
+            this.decimals = ''
         }
     }
 }

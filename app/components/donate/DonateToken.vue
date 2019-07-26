@@ -48,14 +48,15 @@
                 </b-form-group>
                 <b-form-group
                     :description="`Available balance:  ${balance} TOMO`"
-                    :class="'mb-4' + ($v.donationAmount.$dirty ? ' input-warn' : '')"
+                    :class="'mb-4' + ($v.donationAmount.$dirty ? ' input-warn' : '') + warningClass"
                     label="Donation amount"
                     label-for="donationAmount">
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input
                         v-model="donationAmount"
                         type="number"
-                        placeholder="Donation amount"/>
+                        placeholder="Donation amount"
+                        @input="onChange"/>
                     <div
                         v-if="$v.donationAmount.$dirty && !$v.donationAmount.required"
                         class="text-danger pt-2">Required field</div>
@@ -103,7 +104,8 @@ export default {
             config: {},
             poolingFee: '',
             token: {},
-            tokenExist: true
+            tokenExist: true,
+            warningClass: ''
         }
     },
     validations: {
@@ -199,6 +201,16 @@ export default {
                     self.depositingError = false
                     self.confirm()
                 }
+            }
+        },
+        onChange () {
+            const self = this
+            if ((new BigNumber(self.donationAmount)).isGreaterThanOrEqualTo(self.balance)) {
+                self.depositingError = true
+                self.warningClass = ' input-warn'
+            } else {
+                self.depositingError = false
+                self.warningClass = ''
             }
         },
         confirm () {
