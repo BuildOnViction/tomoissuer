@@ -11,14 +11,15 @@
                 @submit.prevent="validate()">
                 <b-form-group
                     :description="`TX fee: 0.0005 TOMO, Available balance: ${balance} TOMO`"
-                    :class="'mb-4' + ($v.depositFee.$dirty ? ' input-warn' : '')"
+                    :class="'mb-4' + ($v.depositFee.$dirty ? ' input-warn' : '') + warningClass"
                     label="Deposit fee"
                     label-for="depositFee">
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input
                         v-model="depositFee"
                         type="text"
-                        placeholder="How much TOMO do you want to deposit? (Min: 10 TOMO)..."/>
+                        placeholder="How much TOMO do you want to deposit? (Min: 10 TOMO)..."
+                        @input="onChange"/>
                     <div
                         v-if="$v.depositFee.$dirty && !$v.depositFee.required"
                         class="text-danger pt-2">Required field</div>
@@ -66,7 +67,8 @@ export default {
             account: '',
             depositFee: '',
             balance: '',
-            depositingError: ''
+            depositingError: '',
+            warningClass: ''
         }
     },
     validations: {
@@ -125,6 +127,16 @@ export default {
                     console.log(error)
                     this.$toasted.show(error, { type: 'error' })
                 })
+            }
+        },
+        onChange () {
+            const self = this
+            if ((new BigNumber(self.depositFee)).isGreaterThanOrEqualTo(self.balance)) {
+                self.depositingError = true
+                self.warningClass = ' input-warn'
+            } else {
+                self.depositingError = false
+                self.warningClass = ''
             }
         },
         confirm () {

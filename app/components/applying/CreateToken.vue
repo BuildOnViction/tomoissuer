@@ -279,29 +279,30 @@ export default {
             if (name.length !== 0 &&
                 regexName.test(name)) {
                 this.checkName = true
-            } else { this.checkName = false }
-            if (!this.checkName) {
+                this.warningName = ''
+            } else {
+                this.checkName = false
                 this.warningName = ' input-warn'
-            } else this.warningName = ''
+            }
         },
         onChangeSymbol () {
             if (this.tokenSymbol.length !== 0 &&
                 regexSymbol.test(this.tokenSymbol)) {
                 this.checkSymbol = true
+                this.warningSymbol = ''
             } else {
                 this.checkSymbol = false
-            }
-            if (!this.checkSymbol) {
                 this.warningSymbol = ' input-warn'
-            } else this.warningSymbol = ''
+            }
         },
         onChangeDecimals () {
             if (this.decimals.length !== 0 && (this.decimals > 0 && this.decimals <= 18)) {
                 this.checkDecimals = true
-            } else { this.checkDecimals = false }
-            if (!this.checkDecimals) {
+                this.warningDecimals = ''
+            } else {
+                this.checkDecimals = false
                 this.warningDecimals = ' input-warn'
-            } else this.warningDecimals = ''
+            }
         },
         estimateGas () {
             const web3 = this.web3
