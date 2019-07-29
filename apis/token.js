@@ -218,6 +218,7 @@ router.post('/announceRelayer', [
         }
         const requestConfig = {
             headers: {
+                'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + config.get('relayerAuthorityKey')
             }
         }

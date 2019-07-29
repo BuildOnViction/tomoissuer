@@ -116,30 +116,28 @@ export default {
             try {
                 if (this.isAppliedZ) {
                     this.loading = true
-                    // announce tomo relayer
-                    const { data } = await axios.post('/api/token/announceRelayer', {
-                        tokenName: this.token.name,
-                        tokenSymbol: this.token.symbol,
-                        totalSupply: this.token.totalSypplyNumber,
-                        address: this.token.hash
-                    })
-                    // OK from relayer
-                    if (data) {
-                        const tomoXContract = this.tomoXContract
-                        const txParams = {
-                            from: (await this.getAccount()).toLowerCase(),
-                            value: this.web3.utils.toHex(),
-                            gasPrice: this.web3.utils.toHex(10000000000000),
-                            gas: this.web3.utils.toHex(20000000),
-                            gasLimit: this.web3.utils.toHex(20000000)
-                        }
+                    const tomoXContract = this.tomoXContract
+                    const txParams = {
+                        from: (await this.getAccount()).toLowerCase(),
+                        value: this.web3.utils.toHex(),
+                        gasPrice: this.web3.utils.toHex(10000000000000),
+                        gas: this.web3.utils.toHex(20000000),
+                        gasLimit: this.web3.utils.toHex(20000000)
+                    }
 
-                        const result = await tomoXContract.methods.apply(this.address).send(txParams)
-                        this.transactionHash = result.transactionHash
-                        this.loading = false
-                        this.isAppliedX = true
-                    } else {
-                        // show error
+                    const result = await tomoXContract.methods.apply(this.address).send(txParams)
+                    this.transactionHash = result.transactionHash
+                    this.loading = false
+                    this.isAppliedX = true
+                    if (this.isAppliedX && this.transactionHash !== '') {
+                        // announce tomo relayer
+                        axios.post('/api/token/announceRelayer', {
+                            tokenName: this.token.name,
+                            tokenSymbol: this.token.symbol,
+                            totalSupply: this.token.totalSupplyNumber,
+                            address: this.token.hash
+                        }).then(response => console.log('OK'))
+                            .catch(error => console.log(error))
                     }
                 }
             } catch (error) {
