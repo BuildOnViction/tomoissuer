@@ -6,31 +6,41 @@
                 class="tmp-form-one"
                 novalidate
                 @submit.prevent="validate()">
-                <b-form-group
-                    class="mb-4"
-                    label="Total supply">
-                    {{ formatNumber(token.totalSupplyNumber) }} {{ token.symbol }}
-                </b-form-group>
-                <b-form-group
-                    class="mb-4"
-                    label="Owner available balance">
-                    {{ formatNumber(ownerBalance) }} {{ token.symbol }}
-                </b-form-group>
+                <div class="d-flex justify-content-between mb-4">
+                    <b-card-text
+                        class="m-0">
+                        Current Total supply
+                    </b-card-text>
+                    <b-card-text
+                        class="m-0">
+                        {{ formatNumber(token.totalSupplyNumber) }} {{ token.symbol }}
+                    </b-card-text>
+                </div>
+                <div class="d-flex justify-content-between mb-4">
+                    <b-card-text
+                        class="m-0">
+                        Current owner balance
+                    </b-card-text>
+                    <b-card-text
+                        class="m-0">
+                        {{ formatNumber(ownerBalance) }} {{ token.symbol }}
+                    </b-card-text>
+                </div>
                 <b-form-group
                     :description="`Transaction fee:  ${currentFee} ${token.symbol}`"
-                    :class="'mb-4' + ($v.reissueAmount.$dirty ? ' input-warn' : '') + warningClass"
-                    label-for="reissueAmount">
+                    :class="'mb-4' + ($v.burnAmount.$dirty ? ' input-warn' : '') + warningClass"
+                    label-for="burnAmount">
                     <span class="txt-fixed">{{ token.symbol }}</span>
                     <b-form-input
-                        v-model="reissueAmount"
+                        v-model="burnAmount"
                         type="text"
                         placeholder="Quantity of token to be burned"
                         @input="onChangeSupply"/>
                     <div
-                        v-if="$v.reissueAmount.$dirty && !$v.reissueAmount.required"
+                        v-if="$v.burnAmount.$dirty && !$v.burnAmount.required"
                         class="text-danger pt-2">Required field</div>
                     <div
-                        v-else-if="$v.reissueAmount.$dirty && !$v.reissueAmount.minValue"
+                        v-else-if="$v.burnAmount.$dirty && !$v.burnAmount.minValue"
                         class="text-danger pt-2">Deposit amount should be more than 0 TOMO</div>
                 </b-form-group>
                 <div class="btn-box">
@@ -65,7 +75,7 @@ export default {
             address: this.$route.params.address.toLowerCase(),
             account: '',
             balance: '',
-            reissueAmount: '',
+            burnAmount: '',
             config: {},
             token: {},
             tokenExist: true,
@@ -77,7 +87,7 @@ export default {
         }
     },
     validations: {
-        reissueAmount: {
+        burnAmount: {
             required,
             minValue: minValue(0)
         }
@@ -146,7 +156,7 @@ export default {
         },
         validate: function () {
             const self = this
-            self.reissueAmount = self.reissueAmount.replace(/,/g, '')
+            self.burnAmount = self.burnAmount.replace(/,/g, '')
             self.$v.$touch()
             if (!self.$v.$invalid) {
                 self.confirm()
@@ -156,16 +166,17 @@ export default {
             const value = newValue.replace(/[^0-9.]/g, '')
             const result = value.replace(/\D/g, '')
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            this.reissueAmount = result
-            if (this.reissueAmount.length !== 0) {
+            this.burnAmount = result
+            if (this.burnAmount.length !== 0) {
                 this.checkSupply = true
             } else { this.checkSupply = false }
         },
         confirm () {
-            this.$router.push({ name: 'ReissueConfirm',
+            this.$router.push({ name: 'BurnTokenConfirm',
                 params: {
                     address: this.address,
-                    reissueAmount: this.reissueAmount
+                    burnAmount: this.burnAmount,
+                    ownerBalance: this.ownerBalance
                 }
             })
         }

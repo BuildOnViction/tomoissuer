@@ -4,20 +4,22 @@
             <div class="info-header">
                 <h2 class="tmp-title-large m-0">{{ token.name }} Token Reissue</h2>
                 <p class="text-center mt-5"><i class="tomoissuer-icon-burn"/></p>
-                <div class="text-center mb-5"><strong>+ {{ formatNumber(reissueAmount) }}</strong></div>
+                <div class="text-center mb-5">
+                    <strong>+ {{ formatNumber(reissueAmount) }} {{ token.symbol }}</strong>
+                </div>
             </div>
             <div class="tmp-table-two grid-two">
                 <table>
                     <tr>
                         <td>Owner balance after reissuing</td>
                         <td>
-                            1000
+                            {{ formatNumber(newOwnerbalance) }}
                         </td>
                     </tr>
                     <tr>
                         <td>Total supply after reissuing</td>
                         <td>
-                            1000
+                            {{ formatNumber(newTotalSupply) }}
                         </td>
                     </tr>
                     <tr>
@@ -104,7 +106,16 @@ export default {
             config: {},
             loading: false,
             gasPrice: '',
-            txFee: ''
+            txFee: '',
+            ownerBalance: ''
+        }
+    },
+    computed: {
+        newOwnerbalance: function () {
+            return (new BigNumber(this.ownerBalance).plus(this.reissueAmount))
+        },
+        newTotalSupply: function () {
+            return (new BigNumber(this.token.totalSupplyNumber).plus(this.reissueAmount))
         }
     },
     async updated () {},
@@ -126,6 +137,7 @@ export default {
         })
         await this.getTokenDetail()
         this.getTransactionFee()
+        this.getOwnerBalance()
     },
     methods: {
         async getTokenDetail () {
@@ -134,6 +146,22 @@ export default {
             const token = data.token
             self.token = token || {}
             self.contractCreation = data.contractCreation
+        },
+        getOwnerBalance () {
+            const web3 = this.web3
+            if (this.contractCreation && web3) {
+                // 0x70a08231 is balanceOf(address) function code
+                let data = '0x70a08231' +
+                    '000000000000000000000000' +
+                    this.contractCreation.substr(2) // chop off the 0x
+                web3.eth.call({ to: this.address, data: data }).then(result => {
+                    let balance = new BigNumber(web3.utils.hexToNumberString(result))
+                    this.ownerBalance = balance.div(10 ** this.token.decimals)
+                }).catch(error => {
+                    console.log(error)
+                    this.$toatsed.show(error, { type: 'error' })
+                })
+            }
         },
         getTransactionFee () {
             const web3 = this.web3
