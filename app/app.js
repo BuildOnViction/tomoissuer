@@ -17,8 +17,10 @@ import DepositConfirm from './components/deposit/DepositConfirm.vue'
 import EditTransactionsFee from './components/edittransactionsfee/EditTransactionsFee.vue'
 import EditTransactionsFeeConfirm from './components/edittransactionsfee/EditTransactionsFeeConfirm.vue'
 import ApplyZX from './components/applying/ApplyZ.vue'
-import Reissue from './components/reissue/Reissue.vue'
+import ReissueToken from './components/reissue/Reissue.vue'
 import ReissueConfirm from './components/reissue/ReissueConfirm.vue'
+import BurnToken from './components/burn/BurnToken.vue'
+import BurnTokenConfirm from './components/burn/BurnTokenConfirm.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
@@ -519,8 +521,10 @@ const router = new VueRouter({
         { path: '/edittransactionsfee/:address', component: EditTransactionsFee },
         { path: '/editconfirm/:address', component: EditTransactionsFeeConfirm, name: 'EditTransactionsFeeConfirm' },
         { path: '/apply/:address', component: ApplyZX },
-        { path: '/reissue/:address', component: Reissue },
-        { path: '/reissueConfirm/:address', component: ReissueConfirm, name: 'ReissueConfirm' }
+        { path: '/reissueToken/:address', component: ReissueToken },
+        { path: '/reissueTokenConfirm/:address', component: ReissueConfirm, name: 'ReissueConfirm' },
+        { path: '/burnToken/:address', component: BurnToken },
+        { path: '/burnTokenConfirm/:address', component: BurnTokenConfirm, name: 'BurnTokenConfirm' }
     ]
 })
 

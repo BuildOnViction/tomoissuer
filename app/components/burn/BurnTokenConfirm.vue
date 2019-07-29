@@ -4,7 +4,7 @@
             <div class="info-header">
                 <h2 class="tmp-title-large">{{ token.name }} Token Reissue</h2>
                 <p class="text-center"><i class="tomoissuer-icon-startup"/></p>
-                <div class="text-center"><strong>+ {{ formatNumber(reissueAmount) }} {{ token.symbol }}</strong></div>
+                <div class="text-center"><strong>- {{ formatNumber(reissueAmount) }} {{ token.symbol }}</strong></div>
             </div>
             <div class="tmp-table-three">
                 <table>
@@ -38,14 +38,14 @@
             </div>
             <div class="btn-box">
                 <b-button
-                    :to="'/reissueToken/' + address"
-                    class="tmp-btn-boder-blue btn-min">
+                    :to="'/burnToken/' + address"
+                    class="tmp-btn-boder-violet btn-min">
                     Back
                 </b-button>
                 <b-button
                     v-b-modal.modal-deposit
                     class="tmp-btn-blue">
-                    Reissue
+                    Burn
                 </b-button>
             </div>
             <b-modal

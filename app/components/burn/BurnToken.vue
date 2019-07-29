@@ -1,23 +1,19 @@
 <template>
     <div class="container container-small flex-content-center">
         <div class="tomo-body-fullw">
-            <h2 class="tmp-title-large">{{ token.name }} Token Reissue</h2>
+            <h2 class="tmp-title-large">{{ token.name }} Token Burn</h2>
             <b-form
                 class="tmp-form-one"
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
                     class="mb-4"
-                    label="Current Total supply"
-                    label-cols-sm="9"
-                    label-cols-lg="9">
+                    label="Total supply">
                     {{ formatNumber(token.totalSupplyNumber) }} {{ token.symbol }}
                 </b-form-group>
                 <b-form-group
                     class="mb-4"
-                    label="Current owner balance"
-                    label-cols-sm="10"
-                    label-cols-lg="9">
+                    label="Owner available balance">
                     {{ formatNumber(ownerBalance) }} {{ token.symbol }}
                 </b-form-group>
                 <b-form-group
@@ -28,7 +24,7 @@
                     <b-form-input
                         v-model="reissueAmount"
                         type="text"
-                        placeholder="Quantity of token to be reissued"
+                        placeholder="Quantity of token to be burned"
                         @input="onChangeSupply"/>
                     <div
                         v-if="$v.reissueAmount.$dirty && !$v.reissueAmount.required"
