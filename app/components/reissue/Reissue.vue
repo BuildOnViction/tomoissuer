@@ -6,23 +6,29 @@
                 class="tmp-form-one"
                 novalidate
                 @submit.prevent="validate()">
-                <b-form-group
-                    class="mb-4"
-                    label="Current Total supply"
-                    label-cols-sm="9"
-                    label-cols-lg="9">
-                    {{ formatNumber(token.totalSupplyNumber) }} {{ token.symbol }}
-                </b-form-group>
-                <b-form-group
-                    class="mb-4"
-                    label="Current owner balance"
-                    label-cols-sm="10"
-                    label-cols-lg="9">
-                    {{ formatNumber(ownerBalance) }} {{ token.symbol }}
-                </b-form-group>
+                <div class="d-flex justify-content-between mb-4">
+                    <b-card-text
+                        class="m-0">
+                        Current Total supply
+                    </b-card-text>
+                    <b-card-text
+                        class="m-0">
+                        {{ formatNumber(token.totalSupplyNumber) }} {{ token.symbol }}
+                    </b-card-text>
+                </div>
+                <div class="d-flex justify-content-between mb-4">
+                    <b-card-text
+                        class="m-0">
+                        Current owner balance
+                    </b-card-text>
+                    <b-card-text
+                        class="m-0">
+                        {{ formatNumber(ownerBalance) }} {{ token.symbol }}
+                    </b-card-text>
+                </div>
                 <b-form-group
                     :description="`Transaction fee:  ${currentFee} ${token.symbol}`"
-                    :class="'mb-4' + ($v.reissueAmount.$dirty ? ' input-warn' : '') + warningClass"
+                    :class="'mt-5' + ($v.reissueAmount.$dirty ? ' input-warn' : '') + warningClass"
                     label-for="reissueAmount">
                     <span class="txt-fixed">{{ token.symbol }}</span>
                     <b-form-input

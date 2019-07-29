@@ -136,7 +136,8 @@ table,
 
 // Pge confirm
 .confirm-table {
-    .tomoissuer-icon-startup {
+	.tomoissuer-icon-startup,
+	.tomoissuer-icon-burn {
         @include fsz-cha(90,70,70);
         color: $color-text-blue;
 	}
@@ -164,7 +165,12 @@ table,
 				display: block;
 			}
         }
-    }
+	}
+	.grid-two {
+		tr {
+			grid-template-columns: 50% 50%;
+		}
+	}
 }
 
 .issue-confirm {

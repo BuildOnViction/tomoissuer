@@ -30,6 +30,21 @@ $font-roboto: 'Roboto', sans-serif;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.tomoissuer-icon-burn:before {
+  content: "\e917";
+}
+.tomoissuer-icon-reissue:before {
+  content: "\e918";
+}
+.tomoissuer-earth:before {
+  content: "\e915";
+}
+.tomoissuer-medium:before {
+  content: "\e916";
+}
+.tomoissuer-icon-search:before {
+  content: "\e914";
+}
 .tomoissuer-icon-edit-pencil:before {
   content: "\e913";
 }
@@ -74,9 +89,6 @@ $font-roboto: 'Roboto', sans-serif;
 }
 .tomoissuer-icon-linkedin:before {
   content: "\e909";
-}
-.tomoissuer-icon-plus:before {
-  content: "\e90a";
 }
 .tomoissuer-icon-telegram:before {
   content: "\e90b";
