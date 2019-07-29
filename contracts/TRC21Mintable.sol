@@ -231,6 +231,21 @@ contract TRC21 is ITRC21 {
     }
 
     /**
+     * @dev Internal function that burns an amount of the token of a given
+     * account.
+     * @param account The account whose tokens will be burnt.
+     * @param value The amount that will be burnt.
+     */
+    function _burn(address account, uint256 value) internal {
+        require(account != 0);
+        require(value <= _balances[account]);
+
+        _totalSupply = _totalSupply.sub(value);
+        _balances[account] = _balances[account].sub(value);
+        emit Transfer(account, address(0), value);
+    }
+
+    /**
      * @dev Transfers token's foundation to new issuer
      * @param newIssuer The address to transfer ownership to.
      */
@@ -387,6 +402,21 @@ contract MyTRC21Mintable is TRC21, MinterRole {
 	returns (bool)
 	{
 		_mint(to, value);
+		return true;
+	}
+
+	/**
+	 * @dev Function to burn tokens
+	 * @param value The amount of tokens to mint.
+	 * @return A boolean that indicates if the operation was successful.
+	 */
+	function burn(
+		uint256 value
+	)
+	public
+	returns (bool)
+	{
+		_burn(msg.sender, value);
 		return true;
 	}
 
