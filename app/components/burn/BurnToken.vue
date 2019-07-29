@@ -1,40 +1,30 @@
 <template>
     <div class="container container-small flex-content-center">
         <div class="tomo-body-fullw">
-            <h2 class="tmp-title-large">{{ token.name }} Token Reissue</h2>
+            <h2 class="tmp-title-large">{{ token.name }} Token Burn</h2>
             <b-form
                 class="tmp-form-one"
                 novalidate
                 @submit.prevent="validate()">
-                <div class="d-flex justify-content-between mb-4">
-                    <b-card-text
-                        class="m-0">
-                        Current Total supply
-                    </b-card-text>
-                    <b-card-text
-                        class="m-0">
-                        {{ formatNumber(token.totalSupplyNumber) }} {{ token.symbol }}
-                    </b-card-text>
-                </div>
-                <div class="d-flex justify-content-between mb-4">
-                    <b-card-text
-                        class="m-0">
-                        Current owner balance
-                    </b-card-text>
-                    <b-card-text
-                        class="m-0">
-                        {{ formatNumber(ownerBalance) }} {{ token.symbol }}
-                    </b-card-text>
-                </div>
+                <b-form-group
+                    class="mb-4"
+                    label="Total supply">
+                    {{ formatNumber(token.totalSupplyNumber) }} {{ token.symbol }}
+                </b-form-group>
+                <b-form-group
+                    class="mb-4"
+                    label="Owner available balance">
+                    {{ formatNumber(ownerBalance) }} {{ token.symbol }}
+                </b-form-group>
                 <b-form-group
                     :description="`Transaction fee:  ${currentFee} ${token.symbol}`"
-                    :class="'mt-5' + ($v.reissueAmount.$dirty ? ' input-warn' : '') + warningClass"
+                    :class="'mb-4' + ($v.reissueAmount.$dirty ? ' input-warn' : '') + warningClass"
                     label-for="reissueAmount">
                     <span class="txt-fixed">{{ token.symbol }}</span>
                     <b-form-input
                         v-model="reissueAmount"
                         type="text"
-                        placeholder="Quantity of token to be reissued"
+                        placeholder="Quantity of token to be burned"
                         @input="onChangeSupply"/>
                     <div
                         v-if="$v.reissueAmount.$dirty && !$v.reissueAmount.required"

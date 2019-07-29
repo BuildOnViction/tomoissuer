@@ -2,11 +2,11 @@
     <div class="container container-small flex-content-center">
         <div class="confirm-table tomo-body-fullw">
             <div class="info-header">
-                <h2 class="tmp-title-large m-0">{{ token.name }} Token Reissue</h2>
-                <p class="text-center mt-5"><i class="tomoissuer-icon-burn"/></p>
-                <div class="text-center mb-5"><strong>+ {{ formatNumber(reissueAmount) }}</strong></div>
+                <h2 class="tmp-title-large">{{ token.name }} Token Reissue</h2>
+                <p class="text-center"><i class="tomoissuer-icon-startup"/></p>
+                <div class="text-center"><strong>- {{ formatNumber(reissueAmount) }} {{ token.symbol }}</strong></div>
             </div>
-            <div class="tmp-table-two grid-two">
+            <div class="tmp-table-three">
                 <table>
                     <tr>
                         <td>Owner balance after reissuing</td>
@@ -38,14 +38,14 @@
             </div>
             <div class="btn-box">
                 <b-button
-                    :to="'/reissueToken/' + address"
-                    class="tmp-btn-boder-blue btn-min">
+                    :to="'/burnToken/' + address"
+                    class="tmp-btn-boder-violet btn-min">
                     Back
                 </b-button>
                 <b-button
                     v-b-modal.modal-deposit
                     class="tmp-btn-blue">
-                    Reissue
+                    Burn
                 </b-button>
             </div>
             <b-modal
