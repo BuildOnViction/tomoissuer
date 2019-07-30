@@ -29,17 +29,17 @@ function serializeQuery (params, prefix) {
     return [].concat.apply([], query).join('&')
 }
 
-function createContract (name) {
-    try {
-        const p = path.resolve(__dirname, '../contracts', 'TRC21.sol')
-        const contractTemplate = fs.readFileSync(p, 'UTF-8')
-        // const newContract = contractTemplate.replace('MyTRC21', name)
-        // return newContract
-        return contractTemplate
-    } catch (error) {
-        throw error
-    }
-}
+// function createContract (name) {
+//     try {
+//         const p = path.resolve(__dirname, '../contracts', 'TRC21.sol')
+//         const contractTemplate = fs.readFileSync(p, 'UTF-8')
+//         // const newContract = contractTemplate.replace('MyTRC21', name)
+//         // return newContract
+//         return contractTemplate
+//     } catch (error) {
+//         throw error
+//     }
+// }
 
 router.post('/createToken', [
     check('name').exists().withMessage("'name' is required"),
@@ -48,7 +48,8 @@ router.post('/createToken', [
     check('totalSupply').exists().withMessage("'totalSupply' is required"),
     check('type').exists().withMessage("'type' is required")
         .isIn(['trc20', 'trc21']).withMessage("'type' should be 'trc20' or 'trc21'"),
-    check('minFee').isFloat({ min: 0 }).exists().withMessage("'minFee' is required")
+    check('minFee').isFloat({ min: 0 }).exists().withMessage("'minFee' is required"),
+    check('mintable').exists().isBoolean().withMessage("'mintable' must be true or false")
 ], async function (req, res, next) {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -61,8 +62,18 @@ router.post('/createToken', [
     const totalSupply = req.body.totalSupply
     const type = req.body.type
     const minFee = req.body.minFee
+    const mintable = req.body.mintable
     // create contract
-    const contractCode = createContract(name)
+    // const contractCode = createContract(name)
+    let contractCode
+    let p
+    if (mintable) {
+        p = path.resolve(__dirname, '../contracts', 'TRC21Mintable.sol')
+        contractCode = fs.readFileSync(p, 'UTF-8')
+    } else {
+        p = path.resolve(__dirname, '../contracts', 'TRC21.sol')
+        contractCode = fs.readFileSync(p, 'UTF-8')
+    }
     return res.json({
         name,
         symbol,
@@ -76,7 +87,8 @@ router.post('/createToken', [
 
 router.post('/compileContract', [
     check('sourceCode').exists().withMessage("'sourceCode' is required"),
-    check('estimate').optional().isBoolean().withMessage("'estimate mus be true of false")
+    check('estimate').optional().isBoolean().withMessage("'estimate' mus be true of false"),
+    check('mintable').optional().isBoolean().withMessage("'mintable' mus be true of false")
 ], async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -84,6 +96,7 @@ router.post('/compileContract', [
     }
     try {
         const estimate = req.body.estimate
+        const mintable = req.body.mintable
         let sourceCode
         let bytecode
         let abi
@@ -93,8 +106,14 @@ router.post('/compileContract', [
         } else {
             sourceCode = req.body.sourceCode
         }
+        let contract
         const compiledContract = solc.compile(sourceCode, 1)
-        let contract = compiledContract.contracts['MyTRC21'] || compiledContract.contracts[':' + 'MyTRC21']
+        if (mintable) {
+            contract = compiledContract.contracts['MyTRC21Mintable'] ||
+                compiledContract.contracts[':' + 'MyTRC21Mintable']
+        } else {
+            contract = compiledContract.contracts['MyTRC21'] || compiledContract.contracts[':' + 'MyTRC21']
+        }
         bytecode = contract.bytecode
         abi = JSON.parse(contract.interface)
 
@@ -109,12 +128,24 @@ router.post('/compileContract', [
 
 router.get('/getABI', [], async (req, res, next) => {
     try {
-        const p = path.resolve(__dirname, '../build/contracts', 'MyTRC21.json')
-        const data = fs.readFileSync(p, 'UTF-8')
-        if (data) {
-            return res.json({
-                abi: JSON.parse(data).abi
-            })
+        let p
+        const type = req.query.type || ''
+        if (type === 'mintable') {
+            p = path.resolve(__dirname, '../build/contracts', 'MyTRC21Mintable.json')
+            const data = fs.readFileSync(p, 'UTF-8')
+            if (data) {
+                return res.json({
+                    abi: JSON.parse(data).abi
+                })
+            }
+        } else {
+            p = path.resolve(__dirname, '../build/contracts', 'MyTRC21.json')
+            const data = fs.readFileSync(p, 'UTF-8')
+            if (data) {
+                return res.json({
+                    abi: JSON.parse(data).abi
+                })
+            }
         }
     } catch (error) {
         console.log(error)

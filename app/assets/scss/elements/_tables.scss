@@ -38,7 +38,10 @@ table,
 				box-shadow: $boxshadow-default;
 				padding: 1em;
 				margin-bottom: 15px;
-				overflow: hidden;
+				// overflow: hidden;
+				@include media-breakpoint-down(md) {
+					position: relative;
+				}
 			}
 			th,
 			td {
@@ -58,6 +61,11 @@ table,
 							float: none!important;
 						}
 					}
+				}
+			}
+			td {
+				&:last-child {
+					overflow: inherit;
 				}
 			}
 			.table-icon {
@@ -190,6 +198,36 @@ table,
 				text-align: left;
 				padding-left: 15px!important;
 			}
+		}
+	}
+}
+
+
+.other-dots {
+	table {
+        tr {
+			td {
+				&:last-child {
+					a {
+						font-size: 15px;
+					}
+					@include media-breakpoint-down(md) {
+						position: absolute;
+						top: 25px;
+						right: 15px;
+						padding: 0;
+						>div {
+							padding: 0!important;
+						}
+					}
+				}
+			}
+		}
+	}
+	.tmp-btn-dots {
+		.dropdown-toggle {
+			padding: 0 5px;
+			line-height: 1;
 		}
 	}
 }

@@ -310,7 +310,8 @@ export default {
             if (this.account && web3) {
                 axios.post('/api/token/compileContract', {
                     sourceCode: '',
-                    estimate: true
+                    estimate: true,
+                    mintable: false
                 }).then(async response => {
                     const contract = new web3.eth.Contract(
                         response.data.abi, null, { data: '0x' + response.data.bytecode })

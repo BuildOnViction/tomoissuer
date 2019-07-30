@@ -3,7 +3,7 @@
         v-if="listokenItems"
         class="container">
         <h2 class="tmp-title-large">Token List</h2>
-        <div class="tmp-table-one">
+        <div class="tmp-table-one other-dots">
             <b-tab
                 title="Transfer"
                 active>
@@ -71,11 +71,35 @@
                             <template
                                 slot="applytomoz"
                                 slot-scope="data">
-                                <router-link
+                                <b-dropdown
+                                    class="tmp-btn-dots"
+                                    right
+                                    offset="25"
+                                    no-caret
+                                    toggle-class="text-decoration-none"
+                                    variant="link">
+                                    <template
+                                        slot="button-content">
+                                        <i class="tomoissuer-three-dots" />
+                                    </template>
+                                    <b-dropdown-item
+                                        :to="'/tomozcondition/' + data.item.hash">
+                                        Apply TomoZ
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        :to="'/reissueToken/' + data.item.hash">
+                                        Reissue Token
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        :to="'/burnToken/' + data.item.hash">
+                                        Burn Token
+                                    </b-dropdown-item>
+                                </b-dropdown>
+                                <!-- <router-link
                                     v-if="!data.value"
                                     :to="`/tomozcondition/${data.item.hash}`">
                                     Apply TomoZ
-                                </router-link>
+                                </router-link> -->
                             </template>
                         </b-table>
                     </div>
