@@ -83,6 +83,7 @@
                                         <i class="tomoissuer-three-dots" />
                                     </template>
                                     <b-dropdown-item
+                                        v-if="!data.value"
                                         :to="'/tomozcondition/' + data.item.hash">
                                         Apply TomoZ
                                     </b-dropdown-item>
@@ -153,11 +154,12 @@ export default {
             listokenPerPage: 7,
             listokenFields: [
                 { key: 'token', label: 'Token' },
+                { key: 'ownerBalance', label: 'Balance' },
+                { key: 'holders', label: 'Holders' },
                 { key: 'price', label: 'Price' },
                 { key: 'volume', label: 'Volume 24h' },
+                // { key: '', label: '' },
                 { key: 'totalSupply', label: 'Total supply' },
-                { key: 'ownerBalance', label: 'Owner balance' },
-                { key: 'holders', label: 'Holders' },
                 { key: 'transferToken', label: '', variant: 'sp-text-center' },
                 { key: 'applytomoz', label: '', variant: 'sp-text-center' }
             ],

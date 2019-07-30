@@ -48,29 +48,32 @@
                                         <i class="tomoissuer-icon-cog" />
                                     </template>
                                     <b-dropdown-item
+                                        v-if="!isAppliedZ && account === contractCreation"
                                         :to="'/tomozcondition/' + address">
                                         Apply to pay fee by token
                                     </b-dropdown-item>
-                                    <b-dropdown-divider />
+                                    <b-dropdown-divider v-if="!isAppliedZ"/>
                                     <b-dropdown-item
                                         :href="config.tomowalletUrl + '/trc21/' + address"
                                         target="_blank">
                                         Transfer
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        :to="'/burnToken/' + address">
+                                        :to="'/reissueToken/' + address">
                                         Reissue Token
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         :to="'/burnToken/' + address">
                                         Burn Token
                                     </b-dropdown-item>
-                                    <b-dropdown-divider />
+                                    <b-dropdown-divider v-if="isAppliedZ" />
                                     <b-dropdown-item
+                                        v-if="isAppliedZ && contractCreation === account"
                                         :to="'/edittransactionsfee/' + address">
                                         Edit transaction fee
                                     </b-dropdown-item>
                                     <b-dropdown-item
+                                        v-if="isAppliedZ"
                                         :to="'/depositfee/' + address">
                                         Deposit TRC-21 fee fund
                                     </b-dropdown-item>
