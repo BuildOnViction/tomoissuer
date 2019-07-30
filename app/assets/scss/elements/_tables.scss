@@ -208,6 +208,9 @@ table,
         tr {
 			td {
 				&:last-child {
+					a {
+						font-size: 15px;
+					}
 					@include media-breakpoint-down(md) {
 						position: absolute;
 						top: 25px;
