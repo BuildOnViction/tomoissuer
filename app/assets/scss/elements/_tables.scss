@@ -208,8 +208,26 @@ table,
         tr {
 			td {
 				&:last-child {
+					ul {
+						border: 0;
+						margin: 0;
+						padding: 0;
+						min-width: max-content;
+						margin-top: 10px;
+						width: 100%;
+						@include fsz(16);
+						@include media-breakpoint-up(lg) {
+							border-radius: $boderradius-default;
+							box-shadow: $boxshadow-default;
+							padding: 1.5em 0;
+						}
+						li {
+							margin: 0;
+							padding: .5em 0;
+						}
+					}
 					a {
-						font-size: 15px;
+						@include fsz(16);
 					}
 					@include media-breakpoint-down(md) {
 						position: absolute;
@@ -228,6 +246,7 @@ table,
 		.dropdown-toggle {
 			padding: 0 5px;
 			line-height: 1;
+			color: $color-text-gray;
 		}
 	}
 }

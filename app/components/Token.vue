@@ -46,6 +46,7 @@
                                         slot="button-content"
                                         class="tmp-btn-transparent">
                                         <i class="tomoissuer-icon-cog" />
+                                        <i class="tomoissuer-icon-angle-down" />
                                     </template>
                                     <b-dropdown-item
                                         v-if="!isAppliedZ && account === contractCreation"

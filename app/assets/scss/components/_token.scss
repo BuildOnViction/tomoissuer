@@ -2,12 +2,42 @@
 .main-box-header {
     .tomo-btn {
         text-align: right;
-        ul {
-            li {
+        >ul {
+            >li {
                 display: inline-block;
                 @include media-breakpoint-down (md) {
                     display: block;
                     margin-top: 1em;
+                }
+                .btn-group .btn-link {
+                    border-radius: $boderradius-default;
+                    box-shadow: $boxshadow-default;
+                    margin-left: 30px;
+                    display: flex;
+                    align-items: center;
+                    color: $color-text-gray;
+                    .tomoissuer-icon-angle-down {
+                        @include fsz(10);
+                        margin-left: 10px;
+                    }
+                }
+                ul {
+                    border: 0;
+                    margin: 0;
+                    padding: 0;
+                    min-width: max-content;
+                    margin-top: 10px;
+                    width: 100%;
+                    @include fsz(16);
+                    @include media-breakpoint-up(lg) {
+                        border-radius: $boderradius-default;
+                        box-shadow: $boxshadow-default;
+                        padding: 1.5em 0;
+                    }
+                    li {
+                        margin: 0;
+                        padding: .5em 0;
+                    }
                 }
             }
         }
