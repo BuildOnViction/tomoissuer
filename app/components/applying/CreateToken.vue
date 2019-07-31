@@ -201,7 +201,8 @@ export default {
             isEditDecimals: false,
             warningName: '',
             warningSymbol: '',
-            warningDecimals: ''
+            warningDecimals: '',
+            mintable: true
         }
     },
     validations: {
@@ -262,7 +263,8 @@ export default {
                     type: this.type,
                     totalSupply: this.totalSupply,
                     issueFee: this.issueFee,
-                    estimatedAmount: this.estimatedAmount
+                    estimatedAmount: this.estimatedAmount,
+                    mintable: this.mintable
                 }
             })
         },

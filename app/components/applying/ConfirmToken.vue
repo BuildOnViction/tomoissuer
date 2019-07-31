@@ -112,6 +112,7 @@ export default {
             issueFee: this.$route.params.issueFee || '',
             minFee: 0,
             totalSupply: (this.$route.params.totalSupply || '').replace(/,/g, ''),
+            mintable: Boolean(this.$route.params.mintable),
             type: this.$route.params.type || '',
             sourceCode: 'Generating Contract...',
             transactionHash: '',
@@ -163,7 +164,8 @@ export default {
                         decimals: self.decimals,
                         totalSupply: self.totalSupply,
                         minFee: self.minFee,
-                        type: self.type
+                        type: self.type,
+                        mintable: true
                     }
                 )
                 if (tokenContract && tokenContract.data) {
@@ -190,7 +192,8 @@ export default {
                 } else {
                     const compiledContract = await axios.post('/api/token/compileContract', {
                         name: self.tokenName,
-                        sourceCode: self.sourceCode
+                        sourceCode: self.sourceCode,
+                        mintable: this.mintable
                     })
 
                     const contract = new web3.eth.Contract(
