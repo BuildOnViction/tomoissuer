@@ -75,13 +75,19 @@ textarea {
     @include media-breakpoint-down(md){
         margin-bottom: 1.5em!important;
     }
-    >label {
+    label {
         @include fsz(16);
         font-family: $font-quicksand;
         color: $color-text-default;
         margin-bottom: 20px;
         min-width: 100px;
         font-weight: 500;
+        display: flex;
+        align-items: center;
+        i {
+            font-size: 18px;
+            color: $color-text-oranges;
+        }
     }
     div {
         position: relative;

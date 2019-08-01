@@ -69,23 +69,69 @@
                 </b-form-group>
                 <b-form-group
                     :class="'mb-4 form-group' + ($v.totalSupply.$dirty && !checkSupply ? ' input-warn' : '')"
-                    label-for="totalSupply"
-                    label="Token Supply">
-                    <i
-                        id="totalSupply"
-                        class="tomoissuer-icon-info"
-                        style="top: -28px !important;left: 89px !important;position: absolute;color: violet"/>
+                    label-for="totalSupply">
+                    <label>
+                        Token Supply
+                        <i
+                            id="totalSupply"
+                            class="tomoissuer-icon-info"/>
+                    </label>
                     <b-tooltip
                         target="totalSupply">
                         Total supply is blah blah...
                     </b-tooltip>
-                    <b-form-input
-                        v-model="totalSupply"
-                        type="text"
-                        autocomplete="off"
-                        placeholder="Please use only number"
-                        @input="onChangeSupply"
-                        @change="onChangeSupply"/>
+                    <b-row class="align-items-center">
+                        <b-col
+                            cols="12"
+                            md="5"
+                            class="mb-sp-4">
+                            <b-form-input
+                                v-model="totalSupply"
+                                type="text"
+                                autocomplete="off"
+                                placeholder="Please use only number"
+                                @input="onChangeSupply"
+                                @change="onChangeSupply"/>
+                        </b-col>
+                        <b-col
+                            :class="($v.totalSupply.$dirty && !checkSupply ? ' input-warn' : '')"
+                            label-for="mintable"
+                            cols="12"
+                            md="7">
+                            <b-row>
+                                <b-col cols="5">
+                                    <b-form-radio
+                                        v-model="mintable"
+                                        value="true"
+                                        class="flex-box">
+                                        Rissueable
+                                        <i
+                                            id="mintable"
+                                            class="tomoissuer-icon-info"/>
+                                    </b-form-radio>
+                                    <b-tooltip
+                                        target="mintable">
+                                        Reissuable is blah blah...
+                                    </b-tooltip>
+                                </b-col>
+                                <b-col cols="7">
+                                    <b-form-radio
+                                        v-model="mintable"
+                                        value="false"
+                                        class="flex-box">
+                                        Not-reissueable
+                                        <i
+                                            id="notmintable"
+                                            class="tomoissuer-icon-info"/>
+                                    </b-form-radio>
+                                    <b-tooltip
+                                        target="notmintable">
+                                        Not-reissuable is blah blah...
+                                    </b-tooltip>
+                                </b-col>
+                            </b-row>
+                        </b-col>
+                    </b-row>
                     <div
                         v-if="checkSupply"
                         class="txt-fixed-behind">
@@ -99,37 +145,6 @@
                     <div
                         v-if="$v.totalSupply.$dirty && !$v.totalSupply.required"
                         class="text-danger pt-2">Required field</div>
-                </b-form-group>
-                <b-form-group
-                    :class="'mb-4 form-group' + ($v.totalSupply.$dirty && !checkSupply ? ' input-warn' : '')"
-                    label-for="mintable">
-                    <b-form-radio
-                        v-model="mintable"
-                        value="true">
-                        Rissueable
-                    </b-form-radio>
-                    <i
-                        id="mintable"
-                        class="tomoissuer-icon-info"
-                        style="top: -8px !important;left: 97px !important;position: absolute;color: violet"/>
-                    <b-tooltip
-                        target="mintable">
-                        Reissuable is blah blah...
-                    </b-tooltip>
-                    <b-form-radio
-                        id="mintable"
-                        v-model="mintable"
-                        value="false">
-                        Not-reissueable
-                    </b-form-radio>
-                    <i
-                        id="notmintable"
-                        class="tomoissuer-icon-info"
-                        style="top: 19px !important;left: 125px !important;position: absolute;color: violet"/>
-                    <b-tooltip
-                        target="notmintable">
-                        Not-reissuable is blah blah...
-                    </b-tooltip>
                 </b-form-group>
                 <b-form-group
                     v-if="isEditDecimals"
