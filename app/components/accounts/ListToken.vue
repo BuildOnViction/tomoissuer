@@ -3,7 +3,7 @@
         v-if="listokenItems"
         class="container">
         <h2 class="tmp-title-large">Token List</h2>
-        <div class="tmp-table-one">
+        <div class="tmp-table-one other-dots">
             <b-tab
                 title="Transfer"
                 active>
@@ -17,6 +17,20 @@
                             :per-page="listokenPerPage"
                             :busy="loading"
                             stacked="lg">
+                            <template
+                                slot="logo"
+                                slot-scope="data">
+                                <div
+                                    :class="'token-logo' + (data.item.logo ? '' : ' set-logo')">
+                                    <div
+                                        v-if="!data.value">
+                                        {{ data.item.name.substring(0, 1) }}
+                                    </div>
+                                    <img
+                                        v-if="data.value"
+                                        :src="data.value">
+                                </div>
+                            </template>
                             <template
                                 slot="table-busy">
                                 <div class="text-center text-danger my-2">
@@ -71,11 +85,36 @@
                             <template
                                 slot="applytomoz"
                                 slot-scope="data">
-                                <router-link
+                                <b-dropdown
+                                    class="tmp-btn-dots"
+                                    right
+                                    offset="25"
+                                    no-caret
+                                    toggle-class="text-decoration-none"
+                                    variant="link">
+                                    <template
+                                        slot="button-content">
+                                        <i class="tomoissuer-three-dots" />
+                                    </template>
+                                    <b-dropdown-item
+                                        v-if="!data.value"
+                                        :to="'/tomozcondition/' + data.item.hash">
+                                        Apply TomoZ
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        :to="'/reissueToken/' + data.item.hash">
+                                        Reissue Token
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        :to="'/burnToken/' + data.item.hash">
+                                        Burn Token
+                                    </b-dropdown-item>
+                                </b-dropdown>
+                                <!-- <router-link
                                     v-if="!data.value"
                                     :to="`/tomozcondition/${data.item.hash}`">
                                     Apply TomoZ
-                                </router-link>
+                                </router-link> -->
                             </template>
                         </b-table>
                     </div>
@@ -128,12 +167,13 @@ export default {
             listokenRows: 0,
             listokenPerPage: 7,
             listokenFields: [
+                { key: 'logo', label: '', variant: 'sp-text-center' },
                 { key: 'token', label: 'Token' },
-                { key: 'price', label: 'Price' },
-                { key: 'volume', label: 'Volume 24h' },
-                { key: 'totalSupply', label: 'Total supply' },
-                { key: 'ownerBalance', label: 'Owner balance' },
+                { key: 'ownerBalance', label: 'Balance' },
                 { key: 'holders', label: 'Holders' },
+                { key: 'price', label: 'Price' },
+                { key: 'value', label: 'Value' },
+                // { key: 'totalSupply', label: 'Total supply' },
                 { key: 'transferToken', label: '', variant: 'sp-text-center' },
                 { key: 'applytomoz', label: '', variant: 'sp-text-center' }
             ],
@@ -175,14 +215,16 @@ export default {
                 if (data.items.length > 0) {
                     const map = await Promise.all(data.items.map(async i => {
                         return {
+                            name: i.name,
                             token: `${i.symbol} (${i.name})`,
                             hash: i.hash,
                             price: '---',
-                            volume: '---',
+                            value: '---',
                             totalSupply: i.totalSupplyNumber,
                             ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
                             holders: i.holders || '---',
-                            applytomoz: ((self.appliedList || []).indexOf(i.hash) > -1)
+                            applytomoz: ((self.appliedList || []).indexOf(i.hash) > -1),
+                            logo: await self.getLogo(i.hash)
                         }
                     }))
                     self.listokenItems = map
@@ -193,6 +235,16 @@ export default {
                 self.loading = false
                 console.log(error)
                 self.$toasted.show(error, { type: 'error' })
+            }
+        },
+        async getLogo (address) {
+            try {
+                const { data } = await axios.get('/api/token/getLogo/' + address)
+                if (data.image) {
+                    return data.image
+                } else return false
+            } catch (error) {
+                return false
             }
         },
         async pageChange (page) {

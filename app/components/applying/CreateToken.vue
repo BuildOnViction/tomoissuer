@@ -8,13 +8,14 @@
                 @submit.prevent="validate()">
                 <b-form-group
                     :class="'mb-4 ' + ($v.tokenName.$dirty && !checkName ? 'input-warn' : '') + warningName"
-                    label-for="tokenName">
+                    label-for="tokenName"
+                    label="Token Name">
                     <b-form-input
                         v-model="tokenName"
                         type="text"
                         autocomplete="off"
                         maxlength="20"
-                        placeholder="Token name"
+                        placeholder="Please use only Latin letters and numbers, e.g. “TomoChain”"
                         @input="onChangeName"
                         @change="onChangeName"/>
                     <div
@@ -22,11 +23,11 @@
                         class="txt-fixed-behind">
                         <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
                     </div>
-                    <small
+                    <!-- <small
                         tabindex="-1"
                         class="form-text text-muted">
                         Please use only Latin letters and numbers, e.g. “TomoChain”
-                    </small>
+                    </small> -->
                     <small
                         class="float-right txt-fixed-description">
                         Character left: {{ nameLeft }}
@@ -38,13 +39,14 @@
                 <b-form-group
                     :class="'mb-4 form-group' +
                     ($v.tokenSymbol.$dirty && !checkSymbol ? ' input-warn' : '') + warningSymbol"
-                    label-for="tokenSymbol">
+                    label-for="tokenSymbol"
+                    label="Token Symbol">
                     <b-form-input
                         v-model="tokenSymbol"
                         autocomplete="off"
                         type="text"
                         maxlength="5"
-                        placeholder="Token symbol"
+                        placeholder="Please use only Latin letters and numbers, e.g. “TOMO”"
                         @input="onChangeSymbol"
                         @change="onChangeSymbol"/>
                     <div
@@ -52,11 +54,11 @@
                         class="txt-fixed-behind">
                         <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
                     </div>
-                    <small
+                    <!-- <small
                         tabindex="-1"
                         class="form-text text-muted">
                         Please use only Latin letters and numbers, e.g. “TOMO”
-                    </small>
+                    </small> -->
                     <small
                         class="float-right txt-fixed-description">
                         Character left: {{ symbolLeft }}
@@ -67,12 +69,21 @@
                 </b-form-group>
                 <b-form-group
                     :class="'mb-4 form-group' + ($v.totalSupply.$dirty && !checkSupply ? ' input-warn' : '')"
-                    label-for="totalSupply">
+                    label-for="totalSupply"
+                    label="Token Supply">
+                    <i
+                        id="totalSupply"
+                        class="tomoissuer-icon-info"
+                        style="top: -28px !important;left: 89px !important;position: absolute;color: violet"/>
+                    <b-tooltip
+                        target="totalSupply">
+                        Total supply is blah blah...
+                    </b-tooltip>
                     <b-form-input
                         v-model="totalSupply"
                         type="text"
                         autocomplete="off"
-                        placeholder="Token Supply"
+                        placeholder="Please use only number"
                         @input="onChangeSupply"
                         @change="onChangeSupply"/>
                     <div
@@ -80,31 +91,63 @@
                         class="txt-fixed-behind">
                         <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
                     </div>
-                    <small
+                    <!-- <small
                         tabindex="-1"
                         class="form-text text-muted">
                         Please use only number
-                    </small>
+                    </small> -->
                     <div
                         v-if="$v.totalSupply.$dirty && !$v.totalSupply.required"
                         class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <b-form-group
+                    :class="'mb-4 form-group' + ($v.totalSupply.$dirty && !checkSupply ? ' input-warn' : '')"
+                    label-for="mintable">
+                    <b-form-radio
+                        v-model="mintable"
+                        value="true">
+                        Rissueable
+                    </b-form-radio>
+                    <i
+                        id="mintable"
+                        class="tomoissuer-icon-info"
+                        style="top: -8px !important;left: 97px !important;position: absolute;color: violet"/>
+                    <b-tooltip
+                        target="mintable">
+                        Reissuable is blah blah...
+                    </b-tooltip>
+                    <b-form-radio
+                        id="mintable"
+                        v-model="mintable"
+                        value="false">
+                        Not-reissueable
+                    </b-form-radio>
+                    <i
+                        id="notmintable"
+                        class="tomoissuer-icon-info"
+                        style="top: 19px !important;left: 125px !important;position: absolute;color: violet"/>
+                    <b-tooltip
+                        target="notmintable">
+                        Not-reissuable is blah blah...
+                    </b-tooltip>
+                </b-form-group>
+                <b-form-group
                     v-if="isEditDecimals"
                     :class="'mb-4' + ($v.decimals.$dirty && !checkDecimals ? ' input-warn' : '') + warningDecimals"
-                    label-for="decimals">
+                    label-for="decimals"
+                    label="Decimals">
                     <b-form-input
                         v-model="decimals"
                         autocomplete="off"
                         type="number"
-                        placeholder="Decimals"
+                        placeholder="Please use the number from 0 to 18"
                         @input="onChangeDecimals"
                         @change="onChangeDecimals"/>
-                    <small
+                    <!-- <small
                         tabindex="-1"
                         class="form-text text-muted">
                         Please use the number from 0 to 18
-                    </small>
+                    </small> -->
                     <div
                         v-if="checkDecimals"
                         class="txt-fixed-behind">
@@ -201,7 +244,8 @@ export default {
             isEditDecimals: false,
             warningName: '',
             warningSymbol: '',
-            warningDecimals: ''
+            warningDecimals: '',
+            mintable: ''
         }
     },
     validations: {
@@ -262,7 +306,8 @@ export default {
                     type: this.type,
                     totalSupply: this.totalSupply,
                     issueFee: this.issueFee,
-                    estimatedAmount: this.estimatedAmount
+                    estimatedAmount: this.estimatedAmount,
+                    mintable: this.mintable || true
                 }
             })
         },
@@ -310,7 +355,8 @@ export default {
             if (this.account && web3) {
                 axios.post('/api/token/compileContract', {
                     sourceCode: '',
-                    estimate: true
+                    estimate: true,
+                    mintable: false
                 }).then(async response => {
                     const contract = new web3.eth.Contract(
                         response.data.abi, null, { data: '0x' + response.data.bytecode })

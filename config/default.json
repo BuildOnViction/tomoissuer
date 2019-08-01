@@ -14,11 +14,12 @@
     "tomowalletUrl": "https://wallet.testnet.tomochain.com",
     "tomorelayerAPI": "https://relayer.testnet.tomochain.com",
     "relayerAuthorityKey": "",
+    "tokenListAPI": "https://raw.githubusercontent.com/tomochain/tokens/master/tokens",
     "blockchain": {
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",
         "networkId": 89,
-        "gas": 1000000,
+        "gas": 2000000,
         "deployPrice": 1000000000000,
         "issuerAddress": "",
         "tomoXAddress": ""
