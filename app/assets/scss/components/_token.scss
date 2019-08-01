@@ -152,3 +152,107 @@
 		}
 	}
 }
+.token-logo {
+	border-radius: 50%;
+    border: 1px solid #f2f2f2;
+    color: #fff;
+	overflow: hidden;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	justify-content: center;
+    align-items: center;
+}
+
+#transfer_table tr {
+    &:nth-child(1) {
+        td {
+            &:first-child {
+                .token-logo {
+                    background-color: rgb(255, 38, 38);
+                }
+            }
+        }
+    }
+    &:nth-child(2) {
+        td {
+            &:first-child {
+                .token-logo {
+                    background-color: rgb(179, 211, 201);
+                }
+            }
+        }
+    }
+    &:nth-child(3) {
+        td {
+            &:first-child {
+                .token-logo {
+                    background-color: green;
+                }
+            }
+        }
+    }
+    &:nth-child(4) {
+        td {
+            &:first-child {
+                .token-logo {
+                    background-color: grey;
+                }
+            }
+        }
+    }
+    &:nth-child(5) {
+        td {
+            &:first-child {
+                .token-logo {
+                    background-color: hotpink;
+                }
+            }
+        }
+    }
+    &:nth-child(6) {
+        td {
+            &:first-child {
+                .token-logo {
+                    background-color: violet;
+                }
+            }
+        }
+    }
+    &:nth-child(7) {
+        td {
+            &:first-child {
+                .token-logo {
+                    background-color: khaki;
+                }
+            }
+        }
+    }
+    &:nth-child(8) {
+        td {
+            &:first-child {
+                .token-logo {
+                    background-color: red;
+                }
+            }
+        }
+    }
+    &:nth-child(8) {
+        td {
+            &:first-child {
+                .token-logo {
+                    background-color: blue;
+                }
+            }
+        }
+    }
+    &:nth-child(10) {
+        td {
+            &:first-child {
+                .token-logo {
+                    background-color: yellow;
+                }
+            }
+        }
+    }
+}

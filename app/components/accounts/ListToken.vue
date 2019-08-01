@@ -18,6 +18,20 @@
                             :busy="loading"
                             stacked="lg">
                             <template
+                                slot="logo"
+                                slot-scope="data">
+                                <div
+                                    :class="'token-logo' + (data.item.logo ? '' : ' set-logo')">
+                                    <div
+                                        v-if="!data.value">
+                                        {{ data.item.name.substring(0, 1) }}
+                                    </div>
+                                    <img
+                                        v-if="data.value"
+                                        :src="data.value">
+                                </div>
+                            </template>
+                            <template
                                 slot="table-busy">
                                 <div class="text-center text-danger my-2">
                                     <b-spinner
@@ -153,13 +167,13 @@ export default {
             listokenRows: 0,
             listokenPerPage: 7,
             listokenFields: [
+                { key: 'logo', label: '', variant: 'sp-text-center' },
                 { key: 'token', label: 'Token' },
                 { key: 'ownerBalance', label: 'Balance' },
                 { key: 'holders', label: 'Holders' },
                 { key: 'price', label: 'Price' },
-                { key: 'volume', label: 'Volume 24h' },
-                // { key: '', label: '' },
-                { key: 'totalSupply', label: 'Total supply' },
+                { key: 'value', label: 'Value' },
+                // { key: 'totalSupply', label: 'Total supply' },
                 { key: 'transferToken', label: '', variant: 'sp-text-center' },
                 { key: 'applytomoz', label: '', variant: 'sp-text-center' }
             ],
@@ -201,14 +215,16 @@ export default {
                 if (data.items.length > 0) {
                     const map = await Promise.all(data.items.map(async i => {
                         return {
+                            name: i.name,
                             token: `${i.symbol} (${i.name})`,
                             hash: i.hash,
                             price: '---',
-                            volume: '---',
+                            value: '---',
                             totalSupply: i.totalSupplyNumber,
                             ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
                             holders: i.holders || '---',
-                            applytomoz: ((self.appliedList || []).indexOf(i.hash) > -1)
+                            applytomoz: ((self.appliedList || []).indexOf(i.hash) > -1),
+                            logo: await self.getLogo(i.hash)
                         }
                     }))
                     self.listokenItems = map
@@ -219,6 +235,16 @@ export default {
                 self.loading = false
                 console.log(error)
                 self.$toasted.show(error, { type: 'error' })
+            }
+        },
+        async getLogo (address) {
+            try {
+                const { data } = await axios.get('/api/token/getLogo/' + address)
+                if (data.image) {
+                    return data.image
+                } else return false
+            } catch (error) {
+                return false
             }
         },
         async pageChange (page) {

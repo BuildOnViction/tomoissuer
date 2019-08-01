@@ -14,6 +14,7 @@
     "tomowalletUrl": "https://wallet.testnet.tomochain.com",
     "tomorelayerAPI": "https://relayer.testnet.tomochain.com",
     "relayerAuthorityKey": "",
+    "tokenListAPI": "https://raw.githubusercontent.com/tomochain/tokens/master/tokens",
     "blockchain": {
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",

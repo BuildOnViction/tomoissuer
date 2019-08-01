@@ -85,6 +85,20 @@ table,
 				}
 			}
 		}
+		&.colum-8 {
+			tr {
+				@include media-breakpoint-up(lg) {
+					display: grid;
+					grid-template-columns: 34px auto 14% 14% 14% 14% 14% 3%;
+					td {
+						&:first-child {
+							padding-right: 0;
+							padding-left: 10px;
+						}
+					}
+				}
+			}
+		}
 		&.colum-4 {
 			tr {
 				@include media-breakpoint-up(lg) {
