@@ -4,15 +4,25 @@
         margin-top: 30px;
     }
     .form-group {
-        >label {
-            margin: 0 25px 0 0;
-            font-weight: 500;
-            min-width: 100px;
+        &.flex-box {
+            label {
+                margin: 0 25px 0 0;
+                font-weight: 500;
+                min-width: 100px;
+            }
         }
     }
     .flex-box {
         display: flex;
         align-items: center;
+        &.custom-radio {
+            display: flex;
+            align-items: center;
+            label {
+                margin-bottom: 0;
+                line-height: 1.8;
+            }
+        }
         .box-radio {
             display: flex;
             align-items: center;
