@@ -22,6 +22,12 @@ router.get('/', async function (req, res, next) {
         tomorelayerAPI = tomorelayerAPI.substr(0, tomorelayerAPI.length - 1)
     }
     appConfig.tomorelayerAPI = tomorelayerAPI
+
+    let tokenListAPI = config.get('tokenListAPI')
+    if (tokenListAPI[tokenListAPI.length - 1] === '/') {
+        tokenListAPI = tokenListAPI.substr(0, tokenListAPI.length - 1)
+    }
+    appConfig.tokenListAPI = tokenListAPI
     return res.json(appConfig)
 })
 

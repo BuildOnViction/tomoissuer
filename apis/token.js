@@ -330,4 +330,23 @@ router.get('/txes/trc21/:token', [], async (req, res, next) => {
     }
 })
 
+router.get('/getLogo/:token', [], async (req, res, next) => {
+    try {
+        const token = req.params.token || ''
+        const response = await axios.get(
+            urljoin(config.get('tokenListAPI'), `${token}.png`)
+        )
+
+        if (response.data) {
+            return res.json({
+                image: urljoin(config.get('tokenListAPI'), `${token}.png`)
+            })
+        }
+    } catch (error) {
+        return res.json({
+            image: false
+        })
+    }
+})
+
 module.exports = router
