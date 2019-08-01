@@ -72,8 +72,13 @@
                     label-for="totalSupply"
                     label="Token Supply">
                     <i
+                        id="totalSupply"
                         class="tomoissuer-icon-info"
-                        style="top: -28px !important;left: 89px !important;position: absolute;"/>
+                        style="top: -28px !important;left: 89px !important;position: absolute;color: violet"/>
+                    <b-tooltip
+                        target="totalSupply">
+                        Total supply is blah blah...
+                    </b-tooltip>
                     <b-form-input
                         v-model="totalSupply"
                         type="text"
@@ -104,16 +109,27 @@
                         Rissueable
                     </b-form-radio>
                     <i
+                        id="mintable"
                         class="tomoissuer-icon-info"
-                        style="top: -8px !important;left: 97px !important;position: absolute;"/>
+                        style="top: -8px !important;left: 97px !important;position: absolute;color: violet"/>
+                    <b-tooltip
+                        target="mintable">
+                        Reissuable is blah blah...
+                    </b-tooltip>
                     <b-form-radio
+                        id="mintable"
                         v-model="mintable"
                         value="false">
                         Not-reissueable
                     </b-form-radio>
                     <i
+                        id="notmintable"
                         class="tomoissuer-icon-info"
-                        style="top: 19px !important;left: 125px !important;position: absolute;"/>
+                        style="top: 19px !important;left: 125px !important;position: absolute;color: violet"/>
+                    <b-tooltip
+                        target="notmintable">
+                        Not-reissuable is blah blah...
+                    </b-tooltip>
                 </b-form-group>
                 <b-form-group
                     v-if="isEditDecimals"
