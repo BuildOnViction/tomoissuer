@@ -28,6 +28,10 @@
                         <td>{{ type.toUpperCase() }}</td>
                     </tr>
                     <tr>
+                        <td>Reissuable</td>
+                        <td>{{ mintable ? 'Yes' : 'No' }}</td>
+                    </tr>
+                    <tr>
                         <td>Issuance fee</td>
                         <td>~ {{ issueFee }} TOMO</td>
                     </tr>
@@ -112,7 +116,7 @@ export default {
             issueFee: this.$route.params.issueFee || '',
             minFee: 0,
             totalSupply: (this.$route.params.totalSupply || '').replace(/,/g, ''),
-            mintable: Boolean(this.$route.params.mintable),
+            mintable: this.$route.params.mintable,
             type: this.$route.params.type || '',
             sourceCode: 'Generating Contract...',
             transactionHash: '',
@@ -165,7 +169,7 @@ export default {
                         totalSupply: self.totalSupply,
                         minFee: self.minFee,
                         type: self.type,
-                        mintable: true
+                        mintable: this.mintable
                     }
                 )
                 if (tokenContract && tokenContract.data) {
@@ -185,6 +189,7 @@ export default {
                 const chainConfig = this.config.blockchain
                 const web3 = self.web3
                 self.loading = true
+                self.account = await self.getAccount()
                 self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18)
                 if (self.balance.isLessThan(self.txFee)) {
                     self.loading = false

@@ -102,7 +102,7 @@ textarea {
         .txt-fixed-behind {
             background: $background-white;
             position: absolute;
-            right: -40px;
+            right: 5px;
             top: 7px;
             padding: 5px;
             @include media-breakpoint-down (sm) {

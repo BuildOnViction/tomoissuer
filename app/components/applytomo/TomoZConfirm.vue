@@ -159,6 +159,7 @@ export default {
             try {
                 if (!this.isAppliedZ) {
                     this.loading = true
+                    this.account = await this.getAccount()
                     const chainConfig = this.config.blockchain
                     const contract = this.TRC21Issuer
                     const txParams = {
