@@ -1,26 +1,22 @@
 {
-  "contractName": "TRC21",
+  "contractName": "MinterRole",
   "abi": [
     {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
       "anonymous": false,
       "inputs": [
         {
           "indexed": true,
-          "name": "from",
+          "name": "account",
           "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "value",
-          "type": "uint256"
         }
       ],
-      "name": "Transfer",
+      "name": "MinterAdded",
       "type": "event"
     },
     {
@@ -28,147 +24,26 @@
       "inputs": [
         {
           "indexed": true,
-          "name": "owner",
+          "name": "account",
           "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "spender",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "value",
-          "type": "uint256"
         }
       ],
-      "name": "Approval",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "from",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "issuer",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "Fee",
+      "name": "MinterRemoved",
       "type": "event"
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "totalSupply",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "minFee",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "issuer",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
       "inputs": [
         {
-          "name": "owner",
+          "name": "account",
           "type": "address"
         }
       ],
-      "name": "balanceOf",
+      "name": "isMinter",
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "estimateFee",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "name": "spender",
-          "type": "address"
-        }
-      ],
-      "name": "allowance",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
+          "type": "bool"
         }
       ],
       "payable": false,
@@ -179,81 +54,31 @@
       "constant": false,
       "inputs": [
         {
-          "name": "to",
+          "name": "account",
           "type": "address"
-        },
-        {
-          "name": "value",
-          "type": "uint256"
         }
       ],
-      "name": "transfer",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
+      "name": "addMinter",
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "constant": false,
-      "inputs": [
-        {
-          "name": "spender",
-          "type": "address"
-        },
-        {
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "approve",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "from",
-          "type": "address"
-        },
-        {
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "transferFrom",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
+      "inputs": [],
+      "name": "renounceMinter",
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.4.26+commit.4563c3fc\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"spender\",\"type\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"estimateFee\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"issuer\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"from\",\"type\":\"address\"},{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"minFee\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"to\",\"type\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"owner\",\"type\":\"address\"},{\"name\":\"spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"issuer\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Fee\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"allowance(address,address)\":{\"details\":\"Function to check the amount of tokens that an owner allowed to a spender.\",\"params\":{\"owner\":\"address The address which owns the funds.\",\"spender\":\"address The address which will spend the funds.\"},\"return\":\"A uint256 specifying the amount of tokens still available for the spender.\"},\"approve(address,uint256)\":{\"details\":\"Approve the passed address to spend the specified amount of tokens on behalf of msg.sender. Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\",\"params\":{\"spender\":\"The address which will spend the funds.\",\"value\":\"The amount of tokens to be spent.\"}},\"balanceOf(address)\":{\"details\":\"Gets the balance of the specified address.\",\"params\":{\"owner\":\"The address to query the balance of.\"},\"return\":\"An uint256 representing the amount owned by the passed address.\"},\"estimateFee(uint256)\":{\"details\":\"Estimate transaction fee.\",\"params\":{\"value\":\"amount tokens sent\"}},\"issuer()\":{\"details\":\"token's foundation\"},\"minFee()\":{\"details\":\"The amount fee that will be lost when transferring.\"},\"totalSupply()\":{\"details\":\"Total number of tokens in existence\"},\"transfer(address,uint256)\":{\"details\":\"Transfer token for a specified address\",\"params\":{\"to\":\"The address to transfer to.\",\"value\":\"The amount to be transferred.\"}},\"transferFrom(address,address,uint256)\":{\"details\":\"Transfer tokens from one address to another\",\"params\":{\"from\":\"address The address which you want to send tokens from\",\"to\":\"address The address which you want to transfer to\",\"value\":\"uint256 the amount of tokens to be transferred\"}}},\"title\":\"Standard TRC21 token\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/vupq/Desktop/XXX/tomoissuer/contracts/TRC21Mintable.sol\":\"TRC21\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/vupq/Desktop/XXX/tomoissuer/contracts/TRC21Mintable.sol\":{\"keccak256\":\"0x0f3e589ad1d924066c83002fe0989560f8a419c57195f7d0f4cedff02666d569\",\"urls\":[\"bzzr://aa16d6f4a974b6155fe121b0d091852d8a1bf7450bbcf5959c8458446ee2844e\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b506106b8806100206000396000f3006080604052600436106100985763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663095ea7b3811461009d578063127e8e4d146100d557806318160ddd146100ff5780631d1438481461011457806323b872dd1461014557806324ec75901461016f57806370a0823114610184578063a9059cbb146101a5578063dd62ed3e146101c9575b600080fd5b3480156100a957600080fd5b506100c1600160a060020a03600435166024356101f0565b604080519115158252519081900360200190f35b3480156100e157600080fd5b506100ed6004356102aa565b60408051918252519081900360200190f35b34801561010b57600080fd5b506100ed6102d6565b34801561012057600080fd5b506101296102dc565b60408051600160a060020a039092168252519081900360200190f35b34801561015157600080fd5b506100c1600160a060020a03600435811690602435166044356102eb565b34801561017b57600080fd5b506100ed61042b565b34801561019057600080fd5b506100ed600160a060020a0360043516610431565b3480156101b157600080fd5b506100c1600160a060020a036004351660243561044c565b3480156101d557600080fd5b506100ed600160a060020a0360043581169060243516610511565b6000600160a060020a038316151561020757600080fd5b60015433600090815260208190526040902054101561022557600080fd5b336000818152600360209081526040808320600160a060020a03888116855292529091208490556002546001546102619392919091169061053c565b604080518381529051600160a060020a0385169133917f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b9259181900360200190a350600192915050565b6001546000906102d0906102c4848463ffffffff61062e16565b9063ffffffff61066316565b92915050565b60045490565b600254600160a060020a031690565b6000806103036001548461066390919063ffffffff16565b9050600160a060020a038416151561031a57600080fd5b8083111561032757600080fd5b600160a060020a038516600090815260036020908152604080832033845290915290205481111561035757600080fd5b600160a060020a038516600090815260036020908152604080832033845290915290205461038b908263ffffffff61067516565b600160a060020a03861660009081526003602090815260408083203384529091529020556103ba85858561053c565b6002546001546103d7918791600160a060020a039091169061053c565b6002546001546040805191825251600160a060020a039283169287169133917ffcf5b3276434181e3c48bd3fe569b8939808f11e845d4b963693b9d7dbd6dd999181900360200190a4506001949350505050565b60015490565b600160a060020a031660009081526020819052604090205490565b6000806104646001548461066390919063ffffffff16565b9050600160a060020a038416151561047b57600080fd5b8083111561048857600080fd5b61049333858561053c565b60006001541115610505576002546001546104bb913391600160a060020a039091169061053c565b6002546001546040805191825251600160a060020a039283169287169133917ffcf5b3276434181e3c48bd3fe569b8939808f11e845d4b963693b9d7dbd6dd999181900360200190a45b600191505b5092915050565b600160a060020a03918216600090815260036020908152604080832093909416825291909152205490565b600160a060020a03831660009081526020819052604090205481111561056157600080fd5b600160a060020a038216151561057657600080fd5b600160a060020a03831660009081526020819052604090205461059f908263ffffffff61067516565b600160a060020a0380851660009081526020819052604080822093909355908416815220546105d4908263ffffffff61066316565b600160a060020a038084166000818152602081815260409182902094909455805185815290519193928716927fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef92918290030190a3505050565b600080831515610641576000915061050a565b5082820282848281151561065157fe5b041461065c57600080fd5b9392505050565b60008282018381101561065c57600080fd5b6000808383111561068557600080fd5b50509003905600a165627a7a723058204de439c35be1bff2047751b7d1b6b598f10b7fb723399ad1b6aced0a2c6d8f4f0029",
-  "deployedBytecode": "0x6080604052600436106100985763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663095ea7b3811461009d578063127e8e4d146100d557806318160ddd146100ff5780631d1438481461011457806323b872dd1461014557806324ec75901461016f57806370a0823114610184578063a9059cbb146101a5578063dd62ed3e146101c9575b600080fd5b3480156100a957600080fd5b506100c1600160a060020a03600435166024356101f0565b604080519115158252519081900360200190f35b3480156100e157600080fd5b506100ed6004356102aa565b60408051918252519081900360200190f35b34801561010b57600080fd5b506100ed6102d6565b34801561012057600080fd5b506101296102dc565b60408051600160a060020a039092168252519081900360200190f35b34801561015157600080fd5b506100c1600160a060020a03600435811690602435166044356102eb565b34801561017b57600080fd5b506100ed61042b565b34801561019057600080fd5b506100ed600160a060020a0360043516610431565b3480156101b157600080fd5b506100c1600160a060020a036004351660243561044c565b3480156101d557600080fd5b506100ed600160a060020a0360043581169060243516610511565b6000600160a060020a038316151561020757600080fd5b60015433600090815260208190526040902054101561022557600080fd5b336000818152600360209081526040808320600160a060020a03888116855292529091208490556002546001546102619392919091169061053c565b604080518381529051600160a060020a0385169133917f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b9259181900360200190a350600192915050565b6001546000906102d0906102c4848463ffffffff61062e16565b9063ffffffff61066316565b92915050565b60045490565b600254600160a060020a031690565b6000806103036001548461066390919063ffffffff16565b9050600160a060020a038416151561031a57600080fd5b8083111561032757600080fd5b600160a060020a038516600090815260036020908152604080832033845290915290205481111561035757600080fd5b600160a060020a038516600090815260036020908152604080832033845290915290205461038b908263ffffffff61067516565b600160a060020a03861660009081526003602090815260408083203384529091529020556103ba85858561053c565b6002546001546103d7918791600160a060020a039091169061053c565b6002546001546040805191825251600160a060020a039283169287169133917ffcf5b3276434181e3c48bd3fe569b8939808f11e845d4b963693b9d7dbd6dd999181900360200190a4506001949350505050565b60015490565b600160a060020a031660009081526020819052604090205490565b6000806104646001548461066390919063ffffffff16565b9050600160a060020a038416151561047b57600080fd5b8083111561048857600080fd5b61049333858561053c565b60006001541115610505576002546001546104bb913391600160a060020a039091169061053c565b6002546001546040805191825251600160a060020a039283169287169133917ffcf5b3276434181e3c48bd3fe569b8939808f11e845d4b963693b9d7dbd6dd999181900360200190a45b600191505b5092915050565b600160a060020a03918216600090815260036020908152604080832093909416825291909152205490565b600160a060020a03831660009081526020819052604090205481111561056157600080fd5b600160a060020a038216151561057657600080fd5b600160a060020a03831660009081526020819052604090205461059f908263ffffffff61067516565b600160a060020a0380851660009081526020819052604080822093909355908416815220546105d4908263ffffffff61066316565b600160a060020a038084166000818152602081815260409182902094909455805185815290519193928716927fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef92918290030190a3505050565b600080831515610641576000915061050a565b5082820282848281151561065157fe5b041461065c57600080fd5b9392505050565b60008282018381101561065c57600080fd5b6000808383111561068557600080fd5b50509003905600a165627a7a723058204de439c35be1bff2047751b7d1b6b598f10b7fb723399ad1b6aced0a2c6d8f4f0029",
-  "sourceMap": "2680:6094:4:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2680:6094:4;;;;;;;",
-  "deployedSourceMap": "2680:6094:4:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;5600:337;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;5600:337:4;-1:-1:-1;;;;;5600:337:4;;;;;;;;;;;;;;;;;;;;;;;;;3828:115;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;3828:115:4;;;;;;;;;;;;;;;;;;;;;3025:89;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3025:89:4;;;;3333:79;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3333:79:4;;;;;;;;-1:-1:-1;;;;;3333:79:4;;;;;;;;;;;;;;6223:487;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;6223:487:4;-1:-1:-1;;;;;6223:487:4;;;;;;;;;;;;3201:79;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3201:79:4;;;;3625:104;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;3625:104:4;-1:-1:-1;;;;;3625:104:4;;;;;4569:395;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;4569:395:4;-1:-1:-1;;;;;4569:395:4;;;;;;;4274:127;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;4274:127:4;-1:-1:-1;;;;;4274:127:4;;;;;;;;;;5600:337;5665:4;-1:-1:-1;;;;;5689:21:4;;;;5681:30;;;;;;5754:7;;5739:10;5729:9;:21;;;;;;;;;;;:32;;5721:41;;;;;;5781:10;5772:20;;;;:8;:20;;;;;;;;-1:-1:-1;;;;;5772:29:4;;;;;;;;;;:37;;;5841:7;;;5850;5819:39;;5781:10;5841:7;;;;;5819:9;:39::i;:::-;5873:36;;;;;;;;-1:-1:-1;;;;;5873:36:4;;;5882:10;;5873:36;;;;;;;;;-1:-1:-1;5926:4:4;5600:337;;;;:::o;3828:115::-;3928:7;;3885;;3911:25;;:12;:5;3885:7;3911:12;:9;:12;:::i;:::-;:16;:25;:16;:25;:::i;:::-;3904:32;3828:115;-1:-1:-1;;3828:115:4:o;3025:89::-;3095:12;;3025:89;:::o;3333:79::-;3398:7;;-1:-1:-1;;;;;3398:7:4;3333:79;:::o;6223:487::-;6302:4;6318:13;6334:18;6344:7;;6334:5;:9;;:18;;;;:::i;:::-;6318:34;-1:-1:-1;;;;;;6370:16:4;;;;6362:25;;;;;;6405:14;;;;6397:23;;;;;;-1:-1:-1;;;;;6447:14:4;;;;;;:8;:14;;;;;;;;6462:10;6447:26;;;;;;;;6438:35;;;6430:44;;;;;;-1:-1:-1;;;;;6514:14:4;;;;;;:8;:14;;;;;;;;6529:10;6514:26;;;;;;;;:37;;6545:5;6514:37;:30;:37;:::i;:::-;-1:-1:-1;;;;;6485:14:4;;;;;;:8;:14;;;;;;;;6500:10;6485:26;;;;;;;:66;6561:26;6494:4;6577:2;6581:5;6561:9;:26::i;:::-;6613:7;;;6622;6597:33;;6607:4;;-1:-1:-1;;;;;6613:7:4;;;;6597:9;:33::i;:::-;6665:7;;;6674;6645:37;;;;;;;-1:-1:-1;;;;;6665:7:4;;;;6645:37;;;6649:10;;6645:37;;;;;;;;;-1:-1:-1;6699:4:4;;6223:487;-1:-1:-1;;;;6223:487:4:o;3201:79::-;3266:7;;3201:79;:::o;3625:104::-;-1:-1:-1;;;;;3706:16:4;3680:7;3706:16;;;;;;;;;;;;3625:104::o;4569:395::-;4630:4;4646:13;4662:18;4672:7;;4662:5;:9;;:18;;;;:::i;:::-;4646:34;-1:-1:-1;;;;;;4698:16:4;;;;4690:25;;;;;;4733:14;;;;4725:23;;;;;;4758:32;4768:10;4780:2;4784:5;4758:9;:32::i;:::-;4814:1;4804:7;;:11;4800:137;;;4853:7;;;4862;4831:39;;4841:10;;-1:-1:-1;;;;;4853:7:4;;;;4831:9;:39::i;:::-;4909:7;;;4918;4889:37;;;;;;;-1:-1:-1;;;;;4909:7:4;;;;4889:37;;;4893:10;;4889:37;;;;;;;;;4800:137;4953:4;4946:11;;4569:395;;;;;;:::o;4274:127::-;-1:-1:-1;;;;;4370:15:4;;;4345:7;4370:15;;;:8;:15;;;;;;;;:24;;;;;;;;;;;;;4274:127::o;6929:298::-;-1:-1:-1;;;;;7025:15:4;;:9;:15;;;;;;;;;;;7016:24;;;7008:33;;;;;;-1:-1:-1;;;;;7059:16:4;;;;7051:25;;;;;;-1:-1:-1;;;;;7104:15:4;;:9;:15;;;;;;;;;;;:26;;7124:5;7104:26;:19;:26;:::i;:::-;-1:-1:-1;;;;;7086:15:4;;;:9;:15;;;;;;;;;;;:44;;;;7156:13;;;;;;;:24;;7174:5;7156:24;:17;:24;:::i;:::-;-1:-1:-1;;;;;7140:13:4;;;:9;:13;;;;;;;;;;;;:40;;;;7195:25;;;;;;;7140:13;;7195:25;;;;;;;;;;;;;6929:298;;;:::o;123:421::-;181:7;;421:6;;417:45;;;450:1;443:8;;;;417:45;-1:-1:-1;484:5:4;;;488:1;484;:5;507;;;;;;;;:10;499:19;;;;;;536:1;123:421;-1:-1:-1;;;123:421:4:o;1293:145::-;1351:7;1382:5;;;1405:6;;;;1397:15;;;;;1075:145;1133:7;;1160:6;;;;1152:15;;;;;;-1:-1:-1;;1189:5:4;;;1075:145::o",
+  "metadata": "",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
   "source": "pragma solidity ^0.4.24;\n\nlibrary SafeMath {\n\n    /**\n     * @dev Multiplies two numbers, reverts on overflow.\n     */\n    function mul(uint256 a, uint256 b) internal pure returns (uint256) {\n        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the\n        // benefit is lost if 'b' is also tested.\n        // See: https://github.com/OpenZeppelin/openzeppelin-solidity/pull/522\n        if (a == 0) {\n            return 0;\n        }\n\n        uint256 c = a * b;\n        require(c / a == b);\n\n        return c;\n    }\n\n    /**\n     * @dev Integer division of two numbers truncating the quotient, reverts on division by zero.\n     */\n    function div(uint256 a, uint256 b) internal pure returns (uint256) {\n        require(b > 0); // Solidity only automatically asserts when dividing by 0\n        uint256 c = a / b;\n        // assert(a == b * c + a % b); // There is no case in which this doesn't hold\n\n        return c;\n    }\n\n    /**\n     * @dev Subtracts two numbers, reverts on overflow (i.e. if subtrahend is greater than minuend).\n     */\n    function sub(uint256 a, uint256 b) internal pure returns (uint256) {\n        require(b <= a);\n        uint256 c = a - b;\n\n        return c;\n    }\n\n    /**\n     * @dev Adds two numbers, reverts on overflow.\n     */\n    function add(uint256 a, uint256 b) internal pure returns (uint256) {\n        uint256 c = a + b;\n        require(c >= a);\n\n        return c;\n    }\n\n    /**\n     * @dev Divides two numbers and returns the remainder (unsigned integer modulo),\n     * reverts when dividing by zero.\n     */\n    function mod(uint256 a, uint256 b) internal pure returns (uint256) {\n        require(b != 0);\n        return a % b;\n    }\n}\n\n/**\n * @title TRC21 interface\n */\ninterface ITRC21 {\n\tfunction totalSupply() external view returns (uint256);\n\n\tfunction balanceOf(address who) external view returns (uint256);\n\n    function issuer() external view returns (address);\n\n\tfunction estimateFee(uint256 value) external view returns (uint256);\n\n\tfunction allowance(address owner, address spender) external view returns (uint256);\n\n\tfunction transfer(address to, uint256 value) external returns (bool);\n\n\tfunction approve(address spender, uint256 value) external returns (bool);\n\n\tfunction transferFrom(address from, address to, uint256 value) external returns (bool);\n\n\tevent Transfer(address indexed from, address indexed to, uint256 value);\n\n\tevent Approval(address indexed owner, address indexed spender, uint256 value);\n\n\tevent Fee(address indexed from, address indexed to, address indexed issuer, uint256 value);\n}\n\n/**\n * @title Standard TRC21 token\n * @dev Implementation of the basic standard token.\n */\ncontract TRC21 is ITRC21 {\n    using SafeMath for uint256;\n\n    mapping (address => uint256) private _balances;\n    uint256 private _minFee;\n    address private _issuer;\n    mapping (address => mapping (address => uint256)) private _allowed;\n    uint256 private _totalSupply;\n\n    /**\n     * @dev Total number of tokens in existence\n     */\n    function totalSupply() public view returns (uint256) {\n        return _totalSupply;\n    }\n\n    /**\n     * @dev  The amount fee that will be lost when transferring.\n     */\n    function minFee() public view returns (uint256) {\n        return _minFee;\n    }\n\n    /**\n     * @dev token's foundation\n     */\n    function issuer() public view returns (address) {\n        return _issuer;\n    }\n\n    /**\n     * @dev Gets the balance of the specified address.\n     * @param owner The address to query the balance of.\n     * @return An uint256 representing the amount owned by the passed address.\n     */\n    function balanceOf(address owner) public view returns (uint256) {\n        return _balances[owner];\n    }\n\n    /**\n     * @dev Estimate transaction fee.\n     * @param value amount tokens sent\n     */\n    function estimateFee(uint256 value) public view returns (uint256) {\n        return value.mul(0).add(_minFee);\n    }\n\n    /**\n     * @dev Function to check the amount of tokens that an owner allowed to a spender.\n     * @param owner address The address which owns the funds.\n     * @param spender address The address which will spend the funds.\n     * @return A uint256 specifying the amount of tokens still available for the spender.\n     */\n    function allowance(address owner,address spender) public\tview returns (uint256){\n        return _allowed[owner][spender];\n    }\n\n    /**\n     * @dev Transfer token for a specified address\n     * @param to The address to transfer to.\n     * @param value The amount to be transferred.\n     */\n    function transfer(address to, uint256 value) public returns (bool) {\n        uint256 total = value.add(_minFee);\n        require(to != address(0));\n        require(value <= total);\n        _transfer(msg.sender, to, value);\n        if (_minFee > 0) {\n            _transfer(msg.sender, _issuer, _minFee);\n            emit Fee(msg.sender, to, _issuer, _minFee);\n        }\n        return true;\n    }\n\n    /**\n     * @dev Approve the passed address to spend the specified amount of tokens on behalf of msg.sender.\n     * Beware that changing an allowance with this method brings the risk that someone may use both the old\n     * and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this\n     * race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards:\n     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\n     * @param spender The address which will spend the funds.\n     * @param value The amount of tokens to be spent.\n     */\n    function approve(address spender, uint256 value) public returns (bool) {\n        require(spender != address(0));\n        require(_balances[msg.sender] >= _minFee);\n        _allowed[msg.sender][spender] = value;\n        _transfer(msg.sender, _issuer, _minFee);\n        emit Approval(msg.sender, spender, value);\n        return true;\n    }\n\n    /**\n     * @dev Transfer tokens from one address to another\n     * @param from address The address which you want to send tokens from\n     * @param to address The address which you want to transfer to\n     * @param value uint256 the amount of tokens to be transferred\n     */\n    function transferFrom(address from,\taddress to,\tuint256 value)\tpublic returns (bool) {\n        uint256 total = value.add(_minFee);\n        require(to != address(0));\n        require(value <= total);\n        require(total <= _allowed[from][msg.sender]);\n\n        _allowed[from][msg.sender] = _allowed[from][msg.sender].sub(total);\n        _transfer(from, to, value);\n        _transfer(from, _issuer, _minFee);\n        emit Fee(msg.sender, to, _issuer, _minFee);\n        return true;\n    }\n\n    /**\n     * @dev Transfer token for a specified addresses\n     * @param from The address to transfer from.\n     * @param to The address to transfer to.\n     * @param value The amount to be transferred.\n     */\n    function _transfer(address from, address to, uint256 value) internal {\n        require(value <= _balances[from]);\n        require(to != address(0));\n        _balances[from] = _balances[from].sub(value);\n        _balances[to] = _balances[to].add(value);\n        emit Transfer(from, to, value);\n    }\n\n    /**\n     * @dev Internal function that mints an amount of the token and assigns it to\n     * an account. This encapsulates the modification of balances such that the\n     * proper events are emitted.\n     * @param account The account that will receive the created tokens.\n     * @param value The amount that will be created.\n     */\n    function _mint(address account, uint256 value) internal {\n        require(account != 0);\n        _totalSupply = _totalSupply.add(value);\n        _balances[account] = _balances[account].add(value);\n        emit Transfer(address(0), account, value);\n    }\n\n    /**\n     * @dev Internal function that burns an amount of the token of a given\n     * account.\n     * @param account The account whose tokens will be burnt.\n     * @param value The amount that will be burnt.\n     */\n    function _burn(address account, uint256 value) internal {\n        require(account != 0);\n        require(value <= _balances[account]);\n\n        _totalSupply = _totalSupply.sub(value);\n        _balances[account] = _balances[account].sub(value);\n        emit Transfer(account, address(0), value);\n    }\n\n    /**\n     * @dev Transfers token's foundation to new issuer\n     * @param newIssuer The address to transfer ownership to.\n     */\n    function _changeIssuer(address newIssuer) internal {\n        require(newIssuer != address(0));\n        _issuer = newIssuer;\n    }\n\n    /**\n     * @dev Change minFee\n     * @param value minFee\n     */\n    function _changeMinFee(uint256 value) internal {\n        _minFee = value;\n    }\n\n}\n\n/**\n * @title Roles\n * @dev Library for managing addresses assigned to a Role.\n */\nlibrary Roles {\n\tstruct Role {\n\t\tmapping (address => bool) bearer;\n\t}\n\n\t/**\n\t * @dev give an account access to this role\n\t */\n\tfunction add(Role storage role, address account) internal {\n\t\trequire(account != address(0));\n\t\trequire(!has(role, account));\n\n\t\trole.bearer[account] = true;\n\t}\n\n\t/**\n\t * @dev remove an account's access to this role\n\t */\n\tfunction remove(Role storage role, address account) internal {\n\t\trequire(account != address(0));\n\t\trequire(has(role, account));\n\n\t\trole.bearer[account] = false;\n\t}\n\n\t/**\n\t * @dev check if an account has this role\n\t * @return bool\n\t */\n\tfunction has(Role storage role, address account)\n\tinternal\n\tview\n\treturns (bool)\n\t{\n\t\trequire(account != address(0));\n\t\treturn role.bearer[account];\n\t}\n}\n\ncontract MinterRole {\n\tusing Roles for Roles.Role;\n\n\tevent MinterAdded(address indexed account);\n\tevent MinterRemoved(address indexed account);\n\n\tRoles.Role private minters;\n\n\tconstructor() internal {\n\t\t_addMinter(msg.sender);\n\t}\n\n\tmodifier onlyMinter() {\n\t\trequire(isMinter(msg.sender));\n\t\t_;\n\t}\n\n\tfunction isMinter(address account) public view returns (bool) {\n\t\treturn minters.has(account);\n\t}\n\n\tfunction addMinter(address account) public onlyMinter {\n\t\t_addMinter(account);\n\t}\n\n\tfunction renounceMinter() public {\n\t\t_removeMinter(msg.sender);\n\t}\n\n\tfunction _addMinter(address account) internal {\n\t\tminters.add(account);\n\t\temit MinterAdded(account);\n\t}\n\n\tfunction _removeMinter(address account) internal {\n\t\tminters.remove(account);\n\t\temit MinterRemoved(account);\n\t}\n}\n\ncontract MyTRC21Mintable is TRC21, MinterRole {\n    string private _name;\n    string private _symbol;\n    uint8 private _decimals;\n\n    constructor (string memory name, string memory symbol, uint8 decimals, uint256 cap, uint256 minFee) public {\n        _name = name;\n        _symbol = symbol;\n        _decimals = decimals;\n        _mint(msg.sender, cap);\n        _changeIssuer(msg.sender);\n        _changeMinFee(minFee);\n    }\n\n    /**\n     * @return the name of the token.\n     */\n    function name() public view returns (string memory) {\n        return _name;\n    }\n\n    /**\n     * @return the symbol of the token.\n     */\n    function symbol() public view returns (string memory) {\n        return _symbol;\n    }\n\n    /**\n     * @return the number of decimals of the token.\n     */\n    function decimals() public view returns (uint8) {\n        return _decimals;\n    }\n\n    function setMinFee(uint256 value) public {\n        require(msg.sender == issuer());\n        _changeMinFee(value);\n    }\n\n\t/**\n\t * @dev Function to mint tokens\n\t * @param to The address that will receive the minted tokens.\n\t * @param value The amount of tokens to mint.\n\t * @return A boolean that indicates if the operation was successful.\n\t */\n\tfunction mint(\n\t\taddress to,\n\t\tuint256 value\n\t)\n\tpublic\n\tonlyMinter\n\treturns (bool)\n\t{\n\t\t_mint(to, value);\n\t\treturn true;\n\t}\n\n\t/**\n\t * @dev Function to burn tokens\n\t * @param value The amount of tokens to mint.\n\t * @return A boolean that indicates if the operation was successful.\n\t */\n\tfunction burn(\n\t\tuint256 value\n\t)\n\tpublic\n\treturns (bool)\n\t{\n\t\t_burn(msg.sender, value);\n\t\treturn true;\n\t}\n\n}\n",
   "sourcePath": "/home/vupq/Desktop/XXX/tomoissuer/contracts/TRC21Mintable.sol",
   "ast": {
@@ -25976,63 +25801,9 @@
   },
   "networks": {},
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-07-29T10:52:20.378Z",
+  "updatedAt": "2019-07-29T10:52:20.392Z",
   "devdoc": {
-    "methods": {
-      "allowance(address,address)": {
-        "details": "Function to check the amount of tokens that an owner allowed to a spender.",
-        "params": {
-          "owner": "address The address which owns the funds.",
-          "spender": "address The address which will spend the funds."
-        },
-        "return": "A uint256 specifying the amount of tokens still available for the spender."
-      },
-      "approve(address,uint256)": {
-        "details": "Approve the passed address to spend the specified amount of tokens on behalf of msg.sender. Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729",
-        "params": {
-          "spender": "The address which will spend the funds.",
-          "value": "The amount of tokens to be spent."
-        }
-      },
-      "balanceOf(address)": {
-        "details": "Gets the balance of the specified address.",
-        "params": {
-          "owner": "The address to query the balance of."
-        },
-        "return": "An uint256 representing the amount owned by the passed address."
-      },
-      "estimateFee(uint256)": {
-        "details": "Estimate transaction fee.",
-        "params": {
-          "value": "amount tokens sent"
-        }
-      },
-      "issuer()": {
-        "details": "token's foundation"
-      },
-      "minFee()": {
-        "details": "The amount fee that will be lost when transferring."
-      },
-      "totalSupply()": {
-        "details": "Total number of tokens in existence"
-      },
-      "transfer(address,uint256)": {
-        "details": "Transfer token for a specified address",
-        "params": {
-          "to": "The address to transfer to.",
-          "value": "The amount to be transferred."
-        }
-      },
-      "transferFrom(address,address,uint256)": {
-        "details": "Transfer tokens from one address to another",
-        "params": {
-          "from": "address The address which you want to send tokens from",
-          "to": "address The address which you want to transfer to",
-          "value": "uint256 the amount of tokens to be transferred"
-        }
-      }
-    },
-    "title": "Standard TRC21 token"
+    "methods": {}
   },
   "userdoc": {
     "methods": {}
