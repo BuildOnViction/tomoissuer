@@ -89,7 +89,7 @@ table,
 			tr {
 				@include media-breakpoint-up(lg) {
 					display: grid;
-					grid-template-columns: 34px auto 14% 14% 14% 14% 14% 3%;
+					grid-template-columns: 40px auto 14% 14% 14% 14% 14% 3%;
 					td {
 						&:first-child {
 							padding-right: 0;

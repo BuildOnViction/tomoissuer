@@ -182,6 +182,7 @@ export default {
             try {
                 if (this.burnAmount && this.contractCreation === this.account.toLowerCase()) {
                     this.loading = true
+                    this.account = await this.getAccount()
                     const chainConfig = this.config.blockchain
                     const txParams = {
                         from: this.account,

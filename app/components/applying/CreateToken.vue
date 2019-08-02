@@ -78,20 +78,27 @@
                     </label>
                     <b-tooltip
                         target="totalSupply">
-                        Total supply is blah blah...
+                        This field refers to the total amount of tokens supply that your asset will contain
                     </b-tooltip>
                     <b-row class="align-items-center">
                         <b-col
                             cols="12"
                             md="5"
                             class="mb-sp-4">
-                            <b-form-input
-                                v-model="totalSupply"
-                                type="text"
-                                autocomplete="off"
-                                placeholder="Please use only number"
-                                @input="onChangeSupply"
-                                @change="onChangeSupply"/>
+                            <div class="clearfix">
+                                <b-form-input
+                                    v-model="totalSupply"
+                                    type="text"
+                                    autocomplete="off"
+                                    placeholder="Please use only number"
+                                    @input="onChangeSupply"
+                                    @change="onChangeSupply"/>
+                                <div
+                                    v-if="checkSupply"
+                                    class="txt-fixed-behind">
+                                    <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
+                                </div>
+                            </div>
                         </b-col>
                         <b-col
                             :class="($v.totalSupply.$dirty && !checkSupply ? ' input-warn' : '')"
@@ -102,7 +109,7 @@
                                 <b-col cols="5">
                                     <b-form-radio
                                         v-model="mintable"
-                                        value="true"
+                                        :value="true"
                                         class="flex-box">
                                         Rissueable
                                         <i
@@ -111,13 +118,17 @@
                                     </b-form-radio>
                                     <b-tooltip
                                         target="mintable">
-                                        Reissuable is blah blah...
+                                        The reissuable token is the token type which its total
+                                        supply could be increased by the issuer at a later point or not, at any time
                                     </b-tooltip>
+                                    <div
+                                        v-if="$v.mintable.$dirty && !$v.mintable.required"
+                                        class="text-danger">Please select one</div>
                                 </b-col>
                                 <b-col cols="7">
                                     <b-form-radio
                                         v-model="mintable"
-                                        value="false"
+                                        :value="false"
                                         class="flex-box">
                                         Not-reissueable
                                         <i
@@ -126,17 +137,13 @@
                                     </b-form-radio>
                                     <b-tooltip
                                         target="notmintable">
-                                        Not-reissuable is blah blah...
+                                        The non-reissuable token is the token type which its
+                                        total supply will be fixed and could not be increased at a later point
                                     </b-tooltip>
                                 </b-col>
                             </b-row>
                         </b-col>
                     </b-row>
-                    <div
-                        v-if="checkSupply"
-                        class="txt-fixed-behind">
-                        <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
-                    </div>
                     <!-- <small
                         tabindex="-1"
                         class="form-text text-muted">
@@ -200,7 +207,7 @@
                         </b-form-radio> -->
                     </b-form-radio-group>
                 </b-form-group>
-                <div class="form-group mb-4">
+                <div class="form-group flex-box mb-4">
                     <label>Issuance fee</label><span>~ {{ issueFee }} TOMO</span>
                 </div>
                 <div class="btn-box">
@@ -260,6 +267,7 @@ export default {
             warningName: '',
             warningSymbol: '',
             warningDecimals: '',
+            warningMintable: '',
             mintable: ''
         }
     },
@@ -271,7 +279,8 @@ export default {
         },
         tokenName: { required, latin },
         tokenSymbol: { required, checkSymbol },
-        totalSupply: { required }
+        totalSupply: { required },
+        mintable: { required }
     },
     computed: {
         nameLeft: function () {
@@ -322,7 +331,7 @@ export default {
                     totalSupply: this.totalSupply,
                     issueFee: this.issueFee,
                     estimatedAmount: this.estimatedAmount,
-                    mintable: this.mintable || true
+                    mintable: this.mintable
                 }
             })
         },

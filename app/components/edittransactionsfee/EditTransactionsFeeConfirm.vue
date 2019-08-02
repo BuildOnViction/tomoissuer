@@ -139,6 +139,7 @@ export default {
             try {
                 if (this.newFee) {
                     this.loading = true
+                    this.account = await this.getAccount()
                     const chainConfig = this.config.blockchain
                     const txParams = {
                         from: this.account,
