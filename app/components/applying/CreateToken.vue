@@ -78,7 +78,7 @@
                     </label>
                     <b-tooltip
                         target="totalSupply">
-                        Total supply is blah blah...
+                        This field refers to the total amount of tokens supply that your asset will contain
                     </b-tooltip>
                     <b-row class="align-items-center">
                         <b-col
@@ -118,7 +118,8 @@
                                     </b-form-radio>
                                     <b-tooltip
                                         target="mintable">
-                                        Reissuable is blah blah...
+                                        The reissuable token is the token type which its total
+                                        supply could be increased by the issuer at a later point or not, at any time
                                     </b-tooltip>
                                     <div
                                         v-if="$v.mintable.$dirty && !$v.mintable.required"
@@ -136,7 +137,8 @@
                                     </b-form-radio>
                                     <b-tooltip
                                         target="notmintable">
-                                        Not-reissuable is blah blah...
+                                        The non-reissuable token is the token type which its
+                                        total supply will be fixed and could not be increased at a later point
                                     </b-tooltip>
                                 </b-col>
                             </b-row>
@@ -205,7 +207,7 @@
                         </b-form-radio> -->
                     </b-form-radio-group>
                 </b-form-group>
-                <div class="form-group mb-4">
+                <div class="form-group flex-box mb-4">
                     <label>Issuance fee</label><span>~ {{ issueFee }} TOMO</span>
                 </div>
                 <div class="btn-box">

@@ -45,7 +45,8 @@
                                 <router-link
                                     :to="`token/${data.item.hash}`"
                                     :title="data.item.hash">
-                                    {{ data.value }}
+                                    <div>{{ data.item.name }}</div>
+                                    <div>{{ data.item.symbol }}</div>
                                 </router-link>
                             </template>
                             <template
@@ -217,6 +218,7 @@ export default {
                         return {
                             name: i.name,
                             token: `${i.symbol} (${i.name})`,
+                            symbol: i.symbol,
                             hash: i.hash,
                             price: '---',
                             value: '---',
