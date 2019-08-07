@@ -32,8 +32,8 @@
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
-                        :to="'/tomozcondition/' + address"
-                        class="tmp-btn-boder-violet btn-min">
+                        class="tmp-btn-boder-violet btn-min"
+                        @click="back">
                         Back
                     </b-button>
                     <b-button
@@ -138,6 +138,9 @@ export default {
                 self.depositingError = false
                 self.warningClass = ''
             }
+        },
+        back () {
+            this.$router.go(-2)
         },
         confirm () {
             this.$router.push({ name: 'TomoZConfirm',
