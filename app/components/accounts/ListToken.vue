@@ -87,6 +87,7 @@
                                 slot="applytomoz"
                                 slot-scope="data">
                                 <b-dropdown
+                                    v-if="!data.item.applytomoz || data.item.mintable"
                                     class="tmp-btn-dots"
                                     right
                                     offset="25"
@@ -103,10 +104,12 @@
                                         Apply TomoZ
                                     </b-dropdown-item>
                                     <b-dropdown-item
+                                        v-if="data.item.mintable"
                                         :to="'/reissueToken/' + data.item.hash">
                                         Reissue Token
                                     </b-dropdown-item>
                                     <b-dropdown-item
+                                        v-if="data.item.mintable"
                                         :to="'/burnToken/' + data.item.hash">
                                         Burn Token
                                     </b-dropdown-item>
@@ -226,7 +229,8 @@ export default {
                             ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
                             holders: i.holders || '---',
                             applytomoz: ((self.appliedList || []).indexOf(i.hash) > -1),
-                            logo: await self.getLogo(i.hash)
+                            logo: await self.getLogo(i.hash),
+                            mintable: i.mintable
                         }
                     }))
                     self.listokenItems = map
