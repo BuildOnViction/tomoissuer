@@ -143,15 +143,15 @@ export default {
                                 this.isAppliedX = true
                                 this.loading = false
                                 if (this.isAppliedX && this.transactionHash !== '') {
-                                // announce tomo relayer
-                                axios.post('/api/token/announceRelayer', {
-                                    tokenName: this.token.name,
-                                    tokenSymbol: this.token.symbol,
-                                    totalSupply: this.token.totalSupplyNumber,
-                                    address: this.token.hash
-                                }).then(response => console.log('OK'))
-                                    .catch(error => console.log(error))
-                            }
+                                    // announce tomo relayer
+                                    axios.post('/api/token/announceRelayer', {
+                                        tokenName: this.token.name,
+                                        tokenSymbol: this.token.symbol,
+                                        totalSupply: this.token.totalSupplyNumber,
+                                        address: this.token.hash
+                                    }).then(response => console.log('OK'))
+                                        .catch(error => console.log(error))
+                                }
                             }
                         }
                     })
