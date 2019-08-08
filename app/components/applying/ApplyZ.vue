@@ -101,11 +101,19 @@ export default {
                     gas: this.web3.utils.toHex(20000000),
                     gasLimit: this.web3.utils.toHex(20000000)
                 }
-                const result = await contract.methods.apply(this.address).send(txParams)
-                console.log(result)
-                this.transactionHash = result.transactionHash
-                this.loading = false
-                this.isAppliedZ = true
+                await contract.methods.apply(this.address).send(txParams)
+                    .on('transactionHash', async (txHash) => {
+                        let check = true
+                        while (check) {
+                            const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                            if (receipt) {
+                                this.transactionHash = txHash
+                                this.isAppliedZ = true
+                                this.loading = false
+                                check = false
+                            }
+                        }
+                    })
             } catch (error) {
                 this.loading = false
                 console.log(error)
@@ -114,32 +122,39 @@ export default {
         },
         async applyTomoX () {
             try {
-                if (this.isAppliedZ) {
-                    this.loading = true
-                    const tomoXContract = this.tomoXContract
-                    const txParams = {
-                        from: (await this.getAccount()).toLowerCase(),
-                        value: this.web3.utils.toHex(),
-                        gasPrice: this.web3.utils.toHex(10000000000000),
-                        gas: this.web3.utils.toHex(20000000),
-                        gasLimit: this.web3.utils.toHex(20000000)
-                    }
-
-                    const result = await tomoXContract.methods.apply(this.address).send(txParams)
-                    this.transactionHash = result.transactionHash
-                    this.loading = false
-                    this.isAppliedX = true
-                    if (this.isAppliedX && this.transactionHash !== '') {
-                        // announce tomo relayer
-                        axios.post('/api/token/announceRelayer', {
-                            tokenName: this.token.name,
-                            tokenSymbol: this.token.symbol,
-                            totalSupply: this.token.totalSupplyNumber,
-                            address: this.token.hash
-                        }).then(response => console.log('OK'))
-                            .catch(error => console.log(error))
-                    }
+                this.loading = true
+                const tomoXContract = this.tomoXContract
+                const txParams = {
+                    from: (await this.getAccount()).toLowerCase(),
+                    value: this.web3.utils.toHex(),
+                    gasPrice: this.web3.utils.toHex(10000000000000),
+                    gas: this.web3.utils.toHex(20000000),
+                    gasLimit: this.web3.utils.toHex(20000000)
                 }
+
+                await tomoXContract.methods.apply(this.address).send(txParams)
+                    .on('transactionHash', async (txHash) => {
+                        let check = true
+                        while (check) {
+                            const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                            if (receipt) {
+                                check = false
+                                this.transactionHash = txHash
+                                this.isAppliedX = true
+                                this.loading = false
+                                if (this.isAppliedX && this.transactionHash !== '') {
+                                // announce tomo relayer
+                                axios.post('/api/token/announceRelayer', {
+                                    tokenName: this.token.name,
+                                    tokenSymbol: this.token.symbol,
+                                    totalSupply: this.token.totalSupplyNumber,
+                                    address: this.token.hash
+                                }).then(response => console.log('OK'))
+                                    .catch(error => console.log(error))
+                            }
+                            }
+                        }
+                    })
             } catch (error) {
                 this.loading = false
                 console.log(error)
