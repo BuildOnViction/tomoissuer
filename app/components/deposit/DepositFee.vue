@@ -3,14 +3,14 @@
         <div class="tomo-body-fullw">
             <div class="info-header">
                 <h2 class="tmp-title-large">Deposit TRC-21 fee</h2>
-                <p>Current {{ token.name }} TRC-21 fee fund: {{ currentPoolingFee }} TOMO</p>
+                <p>Current {{ token.name }} fee fund: {{ currentPoolingFee }} TOMO</p>
             </div>
             <b-form
                 class="tmp-form-one"
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
-                    :description="`TX fee: 0.0005 TOMO, Available balance: ${balance.toNumber().toFixed(4) } TOMO`"
+                    :description="`TX fee: 0.0005 TOMO, Available balance: ${showingBalance} TOMO`"
                     :class="'mb-4' + ($v.depositFee.$dirty ? ' input-warn' : '') + warningClass"
                     label-for="depositFee">
                     <span class="txt-fixed">TOMO</span>
@@ -69,7 +69,8 @@ export default {
             depositFee: '',
             balance: '',
             depositingError: '',
-            warningClass: ''
+            warningClass: '',
+            showingBalance: ''
         }
     },
     validations: {
@@ -116,6 +117,7 @@ export default {
             web3.eth.getBalance(this.account).then(result => {
                 const balance = new BigNumber(result).div(10 ** 18)
                 this.balance = balance
+                this.showingBalance = balance.toNumber().toFixed(4)
             }).catch(error => {
                 console.log(error)
                 this.$toasted.show(error, { type: 'error' })
