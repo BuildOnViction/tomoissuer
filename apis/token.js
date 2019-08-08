@@ -241,12 +241,14 @@ router.post('/announceRelayer', [
         const symbol = req.body.tokenSymbol || ''
         const totalSupply = req.body.totalSupply || ''
         const address = req.body.address || ''
-        const body = {
-            name,
-            symbol,
-            total_supply: totalSupply,
-            address
-        }
+        const body = [
+            {
+                name,
+                symbol,
+                total_supply: totalSupply,
+                address
+            }
+        ]
         const requestConfig = {
             headers: {
                 'Content-Type': 'application/json',
