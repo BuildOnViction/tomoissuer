@@ -54,7 +54,7 @@ async function deployContract (
             }).send({
                 from: account.toLowerCase(),
                 gas: web3.utils.toHex(chainConfig.gas),
-                gasPrice: web3.utils.toHex(1000000000000)
+                gasPrice: web3.utils.toHex(10000000000000)
             })
                 .on('error', (error) => {
                     return reject(error)
@@ -186,28 +186,6 @@ async function announceRelayer (tokenAddress, token) {
     }
 }
 
-async function sendToken (toAddress, web3, tokenAddress, trcContract, token) {
-    return new Promise(async (resolve, reject) => {
-        // const chainConfig = config.get('blockchain')
-        // const account = (await web3.eth.getAccounts())[0]
-        const contract = web3.eth.contract(trcContract.abi).at(tokenAddress)
-        await contract.transfer(
-            toAddress,
-            (new BigNumber(1000000).multipliedBy(10 ** token.decimals)).toString(10)
-        )
-            .on('transactionHash', async (txHash) => {
-                let check = true
-                while (check) {
-                    const receipt = await web3.eth.getTransactionReceipt(txHash)
-                    if (receipt) {
-                        check = false
-                        return resolve(txHash)
-                    }
-                }
-            })
-    })
-}
-
 async function deployToken (tokenName, tokenSymbol, totalSupply, decimals) {
     try {
         if (!tokenName || !tokenSymbol || !totalSupply || !decimals) {
@@ -238,9 +216,6 @@ async function deployToken (tokenName, tokenSymbol, totalSupply, decimals) {
             totalSupply: totalSupply,
             decimals: decimals
         }
-        console.log('Checking network')
-        const check = await web3.eth.net.isListening()
-        console.log(check)
         console.log('Deploying contract')
 
         const contractAddress = await deployContract(
@@ -253,25 +228,6 @@ async function deployToken (tokenName, tokenSymbol, totalSupply, decimals) {
         console.log('Applying tomo z')
         const res = await applyTomoZ(contractAddress, web3, token)
         console.log('hash: ', res)
-
-        console.log('Transfer token')
-        // send token to addresses
-        const send1 = await sendToken(
-            '0x2BA61ebbA034dD702F956810071257C5A8b094af',
-            web3,
-            contractAddress,
-            trcContract
-        )
-        console.log('transfering tx: ', send1)
-
-        const send2 = await sendToken(
-            '0xbF875bE16093a7Be33fF96bB696EF1A40bb975D4',
-            web3,
-            contractAddress,
-            trcContract
-        )
-        console.log('transfering tx: ', send2)
-
         console.log('Applying tomo x')
         // apply tomox
         const result = await applyTomoX(contractAddress.toLowerCase(), web3, token)
