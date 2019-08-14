@@ -100,7 +100,8 @@ textarea {
     div {
         position: relative;
         .txt-fixed {
-            background: $background-white;
+            // background: $background-white;
+            background: transparent;
             position: absolute;
             right: 10px;
             top: 7px;

@@ -19,6 +19,11 @@
                             class="apply-tomoz">
                             TomoZ
                         </span>
+                        <span
+                            v-if="isAppliedX"
+                            class="apply-tomoz">
+                            TomoX
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-6 text-right">
@@ -37,7 +42,6 @@
                             <li>
                                 <b-dropdown
                                     right
-                                    offset="25"
                                     no-caret
                                     class="tmp-btn-transparent"
                                     toggle-class="text-decoration-none"
@@ -53,7 +57,17 @@
                                         :to="'/tomozcondition/' + address">
                                         Apply to pay fee by token
                                     </b-dropdown-item>
-                                    <b-dropdown-divider v-if="!isAppliedZ"/>
+                                    <b-dropdown-item
+                                        v-if="!isAppliedX && account === contractCreation"
+                                        :to="'/tomoxcondition/' + address">
+                                        Apply to TomoX
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        href="https://github.com/tomochain/tokens"
+                                        target="_blank">
+                                        Update Token Info
+                                    </b-dropdown-item>
+                                    <b-dropdown-divider/>
                                     <b-dropdown-item
                                         :href="config.tomowalletUrl + '/trc21/' + address"
                                         target="_blank">
@@ -261,17 +275,18 @@
                                         </a>
                                     </template>
                                 </b-table>
+                                <div class="mt-3 common_tmp_page">
+                                    <b-pagination
+                                        v-if="transferRows > 2"
+                                        v-model="transferCurrentPage"
+                                        :total-rows="transferRows"
+                                        :per-page="transferPerPage"
+                                        aria-controls="transfer_table"
+                                        align="center"
+                                        @change="transferPageChange"/>
+                                </div>
                             </div>
                         </template>
-                        <div class="mt-3 common_tmp_page">
-                            <b-pagination
-                                v-if="transferRows > 2"
-                                v-model="transferCurrentPage"
-                                :total-rows="transferRows"
-                                :per-page="transferPerPage"
-                                aria-controls="transfer_table"
-                                align="center"/>
-                        </div>
                     </b-tab>
                     <b-tab
                         title="Holders">
@@ -314,7 +329,8 @@
                                 :total-rows="holdersRows"
                                 :per-page="holdersPerPage"
                                 aria-controls="holders_table"
-                                align="center"/>
+                                align="center"
+                                @change="holderPageChange"/>
                         </div>
                     </b-tab>
                 </b-tabs>
@@ -378,7 +394,8 @@ export default {
                 { key: 'percentage', label: 'Percentage (%)' }
             ],
             holdersItems: [],
-            contractCreation: ''
+            contractCreation: '',
+            isAppliedX: false
         }
     },
     computed: {},
@@ -400,6 +417,7 @@ export default {
             self.getOwnerBalance()
             self.getPoolingFee()
             self.checkAppliedZ()
+            self.checkAppliedX()
             self.getTransactionFee()
         } catch (error) {
             console.log(error)
@@ -424,7 +442,12 @@ export default {
             const self = this
             self.loading = true
             const isTrc21 = self.token.type
-            axios.get(`/api/token/txes/${isTrc21}/${this.address}`).then(response => {
+            const params = {
+                limit: self.transferPerPage,
+                page: self.transferCurrentPage
+            }
+            const query = self.serializeQuery(params)
+            axios.get(`/api/token/txes/${isTrc21}/${this.address}?${query}`).then(response => {
                 const data = response.data
                 if (data) {
                     const items = []
@@ -541,6 +564,28 @@ export default {
                     console.log(error)
                     this.$toasted.show(error, { type: 'error' })
                 })
+        },
+        async checkAppliedX () {
+            const contract = this.TomoXListing
+            if (contract) {
+                const result = await contract.methods.tokens().call()
+                if (result && result.length > 0) {
+                    const lowerCaseArr = result.map(m => m.toLowerCase())
+                    if (lowerCaseArr.indexOf(this.address) > -1) {
+                        this.isAppliedX = true
+                    }
+                }
+            }
+        },
+        transferPageChange (page) {
+            this.$store.state.transferCurrentPage = page
+            this.transferCurrentPage = page
+            this.getTokenTransfer()
+        },
+        holderPageChange (page) {
+            this.$store.state.holdersCurrentPage = page
+            this.holdersCurrentPage = page
+            this.getTokenHolders()
         }
     }
 }

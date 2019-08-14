@@ -123,6 +123,10 @@
     display: flex;
     .tomo-body-fullw {
         width: 100%;
+        .tomox-font {
+            @include fsz(14);
+            font-weight: 501;
+        }
     }
 }
 
