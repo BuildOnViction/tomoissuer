@@ -1,5 +1,5 @@
 <template>
-    <div class="container container-small">
+    <div class="container container-small flex-content-center">
         <div class="tomo-apply">
             <div class="info-header text-center">
                 <p><i class="tomoissuer-icon-tomoz"/></p>
