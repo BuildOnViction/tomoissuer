@@ -85,16 +85,23 @@ textarea {
         display: flex;
         align-items: center;
         i {
-            font-size: 15px;
+            font-size: 12px;
             // color: $color-text-oranges;
             // color: red($color: #000000);
             margin-left: 5px;
+        }
+        .tooltip-fixed {
+            position: absolute;
+            right: -5px;
+            top: 48px;
+            padding: 5px;
         }
     }
     div {
         position: relative;
         .txt-fixed {
-            background: $background-white;
+            // background: $background-white;
+            background: transparent;
             position: absolute;
             right: 10px;
             top: 7px;

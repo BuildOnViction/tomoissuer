@@ -74,7 +74,7 @@
                         Token Supply
                         <i
                             id="totalSupply"
-                            class="tomoissuer-icon-info"/>
+                            class="tomoissuer-icon-info mb-2"/>
                     </label>
                     <b-tooltip
                         target="totalSupply">
@@ -114,7 +114,7 @@
                                         Rissueable
                                         <i
                                             id="mintable"
-                                            class="tomoissuer-icon-info"/>
+                                            class="tomoissuer-icon-info mb-2"/>
                                     </b-form-radio>
                                     <b-tooltip
                                         target="mintable">
@@ -133,7 +133,7 @@
                                         Not-reissueable
                                         <i
                                             id="notmintable"
-                                            class="tomoissuer-icon-info"/>
+                                            class="tomoissuer-icon-info mb-2"/>
                                     </b-form-radio>
                                     <b-tooltip
                                         target="notmintable">

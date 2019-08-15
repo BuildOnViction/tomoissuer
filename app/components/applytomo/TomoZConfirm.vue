@@ -99,6 +99,7 @@
 
 <script>
 import store from 'store'
+import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import TomoZApplied from './TomoZApplied.vue'
 export default {
@@ -110,7 +111,7 @@ export default {
         return {
             address: this.$route.params.address.toLowerCase(),
             account: '',
-            token: this.$route.params.token,
+            token: {},
             depositeFee: this.$route.params.depositFee,
             config: {},
             transactionHash: '',
@@ -131,6 +132,7 @@ export default {
         self.checkAppliedZ()
 
         self.config = store.get('configIssuer') || await self.appConfig()
+        await this.getData()
 
         self.web3.eth.getGasPrice().then(result => {
             self.gasPrice = result
@@ -140,6 +142,16 @@ export default {
         })
     },
     methods: {
+        async getData () {
+            const self = this
+            const vuexStore = self.$store.state
+            if (vuexStore.token) {
+                self.token = vuexStore.token
+            } else {
+                const { data } = await axios.get(`/api/token/${self.address}`)
+                self.token = data
+            }
+        },
         checkAppliedZ () {
             const contract = this.TRC21Issuer
             contract.methods.tokens.call()

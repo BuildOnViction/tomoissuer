@@ -32,12 +32,12 @@
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
-                        class="tmp-btn-boder-violet btn-min"
+                        class="tmp-btn-boder-blue btn-min"
                         @click="back">
                         Back
                     </b-button>
                     <b-button
-                        class="tmp-btn-violet"
+                        class="tmp-btn-blue"
                         type="submit">
                         Submit
                     </b-button>

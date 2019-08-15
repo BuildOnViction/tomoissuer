@@ -37,7 +37,6 @@
                             <li>
                                 <b-dropdown
                                     right
-                                    offset="25"
                                     no-caret
                                     class="tmp-btn-transparent"
                                     toggle-class="text-decoration-none"
@@ -275,7 +274,8 @@
                                 :total-rows="transferRows"
                                 :per-page="transferPerPage"
                                 aria-controls="transfer_table"
-                                align="center"/>
+                                align="center"
+                                @change="transferPageChange"/>
                         </div>
                     </b-tab>
                     <b-tab
@@ -319,7 +319,8 @@
                                 :total-rows="holdersRows"
                                 :per-page="holdersPerPage"
                                 aria-controls="holders_table"
-                                align="center"/>
+                                align="center"
+                                @change="holderPageChange"/>
                         </div>
                     </b-tab>
                 </b-tabs>
@@ -429,7 +430,12 @@ export default {
             const self = this
             self.loading = true
             const isTrc21 = self.token.type
-            axios.get(`/api/token/txes/${isTrc21}/${this.address}`).then(response => {
+            const params = {
+                limit: self.transferPerPage,
+                page: self.transferCurrentPage
+            }
+            const query = self.serializeQuery(params)
+            axios.get(`/api/token/txes/${isTrc21}/${this.address}?${query}`).then(response => {
                 const data = response.data
                 if (data) {
                     const items = []
@@ -546,6 +552,28 @@ export default {
                     console.log(error)
                     this.$toasted.show(error, { type: 'error' })
                 })
+        },
+        async checkAppliedX () {
+            const contract = this.TomoXListing
+            if (contract) {
+                const result = await contract.methods.tokens().call()
+                if (result && result.length > 0) {
+                    const lowerCaseArr = result.map(m => m.toLowerCase())
+                    if (lowerCaseArr.indexOf(this.address) > -1) {
+                        this.isAppliedX = true
+                    }
+                }
+            }
+        },
+        transferPageChange (page) {
+            this.$store.state.transferCurrentPage = page
+            this.transferCurrentPage = page
+            this.getTokenTransfer()
+        },
+        holderPageChange (page) {
+            this.$store.state.holdersCurrentPage = page
+            this.holdersCurrentPage = page
+            this.getTokenHolders()
         }
     }
 }
