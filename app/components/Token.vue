@@ -53,7 +53,12 @@
                                         :to="'/tomozcondition/' + address">
                                         Apply to pay fee by token
                                     </b-dropdown-item>
-                                    <b-dropdown-divider v-if="!isAppliedZ"/>
+                                    <b-dropdown-item
+                                        href="https://github.com/tomochain/tokens"
+                                        target="_blank">
+                                        Update Token Info
+                                    </b-dropdown-item>
+                                    <b-dropdown-divider/>
                                     <b-dropdown-item
                                         :href="config.tomowalletUrl + '/trc21/' + address"
                                         target="_blank">
