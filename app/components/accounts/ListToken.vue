@@ -31,14 +31,9 @@
                                         :src="data.value">
                                 </div>
                             </template>
-                            <template
-                                slot="table-busy">
-                                <div class="text-center text-danger my-2">
-                                    <b-spinner
-                                        class="align-middle" />
-                                    <strong>Loading...</strong>
-                                </div>
-                            </template>
+                            <div
+                                slot="table-busy"
+                                class="loading"/>
                             <template
                                 slot="token"
                                 slot-scope="data">
@@ -96,12 +91,12 @@
                                         <i class="tomoissuer-three-dots" />
                                     </template>
                                     <b-dropdown-item
-                                        v-if="!data.value"
+                                        v-if="!data.item.applytomoz"
                                         :to="'/tomozcondition/' + data.item.hash">
                                         Apply TomoZ
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="!data.value"
+                                        v-if="!data.item.applytomox"
                                         :to="'/tomoxcondition/' + data.item.hash">
                                         Apply TomoX
                                     </b-dropdown-item>
@@ -193,7 +188,8 @@ export default {
             sortDesc: true,
             tokens: [],
             loading: false,
-            appliedList: [],
+            appliedZList: [],
+            appliedXList: [],
             account: '',
             config: {}
         }
@@ -221,8 +217,10 @@ export default {
                 }
                 const query = self.serializeQuery(params)
                 let promises = this.checkAppliedZ()
+                let appliedXPromise = this.checkAppliedX()
                 const { data } = await axios.get(`/api/account/${self.account}/listTokens?${query}`)
-                self.appliedList = await promises
+                self.appliedZList = await promises
+                self.appliedXList = await appliedXPromise
                 if (data.items.length > 0) {
                     const map = await Promise.all(data.items.map(async i => {
                         return {
@@ -235,7 +233,8 @@ export default {
                             totalSupply: i.totalSupplyNumber,
                             ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
                             holders: i.holders || '---',
-                            applytomoz: ((self.appliedList || []).indexOf(i.hash) > -1),
+                            applytomoz: ((self.appliedZList || []).indexOf(i.hash) > -1),
+                            applytomox: ((self.appliedXList || []).indexOf(i.hash) > -1),
                             logo: await self.getLogo(i.hash),
                             mintable: i.mintable
                         }
@@ -267,6 +266,14 @@ export default {
         },
         async checkAppliedZ () {
             const contract = this.TRC21Issuer
+            const result = await contract.methods.tokens.call()
+            if (result && result.length > 0) {
+                let lowerCaseArr = result.map(m => m.toLowerCase())
+                return lowerCaseArr
+            } else return null
+        },
+        async checkAppliedX () {
+            const contract = this.TomoXListing
             const result = await contract.methods.tokens.call()
             if (result && result.length > 0) {
                 let lowerCaseArr = result.map(m => m.toLowerCase())

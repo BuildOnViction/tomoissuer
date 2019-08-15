@@ -227,13 +227,16 @@
                                     :items="transferItems"
                                     :busy="loading"
                                     stacked="lg">
-                                    <template
+                                    <div
+                                        slot="table-busy"
+                                        class="loading"/>
+                                    <!-- <template
                                         slot="table-busy">
                                         <div class="text-center text-danger my-2">
                                             <b-spinner class="align-middle" />
                                             <strong>Loading...</strong>
                                         </div>
-                                    </template>
+                                    </template> -->
                                     <template
                                         slot="txn_hash"
                                         slot-scope="data">
@@ -312,13 +315,16 @@
                                     :items="holdersItems"
                                     :busy="loading"
                                     stacked="lg">
-                                    <template
+                                    <div
+                                        slot="table-busy"
+                                        class="loading"/>
+                                    <!-- <template
                                         slot="table-busy">
                                         <div class="text-center text-danger my-2">
                                             <b-spinner class="align-middle" />
                                             <strong>Loading...</strong>
                                         </div>
-                                    </template>
+                                    </template> -->
                                     <template
                                         slot="address"
                                         slot-scope="data">

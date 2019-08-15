@@ -12,13 +12,13 @@
             </div>
             <b-row class=" text-center mb-5 mt-5">
                 <b-col class="box-step">
-                    <i class="tomoissuer-icon-tomox2"/>
+                    <i class="tomoissuer-icon-tomox3"/>
                     <p class="mt-3 tmp-title-small weightbold tomox-font">
                         Apply your tokens to TomoX(Fee: 100 TOMO)
                     </p>
                 </b-col>
                 <b-col class="box-step">
-                    <i class="tomoissuer-icon-tomox3" />
+                    <i class="tomoissuer-icon-tomox2" />
                     <p class="mt-3 tmp-title-small weightbold tomox-font">
                         Your applied tokens will be shown to potential relayers
                     </p>

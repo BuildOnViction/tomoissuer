@@ -35,8 +35,8 @@
                         Back
                     </b-button>
                     <b-button
-                        v-b-modal.applyTomoX
-                        class="tmp-btn-blue">
+                        class="tmp-btn-blue"
+                        @click="applyTomoX">
                         Apply to TomoX protocol
                     </b-button>
                 </div>
@@ -169,42 +169,93 @@ export default {
         },
         async applyTomoX () {
             try {
-                this.loading = true
-                const tomoXContract = this.TomoXListing
-                const chainConfig = this.config.blockchain
-                const txParams = {
-                    from: (await this.getAccount()).toLowerCase(),
-                    value: this.web3.utils.toHex(
-                        (new BigNumber(this.txFee).multipliedBy(1e+18)).toString(10)
-                    ),
-                    gasPrice: this.web3.utils.toHex(chainConfig.deployPrice),
-                    gas: this.web3.utils.toHex(chainConfig.gas),
-                    gasLimit: this.web3.utils.toHex(chainConfig.gas)
-                }
+                if (!this.isAppliedX) {
+                    const self = this
+                    this.loading = true
+                    const tomoXContract = this.TomoXListing
+                    const chainConfig = this.config.blockchain
+                    const txParams = {
+                        from: (await this.getAccount()).toLowerCase(),
+                        value: this.web3.utils.toHex(
+                            (new BigNumber(this.txFee).multipliedBy(1e+18)).toString(10)
+                        ),
+                        gasPrice: this.web3.utils.toHex(chainConfig.deployPrice),
+                        gas: this.web3.utils.toHex(chainConfig.gas),
+                        gasLimit: this.web3.utils.toHex(chainConfig.gas)
+                    }
 
-                await tomoXContract.methods.apply(this.address).send(txParams)
-                    .on('transactionHash', async (txHash) => {
-                        let check = true
-                        while (check) {
-                            const receipt = await this.web3.eth.getTransactionReceipt(txHash)
-                            if (receipt) {
-                                check = false
-                                this.transactionHash = txHash
-                                this.isAppliedX = true
-                                this.loading = false
-                                if (this.isAppliedX && this.transactionHash !== '') {
-                                    // announce tomo relayer
-                                    axios.post('/api/token/announceRelayer', {
-                                        tokenName: this.token.name,
-                                        tokenSymbol: this.token.symbol,
-                                        totalSupply: this.token.totalSupplyNumber,
-                                        address: this.token.hash
-                                    }).then(response => console.log('OK'))
-                                        .catch(error => console.log(error))
+                    const provider = this.NetworkProvider
+                    if (provider === 'ledger' || provider === 'trezor') {
+                        let data = await tomoXContract.methods.apply(
+                            this.address
+                        ).encodeABI()
+
+                        const dataTx = {
+                            data,
+                            to: chainConfig.tomoXAddress
+                        }
+                        let nonce = await this.web3.eth.getTransactionCount(this.account)
+                        Object.assign(
+                            dataTx,
+                            dataTx,
+                            txParams,
+                            {
+                                nonce: this.web3.utils.toHex(nonce)
+                            }
+                        )
+                        let signature = await this.signTransaction(dataTx)
+                        const txHash = await this.sendSignedTransaction(dataTx, signature)
+                        if (txHash) {
+                            this.transactionHash = txHash
+                            let check = true
+                            while (check) {
+                                const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                                if (receipt) {
+                                    self.loading = false
+                                    check = false
+                                    self.isAppliedX = true
+                                    if (this.isAppliedX && this.transactionHash !== '') {
+                                        // announce tomo relayer
+                                        axios.post('/api/token/announceRelayer', {
+                                            tokenName: this.token.name,
+                                            tokenSymbol: this.token.symbol,
+                                            totalSupply: this.token.totalSupplyNumber,
+                                            address: this.token.hash
+                                        }).then(response => console.log('OK'))
+                                            .catch(error => console.log(error))
+                                    }
+                                    this.loading = false
+                                    this.$refs.applyTomoX.show()
                                 }
                             }
                         }
-                    })
+                    } else {
+                        await tomoXContract.methods.apply(this.address).send(txParams)
+                        .on('transactionHash', async (txHash) => {
+                            let check = true
+                            while (check) {
+                                const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                                if (receipt) {
+                                    check = false
+                                    this.transactionHash = txHash
+                                    this.isAppliedX = true
+                                    if (this.isAppliedX && this.transactionHash !== '') {
+                                        // announce tomo relayer
+                                            axios.post('/api/token/announceRelayer', {
+                                                tokenName: this.token.name,
+                                                tokenSymbol: this.token.symbol,
+                                                totalSupply: this.token.totalSupplyNumber,
+                                                address: this.token.hash
+                                            }).then(response => console.log('OK'))
+                                                .catch(error => console.log(error))
+                                        }
+                                        this.loading = false
+                                        this.$refs.applyTomoX.show()
+                                    }
+                                }
+                            })
+                        }
+                }
             } catch (error) {
                 this.loading = false
                 console.log(error)

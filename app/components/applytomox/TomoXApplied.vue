@@ -3,7 +3,7 @@
         <div class="tomo-apply">
             <div class="info-header text-center">
                 <p><i class="tomoissuer-icon-tomox"/></p>
-                <h2 class="tmp-title-large">TomoZ Protocol Application</h2>
+                <h2 class="tmp-title-large">TomoX Protocol Application</h2>
             </div>
             <b-form
                 class="tmp-form-one"
