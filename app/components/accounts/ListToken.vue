@@ -45,8 +45,7 @@
                                 <router-link
                                     :to="`token/${data.item.hash}`"
                                     :title="data.item.hash">
-                                    <div>{{ data.item.name }}</div>
-                                    <div>{{ data.item.symbol }}</div>
+                                    {{ data.value }}
                                 </router-link>
                             </template>
                             <template
@@ -87,10 +86,8 @@
                                 slot="applytomoz"
                                 slot-scope="data">
                                 <b-dropdown
-                                    v-if="!data.item.applytomoz || data.item.mintable"
                                     class="tmp-btn-dots"
                                     right
-                                    offset="25"
                                     no-caret
                                     toggle-class="text-decoration-none"
                                     variant="link">
@@ -102,6 +99,11 @@
                                         v-if="!data.value"
                                         :to="'/tomozcondition/' + data.item.hash">
                                         Apply TomoZ
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        href="https://github.com/tomochain/tokens"
+                                        target="_blank">
+                                        Update Token Info
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         v-if="data.item.mintable"
@@ -220,7 +222,7 @@ export default {
                     const map = await Promise.all(data.items.map(async i => {
                         return {
                             name: i.name,
-                            token: `${i.symbol} (${i.name})`,
+                            token: `${i.name} (${i.symbol})`,
                             symbol: i.symbol,
                             hash: i.hash,
                             price: '---',
