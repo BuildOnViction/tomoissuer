@@ -232,7 +232,7 @@ export default {
                             holders: i.holders || '---',
                             applytomoz: ((self.appliedList || []).indexOf(i.hash) > -1),
                             logo: await self.getLogo(i.hash),
-                            mintable: i.mintable
+                            mintable: i.isMintable
                         }
                     }))
                     self.listokenItems = map
