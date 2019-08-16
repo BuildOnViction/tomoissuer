@@ -59,7 +59,7 @@
                 centered
                 no-close-on-esc
                 no-close-on-backdrop>
-                <div class="tomo-modal-default icon-violet">
+                <div class="tomo-modal-default icon-blue">
                     <div class="msg-txt">
                         <i class="tomoissuer-icon-checkmark-outline"/>
                         <h4>Successful</h4>
@@ -78,7 +78,7 @@
                     <div class="btn-box">
                         <b-button
                             :to="'/token/' + address"
-                            class="tmp-btn-violet">
+                            class="tmp-btn-blue">
                             Token detail
                         </b-button>
                     </div>

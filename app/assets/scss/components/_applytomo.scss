@@ -25,6 +25,10 @@
         @include fsz-cha(70,50,50);
         color: $color-text-violet;
     }
+    .tomoissuer-icon-tomox {
+        @include fsz-cha(70,50,50);
+        color: $color-text-blue;
+    }
 }
 
 .tomoissuer-icon-plus {
@@ -37,3 +41,65 @@
 }
 
 // Pge confirm
+
+.apply-tomo-x {
+    .box-step {
+        position: relative;
+        @include media-breakpoint-down(sm){
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        &::after {
+            background-image: linear-gradient(to right, transparent 50%, #00bad1 50%);
+            background-size: 15px 100%;
+            content: '';
+            width: 80px;
+            height: 1px;
+            position: absolute;
+            top: 30%;
+            left: calc(100% - 40px);
+            @include media-breakpoint-down(sm){
+                display: none;
+            }
+        }
+        &:last-child {
+            &::after {
+                display: none;
+            }
+        }
+        i {
+            @include fsz-cha(80,80,50);
+            color: $color-text-blue;
+        }
+        span {
+            background: $color-text-blue;
+            border-radius: 50%;
+            border: 7px solid rgba(white, 0.5);
+            display: flex;
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+            justify-content: center;
+            align-items: center;
+            color: $color-text-white;
+            box-sizing: content-box;
+            position: relative;
+            &::before {
+                background: rgba($color-text-blue, 0.2);
+                border-radius: 50%;
+                content: '';
+                width: 70px;
+                height: 70px;
+                position: absolute;
+                z-index: -1;
+            }
+        }
+        &:last-child {
+            span {
+                &::after {
+                    display: none;
+                }
+            }
+        }
+    }
+}

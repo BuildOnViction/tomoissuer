@@ -19,6 +19,11 @@
                             class="apply-tomoz">
                             TomoZ
                         </span>
+                        <span
+                            v-if="isAppliedX"
+                            class="apply-tomoz">
+                            TomoX
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-6 text-right">
@@ -31,7 +36,7 @@
                                     class="tmp-btn-violet"
                                     style="width: 270px">
                                     <i class="tomoissuer-icon-tomoz mr-1"/>
-                                    Apply to pay fee by token
+                                    Apply to TomoZ Protocol
                                 </b-link>
                             </li>
                             <li>
@@ -50,7 +55,12 @@
                                     <b-dropdown-item
                                         v-if="!isAppliedZ && account === contractCreation"
                                         :to="'/tomozcondition/' + address">
-                                        Apply to pay fee by token
+                                        Apply to TomoZ Protocol
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        v-if="!isAppliedX && account === contractCreation"
+                                        :to="'/tomoxcondition/' + address">
+                                        Apply to TomoX Protocol
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"
@@ -61,19 +71,8 @@
                                     <b-dropdown-item
                                         :href="config.tomowalletUrl + '/trc21/' + address"
                                         target="_blank">
-                                        Transfer
+                                        Transfer Token
                                     </b-dropdown-item>
-                                    <b-dropdown-item
-                                        v-if="token.isMintable"
-                                        :to="'/reissueToken/' + address">
-                                        Reissue Token
-                                    </b-dropdown-item>
-                                    <b-dropdown-item
-                                        v-if="token.isMintable"
-                                        :to="'/burnToken/' + address">
-                                        Burn Token
-                                    </b-dropdown-item>
-                                    <b-dropdown-divider v-if="isAppliedZ" />
                                     <b-dropdown-item
                                         v-if="isAppliedZ && contractCreation === account"
                                         :to="'/edittransactionsfee/' + address">
@@ -83,6 +82,17 @@
                                         v-if="isAppliedZ"
                                         :to="'/depositfee/' + address">
                                         Deposit TRC-21 fee fund
+                                    </b-dropdown-item>
+                                    <b-dropdown-divider v-if="token.isMintable"/>
+                                    <b-dropdown-item
+                                        v-if="token.isMintable"
+                                        :to="'/reissueToken/' + address">
+                                        Reissue Token
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        v-if="token.isMintable"
+                                        :to="'/burnToken/' + address">
+                                        Burn Token
                                     </b-dropdown-item>
                                 </b-dropdown>
                             </li>
@@ -217,13 +227,16 @@
                                     :items="transferItems"
                                     :busy="loading"
                                     stacked="lg">
-                                    <template
+                                    <div
+                                        slot="table-busy"
+                                        class="loading"/>
+                                    <!-- <template
                                         slot="table-busy">
                                         <div class="text-center text-danger my-2">
                                             <b-spinner class="align-middle" />
                                             <strong>Loading...</strong>
                                         </div>
-                                    </template>
+                                    </template> -->
                                     <template
                                         slot="txn_hash"
                                         slot-scope="data">
@@ -265,6 +278,16 @@
                                         </a>
                                     </template>
                                 </b-table>
+                                <div class="mt-3 common_tmp_page">
+                                    <b-pagination
+                                        v-if="transferRows > 2"
+                                        v-model="transferCurrentPage"
+                                        :total-rows="transferRows"
+                                        :per-page="transferPerPage"
+                                        aria-controls="transfer_table"
+                                        align="center"
+                                        @change="transferPageChange"/>
+                                </div>
                             </div>
                         </template>
                         <div class="mt-3 common_tmp_page">
@@ -292,13 +315,16 @@
                                     :items="holdersItems"
                                     :busy="loading"
                                     stacked="lg">
-                                    <template
+                                    <div
+                                        slot="table-busy"
+                                        class="loading"/>
+                                    <!-- <template
                                         slot="table-busy">
                                         <div class="text-center text-danger my-2">
                                             <b-spinner class="align-middle" />
                                             <strong>Loading...</strong>
                                         </div>
-                                    </template>
+                                    </template> -->
                                     <template
                                         slot="address"
                                         slot-scope="data">
@@ -384,7 +410,8 @@ export default {
                 { key: 'percentage', label: 'Percentage (%)' }
             ],
             holdersItems: [],
-            contractCreation: ''
+            contractCreation: '',
+            isAppliedX: false
         }
     },
     computed: {},
@@ -406,6 +433,7 @@ export default {
             self.getOwnerBalance()
             self.getPoolingFee()
             self.checkAppliedZ()
+            self.checkAppliedX()
             self.getTransactionFee()
         } catch (error) {
             console.log(error)
@@ -553,16 +581,21 @@ export default {
                     this.$toasted.show(error, { type: 'error' })
                 })
         },
-        async checkAppliedX () {
+        checkAppliedX () {
             const contract = this.TomoXListing
             if (contract) {
-                const result = await contract.methods.tokens().call()
-                if (result && result.length > 0) {
-                    const lowerCaseArr = result.map(m => m.toLowerCase())
-                    if (lowerCaseArr.indexOf(this.address) > -1) {
-                        this.isAppliedX = true
-                    }
-                }
+                contract.methods.tokens().call()
+                    .then(result => {
+                        if (result && result.length > 0) {
+                            const lowerCaseArr = result.map(m => m.toLowerCase())
+                            if (lowerCaseArr.indexOf(this.address) > -1) {
+                                this.isAppliedX = true
+                            }
+                        }
+                    }).catch(error => {
+                        console.log(error)
+                        this.$toasted.show(error, { type: 'error' })
+                    })
             }
         },
         transferPageChange (page) {

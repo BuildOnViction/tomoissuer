@@ -154,7 +154,7 @@
 }
 .token-logo {
 	border-radius: 50%;
-    border: 1px solid #f2f2f2;
+    border: 2px solid #f2f2f2;
     color: #fff;
 	overflow: hidden;
 	width: 25px;
@@ -173,7 +173,7 @@
         td {
             &:first-child {
                 .token-logo {
-                    background-color: rgb(255, 38, 38);
+                    background-color: #1ABC9C;
                 }
             }
         }
@@ -182,7 +182,7 @@
         td {
             &:first-child {
                 .token-logo {
-                    background-color: rgb(179, 211, 201);
+                    background-color: #F1C40F;
                 }
             }
         }
@@ -191,7 +191,7 @@
         td {
             &:first-child {
                 .token-logo {
-                    background-color: green;
+                    background-color: #F39C12;
                 }
             }
         }
@@ -200,7 +200,7 @@
         td {
             &:first-child {
                 .token-logo {
-                    background-color: grey;
+                    background-color: #D35400;
                 }
             }
         }
@@ -209,7 +209,7 @@
         td {
             &:first-child {
                 .token-logo {
-                    background-color: hotpink;
+                    background-color: #3498DB;
                 }
             }
         }
@@ -218,7 +218,7 @@
         td {
             &:first-child {
                 .token-logo {
-                    background-color: violet;
+                    background-color: #8E44AD;
                 }
             }
         }
@@ -227,7 +227,7 @@
         td {
             &:first-child {
                 .token-logo {
-                    background-color: khaki;
+                    background-color: #9BA37E;
                 }
             }
         }
