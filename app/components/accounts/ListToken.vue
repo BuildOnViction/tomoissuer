@@ -236,7 +236,7 @@ export default {
                             applytomoz: ((self.appliedZList || []).indexOf(i.hash) > -1),
                             applytomox: ((self.appliedXList || []).indexOf(i.hash) > -1),
                             logo: await self.getLogo(i.hash),
-                            mintable: i.mintable
+                            mintable: i.isMintable
                         }
                     }))
                     self.listokenItems = map

@@ -74,12 +74,12 @@
                                         Transfer
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="token.mintable"
+                                        v-if="token.isMintable"
                                         :to="'/reissueToken/' + address">
                                         Reissue Token
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="token.mintable"
+                                        v-if="token.isMintable"
                                         :to="'/burnToken/' + address">
                                         Burn Token
                                     </b-dropdown-item>
