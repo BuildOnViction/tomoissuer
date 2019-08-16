@@ -1,11 +1,15 @@
 <template>
-    <div class="container container-small">
-        <div class="confirm-table issue-confirm">
-            <div class="info-header text-center">
-                <p><i class="tomoissuer-icon-startup"/></p>
-                <h2 class="tmp-title-large">{{ `${tokenName} (${tokenSymbol})` }}</h2>
+    <div class="container container-small flex-content-center">
+        <div class="confirm-table tomo-body-fullw-issue">
+            <div class="info-header">
+                <h2 class="tmp-title-large m-0">Token Issuance Review</h2>
+                <p class="text-center mt-5"><i class="tomoissuer-icon-startup"/></p>
+                <div class="text-center mb-5">
+                    <strong>{{ `${formatNumber(totalSupply)} ${tokenSymbol}` }}</strong>
+                </div>
+                <!-- <h2 class="tmp-title-large">{{ `${formatNumber(totalSupply)} ${tokenSymbol}` }}</h2> -->
             </div>
-            <div class="tmp-table-three issue-confirm">
+            <div class="tmp-table-two grid-two">
                 <table>
                     <tr>
                         <td>Token name</td>
@@ -49,7 +53,7 @@
                     </tr> -->
                 </table>
             </div>
-            <div class="btn-box">
+            <div class="btn-box mt-4">
                 <b-button
                     class="tmp-btn-boder-blue btn-min"
                     to="createToken">

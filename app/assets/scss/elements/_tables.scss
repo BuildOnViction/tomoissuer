@@ -109,6 +109,9 @@ table,
 			}
 		}
 	}
+	p {
+		@include fsz(14);
+	}
 }
 
 .loading {

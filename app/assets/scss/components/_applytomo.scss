@@ -23,7 +23,7 @@
     }
     .tomoissuer-icon-tomoz {
         @include fsz-cha(70,50,50);
-        color: $color-text-blue;
+        color: $color-text-violet;
     }
     .tomoissuer-icon-tomox {
         @include fsz-cha(70,50,50);
@@ -44,8 +44,31 @@
 
 .apply-tomo-x {
     .box-step {
+        position: relative;
+        @include media-breakpoint-down(sm){
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        &::after {
+            background-image: linear-gradient(to right, transparent 50%, #00bad1 50%);
+            background-size: 15px 100%;
+            content: '';
+            width: 80px;
+            height: 1px;
+            position: absolute;
+            top: 30%;
+            left: calc(100% - 40px);
+            @include media-breakpoint-down(sm){
+                display: none;
+            }
+        }
+        &:last-child {
+            &::after {
+                display: none;
+            }
+        }
         i {
-            @include fsz-cha(100,80,50);
+            @include fsz-cha(80,80,50);
             color: $color-text-blue;
         }
         span {
@@ -69,15 +92,6 @@
                 height: 70px;
                 position: absolute;
                 z-index: -1;
-            }
-            &::after {
-                background-image: linear-gradient(to right, transparent 50%, #00bad1 50%);
-                background-size: 15px 100%;
-                content: '';
-                width: 120px;
-                height: 1px;
-                position: absolute;
-                left: calc(100% + 15px);
             }
         }
         &:last-child {
