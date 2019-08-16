@@ -93,12 +93,12 @@
                                     <b-dropdown-item
                                         v-if="!data.item.applytomoz"
                                         :to="'/tomozcondition/' + data.item.hash">
-                                        Apply TomoZ
+                                        Apply to TomoZ
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         v-if="!data.item.applytomox"
                                         :to="'/tomoxcondition/' + data.item.hash">
-                                        Apply TomoX
+                                        Apply to TomoX
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"

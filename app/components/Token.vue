@@ -36,7 +36,7 @@
                                     class="tmp-btn-violet"
                                     style="width: 270px">
                                     <i class="tomoissuer-icon-tomoz mr-1"/>
-                                    Apply to pay fee by token
+                                    Apply to TomoZ Protocol
                                 </b-link>
                             </li>
                             <li>
@@ -55,12 +55,12 @@
                                     <b-dropdown-item
                                         v-if="!isAppliedZ && account === contractCreation"
                                         :to="'/tomozcondition/' + address">
-                                        Apply to pay fee by token
+                                        Apply to TomoZ Protocol
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         v-if="!isAppliedX && account === contractCreation"
                                         :to="'/tomoxcondition/' + address">
-                                        Apply to TomoX
+                                        Apply to TomoX Protocol
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"
@@ -71,19 +71,8 @@
                                     <b-dropdown-item
                                         :href="config.tomowalletUrl + '/trc21/' + address"
                                         target="_blank">
-                                        Transfer
+                                        Transfer Token
                                     </b-dropdown-item>
-                                    <b-dropdown-item
-                                        v-if="token.isMintable"
-                                        :to="'/reissueToken/' + address">
-                                        Reissue Token
-                                    </b-dropdown-item>
-                                    <b-dropdown-item
-                                        v-if="token.isMintable"
-                                        :to="'/burnToken/' + address">
-                                        Burn Token
-                                    </b-dropdown-item>
-                                    <b-dropdown-divider v-if="isAppliedZ" />
                                     <b-dropdown-item
                                         v-if="isAppliedZ && contractCreation === account"
                                         :to="'/edittransactionsfee/' + address">
@@ -93,6 +82,17 @@
                                         v-if="isAppliedZ"
                                         :to="'/depositfee/' + address">
                                         Deposit TRC-21 fee fund
+                                    </b-dropdown-item>
+                                    <b-dropdown-divider v-if="token.isMintable"/>
+                                    <b-dropdown-item
+                                        v-if="token.isMintable"
+                                        :to="'/reissueToken/' + address">
+                                        Reissue Token
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        v-if="token.isMintable"
+                                        :to="'/burnToken/' + address">
+                                        Burn Token
                                     </b-dropdown-item>
                                 </b-dropdown>
                             </li>
@@ -581,16 +581,21 @@ export default {
                     this.$toasted.show(error, { type: 'error' })
                 })
         },
-        async checkAppliedX () {
+        checkAppliedX () {
             const contract = this.TomoXListing
             if (contract) {
-                const result = await contract.methods.tokens().call()
-                if (result && result.length > 0) {
-                    const lowerCaseArr = result.map(m => m.toLowerCase())
-                    if (lowerCaseArr.indexOf(this.address) > -1) {
-                        this.isAppliedX = true
-                    }
-                }
+                contract.methods.tokens().call()
+                    .then(result => {
+                        if (result && result.length > 0) {
+                            const lowerCaseArr = result.map(m => m.toLowerCase())
+                            if (lowerCaseArr.indexOf(this.address) > -1) {
+                                this.isAppliedX = true
+                            }
+                        }
+                    }).catch(error => {
+                        console.log(error)
+                        this.$toasted.show(error, { type: 'error' })
+                    })
             }
         },
         transferPageChange (page) {

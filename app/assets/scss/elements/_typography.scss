@@ -79,7 +79,7 @@
 }
 
 .tmp-title-big {
-	@include fsz-cha(64, 24,5);
+	@include fsz-cha(55, 45,25);
 	font-family: $font-baijam;
 	color: $color-text-default;
 	font-weight: 650;
@@ -95,9 +95,6 @@
 	&.yellow {
 		color: $color-text-yellow;
 	}
-	@include media-breakpoint-down(md){
-        @include fsz-cha(70, 40, 20);
-    }
 }
 
 .title-small {
@@ -106,7 +103,7 @@
 
 .custom-welcome-title {
 	margin-bottom: 1.5em;
-	font-size: 17px
+	@include fsz-cha(20, 30, 16);
 }
 
 .custom-checkmark {

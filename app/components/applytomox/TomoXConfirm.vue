@@ -1,7 +1,7 @@
 <template>
     <div class="container container-small flex-content-center">
         <TomoXApplied
-            v-if="isAppliedX"
+            v-if="isAppliedX && !transactionHash"
             :address="address"/>
         <div
             v-else
@@ -56,12 +56,16 @@
                 no-close-on-esc
                 no-close-on-backdrop
                 centered>
-                <div class="tomo-modal-default icon-violet">
+                <div class="tomo-modal-default icon-blue">
                     <div class="msg-txt">
                         <i class="tomoissuer-icon-checkmark-outline"/>
                         <h4>Successful</h4>
-                        <p>{{ token.name }} token successfully applied to TomoZ</p>
-                        <p>
+                        <p>{{ token.name }} is currently available on TomoX listing
+                        and ready to be traded once any relayer pick up {{ token.name }}
+                            token as a trade pair
+                        </p>
+                        <p
+                            style="font-size: 14px">
                             Transaction hash:
                             <a
                                 :href="config.tomoscanUrl + '/txs/' +
@@ -75,7 +79,7 @@
                     <div class="btn-box">
                         <router-link
                             :to="{ path: `/token/${address}` }"
-                            class="btn tmp-btn-boder-violet btn-secondary">Token detail
+                            class="btn tmp-btn-blue btn-secondary">Token detail
                         </router-link>
                     </div>
                 </div>
@@ -123,6 +127,7 @@ export default {
             this.$router.push({ path: '/login' })
         }
         this.config = store.get('configIssuer') || await self.appConfig()
+        await this.getData()
         this.getBalance()
         await this.checkAppliedX()
     },
@@ -231,16 +236,16 @@ export default {
                         }
                     } else {
                         await tomoXContract.methods.apply(this.address).send(txParams)
-                        .on('transactionHash', async (txHash) => {
-                            let check = true
-                            while (check) {
-                                const receipt = await this.web3.eth.getTransactionReceipt(txHash)
-                                if (receipt) {
-                                    check = false
-                                    this.transactionHash = txHash
-                                    this.isAppliedX = true
-                                    if (this.isAppliedX && this.transactionHash !== '') {
-                                        // announce tomo relayer
+                            .on('transactionHash', async (txHash) => {
+                                let check = true
+                                while (check) {
+                                    const receipt = await this.web3.eth.getTransactionReceipt(txHash)
+                                    if (receipt) {
+                                        check = false
+                                        this.transactionHash = txHash
+                                        this.isAppliedX = true
+                                        if (this.isAppliedX && this.transactionHash !== '') {
+                                            // announce tomo relayer
                                             axios.post('/api/token/announceRelayer', {
                                                 tokenName: this.token.name,
                                                 tokenSymbol: this.token.symbol,
@@ -254,7 +259,7 @@ export default {
                                     }
                                 }
                             })
-                        }
+                    }
                 }
             } catch (error) {
                 this.loading = false
