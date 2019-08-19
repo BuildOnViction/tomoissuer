@@ -228,7 +228,8 @@ export default {
         },
         signOut () {
             store.clearAll()
-            this.$store.state.walletLoggedIn = null
+            this.$store.state.address = null
+            this.$store.state.token = null
 
             this.$router.go({
                 path: '/'
