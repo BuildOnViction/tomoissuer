@@ -68,9 +68,13 @@
                                         Update Token Info
                                     </b-dropdown-item>
                                     <b-dropdown-divider/>
-                                    <b-dropdown-item
+                                    <!-- <b-dropdown-item
                                         :href="config.tomowalletUrl + '/trc21/' + address"
                                         target="_blank">
+                                        Transfer Token
+                                    </b-dropdown-item> -->
+                                    <b-dropdown-item
+                                        @click="transferToken">
                                         Transfer Token
                                     </b-dropdown-item>
                                     <b-dropdown-item
@@ -187,9 +191,12 @@
                                                 <span>{{ formatCurrencySymbol(
                                                 formatNumber(ownerBalance), token.symbol) }}</span>
                                                 <span>
-                                                    <b-link
+                                                    <!-- <b-link
                                                         :href="config.tomowalletUrl + '/trc21/' + address"
-                                                        target="_blank">Transfer</b-link>
+                                                        target="_blank">Transfer</b-link> -->
+                                                    <b-link @click="transferToken">
+                                                        Transfer
+                                                    </b-link>
                                                 </span>
                                             </div>
                                         </li>
@@ -607,6 +614,9 @@ export default {
             this.$store.state.holdersCurrentPage = page
             this.holdersCurrentPage = page
             this.getTokenHolders()
+        },
+        transferToken () {
+            alert('Coming soon')
         }
     }
 }
