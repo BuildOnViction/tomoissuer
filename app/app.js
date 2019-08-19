@@ -83,7 +83,7 @@ TrezorConnect.manifest({
 })
 const store = new Vuex.Store({
     state: {
-        walletLoggedIn: null
+        address: null
     }
 })
 
