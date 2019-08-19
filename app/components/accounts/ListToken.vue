@@ -71,11 +71,13 @@
                             <template
                                 slot="transferToken"
                                 slot-scope="data">
-                                <b-link
+                                <!-- <b-link
                                     :href="config.tomowalletUrl + '/trc21/' + data.item.hash"
                                     target="_blank">
                                     Transfer Token
-                                </b-link>
+                                </b-link> -->
+                                <b-link
+                                    @click="transferToken">Transfer Token</b-link>
                             </template>
                             <template
                                 slot="applytomoz"
@@ -291,6 +293,9 @@ export default {
                 let balance = new BigNumber(web3.utils.hexToNumberString(result))
                 return balance.div(10 ** decimals).toNumber()
             }
+        },
+        transferToken () {
+            alert('Coming soon')
         }
     }
 }
