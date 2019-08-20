@@ -189,7 +189,7 @@ export default {
             tokens: [],
             loading: false,
             appliedZList: [],
-            // appliedXList: [],
+            appliedXList: [],
             account: '',
             config: {}
         }
@@ -220,7 +220,7 @@ export default {
                 let appliedXPromise = this.checkAppliedX()
                 const { data } = await axios.get(`/api/account/${self.account}/listTokens?${query}`)
                 self.appliedZList = await promises
-                // self.appliedXList = await appliedXPromise
+                self.appliedXList = await appliedXPromise
                 if (data.items.length > 0) {
                     const map = await Promise.all(data.items.map(async i => {
                         return {
