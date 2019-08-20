@@ -233,9 +233,11 @@ export default {
                                     const receipt = await web3.eth.getTransactionReceipt(txHash)
                                     if (receipt) {
                                         self.contractAddress = receipt.contractAddress
-                                        self.loading = false
-                                        check = false
-                                        self.$refs.newtokenmodal.show()
+                                        setTimeout(() => {
+                                            self.loading = false
+                                            check = false
+                                            self.$refs.newtokenmodal.show()
+                                        }, 1500)
                                     }
                                 }
                             })
@@ -283,9 +285,11 @@ export default {
                                 const receipt = await web3.eth.getTransactionReceipt(txHash)
                                 if (receipt) {
                                     self.contractAddress = receipt.contractAddress
-                                    self.loading = false
-                                    check = false
-                                    self.$refs.newtokenmodal.show()
+                                    setTimeout(() => {
+                                        self.loading = false
+                                        check = false
+                                        self.$refs.newtokenmodal.show()
+                                    }, 1500)
                                 }
                             }
                         }
