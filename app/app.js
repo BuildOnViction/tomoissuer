@@ -25,7 +25,7 @@ import BurnTokenConfirm from './components/burn/BurnTokenConfirm.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
-// import TomoXListingAritfacts from '../build/contracts/TOMOXListing.json'
+import TomoXListingAritfacts from '../build/contracts/TOMOXListing.json'
 
 import Web3 from 'web3'
 import BootstrapVue from 'bootstrap-vue'
@@ -97,14 +97,18 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
         const config = await getConfig()
         localStorage.set('configIssuer', config)
         const chainConfig = config.blockchain
-        Vue.prototype.TRC21Issuer = new wjs.eth.Contract(
-            TRC21IssuerAritfacts.abi,
-            chainConfig.issuerAddress
-        )
-        // Vue.prototype.TomoXListing = new wjs.eth.Contract(
-        //     TomoXListingAritfacts.abi,
-        //     chainConfig.tomoXAddress
-        // )
+        if (chainConfig.issuerAddress) {
+            Vue.prototype.TRC21Issuer = new wjs.eth.Contract(
+                TRC21IssuerAritfacts.abi,
+                chainConfig.issuerAddress
+            )
+        }
+        if (chainConfig.tomoXAddress) {
+            Vue.prototype.TomoXListing = new wjs.eth.Contract(
+                TomoXListingAritfacts.abi,
+                chainConfig.tomoXAddress
+            )
+        }
     }
 }
 
