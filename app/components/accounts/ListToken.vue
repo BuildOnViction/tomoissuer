@@ -71,11 +71,13 @@
                             <template
                                 slot="transferToken"
                                 slot-scope="data">
-                                <b-link
+                                <!-- <b-link
                                     :href="config.tomowalletUrl + '/trc21/' + data.item.hash"
                                     target="_blank">
                                     Transfer Token
-                                </b-link>
+                                </b-link> -->
+                                <b-link
+                                    @click="transferToken">Transfer Token</b-link>
                             </template>
                             <template
                                 slot="applytomoz"
@@ -95,11 +97,11 @@
                                         :to="'/tomozcondition/' + data.item.hash">
                                         Apply to TomoZ
                                     </b-dropdown-item>
-                                    <b-dropdown-item
+                                    <!-- <b-dropdown-item
                                         v-if="!data.item.applytomox"
                                         :to="'/tomoxcondition/' + data.item.hash">
                                         Apply to TomoX
-                                    </b-dropdown-item>
+                                    </b-dropdown-item> -->
                                     <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"
                                         target="_blank">
@@ -189,7 +191,7 @@ export default {
             tokens: [],
             loading: false,
             appliedZList: [],
-            appliedXList: [],
+            // appliedXList: [],
             account: '',
             config: {}
         }
@@ -217,10 +219,10 @@ export default {
                 }
                 const query = self.serializeQuery(params)
                 let promises = this.checkAppliedZ()
-                let appliedXPromise = this.checkAppliedX()
+                // let appliedXPromise = this.checkAppliedX()
                 const { data } = await axios.get(`/api/account/${self.account}/listTokens?${query}`)
                 self.appliedZList = await promises
-                self.appliedXList = await appliedXPromise
+                // self.appliedXList = await appliedXPromise
                 if (data.items.length > 0) {
                     const map = await Promise.all(data.items.map(async i => {
                         return {
@@ -234,7 +236,7 @@ export default {
                             ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
                             holders: i.holders || '---',
                             applytomoz: ((self.appliedZList || []).indexOf(i.hash) > -1),
-                            applytomox: ((self.appliedXList || []).indexOf(i.hash) > -1),
+                            // applytomox: ((self.appliedXList || []).indexOf(i.hash) > -1),
                             logo: await self.getLogo(i.hash),
                             mintable: i.isMintable
                         }
@@ -265,7 +267,7 @@ export default {
             await this.getTokens()
         },
         async checkAppliedZ () {
-            const contract = this.TRC21Issuer
+            const contract = await this.TRC21Issuer
             const result = await contract.methods.tokens.call()
             if (result && result.length > 0) {
                 let lowerCaseArr = result.map(m => m.toLowerCase())
@@ -273,7 +275,7 @@ export default {
             } else return null
         },
         async checkAppliedX () {
-            const contract = this.TomoXListing
+            const contract = await this.TomoXListing
             const result = await contract.methods.tokens.call()
             if (result && result.length > 0) {
                 let lowerCaseArr = result.map(m => m.toLowerCase())
@@ -291,6 +293,10 @@ export default {
                 let balance = new BigNumber(web3.utils.hexToNumberString(result))
                 return balance.div(10 ** decimals).toNumber()
             }
+        },
+        transferToken () {
+            alert('You can use TomoWallet mobile version to transfer TRC21 Tokens.' +
+                'We will release TomoWallet web version soon.')
         }
     }
 }

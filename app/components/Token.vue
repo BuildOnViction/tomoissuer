@@ -19,11 +19,11 @@
                             class="apply-tomoz">
                             TomoZ
                         </span>
-                        <span
+                        <!-- <span
                             v-if="isAppliedX"
                             class="apply-tomoz">
                             TomoX
-                        </span>
+                        </span> -->
                     </div>
                 </div>
                 <div class="col-md-6 text-right">
@@ -57,20 +57,24 @@
                                         :to="'/tomozcondition/' + address">
                                         Apply to TomoZ Protocol
                                     </b-dropdown-item>
-                                    <b-dropdown-item
+                                    <!-- <b-dropdown-item
                                         v-if="!isAppliedX && account === contractCreation"
                                         :to="'/tomoxcondition/' + address">
                                         Apply to TomoX Protocol
-                                    </b-dropdown-item>
+                                    </b-dropdown-item> -->
                                     <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"
                                         target="_blank">
                                         Update Token Info
                                     </b-dropdown-item>
                                     <b-dropdown-divider/>
-                                    <b-dropdown-item
+                                    <!-- <b-dropdown-item
                                         :href="config.tomowalletUrl + '/trc21/' + address"
                                         target="_blank">
+                                        Transfer Token
+                                    </b-dropdown-item> -->
+                                    <b-dropdown-item
+                                        @click="transferToken">
                                         Transfer Token
                                     </b-dropdown-item>
                                     <b-dropdown-item
@@ -187,9 +191,12 @@
                                                 <span>{{ formatCurrencySymbol(
                                                 formatNumber(ownerBalance), token.symbol) }}</span>
                                                 <span>
-                                                    <b-link
+                                                    <!-- <b-link
                                                         :href="config.tomowalletUrl + '/trc21/' + address"
-                                                        target="_blank">Transfer</b-link>
+                                                        target="_blank">Transfer</b-link> -->
+                                                    <b-link @click="transferToken">
+                                                        Transfer
+                                                    </b-link>
                                                 </span>
                                             </div>
                                         </li>
@@ -410,8 +417,8 @@ export default {
                 { key: 'percentage', label: 'Percentage (%)' }
             ],
             holdersItems: [],
-            contractCreation: '',
-            isAppliedX: false
+            contractCreation: ''
+            // isAppliedX: false
         }
     },
     computed: {},
@@ -433,7 +440,7 @@ export default {
             self.getOwnerBalance()
             self.getPoolingFee()
             self.checkAppliedZ()
-            self.checkAppliedX()
+            // self.checkAppliedX()
             self.getTransactionFee()
         } catch (error) {
             console.log(error)
@@ -607,6 +614,10 @@ export default {
             this.$store.state.holdersCurrentPage = page
             this.holdersCurrentPage = page
             this.getTokenHolders()
+        },
+        transferToken () {
+            alert('You can use TomoWallet mobile version to transfer TRC21 Tokens.' +
+                'We will release TomoWallet web version soon.')
         }
     }
 }
