@@ -130,7 +130,7 @@
                                         v-model="mintable"
                                         :value="false"
                                         class="flex-box">
-                                        Not-reissueable
+                                        None-reissueable
                                         <i
                                             id="notmintable"
                                             class="tomoissuer-icon-info mb-2"/>

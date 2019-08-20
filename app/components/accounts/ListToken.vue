@@ -295,7 +295,8 @@ export default {
             }
         },
         transferToken () {
-            alert('Coming soon')
+            alert('You can use TomoWallet mobile version to transfer TRC21 Tokens.' +
+                'We will release TomoWallet web verson soon.')
         }
     }
 }
