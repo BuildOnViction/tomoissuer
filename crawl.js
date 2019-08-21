@@ -1,5 +1,6 @@
 'use strict'
-const web3 = require('./models/blockchain/web3')
+const web3rpc = require('./models/blockchain/web3')
+const Web3ws = require('./models/blockchain/web3ws')
 // const Issuer = require('./models/blockchain/issuer')
 // const config = require('config')
 const db = require('./models/mongodb')
@@ -7,6 +8,21 @@ const logger = require('./helpers/logger')
 const BigNumber = require('bignumber.js')
 
 // const issuer = new Issuer(web3)
+
+let web3 = new Web3ws()
+
+/* eslint-disable max-len */
+const invalidChars = /((?:[\0-\x08\x0B\f\x0E-\x1F\uFFFD\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]))/g // eslint-disable-line no-control-regex
+
+const invalidChars2 = new RegExp(
+    '([\\x7F-\\x84]|[\\x86-\\x9F]|[\\uFDD0-\\uFDEF]|(?:\\uD83F[\\uDFFE\\uDFFF])|(?:\\uD87F[\\uDF' +
+    'FE\\uDFFF])|(?:\\uD8BF[\\uDFFE\\uDFFF])|(?:\\uD8FF[\\uDFFE\\uDFFF])|(?:\\uD93F[\\uDFFE\\uD' +
+    'FFF])|(?:\\uD97F[\\uDFFE\\uDFFF])|(?:\\uD9BF[\\uDFFE\\uDFFF])|(?:\\uD9FF[\\uDFFE\\uDFFF])' +
+    '|(?:\\uDA3F[\\uDFFE\\uDFFF])|(?:\\uDA7F[\\uDFFE\\uDFFF])|(?:\\uDABF[\\uDFFE\\uDFFF])|(?:\\' +
+    'uDAFF[\\uDFFE\\uDFFF])|(?:\\uDB3F[\\uDFFE\\uDFFF])|(?:\\uDB7F[\\uDFFE\\uDFFF])|(?:\\uDBBF' +
+    '[\\uDFFE\\uDFFF])|(?:\\uDBFF[\\uDFFE\\uDFFF])(?:[\\0-\\t\\x0B\\f\\x0E-\\u2027\\u202A-\\uD7FF\\' +
+    'uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|' +
+    '(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]))', 'g')
 
 const tokenFuncs = {
     'decimals': '0x313ce567', // hex to decimal
@@ -30,34 +46,24 @@ function checkIsToken (code) {
 
 function removeXMLInvalidChars (string, removeDiscouragedChars = true) {
     // remove everything forbidden by XML 1.0 specifications, plus the unicode replacement character U+FFFD
-    /* eslint-disable max-len */
-    let regex = /((?:[\0-\x08\x0B\f\x0E-\x1F\uFFFD\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]))/g // eslint-disable-line no-control-regex
-    string = string.replace(regex, '')
+    string = string.replace(invalidChars, '')
 
     if (removeDiscouragedChars) {
         // remove everything not suggested by XML 1.0 specifications
 
-        regex = new RegExp(
-            '([\\x7F-\\x84]|[\\x86-\\x9F]|[\\uFDD0-\\uFDEF]|(?:\\uD83F[\\uDFFE\\uDFFF])|(?:\\uD87F[\\uDF' +
-            'FE\\uDFFF])|(?:\\uD8BF[\\uDFFE\\uDFFF])|(?:\\uD8FF[\\uDFFE\\uDFFF])|(?:\\uD93F[\\uDFFE\\uD' +
-            'FFF])|(?:\\uD97F[\\uDFFE\\uDFFF])|(?:\\uD9BF[\\uDFFE\\uDFFF])|(?:\\uD9FF[\\uDFFE\\uDFFF])' +
-            '|(?:\\uDA3F[\\uDFFE\\uDFFF])|(?:\\uDA7F[\\uDFFE\\uDFFF])|(?:\\uDABF[\\uDFFE\\uDFFF])|(?:\\' +
-            'uDAFF[\\uDFFE\\uDFFF])|(?:\\uDB3F[\\uDFFE\\uDFFF])|(?:\\uDB7F[\\uDFFE\\uDFFF])|(?:\\uDBBF' +
-            '[\\uDFFE\\uDFFF])|(?:\\uDBFF[\\uDFFE\\uDFFF])(?:[\\0-\\t\\x0B\\f\\x0E-\\u2027\\u202A-\\uD7FF\\' +
-            'uE000-\\uFFFF]|[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|' +
-            '(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]))', 'g')
-        string = string.replace(regex, '')
+        string = string.replace(invalidChars2, '')
     }
 
     return string.trim()
 }
 
-async function watchIssuer (blockNumber) {
+let watchBlock
+
+async function watchIssuer () {
+    let blockNumber = watchBlock || await web3.eth.getBlockNumber()
     try {
-        // const blockNumber = await web3.eth.getBlockNumber()
         logger.info('Issuer crawling tokens from block %s', blockNumber)
 
-        // const blk = await web3.eth.getBlock(4783249)
         const blk = await web3.eth.getBlock(blockNumber)
         if (blk) {
             const txes = blk.transactions
@@ -78,12 +84,13 @@ async function watchIssuer (blockNumber) {
                             // check token
                             const isToken = checkIsToken(code)
                             if (isToken) {
+                                logger.info('Crawling token %s', contractAddress)
                                 const promises = await Promise.all([
-                                    web3.eth.call({ to: contractAddress, data: tokenFuncs['name'] }),
-                                    web3.eth.call({ to: contractAddress, data: tokenFuncs['symbol'] }),
-                                    web3.eth.call({ to: contractAddress, data: tokenFuncs['decimals'] }),
-                                    web3.eth.call({ to: contractAddress, data: tokenFuncs['totalSupply'] }),
-                                    web3.eth.call({ to: contractAddress, data: tokenFuncs['minFee'] })
+                                    web3rpc.eth.call({ to: contractAddress, data: tokenFuncs['name'] }),
+                                    web3rpc.eth.call({ to: contractAddress, data: tokenFuncs['symbol'] }),
+                                    web3rpc.eth.call({ to: contractAddress, data: tokenFuncs['decimals'] }),
+                                    web3rpc.eth.call({ to: contractAddress, data: tokenFuncs['totalSupply'] }),
+                                    web3rpc.eth.call({ to: contractAddress, data: tokenFuncs['minFee'] })
                                 ])
                                 const name = promises[0]
                                 const symbol = promises[1]
@@ -117,6 +124,8 @@ async function watchIssuer (blockNumber) {
         }
     } catch (error) {
         logger.error('watchIssuer error %s', error)
+        watchBlock = blockNumber
+        web3 = new Web3ws()
     }
 }
 
@@ -125,7 +134,7 @@ async function watchNewBlock (n) {
         let blockNumber = await web3.eth.getBlockNumber()
         n = n || blockNumber
         if (blockNumber > n) {
-            await watchIssuer(n)
+            await watchIssuer()
             n++
             blockNumber = n
         }
