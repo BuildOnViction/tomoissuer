@@ -208,7 +208,7 @@
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group flex-box mb-4">
-                    <label>Issuance fee</label><span>~ {{ issueFee }} TOMO</span>
+                    <label>Est. Issuance Fee</label><span>{{ txFee }} TOMO</span>
                 </div>
                 <div class="btn-box">
                     <b-button
@@ -262,7 +262,7 @@ export default {
             checkSymbol: false,
             checkSupply: false,
             checkDecimals: false,
-            issueFee: '',
+            // issueFee: '',
             isEditDecimals: false,
             warningName: '',
             warningSymbol: '',
@@ -307,7 +307,7 @@ export default {
         if (this.balance.isLessThan(this.txFee)) {
             this.isEnoughTOMO = false
         }
-        this.estimateGas()
+        // this.estimateGas()
     },
     methods: {
         async getBalance () {
@@ -329,7 +329,7 @@ export default {
                     decimals: this.decimals,
                     type: this.type,
                     totalSupply: this.totalSupply,
-                    issueFee: this.issueFee,
+                    // issueFee: this.issueFee,
                     estimatedAmount: this.estimatedAmount,
                     mintable: this.mintable
                 }

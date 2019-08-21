@@ -36,8 +36,8 @@
                         <td>{{ mintable ? 'Yes' : 'No' }}</td>
                     </tr>
                     <tr>
-                        <td>Issuance fee</td>
-                        <td>~ {{ issueFee }} TOMO</td>
+                        <td>Est. Issuance Fee</td>
+                        <td>{{ txFee }} TOMO</td>
                     </tr>
                     <!-- <tr>
                         <td >Code review</td>
@@ -117,7 +117,6 @@ export default {
             tokenName: (this.$route.params.name || '').trim(),
             tokenSymbol: (this.$route.params.symbol || '').trim(),
             decimals: this.$route.params.decimals || '',
-            issueFee: this.$route.params.issueFee || '',
             minFee: 0,
             totalSupply: (this.$route.params.totalSupply || '').replace(/,/g, ''),
             mintable: this.$route.params.mintable,
@@ -147,8 +146,10 @@ export default {
             self.$router.push({ path: '/createToken' })
         } else {
             self.config = store.get('configIssuer') || await self.appConfig()
+            const chainConfig = self.config.blockchain
             await self.createContract()
             self.getBalance()
+            self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18)
         }
     },
     methods: {
@@ -194,7 +195,6 @@ export default {
                 const web3 = self.web3
                 self.loading = true
                 self.account = await self.getAccount()
-                self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18)
                 if (self.balance.isLessThan(self.txFee)) {
                     self.loading = false
                     self.$toasted.show('Not enough TOMO', { type: 'error' })
