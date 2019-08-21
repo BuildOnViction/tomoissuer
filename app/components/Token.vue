@@ -410,8 +410,8 @@ export default {
                 { key: 'percentage', label: 'Percentage (%)' }
             ],
             holdersItems: [],
-            contractCreation: ''
-            // isAppliedX: false
+            contractCreation: '',
+            isAppliedX: false
         }
     },
     computed: {},

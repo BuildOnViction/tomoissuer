@@ -10,6 +10,7 @@ const BigNumber = require('bignumber.js')
 // const issuer = new Issuer(web3)
 
 let web3 = new Web3ws()
+let watchBlock = 0
 
 /* eslint-disable max-len */
 const invalidChars = /((?:[\0-\x08\x0B\f\x0E-\x1F\uFFFD\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]))/g // eslint-disable-line no-control-regex
@@ -56,8 +57,6 @@ function removeXMLInvalidChars (string, removeDiscouragedChars = true) {
 
     return string.trim()
 }
-
-let watchBlock
 
 async function watchIssuer () {
     let blockNumber = watchBlock || await web3.eth.getBlockNumber()
