@@ -111,7 +111,7 @@
                                         v-model="mintable"
                                         :value="true"
                                         class="flex-box">
-                                        Rissueable
+                                        Reissuable
                                         <i
                                             id="mintable"
                                             class="tomoissuer-icon-info mb-2"/>
@@ -130,7 +130,7 @@
                                         v-model="mintable"
                                         :value="false"
                                         class="flex-box">
-                                        None-reissueable
+                                        Non-reissueable
                                         <i
                                             id="notmintable"
                                             class="tomoissuer-icon-info mb-2"/>
