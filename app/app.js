@@ -20,8 +20,8 @@ import ReissueToken from './components/reissue/Reissue.vue'
 import ReissueConfirm from './components/reissue/ReissueConfirm.vue'
 import BurnToken from './components/burn/BurnToken.vue'
 import BurnTokenConfirm from './components/burn/BurnTokenConfirm.vue'
-// import TomoXCondition from './components/applytomox/TomoXCondition.vue'
-// import TomoXConfirm from './components/applytomox/TomoXConfirm.vue'
+import TomoXCondition from './components/applytomox/TomoXCondition.vue'
+import TomoXConfirm from './components/applytomox/TomoXConfirm.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
@@ -528,9 +528,9 @@ const router = new VueRouter({
         { path: '/reissueToken/:address', component: ReissueToken },
         { path: '/reissueTokenConfirm/:address', component: ReissueConfirm, name: 'ReissueConfirm' },
         { path: '/burnToken/:address', component: BurnToken },
-        { path: '/burnTokenConfirm/:address', component: BurnTokenConfirm, name: 'BurnTokenConfirm' }
-        // { path: '/tomoxcondition/:address', component: TomoXCondition },
-        // { path: '/tomoxconfirm/:address', component: TomoXConfirm }
+        { path: '/burnTokenConfirm/:address', component: BurnTokenConfirm, name: 'BurnTokenConfirm' },
+        { path: '/tomoxcondition/:address', component: TomoXCondition },
+        { path: '/tomoxconfirm/:address', component: TomoXConfirm }
     ]
 })
 

@@ -35,7 +35,7 @@ Note: before deploying to tomochain testnet, make sure you have TOMO in the wall
 
 ## Run
 - Start mongodb
-- Start TomoMaster
+- Start TomoIssuer
 ```
 npm run dev
 ```
