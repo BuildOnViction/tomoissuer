@@ -19,11 +19,11 @@
                             class="apply-tomoz">
                             TomoZ
                         </span>
-                        <!-- <span
+                        <span
                             v-if="isAppliedX"
                             class="apply-tomoz">
                             TomoX
-                        </span> -->
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-6 text-right">
