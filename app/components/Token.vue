@@ -68,13 +68,9 @@
                                         Update Token Info
                                     </b-dropdown-item>
                                     <b-dropdown-divider/>
-                                    <!-- <b-dropdown-item
-                                        :href="config.tomowalletUrl + '/trc21/' + address"
-                                        target="_blank">
-                                        Transfer Token
-                                    </b-dropdown-item> -->
                                     <b-dropdown-item
-                                        @click="transferToken">
+                                        :href="config.tomowalletUrl"
+                                        target="_blank">
                                         Transfer Token
                                     </b-dropdown-item>
                                     <b-dropdown-item
@@ -191,12 +187,9 @@
                                                 <span>{{ formatCurrencySymbol(
                                                 formatNumber(ownerBalance), token.symbol) }}</span>
                                                 <span>
-                                                    <!-- <b-link
-                                                        :href="config.tomowalletUrl + '/trc21/' + address"
-                                                        target="_blank">Transfer</b-link> -->
-                                                    <b-link @click="transferToken">
-                                                        Transfer
-                                                    </b-link>
+                                                    <b-link
+                                                        :href="config.tomowalletUrl"
+                                                        target="_blank">Transfer</b-link>
                                                 </span>
                                             </div>
                                         </li>
