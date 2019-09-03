@@ -71,13 +71,11 @@
                             <template
                                 slot="transferToken"
                                 slot-scope="data">
-                                <!-- <b-link
-                                    :href="config.tomowalletUrl + '/trc21/' + data.item.hash"
+                                <b-link
+                                    :href="config.tomowalletUrl"
                                     target="_blank">
                                     Transfer Token
-                                </b-link> -->
-                                <b-link
-                                    @click="transferToken">Transfer Token</b-link>
+                                </b-link>
                             </template>
                             <template
                                 slot="applytomoz"
