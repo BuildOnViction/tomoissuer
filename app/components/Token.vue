@@ -124,13 +124,13 @@
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
-                                    <p class="tmp-title-medium">Transfer</p>
+                                    <p class="tmp-title-medium">{{ tokenTransfers > 1 ? 'Transfers' : 'Transfer' }}</p>
                                     <p class="fsz-size text-yellow">{{ tokenTransfers }}</p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
-                                    <p class="tmp-title-medium">Holder</p>
+                                    <p class="tmp-title-medium">{{ tokenHolders > 1 ? 'Holders' : 'Holder' }}</p>
                                     <p class="fsz-size text-oranges">{{ tokenHolders }}</p>
                                 </div>
                             </div>
@@ -278,16 +278,6 @@
                                         </a>
                                     </template>
                                 </b-table>
-                                <div class="mt-3 common_tmp_page">
-                                    <b-pagination
-                                        v-if="transferRows > 2"
-                                        v-model="transferCurrentPage"
-                                        :total-rows="transferRows"
-                                        :per-page="transferPerPage"
-                                        aria-controls="transfer_table"
-                                        align="center"
-                                        @change="transferPageChange"/>
-                                </div>
                             </div>
                         </template>
                         <div class="mt-3 common_tmp_page">
