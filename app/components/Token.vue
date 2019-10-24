@@ -124,13 +124,13 @@
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
-                                    <p class="tmp-title-medium">Transfer</p>
+                                    <p class="tmp-title-medium">{{ tokenTransfers > 1 ? 'Transfers' : 'Transfer' }}</p>
                                     <p class="fsz-size text-yellow">{{ tokenTransfers }}</p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
-                                    <p class="tmp-title-medium">Holder</p>
+                                    <p class="tmp-title-medium">{{ tokenHolders > 1 ? 'Holders' : 'Holder' }}</p>
                                     <p class="fsz-size text-oranges">{{ tokenHolders }}</p>
                                 </div>
                             </div>
