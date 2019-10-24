@@ -278,16 +278,6 @@
                                         </a>
                                     </template>
                                 </b-table>
-                                <div class="mt-3 common_tmp_page">
-                                    <b-pagination
-                                        v-if="transferRows > 2"
-                                        v-model="transferCurrentPage"
-                                        :total-rows="transferRows"
-                                        :per-page="transferPerPage"
-                                        aria-controls="transfer_table"
-                                        align="center"
-                                        @change="transferPageChange"/>
-                                </div>
                             </div>
                         </template>
                         <div class="mt-3 common_tmp_page">
