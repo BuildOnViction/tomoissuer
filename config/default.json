@@ -19,8 +19,8 @@
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",
         "networkId": 89,
-        "gas": 2000000,
-        "deployPrice": 1000000000000,
+        "gas": 1000000,
+        "deployPrice": 10000000000000,
         "issuerAddress": "",
         "tomoXAddress": ""
     },
