@@ -19,11 +19,11 @@
                             class="apply-tomoz">
                             TomoZ
                         </span>
-                        <!-- <span
+                        <span
                             v-if="isAppliedX"
                             class="apply-tomoz">
                             TomoX
-                        </span> -->
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-6 text-right">
@@ -57,11 +57,11 @@
                                         :to="'/tomozcondition/' + address">
                                         Apply to TomoZ Protocol
                                     </b-dropdown-item>
-                                    <!-- <b-dropdown-item
+                                    <b-dropdown-item
                                         v-if="!isAppliedX && account === contractCreation"
                                         :to="'/tomoxcondition/' + address">
                                         Apply to TomoX Protocol
-                                    </b-dropdown-item> -->
+                                    </b-dropdown-item>
                                     <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"
                                         target="_blank">
@@ -400,8 +400,8 @@ export default {
                 { key: 'percentage', label: 'Percentage (%)' }
             ],
             holdersItems: [],
-            contractCreation: ''
-            // isAppliedX: false
+            contractCreation: '',
+            isAppliedX: false
         }
     },
     computed: {},
@@ -423,7 +423,7 @@ export default {
             self.getOwnerBalance()
             self.getPoolingFee()
             self.checkAppliedZ()
-            // self.checkAppliedX()
+            self.checkAppliedX()
             self.getTransactionFee()
         } catch (error) {
             console.log(error)
