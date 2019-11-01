@@ -9,9 +9,9 @@ commander
     .command('deploy-token')
     .description('Deploy a token, apply tomoz, x')
     .option('-n, --name <name>', 'Token name')
-    .option('-y, --symbol <symbol>', 'Token symbol')
-    .option('-y, --totalSupply <totalSupply>', 'Total supply')
-    .option('-y, --decimals <decimals>', 'Decimals')
+    .option('-s, --symbol <symbol>', 'Token symbol')
+    .option('-t, --totalSupply <totalSupply>', 'Total supply')
+    .option('-d, --decimals <decimals>', 'Decimals')
     .action(async (input) => {
         const name = input.name || null
         const symbol = input.symbol || null

@@ -230,7 +230,7 @@ async function deployToken (tokenName, tokenSymbol, totalSupply, decimals) {
         console.log('hash: ', res)
         console.log('Applying tomo x')
         // apply tomox
-        const result = await applyTomoX(contractAddress.toLowerCase(), web3, token)
+        const result = await applyTomoX(contractAddress.toLowerCase(), web3)
         // announce relayer
         if (result) {
             console.log('hash: ', result)
