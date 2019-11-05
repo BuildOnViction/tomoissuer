@@ -7,7 +7,7 @@
             <div class="about-tomoz">
                 <p>
                     TomoX and its liquidity network provide your business and tokens
-                    the most advantages to attract potential investors, trafaders and Dapp users.
+                    the most advantages to attract potential investors, traders and Dapp users.
                 </p>
             </div>
             <b-row class=" text-center mb-5 mt-5">
