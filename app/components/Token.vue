@@ -560,17 +560,17 @@ export default {
             const contract = this.TRC21Issuer
             if (contract) {
                 contract.methods.tokens.call()
-                .then(result => {
-                    if (result && result.length > 0) {
-                        const lowerCaseArr = result.map(m => m.toLowerCase())
-                        if (lowerCaseArr.indexOf(this.address) > -1) {
-                            this.isAppliedZ = true
+                    .then(result => {
+                        if (result && result.length > 0) {
+                            const lowerCaseArr = result.map(m => m.toLowerCase())
+                            if (lowerCaseArr.indexOf(this.address) > -1) {
+                                this.isAppliedZ = true
+                            }
                         }
-                    }
-                }).catch(error => {
-                    console.log(error)
-                    this.$toasted.show(error, { type: 'error' })
-                })
+                    }).catch(error => {
+                        console.log(error)
+                        this.$toasted.show(error, { type: 'error' })
+                    })
             }
         },
         checkAppliedX () {
