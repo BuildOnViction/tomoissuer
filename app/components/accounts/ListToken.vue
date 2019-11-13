@@ -266,19 +266,25 @@ export default {
         },
         async checkAppliedZ () {
             const contract = await this.TRC21Issuer
-            const result = await contract.methods.tokens.call()
-            if (result && result.length > 0) {
-                let lowerCaseArr = result.map(m => m.toLowerCase())
-                return lowerCaseArr
-            } else return null
+            if (contract) {
+                const result = await contract.methods.tokens.call()
+                if (result && result.length > 0) {
+                    let lowerCaseArr = result.map(m => m.toLowerCase())
+                    return lowerCaseArr
+                }
+            }
+            return null
         },
         async checkAppliedX () {
             const contract = await this.TomoXListing
-            const result = await contract.methods.tokens.call()
-            if (result && result.length > 0) {
-                let lowerCaseArr = result.map(m => m.toLowerCase())
-                return lowerCaseArr
-            } else return null
+            if (contract) {
+                const result = await contract.methods.tokens.call()
+                if (result && result.length > 0) {
+                    let lowerCaseArr = result.map(m => m.toLowerCase())
+                    return lowerCaseArr
+                }
+            }
+            return null
         },
         async getOwnerBalance (address, decimals) {
             const web3 = this.web3
