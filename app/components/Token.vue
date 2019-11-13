@@ -558,7 +558,8 @@ export default {
         },
         checkAppliedZ () {
             const contract = this.TRC21Issuer
-            contract.methods.tokens.call()
+            if (contract) {
+                contract.methods.tokens.call()
                 .then(result => {
                     if (result && result.length > 0) {
                         const lowerCaseArr = result.map(m => m.toLowerCase())
@@ -570,6 +571,7 @@ export default {
                     console.log(error)
                     this.$toasted.show(error, { type: 'error' })
                 })
+            }
         },
         checkAppliedX () {
             const contract = this.TomoXListing
