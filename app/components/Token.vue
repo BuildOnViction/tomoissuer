@@ -71,7 +71,7 @@
                                         v-if="!token.contract"
                                         :href="config.tomoscanUrl + '/contracts/verify?address=' + address"
                                         target="_blank">
-                                        Verify & Public Contract
+                                        Verify & Publish Contract
                                     </b-dropdown-item>
                                     <b-dropdown-divider/>
                                     <b-dropdown-item
