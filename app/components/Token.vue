@@ -68,7 +68,7 @@
                                         Update Token Info
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="token.contract"
+                                        v-if="!token.contract"
                                         :href="config.tomoscanUrl + '/contracts/verify?address=' + address"
                                         target="_blank">
                                         Verify & Public Contract
