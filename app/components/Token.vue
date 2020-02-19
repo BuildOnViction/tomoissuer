@@ -444,6 +444,7 @@ export default {
             const { data } = await axios.get(`/api/account/${self.address}`)
             const token = data.token
             self.token = token || {}
+            self.token.contract = data.contract || null
             self.tokenName = token.name
             self.symbol = token.symbol
             self.contractCreation = data.contractCreation
