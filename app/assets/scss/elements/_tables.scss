@@ -224,6 +224,12 @@ table,
 	table {
 		tr {
 			grid-template-columns: 50% 50% !important;
+			&:last-child {
+				grid-template-columns: 100% !important;
+			}
+			&:last-child {
+				text-align: left !important;
+			}
 		}
 		td {
 			&:first-child {
