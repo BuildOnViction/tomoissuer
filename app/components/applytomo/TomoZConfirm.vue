@@ -138,7 +138,7 @@ export default {
             self.gasPrice = result
         }).catch(error => {
             console.log(error)
-            self.$toasted.show(error, { type: 'error' })
+            self.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
         })
     },
     methods: {
