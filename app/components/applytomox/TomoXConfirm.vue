@@ -13,7 +13,7 @@
             <h6 class="tmp-title-normal weightbold mt-5">Condition</h6>
             <p>
                 You need to pay
-                <strong>100 TOMO</strong> as TomoX protocol listing fee
+                <strong>1000 TOMO</strong> as TomoX protocol listing fee
             </p>
             <b-form
                 class="tmp-form-one">
@@ -107,7 +107,7 @@ export default {
             account: '',
             newFee: '',
             currentFee: '',
-            txFee: 100,
+            txFee: 1000,
             token: {},
             config: {},
             loading: false,
