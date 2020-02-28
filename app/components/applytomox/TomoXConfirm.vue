@@ -114,7 +114,8 @@ export default {
             transactionHash: '',
             balance: '',
             isEnoughTOMO: true,
-            isAppliedX: false
+            isAppliedX: false,
+            gasPrice: 0
         }
     },
     validations: {},
@@ -127,6 +128,13 @@ export default {
             this.$router.push({ path: '/login' })
         }
         this.config = store.get('configIssuer') || await self.appConfig()
+
+        this.web3.eth.getGasPrice().then(result => {
+            this.gasPrice = result
+        }).catch(error => {
+            console.log(error)
+            this.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
+        })
         await this.getData()
         this.getBalance()
         await this.checkAppliedX()
@@ -179,12 +187,13 @@ export default {
                     this.loading = true
                     const tomoXContract = this.TomoXListing
                     const chainConfig = this.config.blockchain
+                    console.log('self.gasPrice', self.gasPrice)
                     const txParams = {
                         from: (await this.getAccount()).toLowerCase(),
                         value: this.web3.utils.toHex(
                             (new BigNumber(this.txFee).multipliedBy(1e+18)).toString(10)
                         ),
-                        gasPrice: this.web3.utils.toHex(chainConfig.deployPrice),
+                        gasPrice: this.web3.utils.toHex(self.gasPrice),
                         gas: this.web3.utils.toHex(chainConfig.gas),
                         gasLimit: this.web3.utils.toHex(chainConfig.gas)
                     }
