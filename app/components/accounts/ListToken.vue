@@ -72,7 +72,7 @@
                                 slot="transferToken"
                                 slot-scope="data">
                                 <b-link
-                                    :href="config.tomowalletUrl + '/trc21/' + data.item.hash"
+                                    :href="config.tomowalletUrl"
                                     target="_blank">
                                     Transfer Token
                                 </b-link>
@@ -95,11 +95,11 @@
                                         :to="'/tomozcondition/' + data.item.hash">
                                         Apply to TomoZ
                                     </b-dropdown-item>
-                                    <b-dropdown-item
+                                    <!-- <b-dropdown-item
                                         v-if="!data.item.applytomox"
                                         :to="'/tomoxcondition/' + data.item.hash">
                                         Apply to TomoX
-                                    </b-dropdown-item>
+                                    </b-dropdown-item> -->
                                     <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"
                                         target="_blank">
