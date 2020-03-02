@@ -72,7 +72,7 @@
                                 slot="transferToken"
                                 slot-scope="data">
                                 <b-link
-                                    :href="config.tomowalletUrl + '/trc21/' + data.item.hash"
+                                    :href="config.tomowalletUrl"
                                     target="_blank">
                                     Transfer Token
                                 </b-link>
