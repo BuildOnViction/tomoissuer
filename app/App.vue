@@ -92,18 +92,18 @@
                                 <ul>
                                     <li>
                                         <a
-                                            href="https://docs.tomochain.com/products/tomoissuer/"
+                                            :href="needHelpLink"
                                             target="_blank">Need help?</a>
                                     </li>
                                     <li>
                                         <a
-                                            href="https://docs.tomochain.com/products/tomoissuer/policyprivacy/"
+                                            href="https://docs.tomochain.com/legal/privacy"
                                             target="_blank">Privacy Policy</a>
                                     </li>
                                     <li>
                                         <a
-                                            href="https://docs.tomochain.com/products/tomoissuer/termofcondition/"
-                                            target="_blank">Terms of Service</a>
+                                            href="https://docs.tomochain.com/legal/terms-of-use"
+                                            target="_blank">Terms of Use</a>
                                     </li>
                                     <li>
                                         <a
@@ -160,7 +160,8 @@ export default {
             account: '',
             version: pkg.version,
             balance: '',
-            display: false
+            display: false,
+            needHelpLink: 'https://docs.tomochain.com/faq/products/tomochain-applications/tomoissuer'
         }
     },
     computed: {
