@@ -7,13 +7,18 @@
             v-else
             class="tomo-body-fullw tomo-apply">
             <div class="info-header text-center">
-                <p><i class="tomoissuer-icon-tomox"/></p>
+                <p>
+                    <span class="tomoissuer-icon-tomox-new">
+                        <span class="path1"/><span class="path2"/><span class="path3"/>
+                    </span>
+                </p>
+                <!-- <p><i class="tomoissuer-icon-tomox-new"/></p> -->
                 <h2 class="tmp-title-large">Apply to TomoX protocol</h2>
             </div>
             <h6 class="tmp-title-normal weightbold mt-5">Condition</h6>
             <p>
                 You need to pay
-                <strong>100 TOMO</strong> as TomoX protocol listing fee
+                <strong>1000 TOMO</strong> as TomoX protocol listing fee
             </p>
             <b-form
                 class="tmp-form-one">
@@ -107,14 +112,15 @@ export default {
             account: '',
             newFee: '',
             currentFee: '',
-            txFee: 100,
+            txFee: 1000,
             token: {},
             config: {},
             loading: false,
             transactionHash: '',
             balance: '',
             isEnoughTOMO: true,
-            isAppliedX: false
+            isAppliedX: false,
+            gasPrice: 0
         }
     },
     validations: {},
@@ -127,6 +133,13 @@ export default {
             this.$router.push({ path: '/login' })
         }
         this.config = store.get('configIssuer') || await self.appConfig()
+
+        this.web3.eth.getGasPrice().then(result => {
+            this.gasPrice = result
+        }).catch(error => {
+            console.log(error)
+            this.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
+        })
         await this.getData()
         this.getBalance()
         await this.checkAppliedX()
@@ -179,12 +192,13 @@ export default {
                     this.loading = true
                     const tomoXContract = this.TomoXListing
                     const chainConfig = this.config.blockchain
+                    console.log('self.gasPrice', self.gasPrice)
                     const txParams = {
                         from: (await this.getAccount()).toLowerCase(),
                         value: this.web3.utils.toHex(
                             (new BigNumber(this.txFee).multipliedBy(1e+18)).toString(10)
                         ),
-                        gasPrice: this.web3.utils.toHex(chainConfig.deployPrice),
+                        gasPrice: this.web3.utils.toHex(self.gasPrice),
                         gas: this.web3.utils.toHex(chainConfig.gas),
                         gasLimit: this.web3.utils.toHex(chainConfig.gas)
                     }

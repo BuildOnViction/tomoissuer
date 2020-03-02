@@ -39,7 +39,7 @@
                         <td>Est. Issuance Fee</td>
                         <td>{{ txFee }} TOMO</td>
                     </tr>
-                    <!-- <tr>
+                    <tr>
                         <td >Code review</td>
                         <td/>
                     </tr>
@@ -50,10 +50,11 @@
                                 v-model="sourceCode"
                                 :options="{mode:'application/ld+json',styleActiveLine:false}"/>
                         </td>
-                    </tr> -->
+                        <td />
+                    </tr>
                 </table>
             </div>
-            <div class="btn-box mt-4">
+            <div class="btn-box">
                 <b-button
                     class="tmp-btn-boder-blue btn-min"
                     to="createToken">
