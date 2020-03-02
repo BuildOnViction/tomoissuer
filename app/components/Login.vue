@@ -16,6 +16,7 @@
                                 <b-img
                                     src="/app/assets/images/logo-tomowallet.png"
                                     alt="logo-tomowallet.png"
+                                    style="width: 28px"
                                     @click="changeView"/>
                                 <span>TomoWallet</span>
                             </template>

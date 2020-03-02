@@ -35,7 +35,10 @@
                                     :to="'/tomozcondition/' + address"
                                     class="tmp-btn-violet"
                                     style="width: 270px">
-                                    <i class="tomoissuer-icon-tomoz mr-1"/>
+                                    <span class="tomoissuer-icon-tomoz-new-white mr-1">
+                                        <span class="path1"/><span class="path2"/>
+                                    </span>
+                                    <!-- <i class="tomoissuer-icon-tomoz mr-1"/> -->
                                     Apply to TomoZ Protocol
                                 </b-link>
                             </li>
@@ -66,6 +69,12 @@
                                         href="https://github.com/tomochain/tokens"
                                         target="_blank">
                                         Update Token Info
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        v-if="!token.contract"
+                                        :href="config.tomoscanUrl + '/contracts/verify?address=' + address"
+                                        target="_blank">
+                                        Verify & Publish Contract
                                     </b-dropdown-item>
                                     <b-dropdown-divider/>
                                     <b-dropdown-item
@@ -438,6 +447,7 @@ export default {
             const { data } = await axios.get(`/api/account/${self.address}`)
             const token = data.token
             self.token = token || {}
+            self.token.contract = data.contract || null
             self.tokenName = token.name
             self.symbol = token.symbol
             self.contractCreation = data.contractCreation
@@ -558,18 +568,20 @@ export default {
         },
         checkAppliedZ () {
             const contract = this.TRC21Issuer
-            contract.methods.tokens.call()
-                .then(result => {
-                    if (result && result.length > 0) {
-                        const lowerCaseArr = result.map(m => m.toLowerCase())
-                        if (lowerCaseArr.indexOf(this.address) > -1) {
-                            this.isAppliedZ = true
+            if (contract) {
+                contract.methods.tokens.call()
+                    .then(result => {
+                        if (result && result.length > 0) {
+                            const lowerCaseArr = result.map(m => m.toLowerCase())
+                            if (lowerCaseArr.indexOf(this.address) > -1) {
+                                this.isAppliedZ = true
+                            }
                         }
-                    }
-                }).catch(error => {
-                    console.log(error)
-                    this.$toasted.show(error, { type: 'error' })
-                })
+                    }).catch(error => {
+                        console.log(error)
+                        this.$toasted.show(error, { type: 'error' })
+                    })
+            }
         },
         checkAppliedX () {
             const contract = this.TomoXListing
