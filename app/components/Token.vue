@@ -60,11 +60,11 @@
                                         :to="'/tomozcondition/' + address">
                                         Apply to TomoZ Protocol
                                     </b-dropdown-item>
-                                    <b-dropdown-item
+                                    <!-- <b-dropdown-item
                                         v-if="!isAppliedX && account === contractCreation"
                                         :to="'/tomoxcondition/' + address">
                                         Apply to TomoX Protocol
-                                    </b-dropdown-item>
+                                    </b-dropdown-item> -->
                                     <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"
                                         target="_blank">
