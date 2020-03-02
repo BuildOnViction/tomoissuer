@@ -78,7 +78,7 @@
                                     </b-dropdown-item>
                                     <b-dropdown-divider/>
                                     <b-dropdown-item
-                                        :href="config.tomowalletUrl + '/trc21/' + address"
+                                        :href="config.tomowalletUrl"
                                         target="_blank">
                                         Transfer Token
                                     </b-dropdown-item>
@@ -197,7 +197,7 @@
                                                 formatNumber(ownerBalance), token.symbol) }}</span>
                                                 <span>
                                                     <b-link
-                                                        :href="config.tomowalletUrl + '/trc21/' + address"
+                                                        :href="config.tomowalletUrl"
                                                         target="_blank">Transfer</b-link>
                                                 </span>
                                             </div>
