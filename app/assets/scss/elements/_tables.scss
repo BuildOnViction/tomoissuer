@@ -229,6 +229,11 @@ table,
 			}
 			&:last-child {
 				text-align: left !important;
+				td {
+					&:after {
+						content: '';
+					}
+				}
 			}
 		}
 		td {
