@@ -149,19 +149,20 @@ export default {
             self.config = store.get('configIssuer') || await self.appConfig()
             const chainConfig = self.config.blockchain
             await self.createContract()
-            self.getBalance()
+            await self.getBalance()
             self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18)
         }
     },
     methods: {
-        getBalance () {
-            const web3 = this.web3
-            web3.eth.getBalance(this.account).then(result => {
+        async getBalance () {
+            try {
+                const web3 = this.web3
+                const result = await web3.eth.getBalance(this.account)
                 this.balance = new BigNumber(result).div(10 ** 18)
-            }).catch(error => {
+            } catch (error) {
                 console.log(error)
                 this.$toasted.show(error, { type: 'error' })
-            })
+            }
         },
         async createContract () {
             const self = this
