@@ -193,7 +193,6 @@ export default {
         async deploy () {
             const self = this
             try {
-                console.log('self.txFee', self.txFee.toString(10))
                 const chainConfig = this.config.blockchain
                 const web3 = self.web3
                 self.loading = true
