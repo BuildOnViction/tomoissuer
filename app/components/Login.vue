@@ -14,6 +14,25 @@
                         <b-tab>
                             <template slot="title">
                                 <b-img
+                                    src="/app/assets/images/logo-pantograph.png"
+                                    alt="logo-pantograph.png"
+                                    style="width: 28px"
+                                    @click="changeView"/>
+                                <span>Pantograph</span>
+                            </template>
+                            <div class="inner-content tab-pantograph">
+                                <div class="btn-box">
+                                    <b-button
+                                        class="tmp-btn-blue"
+                                        type="submit">
+                                        Unlock
+                                    </b-button>
+                                </div>
+                            </div>
+                        </b-tab>
+                        <b-tab>
+                            <template slot="title">
+                                <b-img
                                     src="/app/assets/images/logo-tomowallet.png"
                                     alt="logo-tomowallet.png"
                                     style="width: 28px"
@@ -28,22 +47,6 @@
                                         Unlock
                                     </b-button>
                                 </div>
-                                <!-- <div class="inner text-center">
-                                    <p>
-                                        <b-img
-                                            src="/app/assets/images/img-qrcode-tomowallet.png"
-                                            alt="img-qrcode-tomowallet.png"/>
-                                    </p>
-                                    <p>
-                                        <b>Scan QR code using TomoWallet to unlock</b><br>
-                                        Haven’t installed TomoWallet yet?
-                                        <b-link
-                                            to="/"
-                                            target="_blank">
-                                            Click here
-                                        </b-link>
-                                    </p>
-                                </div> -->
                             </div>
                         </b-tab>
                         <b-tab>
@@ -343,6 +346,12 @@ export default {
                         wjs = new Web3(walletProvider)
                     }
                     break
+                case 'pantograph':
+                    if (window.tomoWeb3) {
+                        walletProvider = window.tomoWeb3.currentProvider
+                        wjs = new Web3(walletProvider)
+                    }
+                    break
                 case 'ledger':
                     // Object - HttpProvider
                     wjs = new Web3(new Web3.providers.HttpProvider(self.networks.rpc))
@@ -415,6 +424,11 @@ export default {
             const tabIndex = this.tabIndex
             if (tabIndex === 1) {
                 this.provider = 'metamask'
+                this.login()
+            }
+
+            if (tabIndex === 0) {
+                this.provider = 'pantograph'
                 this.login()
             }
 
