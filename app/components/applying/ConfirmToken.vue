@@ -215,6 +215,7 @@ export default {
                     case 'custom':
                     case 'metamask':
                     case 'tomowallet':
+                    case 'pantograph':
                         await contract.deploy({
                             arguments: [
                                 self.tokenName,
