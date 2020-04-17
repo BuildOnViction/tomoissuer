@@ -388,7 +388,7 @@ export default {
 
                 if (self.address) {
                     self.$store.state.address = self.address.toLowerCase()
-                    if (self.provider === 'metamask') {
+                    if (self.provider === 'metamask' || self.provider === 'pantograph') {
                         store.set('address', self.address.toLowerCase())
                         store.set('network', self.provider)
                     }

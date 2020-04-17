@@ -192,7 +192,6 @@ export default {
                     this.loading = true
                     const tomoXContract = this.TomoXListing
                     const chainConfig = this.config.blockchain
-                    console.log('self.gasPrice', self.gasPrice)
                     const txParams = {
                         from: (await this.getAccount()).toLowerCase(),
                         value: this.web3.utils.toHex(

@@ -314,15 +314,15 @@ Vue.prototype.detectNetwork = async function (provider) {
                 }
                 break
             case 'pantograph':
-                    if (window.tomoWeb3) {
-                        if (window.tomoWeb3.currentProvider) {
-                            let pp = window.tomoWeb3.currentProvider
-                            wjs = new Web3(pp)
-                        } else {
-                            wjs = window.tomoWeb3
-                        }
+                if (window.tomoWeb3) {
+                    if (window.tomoWeb3.currentProvider) {
+                        let pp = window.tomoWeb3.currentProvider
+                        wjs = new Web3(pp)
+                    } else {
+                        wjs = window.tomoWeb3
                     }
-                    break
+                }
+                break
             case 'trezor':
             case 'ledger':
                 if (provider === 'ledger') {
