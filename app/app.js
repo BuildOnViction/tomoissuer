@@ -120,6 +120,16 @@ Vue.prototype.getAccount = async function () {
     case 'metamask':
         // Request account access if needed - for metamask
         await window.ethereum.enable()
+        if (window.ethereum) {
+            await window.ethereum.enable()
+        }
+        account = (await wjs.eth.getAccounts())[0]
+        break
+    case 'pantograph':
+        // Request account access if needed - for pantograph
+        if (window.tomochain) {
+            await window.tomochain.enable()
+        }
         account = (await wjs.eth.getAccounts())[0]
         break
     case 'tomowallet':
@@ -302,6 +312,16 @@ Vue.prototype.detectNetwork = async function (provider) {
                 if (window.web3) {
                     var p = window.web3.currentProvider
                     wjs = new Web3(p)
+                }
+                break
+            case 'pantograph':
+                if (window.tomoWeb3) {
+                    if (window.tomoWeb3.currentProvider) {
+                        let pp = window.tomoWeb3.currentProvider
+                        wjs = new Web3(pp)
+                    } else {
+                        wjs = window.tomoWeb3
+                    }
                 }
                 break
             case 'trezor':
