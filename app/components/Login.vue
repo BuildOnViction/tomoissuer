@@ -16,7 +16,6 @@
                                 <b-img
                                     src="/app/assets/images/logo-pantograph.png"
                                     alt="logo-pantograph.png"
-                                    style="width: 28px"
                                     @click="changeView"/>
                                 <span>Pantograph</span>
                             </template>
@@ -30,7 +29,7 @@
                                 </div>
                             </div>
                         </b-tab>
-                        <b-tab>
+                        <!-- <b-tab>
                             <template slot="title">
                                 <b-img
                                     src="/app/assets/images/logo-tomowallet.png"
@@ -48,7 +47,7 @@
                                     </b-button>
                                 </div>
                             </div>
-                        </b-tab>
+                        </b-tab> -->
                         <b-tab>
                             <template slot="title">
                                 <b-img
