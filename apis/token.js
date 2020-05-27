@@ -332,6 +332,20 @@ router.get('/txes/trc21/:token', [], async (req, res, next) => {
     }
 })
 
+router.get('/txes/trc721/:token', [], async (req, res, next) => {
+    try {
+        const token = req.params.token || ''
+        const page = req.query.page || 1
+        const limit = req.query.limit || 20
+        const { data } = await axios.get(
+            urljoin(config.get('tomoscanAPI'), `/api/token-txs/trc721?token=${token}&page=${page}&limit=${limit}`)
+        )
+        return res.json(data)
+    } catch (error) {
+        return next(error)
+    }
+})
+
 router.get('/getLogo/:token', [], async (req, res, next) => {
     try {
         const token = req.params.token || ''
