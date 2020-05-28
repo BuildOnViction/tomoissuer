@@ -164,7 +164,7 @@ export default {
                 }
             }).catch(error => {
                 console.log(error)
-                this.$toatsed.show(error, { type: 'error' })
+                this.$toatsed.show(error.message ? error.message : error, { type: 'error' })
             })
         },
         getCurrentFee () {
@@ -178,7 +178,7 @@ export default {
                     this.currentFee = balance.div(10 ** this.token.decimals).toNumber()
                 }).catch(error => {
                     console.log(error)
-                    this.$toatsed.show(error, { type: 'error' })
+                    this.$toatsed.show(error.message ? error.message : error, { type: 'error' })
                 })
             }
         },
@@ -277,6 +277,7 @@ export default {
             } catch (error) {
                 this.loading = false
                 console.log(error)
+                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
             }
         },
         async checkAppliedX () {

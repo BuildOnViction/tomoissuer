@@ -305,7 +305,7 @@ export default {
                 self.loading = false
                 console.log(error)
                 self.$toasted.show(
-                    error, { type : 'error' }
+                    error.message ? error.message : error, { type : 'error' }
                 )
             }
         }

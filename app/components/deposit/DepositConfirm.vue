@@ -137,7 +137,7 @@ export default {
             this.gasPrice = result
         }).catch(error => {
             console.log(error)
-            this.$toasted.show(error, { type: 'error' })
+            this.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
         })
         this.getData()
         this.getTransactionFee()
@@ -240,14 +240,14 @@ export default {
                             .catch(error => {
                                 console.log(error)
                                 this.loading = false
-                                this.$toasted.show(error, { type: 'error' })
+                                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
                             })
                     }
                 }
             } catch (error) {
                 console.log(error)
                 this.loading = false
-                this.$toasted.show(error, { type: 'error' })
+                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
             }
         }
     }
