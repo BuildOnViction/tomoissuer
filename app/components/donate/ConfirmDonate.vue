@@ -145,7 +145,7 @@ export default {
             self.gasPrice = result
         }).catch(error => {
             console.log(error)
-            self.$toasted.show(error, { type: 'error' })
+            self.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
         })
         await self.getData()
         self.getTransactionFee()
@@ -166,7 +166,7 @@ export default {
                     this.txFee = balance.div(10 ** this.token.decimals).toNumber()
                 }).catch(error => {
                     console.log(error)
-                    this.$toatsed.show(error, { type: 'error' })
+                    this.$toatsed.show(error.message ? error.message : error, { type: 'error' })
                 })
             }
         },
@@ -238,14 +238,14 @@ export default {
                             .catch(error => {
                                 console.log(error)
                                 this.loading = false
-                                this.$toasted.show(error, { type: 'error' })
+                                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
                             })
                     }
                 }
             } catch (error) {
                 console.log(error)
                 this.loading = false
-                this.$toasted.show(error, { type: 'error' })
+                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
             }
         }
     }

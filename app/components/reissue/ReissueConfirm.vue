@@ -133,7 +133,7 @@ export default {
             this.gasPrice = result
         }).catch(error => {
             console.log(error)
-            this.$toasted.show(error, { type: 'error' })
+            this.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
         })
         await this.getTokenDetail()
         this.getTransactionFee()
@@ -159,7 +159,7 @@ export default {
                     this.ownerBalance = balance.div(10 ** this.token.decimals)
                 }).catch(error => {
                     console.log(error)
-                    this.$toatsed.show(error, { type: 'error' })
+                    this.$toatsed.show(error.message ? error.message : error, { type: 'error' })
                 })
             }
         },
@@ -174,7 +174,7 @@ export default {
                     this.txFee = balance.div(10 ** this.token.decimals).toNumber()
                 }).catch(error => {
                     console.log(error)
-                    this.$toatsed.show(error, { type: 'error' })
+                    this.$toatsed.show(error.message ? error.message : error, { type: 'error' })
                 })
             }
         },
@@ -255,7 +255,7 @@ export default {
                                 .catch(error => {
                                     console.log(error)
                                     this.loading = false
-                                    this.$toasted.show(error, { type: 'error' })
+                                    this.$toasted.show(error.message ? error.message : error, { type: 'error' })
                                 })
                         }
                     }
@@ -263,7 +263,7 @@ export default {
             } catch (error) {
                 console.log(error)
                 this.loading = false
-                this.$toasted.show(error, { type: 'error' })
+                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
             }
         }
     }

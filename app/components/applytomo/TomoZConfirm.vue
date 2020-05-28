@@ -167,7 +167,7 @@ export default {
                     }
                 }).catch(error => {
                     console.log(error)
-                    this.$toasted.show(error, { type: 'error' })
+                    this.$toasted.show(error.message ? error.message : error, { type: 'error' })
                 })
         },
         async applyTomoZ () {
@@ -237,14 +237,14 @@ export default {
                             .catch(error => {
                                 this.loading = false
                                 console.log(error)
-                                this.$toasted.show(error, { type: 'error' })
+                                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
                             })
                     }
                 }
             } catch (error) {
                 this.loading = false
                 console.log(error)
-                this.$toasted.show(error, { type: 'error' })
+                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
             }
         }
     }
