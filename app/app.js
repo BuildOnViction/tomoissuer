@@ -56,7 +56,8 @@ Vue.use(Toasted, {
         onClick : (e, toastObject) => {
             toastObject.goAway(0)
         }
-    }
+    },
+    singleton: true
 })
 
 Vue.use(VueCodeMirror, {
