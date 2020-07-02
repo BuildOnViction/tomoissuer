@@ -22,6 +22,7 @@ import BurnToken from './components/burn/BurnToken.vue'
 import BurnTokenConfirm from './components/burn/BurnTokenConfirm.vue'
 import TomoXCondition from './components/applytomox/TomoXCondition.vue'
 import TomoXConfirm from './components/applytomox/TomoXConfirm.vue'
+import ViewToken from './components/ViewToken.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
@@ -66,7 +67,7 @@ Vue.use(VueCodeMirror, {
         tabSize: 4,
         styleActiveLine: true,
         lineNumbers: true,
-        lineWrapping: true,
+        lineWrapping: false,
         foldGutter: true,
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         mode: 'text/javascript',
@@ -550,7 +551,8 @@ const router = new VueRouter({
         { path: '/burnToken/:address', component: BurnToken },
         { path: '/burnTokenConfirm/:address', component: BurnTokenConfirm, name: 'BurnTokenConfirm' },
         { path: '/tomoxcondition/:address', component: TomoXCondition },
-        { path: '/tomoxconfirm/:address', component: TomoXConfirm }
+        { path: '/tomoxconfirm/:address', component: TomoXConfirm },
+        { path: '/viewToken/:address', component: ViewToken }
     ]
 })
 

@@ -66,6 +66,10 @@
                                         Apply to TomoX Protocol
                                     </b-dropdown-item>
                                     <b-dropdown-item
+                                        :to="'/viewToken/' + address">
+                                        View Token Info
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"
                                         target="_blank">
                                         Update Token Info
