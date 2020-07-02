@@ -260,3 +260,12 @@
         }
     }
 }
+
+.review-logo {
+    // height: 50% !important;
+    max-width: 20% !important;
+    @include media-breakpoint-down (sm) {
+        height: 50% !important;
+        width: 50% !important;
+    }
+}

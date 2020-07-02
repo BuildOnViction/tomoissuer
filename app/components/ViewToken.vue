@@ -3,7 +3,15 @@
         <div class="confirm-table tomo-body-fullw-issue issue-confirm">
             <div class="info-header">
                 <h2 class="tmp-title-large m-0">Token Information</h2>
-                <p class="text-center mt-5"><i class="tomoissuer-icon-startup"/></p>
+                <p class="text-center mt-3">
+                    <i
+                        v-if="!logo"
+                        class="tomoissuer-icon-startup"/>
+                    <img
+                        v-else
+                        :src="logo"
+                        class="review-logo">
+                </p>
                 <div class="text-center mb-5">
                     <strong>{{ `${formatNumber(token.totalSupply)} ${token.symbol}` }}</strong>
                 </div>
@@ -79,7 +87,14 @@ export default {
             loading: false,
             txFee: 0,
             address: this.$route.params.address,
-            token: {}
+            token: {
+                name: '',
+                symbol: '',
+                decimals: 0,
+                totalSupply: 0,
+                type: ''
+            },
+            logo: ''
         }
     },
     async updated () {},
@@ -87,6 +102,7 @@ export default {
     created: async function () {
         const self = this
         await self.getTokenDetail()
+        await self.getLogo()
         if (self.token.type === 'trc21' || self.token.type === 'trc20') {
             await self.createContract()
         }
@@ -123,15 +139,27 @@ export default {
             const self = this
             const { data } = await axios.get(`/api/account/${self.address}`)
             const token = data.token
-            self.token = {
-                name: token.name,
-                symbol: token.symbol,
-                decimals: token.decimals,
-                type: token.type,
-                mintable: token.isMintable,
-                totalSupply: token.totalSupplyNumber
+            if (token) {
+                self.token = {
+                    name: token.name,
+                    symbol: token.symbol,
+                    decimals: token.decimals,
+                    type: token.type || '',
+                    mintable: token.isMintable,
+                    totalSupply: token.totalSupplyNumber
+                }
             }
             self.contractCreation = data.contractCreation
+        },
+        async getLogo () {
+            try {
+                const { data } = await axios.get('/api/token/getLogo/' + this.address)
+                if (data.image) {
+                    this.logo = data.image
+                }
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 }
