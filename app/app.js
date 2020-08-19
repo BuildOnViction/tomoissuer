@@ -122,7 +122,8 @@ Vue.prototype.getAccount = async function () {
     case 'metamask':
         // Request account access if needed - for metamask
         if (window.ethereum) {
-            await window.ethereum.enable()
+            // await window.ethereum.enable()
+            window.ethereum.request({ method: 'eth_requestAccounts' })
         }
         account = (await wjs.eth.getAccounts())[0]
         break
@@ -310,8 +311,9 @@ Vue.prototype.detectNetwork = async function (provider) {
             switch (provider) {
             case 'tomowallet':
             case 'metamask':
-                if (window.web3) {
-                    var p = window.web3.currentProvider
+                if (window.ethereum) {
+                    // var p = window.web3.currentProvider
+                    var p = window.ethereum
                     wjs = new Web3(p)
                 }
                 break

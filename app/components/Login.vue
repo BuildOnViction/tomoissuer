@@ -340,8 +340,9 @@ export default {
                 let offset
                 switch (self.provider) {
                 case 'metamask':
-                    if (window.web3) {
-                        walletProvider = window.web3.currentProvider
+                    if (window.ethereum) {
+                        // walletProvider = window.web3.currentProvider
+                        walletProvider = window.ethereum
                         wjs = new Web3(walletProvider)
                     }
                     break
