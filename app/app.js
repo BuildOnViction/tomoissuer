@@ -311,8 +311,9 @@ Vue.prototype.detectNetwork = async function (provider) {
             switch (provider) {
             case 'tomowallet':
             case 'metamask':
-                if (window.web3) {
-                    var p = window.web3.currentProvider
+                if (window.ethereum) {
+                    // var p = window.web3.currentProvider
+                    var p = window.ethereum
                     wjs = new Web3(p)
                 }
                 break
