@@ -306,6 +306,8 @@ contract TomoBridgeWrapToken is TRC21 {
     event OwnerRemoval(address indexed owner);
     event RequirementChange(uint required);
     event TokenBurn(uint256 indexed burnID, address indexed burner, uint256 value, bytes data);
+    event ChangeTomoFeeMode(bool feeMode);
+    event ChangeWithdrawFeeTomo(uint withdrawFeeTomo);
 
     /*
      *  Constants
@@ -313,6 +315,8 @@ contract TomoBridgeWrapToken is TRC21 {
     uint constant public MAX_OWNER_COUNT = 50;
     uint public WITHDRAW_FEE = 0;
     uint public DEPOSIT_FEE = 0;
+    uint public WITHDRAW_FEE_TOMO = 2 ether;
+    bool public TOMO_FEE_MODE = true;
     
     /*
      *  Storage
@@ -444,7 +448,28 @@ contract TomoBridgeWrapToken is TRC21 {
     {
         isOwner[owner] = true;
         owners.push(owner);
-        OwnerAddition(owner);
+        emit OwnerAddition(owner);
+    }
+
+    /// @dev Allows to change withdraw fee by tomo
+    /// @param withdrawFee Number of required confirmations.
+    function changeWithdrawFeeTomo(uint withdrawFee)
+    public
+    onlyWallet
+    {
+        require(withdrawFee >= 0);
+        WITHDRAW_FEE_TOMO = withdrawFee;
+        emit ChangeWithdrawFeeTomo(withdrawFee);
+    }
+
+     /// @dev Allows to change withdraw fee mode. Transaction has to be sent by wallet.
+     /// @param feeMode Fee mode.
+    function changeWithdrawFeeMode(bool feeMode)
+    public
+    onlyWallet
+    {
+        TOMO_FEE_MODE = feeMode;
+        emit ChangeTomoFeeMode(TOMO_FEE_MODE);
     }
 
     /// @dev Allows to remove an owner. Transaction has to be sent by wallet.
@@ -463,7 +488,7 @@ contract TomoBridgeWrapToken is TRC21 {
         owners.length -= 1;
         if (required > owners.length)
             changeRequirement(owners.length);
-        OwnerRemoval(owner);
+        emit OwnerRemoval(owner);
     }
 
     /// @dev Allows to replace an owner with a new owner. Transaction has to be sent by wallet.
@@ -482,8 +507,8 @@ contract TomoBridgeWrapToken is TRC21 {
             }
         isOwner[owner] = false;
         isOwner[newOwner] = true;
-        OwnerRemoval(owner);
-        OwnerAddition(newOwner);
+        emit OwnerRemoval(owner);
+        emit OwnerAddition(newOwner);
     }
 
     /// @dev Allows to change the number of required confirmations. Transaction has to be sent by wallet.
@@ -494,7 +519,7 @@ contract TomoBridgeWrapToken is TRC21 {
     validRequirement(owners.length, _required)
     {
         required = _required;
-        RequirementChange(_required);
+        emit RequirementChange(_required);
     }
 
     /// @dev Allows an owner to submit and confirm a transaction.
@@ -521,7 +546,7 @@ contract TomoBridgeWrapToken is TRC21 {
     notConfirmed(transactionId, msg.sender)
     {
         confirmations[transactionId][msg.sender] = true;
-        Confirmation(msg.sender, transactionId);
+        emit Confirmation(msg.sender, transactionId);
         executeTransaction(transactionId);
     }
 
@@ -534,25 +559,41 @@ contract TomoBridgeWrapToken is TRC21 {
     notExecuted(transactionId)
     {
         confirmations[transactionId][msg.sender] = false;
-        Revocation(msg.sender, transactionId);
+        emit Revocation(msg.sender, transactionId);
     }
 
     /// @dev Allows an user to burn the token.
     function burn(uint value, bytes data)
+    payable
     public
     {
-        require(value > WITHDRAW_FEE);  //avoid spamming 
-        super._burn(msg.sender, value);
-        if (WITHDRAW_FEE > 0) {
-            super._mint(issuer(), WITHDRAW_FEE);
+        if (TOMO_FEE_MODE) {
+            require(msg.value >= WITHDRAW_FEE_TOMO);  //avoid spamming
+            owners[0].transfer(WITHDRAW_FEE_TOMO);
+
+            msg.sender.transfer(msg.value - WITHDRAW_FEE_TOMO);
+
+            super._burn(msg.sender, value);
+            burnList.push(TokenBurnData({
+                value: value,
+                burner: msg.sender,
+                data: data 
+            }));
+            emit TokenBurn(burnList.length - 1, msg.sender, burnValue, data);
+        } else {
+            require(value > WITHDRAW_FEE);  //avoid spamming
+            super._burn(msg.sender, value);
+            if (WITHDRAW_FEE > 0) {
+                super._mint(owners[0], WITHDRAW_FEE);
+            }
+            uint256 burnValue = value.sub(WITHDRAW_FEE);
+            burnList.push(TokenBurnData({
+                value: burnValue,
+                burner: msg.sender,
+                data: data 
+            }));
+            emit TokenBurn(burnList.length - 1, msg.sender, burnValue, data);
         }
-        uint256 burnValue = value.sub(WITHDRAW_FEE);
-        burnList.push(TokenBurnData({
-            value: burnValue,
-            burner: msg.sender,
-            data: data 
-        }));
-        TokenBurn(burnList.length - 1, msg.sender, burnValue, data);
     }
 
     /// @dev Allows anyone to execute a confirmed transaction.
@@ -575,13 +616,13 @@ contract TomoBridgeWrapToken is TRC21 {
                 if (DEPOSIT_FEE > 0) {
                     super._mint(issuer(), DEPOSIT_FEE);
                 }
-                Execution(transactionId);
+                emit Execution(transactionId);
             } else {
                 //transaction that alters the owners list
                 if (txn.destination.call.value(txn.value)(txn.data))
-                    Execution(transactionId);
+                    emit Execution(transactionId);
                 else {
-                    ExecutionFailure(transactionId);
+                    emit ExecutionFailure(transactionId);
                     txn.executed = false;
                 }
             }
@@ -626,7 +667,7 @@ contract TomoBridgeWrapToken is TRC21 {
             executed: false
         });
         transactionCount += 1;
-        Submission(transactionId);
+        emit Submission(transactionId);
     }
 
     /*
@@ -728,5 +769,4 @@ contract TomoBridgeWrapToken is TRC21 {
         _value = burnList[burnId].value;
         _data = burnList[burnId].data;
     }
-
 }
