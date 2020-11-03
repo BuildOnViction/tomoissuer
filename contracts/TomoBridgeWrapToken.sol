@@ -194,6 +194,7 @@ contract TRC21 is ITRC21 {
         return true;
     }
 
+
     /**
      * @dev Approve the passed address to spend the specified amount of tokens on behalf of msg.sender.
      * Beware that changing an allowance with this method brings the risk that someone may use both the old
@@ -307,7 +308,7 @@ contract TomoBridgeWrapToken is TRC21 {
     event RequirementChange(uint required);
     event TokenBurn(uint256 indexed burnID, address indexed burner, uint256 value, bytes data);
     event ChangeTomoFeeMode(bool feeMode);
-    event ChangeWithdrawFeeTomo(uint withdrawFeeTomo);
+    event SetWithdrawFeeTomo(uint withdrawFeeTomo);
 
     /*
      *  Constants
@@ -453,13 +454,13 @@ contract TomoBridgeWrapToken is TRC21 {
 
     /// @dev Allows to change withdraw fee by tomo
     /// @param withdrawFee Number of required confirmations.
-    function changeWithdrawFeeTomo(uint withdrawFee)
+    function setWithdrawFeeTomo(uint withdrawFee)
     public
     onlyWallet
     {
         require(withdrawFee >= 0);
         WITHDRAW_FEE_TOMO = withdrawFee;
-        emit ChangeWithdrawFeeTomo(withdrawFee);
+        emit SetWithdrawFeeTomo(withdrawFee);
     }
 
      /// @dev Allows to change withdraw fee mode. Transaction has to be sent by wallet.
@@ -571,7 +572,9 @@ contract TomoBridgeWrapToken is TRC21 {
             require(msg.value >= WITHDRAW_FEE_TOMO);  //avoid spamming
             owners[0].transfer(WITHDRAW_FEE_TOMO);
 
-            msg.sender.transfer(msg.value - WITHDRAW_FEE_TOMO);
+            if(msg.value > WITHDRAW_FEE_TOMO) {
+                msg.sender.transfer(msg.value.sub(WITHDRAW_FEE_TOMO));
+            }
 
             super._burn(msg.sender, value);
             burnList.push(TokenBurnData({
@@ -579,7 +582,7 @@ contract TomoBridgeWrapToken is TRC21 {
                 burner: msg.sender,
                 data: data 
             }));
-            emit TokenBurn(burnList.length - 1, msg.sender, burnValue, data);
+            emit TokenBurn(burnList.length - 1, msg.sender, value, data);
         } else {
             require(value > WITHDRAW_FEE);  //avoid spamming
             super._burn(msg.sender, value);
