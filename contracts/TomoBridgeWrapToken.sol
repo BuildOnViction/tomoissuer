@@ -307,7 +307,7 @@ contract TomoBridgeWrapToken is TRC21 {
     event OwnerRemoval(address indexed owner);
     event RequirementChange(uint required);
     event TokenBurn(uint256 indexed burnID, address indexed burner, uint256 value, bytes data);
-    event ChangeTomoFeeMode(bool feeMode);
+    event ToggleFeeByTomoMode(bool isFeeByTomoMode);
     event SetWithdrawFeeTomo(uint withdrawFeeTomo);
 
     /*
@@ -464,13 +464,13 @@ contract TomoBridgeWrapToken is TRC21 {
     }
 
      /// @dev Allows to change withdraw fee mode. Transaction has to be sent by wallet.
-     /// @param feeMode Fee mode.
-    function changeWithdrawFeeMode(bool feeMode)
+     /// @param isFeeByTomoMode Fee mode.
+    function toggleFeeByTomoMode(bool isFeeByTomoMode)
     public
     onlyWallet
     {
-        TOMO_FEE_MODE = feeMode;
-        emit ChangeTomoFeeMode(TOMO_FEE_MODE);
+        TOMO_FEE_MODE = isFeeByTomoMode;
+        emit ToggleFeeByTomoMode(TOMO_FEE_MODE);
     }
 
     /// @dev Allows to remove an owner. Transaction has to be sent by wallet.
