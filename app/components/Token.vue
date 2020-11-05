@@ -251,8 +251,7 @@
                                         </div>
                                     </template> -->
                                     <template
-                                        slot="txn_hash"
-                                        slot-scope="data">
+                                        #cell(txn_hash)="data">
                                         <a
                                             :href="config.tomoscanUrl + '/txs/' +
                                             data.value.toLowerCase()"
@@ -262,13 +261,11 @@
                                         </a>
                                     </template>
                                     <template
-                                        slot="age"
-                                        slot-scope="data">
+                                        #cell(age)="data">
                                         {{ data.item.age }}
                                     </template>
                                     <template
-                                        slot="from"
-                                        slot-scope="data">
+                                        #cell(from)="data">
                                         <a
                                             :href="config.tomoscanUrl + '/address/' + data.value"
                                             :title="data.value"
@@ -281,8 +278,7 @@
                                         <i class="tomoissuer-icon-next-right"/>
                                     </template>
                                     <template
-                                        slot="to"
-                                        slot-scope="data">
+                                        #cell(to)="data">
                                         <a
                                             :href="config.tomoscanUrl + '/address/' + data.value"
                                             :title="data.value"
@@ -329,8 +325,7 @@
                                         </div>
                                     </template> -->
                                     <template
-                                        slot="address"
-                                        slot-scope="data">
+                                        #cell(address)="data">
                                         <a
                                             :href="config.tomoscanUrl + '/address/' + data.value"
                                             :title="data.value"

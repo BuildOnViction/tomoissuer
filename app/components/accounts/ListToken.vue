@@ -18,8 +18,7 @@
                             :busy="loading"
                             stacked="lg">
                             <template
-                                slot="logo"
-                                slot-scope="data">
+                                #cell(logo)="data">
                                 <div
                                     :class="'token-logo' + (data.item.logo ? '' : ' set-logo')">
                                     <div
@@ -35,8 +34,7 @@
                                 slot="table-busy"
                                 class="loading"/>
                             <template
-                                slot="token"
-                                slot-scope="data">
+                                #cell(token)="data">
                                 <router-link
                                     :to="`token/${data.item.hash}`"
                                     :title="data.item.hash">
@@ -44,33 +42,27 @@
                                 </router-link>
                             </template>
                             <template
-                                slot="price"
-                                slot-scope="data">
+                                #cell(price)="data">
                                 {{ data.item.price || '---' }}
                             </template>
                             <template
-                                slot="totalSupply"
-                                slot-scope="data">
+                                #cell(totalSupply)="data">
                                 {{ formatNumber(data.value) }}
                             </template>
                             <template
-                                slot="volume"
-                                slot-scope="data">
+                                #cell(volume)="data">
                                 {{ data.item.volume || '---' }}
                             </template>
                             <template
-                                slot="ownerBalance"
-                                slot-scope="data">
+                                #cell(ownerBalance)="data">
                                 {{ data.item.ownerBalance || '---' }}
                             </template>
                             <template
-                                slot="holders"
-                                slot-scope="data">
+                                #cell(holders)="data">
                                 {{ data.item.holders || '---' }}
                             </template>
                             <template
-                                slot="transferToken"
-                                slot-scope="data">
+                                #cell(transferToken)="">
                                 <b-link
                                     :href="config.tomowalletUrl"
                                     target="_blank">
@@ -78,8 +70,7 @@
                                 </b-link>
                             </template>
                             <template
-                                slot="applytomoz"
-                                slot-scope="data">
+                                #cell(applytomoz)="data">
                                 <b-dropdown
                                     class="tmp-btn-dots"
                                     right
