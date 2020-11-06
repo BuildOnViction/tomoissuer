@@ -1,0 +1,193 @@
+<template>
+    <div class="container container-small">
+        <div class="newtoken">
+            <h2 class="tmp-title-large">Bridge Token Issuance</h2>
+            <b-form
+                class="form-new-token"
+                novalidate
+                @submit.prevent="validate()">
+                <b-form-group
+                    class="mb-4"
+                    label-for="tokenAddress"
+                    label="Token address">
+                    <div class="d-flex">
+                        <b-form-input
+                            v-model="tokenAddress"
+                            type="text"
+                            autocomplete="off"
+                            placeholder="Search token"/>
+                        <b-button
+                            class="tmp-btn-search"
+                            @click="searchToken"><b-icon icon="search" /></b-button>
+                    </div>
+                </b-form-group>
+                <div
+                    v-if="foundToken">
+                    <div class="box-info-token">
+                        <div class="form-group mb-3">
+                            <label>Token name</label><span>{{ tokenName }}</span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Symbol</label><span>{{ tokenSymbol }}</span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Decimals</label><span>{{ decimals }}</span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Est. Issuance Fee</label><span>~{{ issueFee }} TOMO</span>
+                        </div>
+                    </div>
+                    <div class="btn-box">
+                        <b-button
+                            class="tmp-btn-blue"
+                            type="submit">Save & Review</b-button>
+                    </div>
+                    <div
+                        v-if="!isEnoughTOMO"
+                        class="text-center text-danger">
+                        <span>
+                            Your balance is not enough to pay the inssuance fee</span>
+                    </div>
+                </div>
+            </b-form>
+        </div>
+    </div>
+</template>
+
+<script>
+import store from 'store'
+import axios from 'axios'
+import urljoin from 'url-join'
+import { validationMixin } from 'vuelidate'
+import {
+    required
+} from 'vuelidate/lib/validators'
+import BigNumber from 'bignumber.js'
+import Web3 from 'web3'
+
+export default {
+    name: 'App',
+    components: { },
+    mixins: [validationMixin],
+    data () {
+        return {
+            tokenName: '',
+            tokenSymbol: '',
+            decimals: 18,
+            totalSupply: '',
+            account: '',
+            type: 'trc21',
+            balance: 0,
+            txFee: 0,
+            gasPrice: 10000000000000,
+            isEnoughTOMO: true,
+            issueFee: '',
+            tokenAddress: '',
+            foundToken: false,
+            depositFee: ''
+        }
+    },
+    validations: {
+        tokenAddress: { required }
+    },
+    computed: { },
+    watch : { },
+    async updated () {
+    },
+    destroyed () { },
+    created: async function () {
+        this.account = store.get('address') ||
+        this.$store.state.address || await this.getAccount()
+        if (!this.account) {
+            this.$router.push({ path: '/login' })
+        }
+        await this.getBalance()
+        this.config = store.get('configIssuer') || await this.appConfig()
+        const chainConfig = this.config.blockchain
+        this.txFee = new BigNumber(chainConfig.gas).multipliedBy(chainConfig.deployPrice).div(10 ** 18)
+        if (this.balance.isLessThan(this.txFee)) {
+            this.isEnoughTOMO = false
+        }
+    },
+    methods: {
+        async getBalance () {
+            const web3 = this.web3
+            const result = await web3.eth.getBalance(this.account)
+            this.balance = new BigNumber(result).div(10 ** 18)
+        },
+        validate: function () {
+            this.$v.$touch()
+            if (!this.$v.$invalid && this.isEnoughTOMO) {
+                this.confirm()
+            }
+        },
+        confirm () {
+            this.$router.push({ name: 'ConfirmBridgeToken',
+                params: {
+                    name: this.tokenName,
+                    symbol: this.tokenSymbol,
+                    decimals: this.decimals,
+                    type: this.type,
+                    totalSupply: this.totalSupply,
+                    issueFee: this.issueFee
+                }
+            })
+        },
+        async searchToken () {
+            try {
+                this.foundToken = false
+                const config = this.config
+                const { data } = await axios.get(
+                    urljoin(config.etherscanAPI,
+                        `api?module=contract&action=getabi&address=${this.tokenAddress}`)
+                )
+                if (data.status === '1') {
+                    this.$store.state.contract = data.result
+                    const ethWeb3 = new Web3(new Web3.providers.HttpProvider(config.etherChain.rpc))
+                    const contract = new ethWeb3.eth.Contract(
+                        JSON.parse(data.result),
+                        this.tokenAddress
+                    )
+                    contract.methods.name.call().then(name => {
+                        this.tokenName = name
+                    }).catch(error => error)
+                    contract.methods.symbol.call().then(symbol => {
+                        this.tokenSymbol = symbol
+                    }).catch(error => error)
+                    contract.methods.decimals.call().then(decimals => {
+                        this.decimals = decimals
+                    }).catch(error => error)
+
+                    const contractBridge = new this.web3.eth.Contract(
+                        this.TomoBridgeWrapToken.abi, null, { data: this.TomoBridgeWrapToken.bytecode })
+                    contractBridge.deploy({
+                        arguments: [
+                            config.blockchain.multisignWallets,
+                            config.blockchain.defaultRequired,
+                            'BridgeToken', 'BTK', 18, 0, 0, 0,
+                            (new BigNumber(5).multipliedBy(10 ** 18).toString(10))
+                        ]
+                    }).estimateGas().then((gas) => {
+                        this.issueFee = new BigNumber(gas * config.blockchain.deployPrice)
+                            .div(10 ** 18).toNumber()
+                        this.issueFee = this.issueFee.toFixed(4)
+                    })
+                        .catch(error => error)
+                    this.foundToken = true
+                } else {
+                    this.$toasted.show(
+                        data.result,
+                        { type: 'error' }
+                    )
+                }
+            } catch (error) {
+                console.log(error)
+                this.$toasted.show(
+                    'Cannot find token. Make sure token address is corrected',
+                    { type: 'error' }
+                )
+            }
+        }
+    }
+}
+</script>

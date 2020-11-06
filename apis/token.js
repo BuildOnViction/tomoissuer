@@ -85,10 +85,25 @@ router.post('/createToken', [
     })
 })
 
+router.get('/getBridgeTokenContract', [
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return next(errors.array())
+    }
+    try {
+        const p = path.resolve(__dirname, '../contracts', 'TomoBridgeWrapToken.sol')
+        const contractCode = fs.readFileSync(p, 'UTF-8')
+        return res.json({ contractCode })
+    } catch (error) {
+        return next(error)
+    }
+})
+
 router.post('/compileContract', [
     check('sourceCode').exists().withMessage("'sourceCode' is required"),
-    check('estimate').optional().isBoolean().withMessage("'estimate' mus be true of false"),
-    check('mintable').optional().isBoolean().withMessage("'mintable' mus be true of false")
+    check('estimate').optional().isBoolean().withMessage("'estimate' must be true or false"),
+    check('mintable').optional().isBoolean().withMessage("'mintable' must be true or false")
 ], async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -114,6 +129,35 @@ router.post('/compileContract', [
         } else {
             contract = compiledContract.contracts['MyTRC21'] || compiledContract.contracts[':' + 'MyTRC21']
         }
+        bytecode = contract.bytecode
+        abi = JSON.parse(contract.interface)
+
+        return res.json({
+            bytecode,
+            abi
+        })
+    } catch (error) {
+        return next(error)
+    }
+})
+
+router.get('/compileBridgeTokenContract', [
+], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return next(errors.array())
+    }
+    try {
+        let sourceCode
+        let bytecode
+        let abi
+        const p = path.resolve(__dirname, '../contracts', 'TomoBridgeWrapToken.sol')
+        sourceCode = fs.readFileSync(p, 'UTF-8')
+        let contract
+        const compiledContract = solc.compile(sourceCode, 1)
+
+        contract = compiledContract.contracts['TomoBridgeWrapToken'] ||
+            compiledContract.contracts[':' + 'TomoBridgeWrapToken']
         bytecode = contract.bytecode
         abi = JSON.parse(contract.interface)
 

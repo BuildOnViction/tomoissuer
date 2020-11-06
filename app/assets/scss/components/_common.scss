@@ -134,6 +134,9 @@
             @include fsz(14);
             font-weight: 501;
         }
+        @include media-breakpoint-down(sm) {
+            width: 50%;
+        }
     }
 }
 

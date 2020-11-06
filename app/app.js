@@ -23,13 +23,16 @@ import BurnTokenConfirm from './components/burn/BurnTokenConfirm.vue'
 import TomoXCondition from './components/applytomox/TomoXCondition.vue'
 import TomoXConfirm from './components/applytomox/TomoXConfirm.vue'
 import ViewToken from './components/ViewToken.vue'
+import CreateBridgeToken from './components/applying/bridgeToken/CreateBridgeToken.vue'
+import ConfirmBridgeToken from './components/applying/bridgeToken/ConfirmBridgeToken.vue'
 import './utils/codemirror'
 
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
 import TomoXListingAritfacts from '../build/contracts/TOMOXListing.json'
+import TomoBridgeWrapTokenAbi from '../build/contracts/TomoBridgeWrapToken'
 
 import Web3 from 'web3'
-import BootstrapVue from 'bootstrap-vue'
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import TrezorConnect from 'trezor-connect'
@@ -46,6 +49,7 @@ import * as ethUtils from 'ethereumjs-util'
 // import * as contract from 'truffle-contract'
 
 Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
 Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.use(Toasted, {
@@ -67,13 +71,12 @@ Vue.use(VueCodeMirror, {
         tabSize: 4,
         styleActiveLine: true,
         lineNumbers: true,
-        lineWrapping: false,
+        lineWrapping: true,
         foldGutter: true,
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
         mode: 'text/javascript',
         matchBrackets: true,
         openDialog:true,
-        scrollbarStyle: 'simple',
         theme: 'eclipse'
     }
 })
@@ -99,6 +102,7 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
         const config = await getConfig()
         localStorage.set('configIssuer', config)
         const chainConfig = config.blockchain
+        Vue.prototype.TomoBridgeWrapToken = TomoBridgeWrapTokenAbi
         if (chainConfig.issuerAddress) {
             Vue.prototype.TRC21Issuer = new wjs.eth.Contract(
                 TRC21IssuerAritfacts.abi,
@@ -537,6 +541,8 @@ const router = new VueRouter({
         { path: '/login', component: Login },
         { path: '/confirmToken', component: ConfirmToken, name: 'ConfirmToken' },
         { path: '/createToken', component: CreateToken },
+        { path: '/confirmBridgeToken', component: ConfirmBridgeToken, name: 'ConfirmBridgeToken' },
+        { path: '/createBridgeToken', component: CreateBridgeToken },
         { path: '/verify', component: VerifyContract },
         { path: '/token/:address', component: TokenDetail },
         { path: '/donateTxFee', component: DonateToken },

@@ -6,6 +6,7 @@ const router = express.Router()
 router.get('/', async function (req, res, next) {
     let appConfig = {}
     appConfig.blockchain = config.get('blockchain')
+    appConfig.etherChain = config.get('etherChain')
     let tomoscanUrl = config.get('tomoscanUrl')
     if (tomoscanUrl[tomoscanUrl.length - 1] === '/') {
         tomoscanUrl = tomoscanUrl.substr(0, tomoscanUrl.length - 1)
@@ -28,6 +29,12 @@ router.get('/', async function (req, res, next) {
         tokenListAPI = tokenListAPI.substr(0, tokenListAPI.length - 1)
     }
     appConfig.tokenListAPI = tokenListAPI
+
+    let etherscanAPI = config.get('etherscanAPI')
+    if (etherscanAPI[etherscanAPI.length - 1] === '/') {
+        etherscanAPI = etherscanAPI.substr(0, etherscanAPI.length - 1)
+    }
+    appConfig.etherscanAPI = etherscanAPI
     return res.json(appConfig)
 })
 
