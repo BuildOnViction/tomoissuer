@@ -61,14 +61,14 @@
             &:nth-child(2),
             &:nth-last-child(1),
             &:nth-last-child(2) {
-                a,
+                button,
                 span {
                     @include fsz(26);
                     padding-bottom: 15px;
 
                 }
             }
-            a,
+            button,
             span {
                 background: transparent;
                 border: 0;
@@ -82,14 +82,14 @@
                 padding: 10px;
             }
             &.disabled {
-                a,
+                button,
                 span {
                     background: transparent;
                     opacity: .5;
                 }
             }
             &.active {
-                a {
+                button {
                     background: $background-white;
                     color: $color-text-gray;
                     box-shadow: $boxshadow-default;

@@ -274,7 +274,7 @@
                                         </a>
                                     </template>
                                     <template
-                                        slot="icon">
+                                        #cell(icon)="">
                                         <i class="tomoissuer-icon-next-right"/>
                                     </template>
                                     <template
