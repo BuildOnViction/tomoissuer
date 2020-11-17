@@ -37,7 +37,7 @@
                     </tr>
                     <tr>
                         <td>Est. Issuance Fee</td>
-                        <td>{{ txFee }} TOMO</td>
+                        <td>~{{ txFee }} TOMO</td>
                     </tr>
                     <tr>
                         <td >Code review</td>
@@ -147,10 +147,11 @@ export default {
             self.$router.push({ path: '/createToken' })
         } else {
             self.config = store.get('configIssuer') || await self.appConfig()
-            const chainConfig = self.config.blockchain
+            // const chainConfig = self.config.blockchain
             await self.createContract()
             await self.getBalance()
-            self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18)
+            self.estimateFee()
+            // self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18)
         }
     },
     methods: {
@@ -201,14 +202,15 @@ export default {
                     self.loading = false
                     self.$toasted.show('Not enough TOMO', { type: 'error' })
                 } else {
-                    const compiledContract = await axios.post('/api/token/compileContract', {
-                        name: self.tokenName,
-                        sourceCode: self.sourceCode,
-                        mintable: this.mintable
-                    })
+                    // const compiledContract = await axios.post('/api/token/compileContract', {
+                    //     name: self.tokenName,
+                    //     sourceCode: self.sourceCode,
+                    //     mintable: this.mintable
+                    // })
+                    const compiledContract = self.mintable ? self.MyTRC21Mintable : self.MyTRC21
 
                     const contract = new web3.eth.Contract(
-                        compiledContract.data.abi, null, { data: '0x' + compiledContract.data.bytecode })
+                        compiledContract.abi, null, { data: compiledContract.bytecode })
 
                     // deployment
                     switch (self.provider) {
@@ -216,6 +218,15 @@ export default {
                     case 'metamask':
                     case 'tomowallet':
                     case 'pantograph':
+                        const estimateGas = await contract.deploy({
+                            arguments: [
+                                self.tokenName,
+                                self.tokenSymbol,
+                                self.decimals,
+                                (new BigNumber(self.totalSupply).multipliedBy(10 ** self.decimals)).toString(10),
+                                (new BigNumber(self.minFee).multipliedBy(10 ** self.decimals)).toString(10)
+                            ]
+                        }).estimateGas()
                         await contract.deploy({
                             arguments: [
                                 self.tokenName,
@@ -226,7 +237,7 @@ export default {
                             ]
                         }).send({
                             from: self.account,
-                            gas: web3.utils.toHex(chainConfig.gas),
+                            gas: web3.utils.toHex(estimateGas),
                             gasPrice: web3.utils.toHex(chainConfig.deployPrice)
                         })
                             .on('transactionHash', async (txHash) => {
@@ -307,6 +318,26 @@ export default {
                 self.$toasted.show(
                     error.message ? error.message : error, { type : 'error' }
                 )
+            }
+        },
+        async estimateFee () {
+            const web3 = this.web3
+            const chainConfig = this.config.blockchain
+            if (this.account && web3) {
+                const contractAbi = this.MyTRC21Mintable
+                const contract = new web3.eth.Contract(
+                    contractAbi.abi, null, { data: contractAbi.bytecode })
+                const estimatedAmount = await contract.deploy({
+                    arguments: [
+                        this.tokenName,
+                        this.tokenSymbol,
+                        this.decimals,
+                        (new BigNumber(this.totalSupply).multipliedBy(10 ** 18)).toString(10),
+                        (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }).estimateGas()
+                this.txFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
+                    .div(10 ** 18).toNumber()
             }
         }
     }

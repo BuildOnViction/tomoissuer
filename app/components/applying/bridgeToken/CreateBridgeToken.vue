@@ -103,11 +103,11 @@ export default {
         }
         await this.getBalance()
         this.config = store.get('configIssuer') || await this.appConfig()
-        const chainConfig = this.config.blockchain
-        this.txFee = new BigNumber(chainConfig.gas).multipliedBy(chainConfig.deployPrice).div(10 ** 18)
-        if (this.balance.isLessThan(this.txFee)) {
-            this.isEnoughTOMO = false
-        }
+        // const chainConfig = this.config.blockchain
+        // this.txFee = new BigNumber(chainConfig.gas).multipliedBy(chainConfig.deployPrice).div(10 ** 18)
+        // if (this.balance.isLessThan(this.txFee)) {
+        //     this.isEnoughTOMO = false
+        // }
     },
     methods: {
         async getBalance () {
@@ -170,6 +170,9 @@ export default {
                     }).estimateGas().then((gas) => {
                         this.issueFee = new BigNumber(gas * config.blockchain.deployPrice)
                             .div(10 ** 18).toNumber()
+                        if (this.balance.isLessThan(this.issueFee)) {
+                            this.isEnoughTOMO = false
+                        }
                         this.issueFee = this.issueFee.toFixed(4)
                     })
                         .catch(error => error)
