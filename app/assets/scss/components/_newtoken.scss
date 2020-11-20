@@ -32,3 +32,24 @@
         }
     }
 }
+
+.box-info-token {
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    .form-group {
+        display: inline-block;
+        label {
+            display: block;
+            font-weight: bold;
+        }
+    }
+    @media screen and (max-width: 767px) {
+        display: block;
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            text-align: left;
+        }
+    }
+}

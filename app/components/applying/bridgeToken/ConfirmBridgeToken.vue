@@ -2,7 +2,7 @@
     <div class="container container-small flex-content-center">
         <div class="confirm-table tomo-body-fullw-issue issue-confirm">
             <div class="info-header">
-                <h2 class="tmp-title-large m-0">Token Issuance Review</h2>
+                <h2 class="tmp-title-large m-0">Bridge Token Issuance Review</h2>
                 <p class="text-center mt-5"><i class="tomoissuer-icon-startup"/></p>
                 <div class="text-center mb-5">
                     <strong>{{ `${formatNumber(totalSupply)} ${tokenSymbol}` }}</strong>
@@ -32,12 +32,8 @@
                         <td>{{ type.toUpperCase() }}</td>
                     </tr>
                     <tr>
-                        <td>Reissuable</td>
-                        <td>{{ mintable ? 'Yes' : 'No' }}</td>
-                    </tr>
-                    <tr>
                         <td>Est. Issuance Fee</td>
-                        <td>~{{ txFee }} TOMO</td>
+                        <td>~{{ issueFee }} TOMO</td>
                     </tr>
                     <tr>
                         <td >Code review</td>
@@ -57,7 +53,7 @@
             <div class="btn-box">
                 <b-button
                     class="tmp-btn-boder-blue btn-min"
-                    to="createToken">
+                    to="createBridgeToken">
                     Back
                 </b-button>
                 <b-button
@@ -118,9 +114,9 @@ export default {
             tokenName: (this.$route.params.name || '').trim(),
             tokenSymbol: (this.$route.params.symbol || '').trim(),
             decimals: this.$route.params.decimals || '',
+            issueFee: this.$route.params.issueFee || '',
             minFee: 0,
-            totalSupply: (this.$route.params.totalSupply || '').replace(/,/g, ''),
-            mintable: this.$route.params.mintable,
+            totalSupply: 0,
             type: this.$route.params.type || '',
             sourceCode: 'Generating Contract...',
             transactionHash: '',
@@ -129,9 +125,8 @@ export default {
             provider: this.NetworkProvider,
             loading: false,
             config: {},
-            gasPrice: 10000000000000,
-            balance: 0,
-            txFee: 0
+            gasPrice: '',
+            balance: 0
         }
     },
     async updated () {},
@@ -144,14 +139,11 @@ export default {
             self.$router.push({ path: '/login' })
         }
         if (!self.tokenName || !self.tokenSymbol) {
-            self.$router.push({ path: '/createToken' })
+            self.$router.push({ path: '/createBridgeToken' })
         } else {
             self.config = store.get('configIssuer') || await self.appConfig()
-            // const chainConfig = self.config.blockchain
             await self.createContract()
             await self.getBalance()
-            self.estimateFee()
-            // self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18)
         }
     },
     methods: {
@@ -168,17 +160,8 @@ export default {
         async createContract () {
             const self = this
             try {
-                const tokenContract = await axios.post(
-                    '/api/token/createToken',
-                    {
-                        name: self.tokenName,
-                        symbol: self.tokenSymbol,
-                        decimals: self.decimals,
-                        totalSupply: self.totalSupply,
-                        minFee: self.minFee,
-                        type: self.type,
-                        mintable: this.mintable
-                    }
+                const tokenContract = await axios.get(
+                    '/api/token/getBridgeTokenContract'
                 )
                 if (tokenContract && tokenContract.data) {
                     // token source code
@@ -198,42 +181,46 @@ export default {
                 const web3 = self.web3
                 self.loading = true
                 self.account = await self.getAccount()
-                if (self.balance.isLessThan(self.txFee)) {
+                if (self.balance.isLessThan(self.issueFee)) {
                     self.loading = false
                     self.$toasted.show('Not enough TOMO', { type: 'error' })
                 } else {
-                    // const compiledContract = await axios.post('/api/token/compileContract', {
-                    //     name: self.tokenName,
-                    //     sourceCode: self.sourceCode,
-                    //     mintable: this.mintable
-                    // })
-                    const compiledContract = self.mintable ? self.MyTRC21Mintable : self.MyTRC21
+                    const compiledContract = this.TomoBridgeWrapToken
 
                     const contract = new web3.eth.Contract(
                         compiledContract.abi, null, { data: compiledContract.bytecode })
 
                     // deployment
+                    const estimateGas = await contract.deploy({
+                        arguments: [
+                            chainConfig.multisignWallets,
+                            chainConfig.defaultRequired,
+                            self.tokenName,
+                            self.tokenSymbol,
+                            self.decimals,
+                            self.totalSupply,
+                            self.minFee,
+                            0,
+                            0
+                        ]
+                    }).estimateGas()
                     switch (self.provider) {
                     case 'custom':
                     case 'metamask':
                     case 'tomowallet':
                     case 'pantograph':
-                        const estimateGas = await contract.deploy({
-                            arguments: [
-                                self.tokenName,
-                                self.tokenSymbol,
-                                self.decimals,
-                                (new BigNumber(self.totalSupply).multipliedBy(10 ** self.decimals)).toString(10),
-                                (new BigNumber(self.minFee).multipliedBy(10 ** self.decimals)).toString(10)
-                            ]
-                        }).estimateGas()
+
                         await contract.deploy({
                             arguments: [
+                                chainConfig.multisignWallets,
+                                chainConfig.defaultRequired,
                                 self.tokenName,
                                 self.tokenSymbol,
                                 self.decimals,
-                                (new BigNumber(self.totalSupply).multipliedBy(10 ** self.decimals)).toString(10),
-                                (new BigNumber(self.minFee).multipliedBy(10 ** self.decimals)).toString(10)
+                                0,
+                                0,
+                                0,
+                                0
                             ]
                         }).send({
                             from: self.account,
@@ -260,11 +247,15 @@ export default {
                     case 'trezor':
                         let deploy = await contract.deploy({
                             arguments: [
+                                chainConfig.multisignWallets,
+                                chainConfig.defaultRequired, // required
                                 self.tokenName,
                                 self.tokenSymbol,
                                 self.decimals,
-                                (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
-                                (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
+                                0, // capacity
+                                0, // minFee
+                                0, // depositFee
+                                0 // withdrawFee
                             ]
                         }).encodeABI()
 
@@ -276,9 +267,9 @@ export default {
                         let nonce = await web3.eth.getTransactionCount(self.account)
                         const dataTx = {
                             from: self.account,
-                            gas: web3.utils.toHex(chainConfig.gas),
+                            gas: web3.utils.toHex(estimateGas),
                             gasPrice: web3.utils.toHex(chainConfig.deployPrice),
-                            gasLimit: web3.utils.toHex(chainConfig.gas),
+                            gasLimit: web3.utils.toHex(estimateGas),
                             value: web3.utils.toHex(0),
                             chainId: chainConfig.networkId
                         }
@@ -318,26 +309,6 @@ export default {
                 self.$toasted.show(
                     error.message ? error.message : error, { type : 'error' }
                 )
-            }
-        },
-        async estimateFee () {
-            const web3 = this.web3
-            const chainConfig = this.config.blockchain
-            if (this.account && web3) {
-                const contractAbi = this.MyTRC21Mintable
-                const contract = new web3.eth.Contract(
-                    contractAbi.abi, null, { data: contractAbi.bytecode })
-                const estimatedAmount = await contract.deploy({
-                    arguments: [
-                        this.tokenName,
-                        this.tokenSymbol,
-                        this.decimals,
-                        (new BigNumber(this.totalSupply).multipliedBy(10 ** 18)).toString(10),
-                        (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
-                    ]
-                }).estimateGas()
-                this.txFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
-                    .div(10 ** 18).toNumber()
             }
         }
     }

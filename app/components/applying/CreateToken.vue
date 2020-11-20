@@ -208,7 +208,7 @@
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group flex-box mb-4">
-                    <label>Est. Issuance Fee</label><span>{{ txFee }} TOMO</span>
+                    <label>Est. Issuance Fee</label><span>~{{ txFee }} TOMO</span>
                 </div>
                 <div class="btn-box">
                     <b-button
@@ -228,7 +228,6 @@
 
 <script>
 import store from 'store'
-import axios from 'axios'
 import { validationMixin } from 'vuelidate'
 import {
     required,
@@ -302,12 +301,7 @@ export default {
         }
         await this.getBalance()
         this.config = store.get('configIssuer') || await this.appConfig()
-        const chainConfig = this.config.blockchain
-        this.txFee = new BigNumber(chainConfig.gas).multipliedBy(chainConfig.deployPrice).div(10 ** 18)
-        if (this.balance.isLessThan(this.txFee)) {
-            this.isEnoughTOMO = false
-        }
-        // this.estimateGas()
+        this.estimateGas()
     },
     methods: {
         async getBalance () {
@@ -329,7 +323,7 @@ export default {
                     decimals: this.decimals,
                     type: this.type,
                     totalSupply: this.totalSupply,
-                    // issueFee: this.issueFee,
+                    issueFee: this.issueFee,
                     estimatedAmount: this.estimatedAmount,
                     mintable: this.mintable
                 }
@@ -373,33 +367,51 @@ export default {
                 this.warningDecimals = ' input-warn'
             }
         },
-        estimateGas () {
+        async estimateGas () {
             const web3 = this.web3
             const chainConfig = this.config.blockchain
             if (this.account && web3) {
-                axios.post('/api/token/compileContract', {
-                    sourceCode: '',
-                    estimate: true,
-                    mintable: false
-                }).then(async response => {
-                    const contract = new web3.eth.Contract(
-                        response.data.abi, null, { data: '0x' + response.data.bytecode })
-                    const estimatedAmount = await contract.deploy({
-                        arguments: [
-                            'example',
-                            'example',
-                            18,
-                            (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
-                            (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
-                        ]
-                    }).estimateGas()
-                    this.issueFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
-                        .div(10 ** 18).toNumber()
-                    this.issueFee = Math.round(this.issueFee)
-                }).catch(error => {
-                    console.log(error)
-                    this.$toasted.show(error, { type: 'error' })
-                })
+                const contractAbi = this.MyTRC21Mintable
+                const contract = new web3.eth.Contract(
+                    contractAbi.abi, null, { data: contractAbi.bytecode })
+                const estimatedAmount = await contract.deploy({
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
+                        (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }).estimateGas()
+                this.txFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
+                    .div(10 ** 18).toNumber()
+                if (this.balance.isLessThan(this.txFee)) {
+                    this.isEnoughTOMO = false
+                }
+                console.log(this.txFee)
+                // axios.post('/api/token/compileContract', {
+                //     sourceCode: '',
+                //     estimate: true,
+                //     mintable: false
+                // }).then(async response => {
+                //     const contract = new web3.eth.Contract(
+                //         response.data.abi, null, { data: '0x' + response.data.bytecode })
+                //     const estimatedAmount = await contract.deploy({
+                //         arguments: [
+                //             'example',
+                //             'example',
+                //             18,
+                //             (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
+                //             (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
+                //         ]
+                //     }).estimateGas()
+                //     this.issueFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
+                //         .div(10 ** 18).toNumber()
+                //     this.issueFee = Math.round(this.issueFee)
+                // }).catch(error => {
+                //     console.log(error)
+                //     this.$toasted.show(error, { type: 'error' })
+                // })
             }
         },
         editDecimals () {

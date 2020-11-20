@@ -26,6 +26,16 @@
                             <b-nav-item
                                 v-if="isTomonet"
                                 class="tmp-btn-blue"
+                                to="/createBridgeToken">
+                                <i
+                                    class="tomoissuer-icon-plus text-center"/>
+                                <div
+                                    class="text-center issue-text"
+                                    style="margin-right:11px">Issue bridge token</div>
+                            </b-nav-item>
+                            <b-nav-item
+                                v-if="isTomonet"
+                                class="tmp-btn-blue"
                                 to="/createToken">
                                 <i
                                     class="tomoissuer-icon-plus text-center"/>

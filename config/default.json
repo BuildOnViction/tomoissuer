@@ -7,7 +7,8 @@
         "level": "debug"
     },
     "cors": [
-        "https://swagger.tomochain.com"
+        "https://swagger.tomochain.com",
+        "http://api.etherscan.io"
     ],
     "tomoscanUrl": "http://localhost:3003",
     "tomoscanAPI": "https://scan.tomochain.com",
@@ -15,6 +16,11 @@
     "tomorelayerAPI": "https://relayer.testnet.tomochain.com",
     "relayerAuthorityKey": "",
     "tokenListAPI": "https://raw.githubusercontent.com/tomochain/tokens/master/tokens",
+    "etherscanAPI": "http://api.etherscan.io/",
+    "etherChain": {
+        "rpc": "https://api.infura.io/v1/jsonrpc/mainnet",
+        "networkId": 1
+    },
     "blockchain": {
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",
@@ -22,7 +28,9 @@
         "gas": 2000000,
         "deployPrice": 10000000000000,
         "issuerAddress": "",
-        "tomoXAddress": ""
+        "tomoXAddress": "",
+        "multisignWallets": [],
+        "defaultRequired": 2
     },
     "db": {
         "uri": "mongodb://mongodb:27017/tomoissuer"
