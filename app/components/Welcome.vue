@@ -22,6 +22,11 @@
                 <div class="btn-box">
                     <b-button
                         class="tmp-btn-blue"
+                        @click="redirectTo('createBridgeToken')">
+                        Issue bridge token
+                    </b-button>
+                    <b-button
+                        class="tmp-btn-blue"
                         @click="redirectTo('createToken')">
                         Issue new token
                     </b-button>

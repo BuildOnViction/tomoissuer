@@ -16,7 +16,7 @@ $font-roboto: 'Roboto', sans-serif;
   font-display: block;
 }
 
-[class^="tomoissuer-"], [class*=" tomoissuer-"] {
+[class^="tm-"], [class*=" tm-"] {
   /* use !important to prevent issues with browser extensions that change ../fonts/tomoissuer */
   font-family: 'tomoissuer' !important;
   speak: none;
@@ -31,128 +31,139 @@ $font-roboto: 'Roboto', sans-serif;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.tomoissuer-icon-tomoz-new-white .path1:before {
-  content: "\e927";
-  color: rgb(255, 255, 255);
-}
-.tomoissuer-icon-tomoz-new-white .path2:before {
-  content: "\e928";
-  margin-left: -1.3505859375em;
-  color: rgb(0, 232, 181);
-}
-.tomoissuer-icon-tomox-new .path1:before {
-  content: "\e922";
-  color: rgb(36, 40, 40);
-}
-.tomoissuer-icon-tomox-new .path2:before {
-  content: "\e923";
-  margin-left: -1.25em;
-  color: rgb(36, 40, 40);
-}
-.tomoissuer-icon-tomox-new .path3:before {
-  content: "\e924";
-  margin-left: -1.25em;
-  color: rgb(0, 232, 181);
-}
-.tomoissuer-icon-tomoz-new .path1:before {
-  content: "\e925";
-  color: rgb(36, 40, 40);
-}
-.tomoissuer-icon-tomoz-new .path2:before {
-  content: "\e926";
-  margin-left: -1.3505859375em;
-  color: rgb(0, 232, 181);
-}
-.tomoissuer-icon-angle-double-left:before {
+.tm-icon-angle-double-left:before {
   content: "\e900";
 }
-.tomoissuer-icon-angle-double-right:before {
+.tm-icon-angle-double-right:before {
   content: "\e901";
 }
-.tomoissuer-icon-angle-down:before {
+.tm-icon-angle-down:before {
   content: "\e902";
 }
-.tomoissuer-icon-angle-left:before {
+.tm-icon-angle-left:before {
   content: "\e903";
 }
-.tomoissuer-icon-angle-right:before {
+.tm-icon-angle-right:before {
   content: "\e904";
 }
-.tomoissuer-icon-angle-up:before {
+.tm-icon-angle-up:before {
   content: "\e905";
 }
-.tomoissuer-icon-email:before {
+.tm-icon-email:before {
   content: "\e906";
 }
-.tomoissuer-icon-facebook:before {
+.tm-icon-facebook:before {
   content: "\e907";
 }
-.tomoissuer-icon-github:before {
+.tm-icon-github:before {
   content: "\e908";
 }
-.tomoissuer-icon-linkedin:before {
+.tm-icon-linkedin:before {
   content: "\e909";
 }
-.tomoissuer-icon-tomox:before {
+.tm-icon-tomox:before {
   content: "\e90a";
 }
-.tomoissuer-icon-telegram:before {
+.tm-icon-telegram:before {
   content: "\e90b";
 }
-.tomoissuer-icon-tomoz:before {
+.tm-icon-tomoz:before {
   content: "\e90c";
 }
-.tomoissuer-icon-twiter:before {
+.tm-icon-twiter:before {
   content: "\e90d";
 }
-.tomoissuer-icon-wallet:before {
+.tm-icon-wallet:before {
   content: "\e90e";
 }
-.tomoissuer-icon-reddit:before {
+.tm-icon-reddit:before {
   content: "\e90f";
 }
-.tomoissuer-icon-next-right:before {
+.tm-icon-next-right:before {
   content: "\e910";
 }
-.tomoissuer-icon-startup:before {
+.tm-icon-startup:before {
   content: "\e911";
 }
-.tomoissuer-icon-checkmark-outline:before {
+.tm-icon-checkmark-outline:before {
   content: "\e912";
 }
-.tomoissuer-icon-edit-pencil:before {
+.tm-icon-edit-pencil:before {
   content: "\e913";
 }
-.tomoissuer-icon-search:before {
+.tm-icon-search:before {
   content: "\e914";
 }
-.tomoissuer-earth:before {
+.tm-earth:before {
   content: "\e915";
 }
-.tomoissuer-medium:before {
+.tm-medium:before {
   content: "\e916";
 }
-.tomoissuer-icon-burn:before {
+.tm-icon-burn:before {
   content: "\e917";
 }
-.tomoissuer-icon-reissue:before {
+.tm-icon-reissue:before {
   content: "\e918";
 }
-.tomoissuer-three-dots:before {
+.tm-three-dots:before {
   content: "\e919";
 }
-.tomoissuer-icon-cog:before {
+.tm-icon-cog:before {
   content: "\e91a";
 }
-.tomoissuer-icon-info:before {
+.tm-icon-info:before {
   content: "\e91b";
 }
-.tomoissuer-icon-tomox2:before {
+.tm-icon-tomox2:before {
+  content: "\e91c";
+}
+.tm-icon-tomox3:before {
+  content: "\e91d";
+}
+.tm-icon-tomox1:before {
+  content: "\e91e";
+}
+
+.tm-icon-tomoz-new-white .path1:before {
   content: "\e91f";
+  color: #fff;
 }
-.tomoissuer-icon-tomox3:before {
+.tm-icon-tomoz-new-white .path2:before {
   content: "\e920";
+  color: #00e8b5;
+  margin-left: -1.3505859375em;
 }
-.tomoissuer-icon-tomox1:before {
+
+.tm-icon-tomoz-new .path1:before {
   content: "\e921";
+  color: #242828;
+}
+.tm-icon-tomoz-new .path2:before {
+  content: "\e922";
+  color: #00e8b5;
+  margin-left: -1.3505859375em;
+}
+
+.tm-icon-tomox-new .path1:before {
+  content: "\e923";
+  color: #242828;
+}
+.tm-icon-tomox-new .path2:before {
+  content: "\e924";
+  color: #242828;
+  margin-left: -1.2509765625em;
+}
+.tm-icon-tomox-new .path3:before {
+  content: "\e925";
+  color: #00e8b5;
+  margin-left: -1.2509765625em;
+}
+
+.tm-icon-menu:before {
+  content: "\e926";
+}
+
+.tm-add-outline:before {
+  content: "\e927";
 }

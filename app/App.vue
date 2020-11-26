@@ -23,26 +23,14 @@
                         id="nav-collapse"
                         is-nav>
                         <b-navbar-nav class="ml-auto navbar-buttons">
-                            <b-nav-item
+                            <!-- <b-nav-item
                                 v-if="isTomonet"
                                 class="tmp-btn-blue"
-                                to="/createBridgeToken">
-                                <i
-                                    class="tomoissuer-icon-plus text-center"/>
+                                @click="openModal">
                                 <div
-                                    class="text-center issue-text"
-                                    style="margin-right:11px">Issue bridge token</div>
-                            </b-nav-item>
-                            <b-nav-item
-                                v-if="isTomonet"
-                                class="tmp-btn-blue"
-                                to="/createToken">
-                                <i
-                                    class="tomoissuer-icon-plus text-center"/>
-                                <div
-                                    class="text-center issue-text"
-                                    style="margin-right:11px">Issue new token</div>
-                            </b-nav-item>
+                                    class="text-center issue-text">Issue new tokens</div>
+                            </b-nav-item> -->
+
                             <b-nav-item-dropdown
                                 v-if="isTomonet"
                                 class="tmp-btn-transparent tomo-wallet"
@@ -51,7 +39,7 @@
                                 <template
                                     slot="button-content"
                                     class="tmp-btn-transparent">
-                                    <i class="tomoissuer-icon-wallet"/>
+                                    <i class="tm-icon-wallet"/>
                                     {{ truncate(account, 16) }}
                                 </template>
                                 <b-dropdown-text
@@ -59,6 +47,17 @@
                                     <span>Balance:</span>
                                     <strong>{{ balance }} TOMO</strong>
                                 </b-dropdown-text>
+                                <b-dropdown-divider />
+                                <b-dropdown-item
+                                    to="/createToken">
+                                    Issue New Token
+                                    <i class="ml-1 tm-add-outline float-right" />
+                                </b-dropdown-item>
+                                <b-dropdown-item
+                                    to="/createBridgeToken">
+                                    Issue Bridge Token
+                                    <i class="ml-1 tm-add-outline float-right"/>
+                                </b-dropdown-item>
                                 <b-dropdown-divider />
                                 <b-dropdown-item
                                     to="/donateTxFee">
@@ -131,7 +130,7 @@
                                         target="_blank"><i class="tomoissuer-icon-facebook"/></a></li>
                                     <li><a
                                         href="https://twitter.com/TomoChainANN"
-                                        target="_blank"><i class="tomoissuer-icon-twiter"/></a></li>
+                                        target="_blank"><i class="tm-icon-twiter"/></a></li>
                                     <li><a
                                         href="https://t.me/tomochain"
                                         target="_blank"><i class="tomoissuer-icon-telegram"/></a></li>

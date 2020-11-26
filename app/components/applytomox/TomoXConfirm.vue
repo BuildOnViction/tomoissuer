@@ -8,11 +8,11 @@
             class="tomo-body-fullw tomo-apply">
             <div class="info-header text-center">
                 <p>
-                    <span class="tomoissuer-icon-tomox-new">
+                    <span class="tm-icon-tomox-new">
                         <span class="path1"/><span class="path2"/><span class="path3"/>
                     </span>
                 </p>
-                <!-- <p><i class="tomoissuer-icon-tomox-new"/></p> -->
+                <!-- <p><i class="tm-icon-tomox-new"/></p> -->
                 <h2 class="tmp-title-large">Apply to TomoX protocol</h2>
             </div>
             <h6 class="tmp-title-normal weightbold mt-5">Condition</h6>
