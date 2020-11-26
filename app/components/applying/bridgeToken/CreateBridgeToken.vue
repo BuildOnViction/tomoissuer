@@ -2,6 +2,7 @@
     <div class="container container-small">
         <div class="newtoken">
             <h2 class="tmp-title-large">Bridge Token Issuance</h2>
+            <p>Bring your ERC20 token to TomoChain network.</p>
             <b-form
                 class="form-new-token"
                 novalidate
@@ -15,7 +16,7 @@
                             v-model="tokenAddress"
                             type="text"
                             autocomplete="off"
-                            placeholder="Search token"/>
+                            placeholder="Search ERC20 token"/>
                         <b-button
                             class="tmp-btn-search"
                             @click="searchToken"><b-icon icon="search" /></b-button>

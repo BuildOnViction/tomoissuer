@@ -35,7 +35,7 @@
                                     :to="'/tomozcondition/' + address"
                                     class="tmp-btn-violet"
                                     style="width: 270px">
-                                    <span class="tomoissuer-icon-tomoz-new-white mr-1">
+                                    <span class="tm-icon-tomoz-new-white mr-1">
                                         <span class="path1"/><span class="path2"/>
                                     </span>
                                     <!-- <i class="tomoissuer-icon-tomoz mr-1"/> -->
@@ -52,8 +52,7 @@
                                     <template
                                         slot="button-content"
                                         class="tmp-btn-transparent">
-                                        <i class="tomoissuer-icon-cog" />
-                                        <i class="tomoissuer-icon-angle-down" />
+                                        <i class="tm-icon-cog" />
                                     </template>
                                     <b-dropdown-item
                                         v-if="!isAppliedZ && account === contractCreation"
@@ -275,7 +274,7 @@
                                     </template>
                                     <template
                                         #cell(icon)="">
-                                        <i class="tomoissuer-icon-next-right"/>
+                                        <i class="tm-icon-next-right"/>
                                     </template>
                                     <template
                                         #cell(to)="data">

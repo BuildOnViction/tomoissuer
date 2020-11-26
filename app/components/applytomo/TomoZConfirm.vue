@@ -8,9 +8,9 @@
         <div class="confirm-table">
             <div class="info-header text-center">
                 <p>
-                    <span class="tomoissuer-icon-tomoz-new"><span class="path1"/><span class="path2"/></span>
+                    <i class="tm-icon-tomoz-new"><span class="path1"/><span class="path2"/></i>
                 </p>
-                <!-- <p><i class="tomoissuer-icon-tomoz-new"/></p> -->
+                <!-- <p><i class="tm-icon-tomoz-new"/></p> -->
                 <h2 class="tmp-title-large">TomoZ Protocol Application</h2>
             </div>
             <div class="tmp-table-three">
