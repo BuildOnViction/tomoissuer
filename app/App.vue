@@ -127,22 +127,22 @@
                                 <ul>
                                     <li><a
                                         href="https://www.facebook.com/tomochainofficial"
-                                        target="_blank"><i class="tomoissuer-icon-facebook"/></a></li>
+                                        target="_blank"><i class="tm-icon-facebook"/></a></li>
                                     <li><a
                                         href="https://twitter.com/TomoChainANN"
                                         target="_blank"><i class="tm-icon-twiter"/></a></li>
                                     <li><a
                                         href="https://t.me/tomochain"
-                                        target="_blank"><i class="tomoissuer-icon-telegram"/></a></li>
+                                        target="_blank"><i class="tm-icon-telegram"/></a></li>
                                     <li><a
                                         href="https://github.com/tomochain/"
-                                        target="_blank"><i class="tomoissuer-icon-github"/></a></li>
+                                        target="_blank"><i class="tm-icon-github"/></a></li>
                                     <li><a
                                         href="https://www.linkedin.com/company/tomochain"
-                                        target="_blank"><i class="tomoissuer-icon-linkedin"/></a></li>
+                                        target="_blank"><i class="tm-icon-linkedin"/></a></li>
                                     <li><a
                                         href="https://www.reddit.com/r/Tomochain/"
-                                        target="_blank"><i class="tomoissuer-icon-reddit"/></a></li>
+                                        target="_blank"><i class="tm-icon-reddit"/></a></li>
                                 </ul>
                             </div>
                         </div>

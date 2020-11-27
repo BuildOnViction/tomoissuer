@@ -2,7 +2,7 @@
     <div class="container container-small flex-content-center">
         <div class="tomo-apply">
             <div class="info-header text-center">
-                <p><i class="tomoissuer-icon-tomoz"/></p>
+                <p><i class="tm-icon-tomoz"/></p>
                 <h2 class="tmp-title-large">TomoZ Protocol Application</h2>
             </div>
             <b-form

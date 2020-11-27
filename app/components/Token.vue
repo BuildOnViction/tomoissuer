@@ -38,7 +38,7 @@
                                     <span class="tm-icon-tomoz-new-white mr-1">
                                         <span class="path1"/><span class="path2"/>
                                     </span>
-                                    <!-- <i class="tomoissuer-icon-tomoz mr-1"/> -->
+                                    <!-- <i class="tm-icon-tomoz mr-1"/> -->
                                     Apply to TomoZ Protocol
                                 </b-link>
                             </li>
@@ -177,7 +177,7 @@
                                                 <b-link
                                                     v-if="account === contractCreation"
                                                     :to="`/edittransactionsfee/${address}`">
-                                                    <i class="tomoissuer-icon-edit-pencil"/>
+                                                    <i class="tm-icon-edit-pencil"/>
                                                 </b-link>
                                             </p>
                                             <p>{{ formatNumber(txFee) }} {{ token.symbol }}</p>

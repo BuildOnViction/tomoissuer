@@ -21,7 +21,7 @@
                     <div
                         v-if="checkName"
                         class="txt-fixed-behind">
-                        <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
+                        <i class="tm-icon-checkmark-outline custom-checkmark"/>
                     </div>
                     <!-- <small
                         tabindex="-1"
@@ -52,7 +52,7 @@
                     <div
                         v-if="checkSymbol"
                         class="txt-fixed-behind">
-                        <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
+                        <i class="tm-icon-checkmark-outline custom-checkmark"/>
                     </div>
                     <!-- <small
                         tabindex="-1"
@@ -74,7 +74,7 @@
                         Token Supply
                         <i
                             id="totalSupply"
-                            class="tomoissuer-icon-info mb-2"/>
+                            class="tm-icon-info mb-2"/>
                     </label>
                     <b-tooltip
                         target="totalSupply">
@@ -96,7 +96,7 @@
                                 <div
                                     v-if="checkSupply"
                                     class="txt-fixed-behind">
-                                    <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
+                                    <i class="tm-icon-checkmark-outline custom-checkmark"/>
                                 </div>
                             </div>
                         </b-col>
@@ -114,7 +114,7 @@
                                         Reissuable
                                         <i
                                             id="mintable"
-                                            class="tomoissuer-icon-info mb-2"/>
+                                            class="tm-icon-info mb-2"/>
                                     </b-form-radio>
                                     <b-tooltip
                                         target="mintable">
@@ -133,7 +133,7 @@
                                         Non-reissueable
                                         <i
                                             id="notmintable"
-                                            class="tomoissuer-icon-info mb-2"/>
+                                            class="tm-icon-info mb-2"/>
                                     </b-form-radio>
                                     <b-tooltip
                                         target="notmintable">
@@ -173,7 +173,7 @@
                     <div
                         v-if="checkDecimals"
                         class="txt-fixed-behind">
-                        <i class="tomoissuer-icon-checkmark-outline custom-checkmark"/>
+                        <i class="tm-icon-checkmark-outline custom-checkmark"/>
                     </div>
                     <div
                         v-if="$v.decimals.$dirty && !$v.decimals.required"

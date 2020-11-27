@@ -3,7 +3,7 @@
         <div class="confirm-table tomo-body-fullw-issue issue-confirm">
             <div class="info-header">
                 <h2 class="tmp-title-large m-0">Token Issuance Review</h2>
-                <p class="text-center mt-5"><i class="tomoissuer-icon-startup"/></p>
+                <p class="text-center mt-5"><i class="tm-icon-startup"/></p>
                 <div class="text-center mb-5">
                     <strong>{{ `${formatNumber(totalSupply)} ${tokenSymbol}` }}</strong>
                 </div>
@@ -76,7 +76,7 @@
                 no-close-on-backdrop>
                 <div class="tomo-modal-default">
                     <div class="msg-txt">
-                        <i class="tomoissuer-icon-checkmark-outline"/>
+                        <i class="tm-icon-checkmark-outline"/>
                         <h4>Successful</h4>
                         <p>Token successfully issued</p>
                         <p>

@@ -2,7 +2,7 @@
     <div class="container container-small flex-content-center">
         <div class="tomo-apply">
             <div class="info-header text-center">
-                <p><i class="tomoissuer-icon-tomox"/></p>
+                <p><i class="tm-icon-tomox"/></p>
                 <h2 class="tmp-title-large">TomoX Protocol Application</h2>
             </div>
             <b-form

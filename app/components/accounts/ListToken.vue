@@ -79,7 +79,7 @@
                                     variant="link">
                                     <template
                                         slot="button-content">
-                                        <i class="tomoissuer-three-dots" />
+                                        <i class="tm-three-dots" />
                                     </template>
                                     <b-dropdown-item
                                         v-if="!data.item.applytomoz"
