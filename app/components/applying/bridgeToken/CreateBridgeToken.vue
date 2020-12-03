@@ -157,19 +157,19 @@ export default {
                     this.isTokenAddressEmpty = false
                     const config = this.config
                     await this.checkDuplicate()
-                    await axios.get(
+                    const coingeckoInfo = await axios.get(
                         urljoin(config.coingeckoAPI,
                             `coins/ethereum/contract/${this.tokenAddress}`)
-                    ).then(response => {
-                        this.coingecko_id = response.data.id
-                        this.tokenPrice = _get(response, ['data', 'market_data', 'current_price', 'usd'], 0)
-                    })
+                    )
+                    if (coingeckoInfo && coingeckoInfo.data) {
+                        this.coingecko_id = coingeckoInfo.data.id
+                        this.tokenPrice = _get(coingeckoInfo, ['data', 'market_data', 'current_price', 'usd'], 0)
+                    }
                     const { data } = await axios.get(
                         urljoin(config.etherscanAPI,
                             `api?module=contract&action=getabi&address=${this.tokenAddress}`)
                     )
                     if (data.status === '1') {
-                        this.$store.state.contract = data.result
                         const ethWeb3 = new Web3(new Web3.providers.HttpProvider(config.etherChain.rpc))
                         const contract = new ethWeb3.eth.Contract(
                             JSON.parse(data.result),
