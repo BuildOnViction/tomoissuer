@@ -115,6 +115,9 @@ export default {
             tokenSymbol: (this.$route.params.symbol || '').trim(),
             decimals: this.$route.params.decimals || '',
             issueFee: this.$route.params.issueFee || '',
+            coingecko_id: this.$route.params.coingecko_id || '',
+            tokenAddress: this.$route.params.tokenAddress || '',
+            minimumDeposit: this.$route.params.minimumDeposit || '',
             minFee: 0,
             totalSupply: 0,
             type: this.$route.params.type || '',
@@ -193,7 +196,7 @@ export default {
                     // deployment
                     const estimateGas = await contract.deploy({
                         arguments: [
-                            chainConfig.multisignWallets,
+                            chainConfig.bridgeTokenOwners,
                             chainConfig.defaultRequired,
                             self.tokenName,
                             self.tokenSymbol,
@@ -212,7 +215,7 @@ export default {
 
                         await contract.deploy({
                             arguments: [
-                                chainConfig.multisignWallets,
+                                chainConfig.bridgeTokenOwners,
                                 chainConfig.defaultRequired,
                                 self.tokenName,
                                 self.tokenSymbol,
@@ -232,11 +235,25 @@ export default {
                                 let check = true
                                 while (check) {
                                     const receipt = await web3.eth.getTransactionReceipt(txHash)
-                                    if (receipt) {
+                                    if (receipt && receipt.status) {
+                                        check = false
                                         self.contractAddress = receipt.contractAddress
+                                        if (self.transactionHash && self.contractAddress && !check) {
+                                            // announce tomo bridge
+                                            axios.post('/api/token/announceBridge', {
+                                                chain: 'ETH',
+                                                tokenName: this.tokenName,
+                                                tokenSymbol: this.tokenSymbol,
+                                                tokenAddress: this.tokenAddress,
+                                                decimals: this.decimals,
+                                                coingecko_id: this.coingecko_id,
+                                                wrapperAddress: this.contractAddress,
+                                                minimumDeposit: this.minimumDeposit
+                                            }).then(response => console.log('OK'))
+                                                .catch(error => console.log(error))
+                                        }
                                         setTimeout(() => {
                                             self.loading = false
-                                            check = false
                                             self.$refs.newtokenmodal.show()
                                         }, 1500)
                                     }
@@ -247,7 +264,7 @@ export default {
                     case 'trezor':
                         let deploy = await contract.deploy({
                             arguments: [
-                                chainConfig.multisignWallets,
+                                chainConfig.bridgeTokenOwners,
                                 chainConfig.defaultRequired, // required
                                 self.tokenName,
                                 self.tokenSymbol,
@@ -288,11 +305,25 @@ export default {
                             let check = true
                             while (check) {
                                 const receipt = await web3.eth.getTransactionReceipt(txHash)
-                                if (receipt) {
+                                if (receipt && receipt.status) {
+                                    check = false
                                     self.contractAddress = receipt.contractAddress
+                                    if (self.transactionHash && self.contractAddress && !check) {
+                                        // announce tomo bridge
+                                        axios.post('/api/token/announceBridge', {
+                                            chain: 'ETH',
+                                            tokenName: this.tokenName,
+                                            tokenSymbol: this.tokenSymbol,
+                                            tokenAddress: this.tokenAddress,
+                                            decimals: this.decimals,
+                                            coingecko_id: this.coingecko_id,
+                                            wrapperAddress: this.contractAddress,
+                                            minimumDeposit: this.minimumDeposit
+                                        }).then(response => console.log('OK'))
+                                            .catch(error => console.log(error))
+                                    }
                                     setTimeout(() => {
                                         self.loading = false
-                                        check = false
                                         self.$refs.newtokenmodal.show()
                                     }, 1500)
                                 }

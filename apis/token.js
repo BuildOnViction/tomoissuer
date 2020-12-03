@@ -11,6 +11,17 @@ const web3 = require('../models/blockchain/web3')
 const md5 = require('blueimp-md5')
 const urljoin = require('url-join')
 
+const getChainExplorer = (chain) => {
+    switch (chain) {
+    case 'BTC':
+        return 'https://www.blockchain.com/btc'
+    case 'ETH':
+        return 'https://etherscan.io'
+    default:
+        return ''
+    }
+}
+
 function serializeQuery (params, prefix) {
     const query = Object.keys(params).map((key) => {
         const value = params[key]
@@ -310,6 +321,25 @@ router.post('/announceRelayer', [
     }
 })
 
+router.get('/getToken', async function (req, res, next) {
+    try {
+        const token = req.query.token || ''
+        const { data } = await axios.get(
+            urljoin(config.get('tomobridgeAPI'), 'tokens?page=1&limit=1000')
+        )
+        const tokenInfo = data.Data.find(d => d.address === token)
+        if (tokenInfo) {
+            return res.json({
+                status: true
+            })
+        } else {
+            return res.json({ status: false })
+        }
+    } catch (error) {
+        return next(error)
+    }
+})
+
 router.get('/:token', [], async (req, res, next) => {
     try {
         const token = req.params.token || ''
@@ -406,6 +436,46 @@ router.get('/getLogo/:token', [], async (req, res, next) => {
         return res.json({
             image: false
         })
+    }
+})
+
+router.post('/announceBridge', [
+    check('tokenName').exists().withMessage("'tokenName' is required"),
+    check('tokenSymbol').exists().withMessage("'tokenSymbol' is required"),
+    check('chain').isIn(['ETH', 'BTC']).exists().withMessage("'chain' is required"),
+    check('wrapperAddress').exists().isLength({ min: 42, max: 42 }).withMessage("'wrapperAddress' is required"),
+    check('tokenAddress').exists().isLength({ min: 42, max: 42 }).withMessage("'tokenAddress' is required"),
+    check('decimals').exists().withMessage("'decimals' is required"),
+    check('minimumDeposit').exists().withMessage("'minimumDeposit' is required")
+], async (req, res, next) => {
+    try {
+        const body = {
+            chain: req.body.chain.toUpperCase(),
+            name: req.body.tokenName,
+            symbol: req.body.tokenSymbol,
+            decimals: req.body.decimals,
+            address: req.body.tokenAddress,
+            wrap_smart_contract: req.body.wrapperAddress,
+            coingecko_id: req.body.coingecko_id,
+            explorer_url: getChainExplorer(req.body.chain.toUpperCase()),
+            confirms: config.get('blockchain.confirmation'),
+            multisig_wallet: config.get('blockchain.multisignWallet'),
+            min_deposit_value: '2000000000000000000'
+        }
+        const requestConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+                api_key: config.get('bridgeAuthorityKey')
+            }
+        }
+        const { data } = await axios.post(
+            urljoin(config.get('tomobridgeAPI'), '/new-token'),
+            body,
+            requestConfig
+        )
+        return res.json(data)
+    } catch (error) {
+        return next(error)
     }
 })
 
