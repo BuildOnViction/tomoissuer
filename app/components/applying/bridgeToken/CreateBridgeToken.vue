@@ -182,7 +182,7 @@ export default {
                             this.tokenSymbol = this.checkTokenName(symbol)
                         }).catch(error => error)
                         contract.methods.decimals.call().then(decimals => {
-                            this.decimals = decimals
+                            this.decimals = new BigNumber(decimals).toNumber()
                         }).catch(error => error)
 
                         const contractBridge = new this.web3.eth.Contract(
@@ -227,11 +227,18 @@ export default {
                 this.$toasted.show(error, { type: 'error' })
             }
         },
-        async calculateMinDeposit () {
+        calculateMinDeposit () {
             if (this.tokenPrice !== 0) {
+                let minimum = 5 / this.tokenPrice
+                if (minimum > 1) {
+                    minimum = Math.round(minimum)
+                } else {
+                    let count = -Math.floor(Math.log(minimum) / Math.log(10) + 1)
+                    minimum = minimum.toFixed(count + 1)
+                }
                 // Minimum deposit is 5 usd
                 const a = new BigNumber(
-                    new BigNumber(5).div(new BigNumber(this.tokenPrice))
+                    minimum
                 ).multipliedBy(10 ** this.decimals).toString()
                 return a
             } else {
@@ -239,8 +246,12 @@ export default {
             }
         },
         checkTokenName (name) {
-            const a = this.web3.utils.hexToAscii(name)
-            return a.trim()
+            if (name.indexOf('0x') === 0) {
+                const a = this.web3.utils.hexToUtf8(name)
+                return a.trim()
+            }
+
+            return name
         }
     }
 }
