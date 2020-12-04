@@ -21,6 +21,9 @@
                             class="tmp-btn-search"
                             @click="searchToken"><b-icon icon="search" /></b-button>
                     </div>
+                    <div
+                        v-if="isTokenAddressEmpty"
+                        class="text-danger pt-2">Required field</div>
                 </b-form-group>
                 <div
                     v-if="foundToken">
@@ -38,8 +41,15 @@
                             <label>Est. Issuance Fee</label><span>~{{ issueFee }} TOMO</span>
                         </div>
                     </div>
+                    <div
+                        v-if="duplicateToken"
+                        class="text-center text-danger">
+                        <span>
+                            This token has already been issued to TomoBridge</span>
+                    </div>
                     <div class="btn-box">
                         <b-button
+                            :disabled="duplicateToken"
                             class="tmp-btn-blue"
                             type="submit">Save & Review</b-button>
                     </div>
@@ -65,6 +75,7 @@ import {
 } from 'vuelidate/lib/validators'
 import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
+import _get from 'lodash.get'
 
 export default {
     name: 'App',
@@ -85,7 +96,12 @@ export default {
             issueFee: '',
             tokenAddress: '',
             foundToken: false,
-            depositFee: ''
+            depositFee: '',
+            isTokenAddressEmpty: false,
+            coingecko_id: '',
+            duplicateToken: false,
+            minDeposit: 0,
+            tokenPrice: 0
         }
     },
     validations: {
@@ -104,11 +120,6 @@ export default {
         }
         await this.getBalance()
         this.config = store.get('configIssuer') || await this.appConfig()
-        // const chainConfig = this.config.blockchain
-        // this.txFee = new BigNumber(chainConfig.gas).multipliedBy(chainConfig.deployPrice).div(10 ** 18)
-        // if (this.balance.isLessThan(this.txFee)) {
-        //     this.isEnoughTOMO = false
-        // }
     },
     methods: {
         async getBalance () {
@@ -130,59 +141,75 @@ export default {
                     decimals: this.decimals,
                     type: this.type,
                     totalSupply: this.totalSupply,
-                    issueFee: this.issueFee
+                    issueFee: this.issueFee,
+                    coingecko_id: this.coingecko_id,
+                    tokenAddress: this.tokenAddress,
+                    minimumDeposit: this.calculateMinDeposit()
                 }
             })
         },
         async searchToken () {
             try {
-                this.foundToken = false
-                const config = this.config
-                const { data } = await axios.get(
-                    urljoin(config.etherscanAPI,
-                        `api?module=contract&action=getabi&address=${this.tokenAddress}`)
-                )
-                if (data.status === '1') {
-                    this.$store.state.contract = data.result
-                    const ethWeb3 = new Web3(new Web3.providers.HttpProvider(config.etherChain.rpc))
-                    const contract = new ethWeb3.eth.Contract(
-                        JSON.parse(data.result),
-                        this.tokenAddress
-                    )
-                    contract.methods.name.call().then(name => {
-                        this.tokenName = name
-                    }).catch(error => error)
-                    contract.methods.symbol.call().then(symbol => {
-                        this.tokenSymbol = symbol
-                    }).catch(error => error)
-                    contract.methods.decimals.call().then(decimals => {
-                        this.decimals = decimals
-                    }).catch(error => error)
-
-                    const contractBridge = new this.web3.eth.Contract(
-                        this.TomoBridgeWrapToken.abi, null, { data: this.TomoBridgeWrapToken.bytecode })
-                    contractBridge.deploy({
-                        arguments: [
-                            config.blockchain.multisignWallets,
-                            config.blockchain.defaultRequired,
-                            'BridgeToken', 'BTK', 18, 0, 0, 0,
-                            (new BigNumber(5).multipliedBy(10 ** 18).toString(10))
-                        ]
-                    }).estimateGas().then((gas) => {
-                        this.issueFee = new BigNumber(gas * config.blockchain.deployPrice)
-                            .div(10 ** 18).toNumber()
-                        if (this.balance.isLessThan(this.issueFee)) {
-                            this.isEnoughTOMO = false
-                        }
-                        this.issueFee = this.issueFee.toFixed(4)
-                    })
-                        .catch(error => error)
-                    this.foundToken = true
+                if (!this.tokenAddress) {
+                    this.isTokenAddressEmpty = true
                 } else {
-                    this.$toasted.show(
-                        data.result,
-                        { type: 'error' }
+                    this.foundToken = false
+                    this.isTokenAddressEmpty = false
+                    const config = this.config
+                    await this.checkDuplicate()
+                    const coingeckoInfo = await axios.get(
+                        urljoin(config.coingeckoAPI,
+                            `coins/ethereum/contract/${this.tokenAddress}`)
                     )
+                    if (coingeckoInfo && coingeckoInfo.data) {
+                        this.coingecko_id = coingeckoInfo.data.id
+                        this.tokenPrice = _get(coingeckoInfo, ['data', 'market_data', 'current_price', 'usd'], 0)
+                    }
+                    const { data } = await axios.get(
+                        urljoin(config.etherscanAPI,
+                            `api?module=contract&action=getabi&address=${this.tokenAddress}`)
+                    )
+                    if (data.status === '1') {
+                        const ethWeb3 = new Web3(new Web3.providers.HttpProvider(config.etherChain.rpc))
+                        const contract = new ethWeb3.eth.Contract(
+                            JSON.parse(data.result),
+                            this.tokenAddress
+                        )
+                        contract.methods.name.call().then(name => {
+                            this.tokenName = this.checkTokenName(name)
+                        }).catch(error => error)
+                        contract.methods.symbol.call().then(symbol => {
+                            this.tokenSymbol = this.checkTokenName(symbol)
+                        }).catch(error => error)
+                        contract.methods.decimals.call().then(decimals => {
+                            this.decimals = new BigNumber(decimals).toNumber()
+                        }).catch(error => error)
+
+                        const contractBridge = new this.web3.eth.Contract(
+                            this.TomoBridgeWrapToken.abi, null, { data: this.TomoBridgeWrapToken.bytecode })
+                        contractBridge.deploy({
+                            arguments: [
+                                config.blockchain.bridgeTokenOwners,
+                                config.blockchain.defaultRequired,
+                                'BridgeToken', 'BTK', 18, 0, 0, 0,
+                                (new BigNumber(5).multipliedBy(10 ** 18).toString(10))
+                            ]
+                        }).estimateGas().then((gas) => {
+                            this.issueFee = new BigNumber(gas * config.blockchain.deployPrice)
+                                .div(10 ** 18).toNumber()
+                            if (this.balance.isLessThan(this.issueFee)) {
+                                this.isEnoughTOMO = false
+                            }
+                            this.issueFee = this.issueFee.toFixed(4)
+                        })
+                            .catch(error => error)
+                        this.foundToken = true
+                    } else {
+                        this.$toasted.show(
+                            data.result,
+                            { type: 'error' }
+                        )
+                    }
                 }
             } catch (error) {
                 console.log(error)
@@ -191,6 +218,40 @@ export default {
                     { type: 'error' }
                 )
             }
+        },
+        async checkDuplicate () {
+            try {
+                const { data } = await axios.get('/api/token/getToken?token=' + this.tokenAddress)
+                this.duplicateToken = data.status
+            } catch (error) {
+                this.$toasted.show(error, { type: 'error' })
+            }
+        },
+        calculateMinDeposit () {
+            if (this.tokenPrice !== 0) {
+                let minimum = 5 / this.tokenPrice
+                if (minimum > 1) {
+                    minimum = Math.round(minimum)
+                } else {
+                    let count = -Math.floor(Math.log(minimum) / Math.log(10) + 1)
+                    minimum = minimum.toFixed(count + 1)
+                }
+                // Minimum deposit is 5 usd
+                const a = new BigNumber(
+                    minimum
+                ).multipliedBy(10 ** this.decimals).toString()
+                return a
+            } else {
+                return 0
+            }
+        },
+        checkTokenName (name) {
+            if (name.indexOf('0x') === 0) {
+                const a = this.web3.utils.hexToUtf8(name)
+                return a.trim()
+            }
+
+            return name
         }
     }
 }

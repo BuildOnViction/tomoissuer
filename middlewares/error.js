@@ -1,12 +1,12 @@
 'use strict'
 const logger = require('../helpers/logger')
-const _ = require('lodash')
+const _map = require('lodash.map')
 
 module.exports = function (err, req, res, next) {
     if (err) {
         if (err === true) err = {}
         err.status = err.status || 406
-        err.message = err.message || _.map(err, 'msg')[0] || 'Not Acceptable'
+        err.message = err.message || _map(err, 'msg')[0] || 'Not Acceptable'
 
         if (parseInt(err.status) !== 401 && parseInt(err.status) !== 403) {
             logger.warn(err)

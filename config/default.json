@@ -21,6 +21,8 @@
         "rpc": "https://api.infura.io/v1/jsonrpc/mainnet",
         "networkId": 1
     },
+    "tomobridgeAPI": "",
+    "bridgeAuthorityKey": "123456",
     "blockchain": {
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",
@@ -29,8 +31,10 @@
         "deployPrice": 10000000000000,
         "issuerAddress": "",
         "tomoXAddress": "",
-        "multisignWallets": [],
-        "defaultRequired": 2
+        "bridgeTokenOwners": [],
+        "multisignWallet": "",
+        "defaultRequired": 2,
+        "confirmation": 6
     },
     "db": {
         "uri": "mongodb://mongodb:27017/tomoissuer"

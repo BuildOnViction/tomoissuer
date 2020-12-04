@@ -74,7 +74,7 @@
                 no-close-on-backdrop>
                 <div class="tomo-modal-default icon-violet">
                     <div class="msg-txt">
-                        <i class="tomoissuer-icon-checkmark-outline"/>
+                        <i class="tm-icon-checkmark-outline"/>
                         <h4>Successful</h4>
                         <p>You’ve just successfully deposited {{ depositFee }} TOMO</p>
                         <p>

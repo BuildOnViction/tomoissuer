@@ -68,7 +68,7 @@
                 centered>
                 <div class="tomo-modal-default icon-violet">
                     <div class="msg-txt">
-                        <i class="tomoissuer-icon-checkmark-outline"/>
+                        <i class="tm-icon-checkmark-outline"/>
                         <h4>Successful</h4>
                         <p>{{ token.name }} token successfully applied to TomoZ</p>
                         <p>

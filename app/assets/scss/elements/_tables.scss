@@ -183,8 +183,8 @@ table,
 
 // Pge confirm
 .confirm-table {
-	.tomoissuer-icon-startup,
-	.tomoissuer-icon-burn {
+	.tm-icon-startup,
+	.tm-icon-burn {
         @include fsz-cha(90,70,70);
         color: $color-text-blue;
 	}

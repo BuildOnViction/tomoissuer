@@ -3,7 +3,7 @@
         <div class="confirm-table tomo-body-fullw">
             <div class="info-header">
                 <h2 class="tmp-title-large m-0">{{ token.name }} Token Burn</h2>
-                <p class="text-center mt-5"><i class="tomoissuer-icon-burn"/></p>
+                <p class="text-center mt-5"><i class="tm-icon-burn"/></p>
                 <div class="text-center mb-5">
                     <strong>- {{ formatNumber(burnAmount) }} {{ token.symbol }}</strong>
                 </div>
@@ -61,7 +61,7 @@
                 no-close-on-backdrop>
                 <div class="tomo-modal-default icon-blue">
                     <div class="msg-txt">
-                        <i class="tomoissuer-icon-checkmark-outline"/>
+                        <i class="tm-icon-checkmark-outline"/>
                         <h4>Successful</h4>
                         <p>You’ve just burned {{ formatNumber(burnAmount) }} {{ token.symbol }}</p>
                         <p>

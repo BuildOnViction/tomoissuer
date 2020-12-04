@@ -6,7 +6,7 @@
                 <p class="text-center mt-3">
                     <i
                         v-if="!logo"
-                        class="tomoissuer-icon-startup"/>
+                        class="tm-icon-startup"/>
                     <img
                         v-else
                         :src="logo"
