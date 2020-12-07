@@ -55,7 +55,7 @@
                                 </b-dropdown-item>
                                 <b-dropdown-item
                                     to="/createBridgeToken">
-                                    Issue Bridge Token
+                                    Issue Wrap-ERC20 Token
                                     <i class="ml-1 tm-add-outline float-right"/>
                                 </b-dropdown-item>
                                 <b-dropdown-divider />

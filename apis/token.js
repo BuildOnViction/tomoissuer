@@ -460,7 +460,7 @@ router.post('/announceBridge', [
             explorer_url: getChainExplorer(req.body.chain.toUpperCase()),
             confirms: config.get('blockchain.confirmation'),
             multisig_wallet: config.get('blockchain.multisignWallet'),
-            min_deposit_value: '2000000000000000000'
+            min_deposit_value: req.body.minimumDeposit
         }
         const requestConfig = {
             headers: {

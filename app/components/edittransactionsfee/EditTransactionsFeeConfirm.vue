@@ -54,7 +54,7 @@
                 <div class="tomo-modal-default icon-violet">
                     <div class="msg-txt">
                         <i class="tm-icon-checkmark-outline"/>
-                        <h4>Successful</h4>
+                        <h3><b>Successful</b></h3>
                         <p>You changed the transacion fee</p>
                         <p>
                             Transaction hash:

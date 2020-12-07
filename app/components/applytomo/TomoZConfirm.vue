@@ -69,7 +69,7 @@
                 <div class="tomo-modal-default icon-violet">
                     <div class="msg-txt">
                         <i class="tm-icon-checkmark-outline"/>
-                        <h4>Successful</h4>
+                        <h3><b>Successful</b></h3>
                         <p>{{ token.name }} token successfully applied to TomoZ</p>
                         <p>
                             Transaction hash:

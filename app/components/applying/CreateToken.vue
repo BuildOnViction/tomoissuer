@@ -388,30 +388,6 @@ export default {
                 if (this.balance.isLessThan(this.txFee)) {
                     this.isEnoughTOMO = false
                 }
-                console.log(this.txFee)
-                // axios.post('/api/token/compileContract', {
-                //     sourceCode: '',
-                //     estimate: true,
-                //     mintable: false
-                // }).then(async response => {
-                //     const contract = new web3.eth.Contract(
-                //         response.data.abi, null, { data: '0x' + response.data.bytecode })
-                //     const estimatedAmount = await contract.deploy({
-                //         arguments: [
-                //             'example',
-                //             'example',
-                //             18,
-                //             (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
-                //             (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
-                //         ]
-                //     }).estimateGas()
-                //     this.issueFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
-                //         .div(10 ** 18).toNumber()
-                //     this.issueFee = Math.round(this.issueFee)
-                // }).catch(error => {
-                //     console.log(error)
-                //     this.$toasted.show(error, { type: 'error' })
-                // })
             }
         },
         editDecimals () {
