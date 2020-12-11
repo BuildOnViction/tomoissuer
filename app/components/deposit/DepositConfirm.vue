@@ -75,7 +75,7 @@
                 <div class="tomo-modal-default icon-violet">
                     <div class="msg-txt">
                         <i class="tm-icon-checkmark-outline"/>
-                        <h4>Successful</h4>
+                        <h3><b>Successful</b></h3>
                         <p>You’ve just successfully deposited {{ depositFee }} TOMO</p>
                         <p>
                             Transaction hash:

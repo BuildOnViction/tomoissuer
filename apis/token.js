@@ -10,6 +10,8 @@ const axios = require('axios')
 const web3 = require('../models/blockchain/web3')
 const md5 = require('blueimp-md5')
 const urljoin = require('url-join')
+const BigNumber = require('bignumber.js')
+const _get = require('lodash.get')
 
 const getChainExplorer = (chain) => {
     switch (chain) {
@@ -19,6 +21,25 @@ const getChainExplorer = (chain) => {
         return 'https://etherscan.io'
     default:
         return ''
+    }
+}
+
+const calculateMinDeposit = (tokenPrice, decimals) => {
+    if (tokenPrice !== 0) {
+        let minimum = 5 / tokenPrice
+        if (minimum > 1) {
+            minimum = Math.round(minimum)
+        } else {
+            let count = -Math.floor(Math.log(minimum) / Math.log(10) + 1)
+            minimum = minimum.toFixed(count + 1)
+        }
+        // Minimum deposit is 5 usd
+        const a = new BigNumber(
+            minimum
+        ).multipliedBy(10 ** decimals).toString()
+        return a
+    } else {
+        return '0'
     }
 }
 
@@ -445,10 +466,23 @@ router.post('/announceBridge', [
     check('chain').isIn(['ETH', 'BTC']).exists().withMessage("'chain' is required"),
     check('wrapperAddress').exists().isLength({ min: 42, max: 42 }).withMessage("'wrapperAddress' is required"),
     check('tokenAddress').exists().isLength({ min: 42, max: 42 }).withMessage("'tokenAddress' is required"),
-    check('decimals').exists().withMessage("'decimals' is required"),
-    check('minimumDeposit').exists().withMessage("'minimumDeposit' is required")
+    check('decimals').exists().withMessage("'decimals' is required")
 ], async (req, res, next) => {
     try {
+        let tokenPrice, coingeckoId
+        await axios.get(
+            urljoin(config.coingeckoAPI,
+                `coins/ethereum/contract/${req.body.tokenAddress}`)
+        ).then(response => {
+            tokenPrice = _get(response, ['data', 'market_data', 'current_price', 'usd'], 0)
+            coingeckoId = _get(response, ['data', 'id'], '')
+        }).catch(error => {
+            if (error) {
+                coingeckoId = ''
+                tokenPrice = 0
+            }
+        })
+        const minimumDeposit = calculateMinDeposit(tokenPrice, req.body.decimals)
         const body = {
             chain: req.body.chain.toUpperCase(),
             name: req.body.tokenName,
@@ -456,12 +490,13 @@ router.post('/announceBridge', [
             decimals: req.body.decimals,
             address: req.body.tokenAddress,
             wrap_smart_contract: req.body.wrapperAddress,
-            coingecko_id: req.body.coingecko_id,
+            coingecko_id: coingeckoId,
             explorer_url: getChainExplorer(req.body.chain.toUpperCase()),
             confirms: config.get('blockchain.confirmation'),
             multisig_wallet: config.get('blockchain.multisignWallet'),
-            min_deposit_value: '2000000000000000000'
+            min_deposit_value: minimumDeposit
         }
+        console.log(body)
         const requestConfig = {
             headers: {
                 'Content-Type': 'application/json',

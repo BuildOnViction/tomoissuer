@@ -64,7 +64,7 @@
                 <div class="tomo-modal-default icon-blue">
                     <div class="msg-txt">
                         <i class="tm-icon-checkmark-outline"/>
-                        <h4>Successful</h4>
+                        <h3><b>Successful</b></h3>
                         <p>{{ token.name }} is currently available on TomoX listing
                         and ready to be traded once any relayer pick up {{ token.name }}
                             token as a trade pair

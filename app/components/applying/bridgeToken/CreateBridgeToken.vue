@@ -1,7 +1,7 @@
 <template>
     <div class="container container-small">
         <div class="newtoken">
-            <h2 class="tmp-title-large">Bridge Token Issuance</h2>
+            <h2 class="tmp-title-large">Wrap-ERC20 Token Issuance</h2>
             <p>Bring your ERC20 token to TomoChain network.</p>
             <b-form
                 class="form-new-token"
@@ -75,7 +75,7 @@ import {
 } from 'vuelidate/lib/validators'
 import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
-import _get from 'lodash.get'
+// import _get from 'lodash.get'
 
 export default {
     name: 'App',
@@ -98,9 +98,9 @@ export default {
             foundToken: false,
             depositFee: '',
             isTokenAddressEmpty: false,
-            coingecko_id: '',
+            // coingecko_id: '',
             duplicateToken: false,
-            minDeposit: 0,
+            // minDeposit: 0,
             tokenPrice: 0
         }
     },
@@ -142,9 +142,7 @@ export default {
                     type: this.type,
                     totalSupply: this.totalSupply,
                     issueFee: this.issueFee,
-                    coingecko_id: this.coingecko_id,
-                    tokenAddress: this.tokenAddress,
-                    minimumDeposit: this.calculateMinDeposit()
+                    tokenAddress: this.tokenAddress
                 }
             })
         },
@@ -157,22 +155,17 @@ export default {
                     this.isTokenAddressEmpty = false
                     const config = this.config
                     await this.checkDuplicate()
-                    const coingeckoInfo = await axios.get(
-                        urljoin(config.coingeckoAPI,
-                            `coins/ethereum/contract/${this.tokenAddress}`)
-                    )
-                    if (coingeckoInfo && coingeckoInfo.data) {
-                        this.coingecko_id = coingeckoInfo.data.id
-                        this.tokenPrice = _get(coingeckoInfo, ['data', 'market_data', 'current_price', 'usd'], 0)
-                    }
                     const { data } = await axios.get(
                         urljoin(config.etherscanAPI,
                             `api?module=contract&action=getabi&address=${this.tokenAddress}`)
                     )
+
+                    // const data = { status: '1' }
                     if (data.status === '1') {
                         const ethWeb3 = new Web3(new Web3.providers.HttpProvider(config.etherChain.rpc))
                         const contract = new ethWeb3.eth.Contract(
-                            JSON.parse(data.result),
+                            // JSON.parse(data.result),
+                            this.ERC20.abi,
                             this.tokenAddress
                         )
                         contract.methods.name.call().then(name => {
@@ -191,8 +184,10 @@ export default {
                             arguments: [
                                 config.blockchain.bridgeTokenOwners,
                                 config.blockchain.defaultRequired,
-                                'BridgeToken', 'BTK', 18, 0, 0, 0,
-                                (new BigNumber(5).multipliedBy(10 ** 18).toString(10))
+                                'BridgeToken', 'BTK', 18, 0, 0,
+                                [0, 0], // deposit fee and withdraw fee
+                                this.tokenAddress,
+                                'ETH' // hardcode for ethereum network
                             ]
                         }).estimateGas().then((gas) => {
                             this.issueFee = new BigNumber(gas * config.blockchain.deployPrice)
@@ -225,24 +220,6 @@ export default {
                 this.duplicateToken = data.status
             } catch (error) {
                 this.$toasted.show(error, { type: 'error' })
-            }
-        },
-        calculateMinDeposit () {
-            if (this.tokenPrice !== 0) {
-                let minimum = 5 / this.tokenPrice
-                if (minimum > 1) {
-                    minimum = Math.round(minimum)
-                } else {
-                    let count = -Math.floor(Math.log(minimum) / Math.log(10) + 1)
-                    minimum = minimum.toFixed(count + 1)
-                }
-                // Minimum deposit is 5 usd
-                const a = new BigNumber(
-                    minimum
-                ).multipliedBy(10 ** this.decimals).toString()
-                return a
-            } else {
-                return 0
             }
         },
         checkTokenName (name) {

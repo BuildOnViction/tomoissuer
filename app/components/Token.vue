@@ -24,6 +24,11 @@
                             class="apply-tomoz">
                             TomoX
                         </span>
+                        <span
+                            v-if="isAppliedB"
+                            class="apply-tomoz">
+                            TomoBridge
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-6 text-right">
@@ -63,6 +68,22 @@
                                         v-if="!isAppliedX && account === contractCreation"
                                         :to="'/tomoxcondition/' + address">
                                         Apply to TomoX Protocol
+                                    </b-dropdown-item>
+                                    <b-dropdown-item
+                                        v-if="isBridgeToken && !isAppliedB">
+                                        <div id="applyBridge">
+                                            <b-link
+                                                :disabled="!isAppliedZ"
+                                                :style="!isAppliedZ ? `cursor: not-allowed` : ''"
+                                                @click="announeBridge">
+                                                Apply to TomoBridge
+                                            </b-link>
+                                        </div>
+                                        <b-tooltip
+                                            v-if="!isAppliedZ"
+                                            target="applyBridge">
+                                            Apply to TomoZ is required
+                                        </b-tooltip>
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         :to="'/viewToken/' + address">
@@ -155,13 +176,15 @@
                                     <p class="tmp-title-medium">Profile summary</p>
                                     <ul>
                                         <li>
-                                            <p class="title-small">
-                                                Contract address
+                                            <p
+                                                class="title-small">
+                                                {{ isBridgeToken ? 'ERC20 Contract address' : 'Contract address' }}
                                             </p>
                                             <p class="common_txt_ellipsis text-blue">
                                                 <a
                                                     :title="token.hash"
-                                                    :href="config.tomoscanUrl + '/tokens/' + address"
+                                                    :href="isBridgeToken ? tokenAddressURL :
+                                                    config.tomoscanUrl + '/tokens/' + address"
                                                     target="_blank">
                                                     {{ token.hash }}
                                                 </a>
@@ -351,6 +374,30 @@
             <!-- /tmp-table-one -->
         </div>
         <!-- /main-box-header -->
+        <b-modal
+            id="announceBridgeModal"
+            ref="announceBridgeModal"
+            size="md"
+            hide-header
+            hide-footer
+            centered
+            no-close-on-esc
+            no-close-on-backdrop>
+            <div class="tomo-modal-default icon-blue">
+                <div class="msg-txt">
+                    <i class="tm-icon-checkmark-outline"/>
+                    <h3><b>Successful</b></h3>
+                    <p>You’ve just applied to TomoBridge.</p>
+                </div>
+                <div class="btn-box">
+                    <b-button
+                        class="tmp-btn-blue"
+                        @click="closeModal">
+                        OK
+                    </b-button>
+                </div>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -360,6 +407,7 @@ import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import store from 'store'
 import moment from 'moment'
+import urljoin from 'url-join'
 
 export default {
     name: 'App',
@@ -408,7 +456,11 @@ export default {
             ],
             holdersItems: [],
             contractCreation: '',
-            isAppliedX: false
+            isAppliedX: false,
+            isAppliedB: false,
+            isBridgeToken: false,
+            tokenAddressURL: '',
+            tokenERC20Address: ''
         }
     },
     computed: {},
@@ -432,6 +484,7 @@ export default {
             self.checkAppliedZ()
             self.checkAppliedX()
             self.getTransactionFee()
+            self.checkBridgeToken()
         } catch (error) {
             console.log(error)
             this.$toasted.show(error, { type :'error' })
@@ -611,6 +664,63 @@ export default {
         transferToken () {
             alert('You can use TomoWallet mobile version to transfer TRC21 Tokens.' +
                 'We will release TomoWallet web version soon.')
+        },
+        async checkAppliedB () {
+            try {
+                console.log(this.tokenERC20Address)
+                const { data } = await axios.get('/api/token/getToken?token=' + this.tokenERC20Address)
+                this.isAppliedB = data.status
+            } catch (error) {
+                this.$toasted.show(error, { type: 'error' })
+            }
+        },
+        async checkBridgeToken () {
+            const self = this
+            try {
+                const contract = new this.web3.eth.Contract(
+                    this.TomoBridgeWrapToken.abi,
+                    this.address
+                )
+                await contract.methods.ORIGINAL_CONTRACT.call()
+                    .then(result => {
+                        self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
+                        self.tokenERC20Address = result
+                        self.checkAppliedB()
+                        self.tokenAddressURL = urljoin(
+                            self.config.etherChain.etherScanURL,
+                            'token',
+                            result
+                        )
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        self.isBridgeToken = false
+                    })
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async announeBridge () {
+            axios.post('/api/token/announceBridge', {
+                chain: 'ETH',
+                tokenName: this.tokenName,
+                tokenSymbol: this.symbol,
+                tokenAddress: this.tokenERC20Address,
+                decimals: this.token.decimals,
+                coingecko_id: this.coingecko_id,
+                wrapperAddress: this.address
+            }).then(response => {
+                console.log('OK', response.data)
+                if (response.data.address) {
+                    this.isAppliedB = true
+                    this.$refs.announceBridgeModal.show()
+                }
+            }).catch(error => {
+                this.$toasted.show(error, { type: 'error' })
+            })
+        },
+        closeModal () {
+            this.$refs.announceBridgeModal.hide()
         }
     }
 }

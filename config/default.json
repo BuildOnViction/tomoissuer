@@ -22,7 +22,7 @@
         "networkId": 1
     },
     "tomobridgeAPI": "",
-    "bridgeAuthorityKey": "123456",
+    "bridgeAuthorityKey": "",
     "blockchain": {
         "rpc": "https://testnet.tomochain.com",
         "ws": "wss://testnet.tomochain.com/ws",

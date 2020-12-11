@@ -9,6 +9,7 @@ import TomoXListingAritfacts from '../build/contracts/TOMOXListing.json'
 import TomoBridgeWrapTokenAbi from '../build/contracts/TomoBridgeWrapToken'
 import MyTRC21Abi from '../build/contracts/MyTRC21'
 import MyTRC21MintableAbi from '../build/contracts/MyTRC21Mintable'
+import ERC20Abi from '../build/contracts/ERC20'
 
 import Web3 from 'web3'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
@@ -84,6 +85,7 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
         Vue.prototype.TomoBridgeWrapToken = TomoBridgeWrapTokenAbi
         Vue.prototype.MyTRC21 = MyTRC21Abi
         Vue.prototype.MyTRC21Mintable = MyTRC21MintableAbi
+        Vue.prototype.ERC20 = ERC20Abi
         if (chainConfig.issuerAddress) {
             Vue.prototype.TRC21Issuer = new wjs.eth.Contract(
                 TRC21IssuerAritfacts.abi,
