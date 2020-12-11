@@ -73,7 +73,7 @@
                 <div class="tomo-modal-default">
                     <div class="msg-txt">
                         <i class="tm-icon-checkmark-outline"/>
-                        <h4>Successful</h4>
+                        <h3><b>Successful</b></h3>
                         <p>Token successfully issued</p>
                         <p>
                             Transaction hash:
@@ -85,12 +85,21 @@
                                 {{ truncate(transactionHash, 26) }}
                             </a>
                         </p>
+                        <!-- <h6>In order to apply to TomoBridge, applying to TomoZ is required</h6> -->
                     </div>
                     <div class="btn-box">
                         <router-link
-                            :to="'token/' + contractAddress"
-                            class="tmp-btn-blue">View detail
+                            :to="{ path: `/token/${contractAddress}` }"
+                            class="btn tmp-btn-boder-violet btn-secondary">Token detail
                         </router-link>
+                        <!-- <router-link
+                            :to="'/tomozcondition/' + contractAddress"
+                            class="tmp-btn-violet">
+                            <span class="tm-icon-tomoz-new-white mr-1">
+                                <span class="path1"/><span class="path2"/>
+                            </span>
+                            Apply TomoZ
+                        </router-link> -->
                     </div>
                 </div>
             </b-modal>
@@ -203,8 +212,9 @@ export default {
                             self.decimals,
                             self.totalSupply,
                             self.minFee,
-                            0,
-                            0
+                            [0, 0], // deposit fee and withdraw fee
+                            this.tokenAddress, // erc20 token address
+                            'ETH' // network
                         ]
                     }).estimateGas()
                     switch (self.provider) {
@@ -222,8 +232,9 @@ export default {
                                 self.decimals,
                                 0,
                                 0,
-                                0,
-                                0
+                                [0, 0], // deposit fee and withdraw fee
+                                this.tokenAddress, // erc20 token address
+                                'ETH' // network
                             ]
                         }).send({
                             from: self.account,
@@ -238,20 +249,6 @@ export default {
                                     if (receipt && receipt.status) {
                                         check = false
                                         self.contractAddress = receipt.contractAddress
-                                        if (self.transactionHash && self.contractAddress && !check) {
-                                            // announce tomo bridge
-                                            axios.post('/api/token/announceBridge', {
-                                                chain: 'ETH',
-                                                tokenName: this.tokenName,
-                                                tokenSymbol: this.tokenSymbol,
-                                                tokenAddress: this.tokenAddress,
-                                                decimals: this.decimals,
-                                                coingecko_id: this.coingecko_id,
-                                                wrapperAddress: this.contractAddress,
-                                                minimumDeposit: this.minimumDeposit
-                                            }).then(response => console.log('OK'))
-                                                .catch(error => console.log(error))
-                                        }
                                         setTimeout(() => {
                                             self.loading = false
                                             self.$refs.newtokenmodal.show()
@@ -271,8 +268,9 @@ export default {
                                 self.decimals,
                                 0, // capacity
                                 0, // minFee
-                                0, // depositFee
-                                0 // withdrawFee
+                                [0, 0], // deposit fee and withdraw fee
+                                this.tokenAddress, // erc20 token address
+                                'ETH' // network
                             ]
                         }).encodeABI()
 
@@ -308,20 +306,6 @@ export default {
                                 if (receipt && receipt.status) {
                                     check = false
                                     self.contractAddress = receipt.contractAddress
-                                    if (self.transactionHash && self.contractAddress && !check) {
-                                        // announce tomo bridge
-                                        axios.post('/api/token/announceBridge', {
-                                            chain: 'ETH',
-                                            tokenName: this.tokenName,
-                                            tokenSymbol: this.tokenSymbol,
-                                            tokenAddress: this.tokenAddress,
-                                            decimals: this.decimals,
-                                            coingecko_id: this.coingecko_id,
-                                            wrapperAddress: this.contractAddress,
-                                            minimumDeposit: this.minimumDeposit
-                                        }).then(response => console.log('OK'))
-                                            .catch(error => console.log(error))
-                                    }
                                     setTimeout(() => {
                                         self.loading = false
                                         self.$refs.newtokenmodal.show()

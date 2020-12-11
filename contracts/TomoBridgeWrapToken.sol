@@ -318,6 +318,8 @@ contract TomoBridgeWrapToken is TRC21 {
     uint public DEPOSIT_FEE = 0;
     uint public WITHDRAW_FEE_TOMO = 2 ether;
     bool public TOMO_FEE_MODE = true;
+    string public ORIGINAL_CONTRACT;
+    string public NETWORK;
     
     /*
      *  Storage
@@ -409,19 +411,24 @@ contract TomoBridgeWrapToken is TRC21 {
                  uint _required, string memory _name,
                  string memory _symbol, uint8 _decimals,
                  uint256 cap, uint256 minFee,
-                 uint256 depositFee, uint256 withdrawFee
+                 uint256[] depositAndWithdrawFee, string memory originContract, string memory network
                 ) TRC21(_name, _symbol, _decimals) public validRequirement(_owners.length, _required) {
-        _mint(msg.sender, cap);
-        _changeIssuer(msg.sender);
-        _changeMinFee(minFee);
+
         for (uint i=0; i<_owners.length; i++) {
             require(!isOwner[_owners[i]] && _owners[i] != 0);
             isOwner[_owners[i]] = true;
         }
-        owners = _owners;
-        required = _required;
-        DEPOSIT_FEE = depositFee;
-        WITHDRAW_FEE = withdrawFee;
+        {
+            _mint(msg.sender, cap);
+            _changeIssuer(msg.sender);
+            _changeMinFee(minFee);
+            owners = _owners;
+            required = _required;
+            DEPOSIT_FEE = depositAndWithdrawFee[0];
+            WITHDRAW_FEE = depositAndWithdrawFee[1];
+            ORIGINAL_CONTRACT = originContract;
+            NETWORK = network;
+        }
     }
 
     function transferContractIssuer(address newOwner) public onlyContractIssuer {
@@ -430,11 +437,17 @@ contract TomoBridgeWrapToken is TRC21 {
         }
     }
 
-    function setDepositFee(uint256 depositFee) public onlyContractIssuer {
+    function setDepositFee(uint256 depositFee)
+    public
+    onlyWallet
+    {
         DEPOSIT_FEE = depositFee;
     }
 
-    function setWithdrawFee(uint256 withdrawFee) public onlyContractIssuer {
+    function setWithdrawFee(uint256 withdrawFee)
+    public
+    onlyWallet
+    {
         WITHDRAW_FEE = withdrawFee;
     }
 
