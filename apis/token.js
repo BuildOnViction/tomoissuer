@@ -348,7 +348,7 @@ router.get('/getToken', async function (req, res, next) {
         const { data } = await axios.get(
             urljoin(config.get('tomobridgeAPI'), 'tokens?page=1&limit=1000')
         )
-        const tokenInfo = data.Data.find(d => d.address === token)
+        const tokenInfo = data.Data.find(d => d.address.toLowerCase() === token.toLowerCase())
         if (tokenInfo) {
             return res.json({
                 status: true

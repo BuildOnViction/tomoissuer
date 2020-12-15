@@ -164,8 +164,8 @@ export default {
                     if (data.status === '1') {
                         const ethWeb3 = new Web3(new Web3.providers.HttpProvider(config.etherChain.rpc))
                         const contract = new ethWeb3.eth.Contract(
-                            // JSON.parse(data.result),
-                            this.ERC20.abi,
+                            JSON.parse(data.result),
+                            // this.ERC20.abi,
                             this.tokenAddress
                         )
                         contract.methods.name.call().then(name => {
