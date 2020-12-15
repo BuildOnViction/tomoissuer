@@ -19,7 +19,8 @@
     "etherscanAPI": "http://api.etherscan.io/",
     "etherChain": {
         "rpc": "https://api.infura.io/v1/jsonrpc/mainnet",
-        "networkId": 1
+        "networkId": 1,
+        "etherScanURL": "https://etherscan.io/"
     },
     "tomobridgeAPI": "",
     "bridgeAuthorityKey": "",
