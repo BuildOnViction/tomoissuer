@@ -496,7 +496,6 @@ router.post('/announceBridge', [
             multisig_wallet: config.get('blockchain.multisignWallet'),
             min_deposit_value: minimumDeposit
         }
-        console.log(body)
         const requestConfig = {
             headers: {
                 'Content-Type': 'application/json',
@@ -510,6 +509,7 @@ router.post('/announceBridge', [
         )
         return res.json(data)
     } catch (error) {
+        console.log(error)
         return next(error)
     }
 })

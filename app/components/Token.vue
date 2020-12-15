@@ -15,6 +15,11 @@
                             TRC-21
                         </span>
                         <span
+                            v-if="isBridgeToken && token.type === 'trc21'"
+                            class="apply-trc">
+                            W-ERC20
+                        </span>
+                        <span
                             v-if="isAppliedZ"
                             class="apply-tomoz">
                             TomoZ
@@ -75,7 +80,7 @@
                                             <b-link
                                                 :disabled="!isAppliedZ"
                                                 :style="!isAppliedZ ? `cursor: not-allowed` : ''"
-                                                @click="announeBridge">
+                                                @click="showAnnounceBridgeModal">
                                                 Apply to TomoBridge
                                             </b-link>
                                         </div>
@@ -384,17 +389,38 @@
             no-close-on-esc
             no-close-on-backdrop>
             <div class="tomo-modal-default icon-blue">
-                <div class="msg-txt">
-                    <i class="tm-icon-checkmark-outline"/>
-                    <h3><b>Successful</b></h3>
-                    <p>You’ve just applied to TomoBridge.</p>
+                <div v-if="step === 1">
+                    <div class="msg-txt">
+                        <h3>TomoBridge applying</h3>
+                        <p>Are you sure you want to apply your token to TomoBridge?</p>
+                    </div>
+                    <div class="btn-box">
+                        <b-button
+                            class="tmp-btn-boder-blue btn-min"
+                            @click="closeModal">
+                            Back
+                        </b-button>
+                        <b-button
+                            class="tmp-btn-blue"
+                            @click="announceBridge">
+                            Confirm
+                        </b-button>
+                    </div>
                 </div>
-                <div class="btn-box">
-                    <b-button
-                        class="tmp-btn-blue"
-                        @click="closeModal">
-                        OK
-                    </b-button>
+                <div
+                    v-if="step === 2">
+                    <div class="msg-txt">
+                        <i class="tm-icon-checkmark-outline"/>
+                        <h3><b>Successful</b></h3>
+                        <p>You’ve just applied to TomoBridge.</p>
+                    </div>
+                    <div class="btn-box">
+                        <b-button
+                            class="tmp-btn-blue"
+                            @click="closeModal">
+                            OK
+                        </b-button>
+                    </div>
                 </div>
             </div>
         </b-modal>
@@ -460,7 +486,8 @@ export default {
             isAppliedB: false,
             isBridgeToken: false,
             tokenAddressURL: '',
-            tokenERC20Address: ''
+            tokenERC20Address: '',
+            step: 1
         }
     },
     computed: {},
@@ -667,7 +694,6 @@ export default {
         },
         async checkAppliedB () {
             try {
-                console.log(this.tokenERC20Address)
                 const { data } = await axios.get('/api/token/getToken?token=' + this.tokenERC20Address)
                 this.isAppliedB = data.status
             } catch (error) {
@@ -700,7 +726,11 @@ export default {
                 console.log(error)
             }
         },
-        async announeBridge () {
+        showAnnounceBridgeModal () {
+            this.step = 1
+            this.$refs.announceBridgeModal.show()
+        },
+        async announceBridge () {
             axios.post('/api/token/announceBridge', {
                 chain: 'ETH',
                 tokenName: this.tokenName,
@@ -710,10 +740,9 @@ export default {
                 coingecko_id: this.coingecko_id,
                 wrapperAddress: this.address
             }).then(response => {
-                console.log('OK', response.data)
                 if (response.data.address) {
+                    this.step = 2
                     this.isAppliedB = true
-                    this.$refs.announceBridgeModal.show()
                 }
             }).catch(error => {
                 this.$toasted.show(error, { type: 'error' })
