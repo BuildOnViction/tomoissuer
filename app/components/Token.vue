@@ -187,11 +187,11 @@
                                             </p>
                                             <p class="common_txt_ellipsis text-blue">
                                                 <a
-                                                    :title="token.hash"
+                                                    :title="isBridgeToken ? tokenERC20Address : token.hash"
                                                     :href="isBridgeToken ? tokenAddressURL :
                                                     config.tomoscanUrl + '/tokens/' + address"
                                                     target="_blank">
-                                                    {{ token.hash }}
+                                                    {{ isBridgeToken ? tokenERC20Address : token.hash }}
                                                 </a>
                                             </p>
                                         </li>
@@ -548,7 +548,7 @@ export default {
                     data.items.map(m => {
                         items.push({
                             txn_hash: m.transactionHash,
-                            age: moment(m.createdAt).fromNow(),
+                            age: moment(m.blockTime).fromNow(),
                             from: m.from,
                             to: m.to,
                             amount: self.formatNumber(
