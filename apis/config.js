@@ -11,7 +11,7 @@ router.get('/', async function (req, res, next) {
     if (tomoscanUrl[tomoscanUrl.length - 1] === '/') {
         tomoscanUrl = tomoscanUrl.substr(0, tomoscanUrl.length - 1)
     }
-
+    appConfig.tomoscanUrl = tomoscanUrl
     appConfig.tomowalletUrl = config.get('tomowalletUrl')
     appConfig.etherscanAPI = config.get('etherscanAPI')
     appConfig.coingeckoAPI = config.get('coingeckoAPI')
