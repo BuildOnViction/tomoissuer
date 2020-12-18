@@ -1,6 +1,13 @@
 <template>
     <div :class="`container container-small ${sourceCode ? 'flex-content-center' : 'flex-content-between'}`">
         <div class="confirm-table tomo-body-fullw-issue issue-confirm">
+            <b-link
+                :to="'/token/' + address"
+                class="d-flex align-items-center font-weight-bold mt-4 mb-4 text-dark">
+                <b-icon-arrow-left
+                    class="mr-3"
+                    font-scale="1.5"/>BACK
+            </b-link>
             <div class="info-header">
                 <h2 class="tmp-title-large m-0">Token Information</h2>
                 <p class="text-center mt-3">
@@ -94,7 +101,9 @@ export default {
                 totalSupply: 0,
                 type: ''
             },
-            logo: ''
+            logo: '',
+            isBridgeToken: false,
+            tokenERC20Address: ''
         }
     },
     async updated () {},
@@ -103,6 +112,7 @@ export default {
         const self = this
         await self.getTokenDetail()
         await self.getLogo()
+        await self.checkBridgeToken()
         if (self.token.type === 'trc21' || self.token.type === 'trc20') {
             await self.createContract()
         }
@@ -111,19 +121,26 @@ export default {
         async createContract () {
             const self = this
             const token = self.token
+            let tokenContract
             try {
-                const tokenContract = await axios.post(
-                    '/api/token/createToken',
-                    {
-                        minFee: self.minFee,
-                        name: token.name,
-                        symbol: token.symbol,
-                        decimals: token.decimals,
-                        type: token.type,
-                        mintable: token.mintable || false,
-                        totalSupply: token.totalSupply
-                    }
-                )
+                if (self.isBridgeToken) {
+                    tokenContract = await axios.get(
+                        '/api/token/getBridgeTokenContract'
+                    )
+                } else {
+                    tokenContract = await axios.post(
+                        '/api/token/createToken',
+                        {
+                            minFee: self.minFee,
+                            name: token.name,
+                            symbol: token.symbol,
+                            decimals: token.decimals,
+                            type: token.type,
+                            mintable: token.mintable || false,
+                            totalSupply: token.totalSupply
+                        }
+                    )
+                }
                 if (tokenContract && tokenContract.data) {
                     // token source code
                     self.sourceCode = tokenContract.data.contractCode.toString()
@@ -157,6 +174,26 @@ export default {
                 if (data.image) {
                     this.logo = data.image
                 }
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async checkBridgeToken () {
+            const self = this
+            try {
+                const contract = new this.web3.eth.Contract(
+                    this.TomoBridgeWrapToken.abi,
+                    this.address
+                )
+                await contract.methods.ORIGINAL_CONTRACT.call()
+                    .then(result => {
+                        self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
+                        self.tokenERC20Address = result
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        self.isBridgeToken = false
+                    })
             } catch (error) {
                 console.log(error)
             }
