@@ -201,7 +201,7 @@ export default {
                         this.foundToken = true
                     } else {
                         this.$toasted.show(
-                            data.result,
+                            'Etherscan error: ' + data.result,
                             { type: 'error' }
                         )
                     }
