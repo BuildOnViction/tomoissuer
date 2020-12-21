@@ -309,6 +309,7 @@ contract TomoBridgeWrapToken is TRC21 {
     event TokenBurn(uint256 indexed burnID, address indexed burner, uint256 value, bytes data);
     event ToggleFeeByTomoMode(bool isFeeByTomoMode);
     event SetWithdrawFeeTomo(uint withdrawFeeTomo);
+    event SetReceivingFeeWallet(address receivingFeeWallet);
 
     /*
      *  Constants
@@ -318,8 +319,6 @@ contract TomoBridgeWrapToken is TRC21 {
     uint public DEPOSIT_FEE = 0;
     uint public WITHDRAW_FEE_TOMO = 2 ether;
     bool public TOMO_FEE_MODE = true;
-    string public ORIGINAL_CONTRACT;
-    string public NETWORK;
     
     /*
      *  Storage
@@ -331,6 +330,9 @@ contract TomoBridgeWrapToken is TRC21 {
     uint public required;
     uint public transactionCount;
     TokenBurnData[] public burnList;
+    string public original_contract;
+    string public original_network;
+    address public receivingFeeWallet;
 
     struct TokenBurnData {
         uint256 value;
@@ -426,8 +428,9 @@ contract TomoBridgeWrapToken is TRC21 {
             required = _required;
             DEPOSIT_FEE = depositAndWithdrawFee[0];
             WITHDRAW_FEE = depositAndWithdrawFee[1];
-            ORIGINAL_CONTRACT = originContract;
-            NETWORK = network;
+            original_contract = originContract;
+            original_network = network;
+            receivingFeeWallet = owners[0];
         }
     }
 
@@ -476,14 +479,24 @@ contract TomoBridgeWrapToken is TRC21 {
         emit SetWithdrawFeeTomo(withdrawFee);
     }
 
-     /// @dev Allows to change withdraw fee mode. Transaction has to be sent by wallet.
-     /// @param isFeeByTomoMode Fee mode.
+    /// @dev Allows to change withdraw fee mode. Transaction has to be sent by wallet.
+    /// @param isFeeByTomoMode Fee mode.
     function toggleFeeByTomoMode(bool isFeeByTomoMode)
     public
     onlyWallet
     {
         TOMO_FEE_MODE = isFeeByTomoMode;
         emit ToggleFeeByTomoMode(TOMO_FEE_MODE);
+    }
+
+    /// @dev Allows to set receiving fee address. Transaction has to be sent by wallet.
+    /// @param wallet Receiving fee address.
+    function setReceivingFeeWallet(address wallet)
+    public
+    onlyWallet
+    {
+        receivingFeeWallet = wallet;
+        emit SetReceivingFeeWallet(receivingFeeWallet);
     }
 
     /// @dev Allows to remove an owner. Transaction has to be sent by wallet.
@@ -583,7 +596,7 @@ contract TomoBridgeWrapToken is TRC21 {
     {
         if (TOMO_FEE_MODE) {
             require(msg.value >= WITHDRAW_FEE_TOMO);  //avoid spamming
-            owners[0].transfer(WITHDRAW_FEE_TOMO);
+            receivingFeeWallet.transfer(WITHDRAW_FEE_TOMO);
 
             if(msg.value > WITHDRAW_FEE_TOMO) {
                 msg.sender.transfer(msg.value.sub(WITHDRAW_FEE_TOMO));
@@ -600,7 +613,7 @@ contract TomoBridgeWrapToken is TRC21 {
             require(value > WITHDRAW_FEE);  //avoid spamming
             super._burn(msg.sender, value);
             if (WITHDRAW_FEE > 0) {
-                super._mint(owners[0], WITHDRAW_FEE);
+                super._mint(receivingFeeWallet, WITHDRAW_FEE);
             }
             uint256 burnValue = value.sub(WITHDRAW_FEE);
             burnList.push(TokenBurnData({
@@ -630,7 +643,7 @@ contract TomoBridgeWrapToken is TRC21 {
                 txn.value = txn.value.sub(DEPOSIT_FEE);
                 super._mint(txn.destination, txn.value);
                 if (DEPOSIT_FEE > 0) {
-                    super._mint(issuer(), DEPOSIT_FEE);
+                    super._mint(receivingFeeWallet, DEPOSIT_FEE);
                 }
                 emit Execution(transactionId);
             } else {
