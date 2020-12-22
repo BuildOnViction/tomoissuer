@@ -185,7 +185,7 @@ export default {
                     this.TomoBridgeWrapToken.abi,
                     this.address
                 )
-                await contract.methods.ORIGINAL_CONTRACT.call()
+                await contract.methods.original_contract.call()
                     .then(result => {
                         self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
                         self.tokenERC20Address = result
