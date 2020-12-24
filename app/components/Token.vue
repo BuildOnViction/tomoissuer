@@ -16,8 +16,13 @@
                         </span>
                         <span
                             v-if="isBridgeToken && token.type === 'trc21'"
+                            id="wraperc20"
                             class="apply-trc">
-                            W-ERC20
+                            Wrapped: ERC-20
+                            <b-tooltip
+                                target="wraperc20">
+                                This is a TRC-21 standard wrapped token backed by an ERC-20 asset.
+                            </b-tooltip>
                         </span>
                         <span
                             v-if="isAppliedZ"
