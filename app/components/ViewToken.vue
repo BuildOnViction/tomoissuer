@@ -26,6 +26,16 @@
             </div>
             <div class="tmp-table-two grid-two issue-confirm">
                 <table>
+                    <tr v-if="isBridgeToken">
+                        <td>Original contract</td>
+                        <td>
+                            <a
+                                :href="tokenAddressURL"
+                                target="_blank">
+                                {{ truncate(tokenERC20Address, 34) }}
+                            </a>
+                        </td>
+                    </tr>
                     <tr>
                         <td>Token name</td>
                         <td>{{ token.name }}</td>
@@ -81,6 +91,8 @@
 
 <script>
 import axios from 'axios'
+import urljoin from 'url-join'
+import store from 'store'
 export default {
     name: 'App',
     components: { },
@@ -93,6 +105,7 @@ export default {
             provider: this.NetworkProvider,
             loading: false,
             txFee: 0,
+            config: {},
             address: this.$route.params.address,
             token: {
                 name: '',
@@ -103,13 +116,15 @@ export default {
             },
             logo: '',
             isBridgeToken: false,
-            tokenERC20Address: ''
+            tokenERC20Address: '',
+            tokenAddressURL: ''
         }
     },
     async updated () {},
     destroyed () { },
     created: async function () {
         const self = this
+        self.config = store.get('configIssuer') || await self.appConfig()
         await self.getTokenDetail()
         await self.getLogo()
         await self.checkBridgeToken()
@@ -189,6 +204,11 @@ export default {
                     .then(result => {
                         self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
                         self.tokenERC20Address = result
+                        self.tokenAddressURL = urljoin(
+                            self.config.etherChain.etherScanURL,
+                            'token',
+                            result
+                        )
                     })
                     .catch(error => {
                         console.log(error)

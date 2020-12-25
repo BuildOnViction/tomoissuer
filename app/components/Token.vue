@@ -188,15 +188,14 @@
                                         <li>
                                             <p
                                                 class="title-small">
-                                                {{ isBridgeToken ? 'ERC20 Contract address' : 'Contract address' }}
+                                                Contract address
                                             </p>
                                             <p class="common_txt_ellipsis text-blue">
                                                 <a
-                                                    :title="isBridgeToken ? tokenERC20Address : token.hash"
-                                                    :href="isBridgeToken ? tokenAddressURL :
-                                                    config.tomoscanUrl + '/tokens/' + address"
+                                                    :title="token.hash"
+                                                    :href="config.tomoscanUrl + '/tokens/' + address"
                                                     target="_blank">
-                                                    {{ isBridgeToken ? tokenERC20Address : token.hash }}
+                                                    {{ token.hash }}
                                                 </a>
                                             </p>
                                         </li>
