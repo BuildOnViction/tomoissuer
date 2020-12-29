@@ -96,6 +96,9 @@
                 a {
                     padding-right: 20px;
                     position: relative;
+                    @include media-breakpoint-down(lg) {
+                        display: table-caption;
+                    }
                     &::before {
                         content: "\e910";
                         position: absolute;
