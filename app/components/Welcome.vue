@@ -20,16 +20,20 @@
                     Create TRC21 tokens and let token holders pay transaction fees in the token itself
                 </p>
                 <div class="btn-box">
-                    <b-button
-                        class="tmp-btn-blue"
-                        @click="redirectTo('createBridgeToken')">
-                        Issue bridge token
-                    </b-button>
-                    <b-button
-                        class="tmp-btn-blue"
-                        @click="redirectTo('createToken')">
-                        Issue new token
-                    </b-button>
+                    <b-dropdown
+                        class="dropdown-class"
+                        variant="secondary"
+                        text="Issue a New Token">
+                        <b-dropdown-item
+                            @click="redirectTo('createBridgeToken')">
+                            Issue an wrapped ERC-20  token
+                        </b-dropdown-item>
+                        <b-dropdown-divider />
+                        <b-dropdown-item
+                            @click="redirectTo('createToken')">
+                            Issue a new TRC-21 token
+                        </b-dropdown-item>
+                    </b-dropdown>
                     <b-button
                         class="tmp-btn-boder-blue"
                         @click="redirectTo('donateTxFee')">
