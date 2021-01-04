@@ -155,6 +155,7 @@
 		}
 	}
 }
+
 .token-logo {
 	border-radius: 50%;
     border: 2px solid #f2f2f2;
@@ -178,6 +179,9 @@
                 .token-logo {
                     background-color: #1ABC9C;
                 }
+                .set-logo {
+                    background-color: transparent;
+                }
             }
         }
     }
@@ -186,6 +190,9 @@
             &:first-child {
                 .token-logo {
                     background-color: #F1C40F;
+                }
+                .set-logo {
+                    background-color: transparent;
                 }
             }
         }
@@ -196,6 +203,9 @@
                 .token-logo {
                     background-color: #F39C12;
                 }
+                .set-logo {
+                    background-color: transparent;
+                }
             }
         }
     }
@@ -204,6 +214,9 @@
             &:first-child {
                 .token-logo {
                     background-color: #D35400;
+                }
+                .set-logo {
+                    background-color: transparent;
                 }
             }
         }
@@ -214,6 +227,9 @@
                 .token-logo {
                     background-color: #3498DB;
                 }
+                .set-logo {
+                    background-color: transparent;
+                }
             }
         }
     }
@@ -222,6 +238,9 @@
             &:first-child {
                 .token-logo {
                     background-color: #8E44AD;
+                }
+                .set-logo {
+                    background-color: transparent;
                 }
             }
         }
@@ -232,6 +251,9 @@
                 .token-logo {
                     background-color: #9BA37E;
                 }
+                .set-logo {
+                    background-color: transparent;
+                }
             }
         }
     }
@@ -240,6 +262,9 @@
             &:first-child {
                 .token-logo {
                     background-color: red;
+                }
+                .set-logo {
+                    background-color: transparent;
                 }
             }
         }
@@ -250,6 +275,9 @@
                 .token-logo {
                     background-color: blue;
                 }
+                .set-logo {
+                    background-color: transparent;
+                }
             }
         }
     }
@@ -258,6 +286,9 @@
             &:first-child {
                 .token-logo {
                     background-color: yellow;
+                }
+                .set-logo {
+                    background-color: transparent;
                 }
             }
         }

@@ -20,7 +20,7 @@
                             <template
                                 #cell(logo)="data">
                                 <div
-                                    :class="'token-logo' + (data.item.logo ? '' : ' set-logo')">
+                                    :class="'token-logo' + (data.item.logo ? ' set-logo' : '')">
                                     <div
                                         v-if="!data.value">
                                         {{ data.item.name.substring(0, 1) }}
