@@ -213,3 +213,38 @@ input {
         }
     }
 }
+
+.dropdown-class {
+    button {
+        @include transit;
+        background: $background-blue;
+        border: 2px solid $background-blue;
+        color: $color-text-white!important;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: .3em 1.2em!important;
+        font-weight: 500;
+        min-width: 220px;
+        @include media-breakpoint-down(sm) {
+            min-width: 180px;
+        }
+        @include fsz(18);
+        &.btn-min {
+            min-width: 100px;
+        }
+        i {
+            padding-right: 5px;
+            font-weight: bold;
+        }
+        &:hover,
+        .active {
+            background: $background-blue-active;
+            border: 2px solid $background-blue;
+        }
+    }
+    a {
+        margin: 0 !important;
+    }
+}
