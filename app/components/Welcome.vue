@@ -26,7 +26,7 @@
                         text="Issue a New Token">
                         <b-dropdown-item
                             @click="redirectTo('createBridgeToken')">
-                            Issue an wrapped ERC-20  token
+                            Issue a wrapped ERC-20  token
                         </b-dropdown-item>
                         <b-dropdown-divider />
                         <b-dropdown-item
