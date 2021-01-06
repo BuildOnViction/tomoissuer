@@ -503,7 +503,7 @@ router.post('/announceBridge', [
             }
         }
         const { data } = await axios.post(
-            urljoin(config.get('tomobridgeAPI'), '/new-token'),
+            urljoin(config.get('tomobridgeAPI'), '/tokens'),
             body,
             requestConfig
         )
