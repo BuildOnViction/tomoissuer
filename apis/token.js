@@ -499,7 +499,7 @@ router.post('/announceBridge', [
         const requestConfig = {
             headers: {
                 'Content-Type': 'application/json',
-                api_key: config.get('bridgeAuthorityKey')
+                'Authorization': config.get('bridgeAuthorityKey')
             }
         }
         const { data } = await axios.post(
