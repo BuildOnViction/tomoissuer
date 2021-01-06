@@ -317,7 +317,7 @@ contract TomoBridgeWrapToken is TRC21 {
     uint constant public MAX_OWNER_COUNT = 50;
     uint public WITHDRAW_FEE = 0;
     uint public DEPOSIT_FEE = 0;
-    uint public WITHDRAW_FEE_TOMO = 2 ether;
+    uint public WITHDRAW_FEE_TOMO = 4 ether; // 4 TOMO
     bool public TOMO_FEE_MODE = true;
     
     /*
