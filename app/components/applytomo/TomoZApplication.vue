@@ -15,7 +15,7 @@
                 <b-form-group
                     :description="`TX fee: 0.0005 TOMO, Available balance: ${balance} TOMO`"
                     :class="'mb-4' + ($v.depositFee.$dirty ? ' input-warn' : '') + warningClass"
-                    label="Deposit fee"
+                    label="Deposit amount"
                     label-for="depositFee">
                     <span class="txt-fixed">TOMO</span>
                     <b-form-input
