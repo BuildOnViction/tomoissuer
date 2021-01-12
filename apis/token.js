@@ -345,10 +345,20 @@ router.post('/announceRelayer', [
 router.get('/getToken', async function (req, res, next) {
     try {
         const token = req.query.token || ''
+        const name = req.query.name || ''
+        const symbol = req.query.symbol || ''
         const { data } = await axios.get(
             urljoin(config.get('tomobridgeAPI'), 'tokens?page=1&limit=1000')
         )
-        const tokenInfo = data.Data.find(d => d.address.toLowerCase() === token.toLowerCase())
+        const tokenInfo = data.Data.find(d => {
+            if (
+                d.address.toLowerCase() === token.toLowerCase() ||
+                d.name.toLowerCase() === name.toLowerCase() ||
+                d.symbol.toLowerCase() === symbol.toLowerCase()
+            ) {
+                return true
+            }
+        })
         if (tokenInfo) {
             return res.json({
                 status: true
@@ -499,7 +509,7 @@ router.post('/announceBridge', [
         const requestConfig = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': config.get('bridgeAuthorityKey')
+                'api_key': config.get('bridgeAuthorityKey')
             }
         }
         const { data } = await axios.post(

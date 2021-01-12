@@ -62,6 +62,8 @@
                 </div>
             </b-form>
         </div>
+        <div
+            :class="(loading ? 'tomo-loading' : '')"/>
     </div>
 </template>
 
@@ -101,7 +103,8 @@ export default {
             // coingecko_id: '',
             duplicateToken: false,
             // minDeposit: 0,
-            tokenPrice: 0
+            tokenPrice: 0,
+            loading: false
         }
     },
     validations: {
@@ -151,10 +154,10 @@ export default {
                 if (!this.tokenAddress) {
                     this.isTokenAddressEmpty = true
                 } else {
+                    this.loading = true
                     this.foundToken = false
                     this.isTokenAddressEmpty = false
                     const config = this.config
-                    await this.checkDuplicate()
                     const { data } = await axios.get(
                         urljoin(config.etherscanAPI,
                             `api?module=contract&action=getabi&address=${this.tokenAddress}`)
@@ -174,15 +177,19 @@ export default {
                                 this.tokenAddress
                             )
                         }
-                        contract.methods.name.call().then(name => {
-                            this.tokenName = this.checkTokenName(name)
-                        }).catch(error => error)
-                        contract.methods.symbol.call().then(symbol => {
-                            this.tokenSymbol = this.checkTokenName(symbol)
-                        }).catch(error => error)
+                        this.tokenName = this.checkTokenName(await contract.methods.name.call())
+                        this.tokenSymbol = this.checkTokenName(await contract.methods.symbol.call())
+                        // contract.methods.name.call().then(name => {
+                        //     this.tokenName = this.checkTokenName(name)
+                        // }).catch(error => error)
+                        // contract.methods.symbol.call().then(symbol => {
+                        //     this.tokenSymbol = this.checkTokenName(symbol)
+                        // }).catch(error => error)
                         contract.methods.decimals.call().then(decimals => {
                             this.decimals = new BigNumber(decimals).toNumber()
                         }).catch(error => error)
+
+                        await this.checkDuplicate(this.tokenName, this.tokenSymbol)
 
                         const contractBridge = new this.web3.eth.Contract(
                             this.TomoBridgeWrapToken.abi, null, { data: this.TomoBridgeWrapToken.bytecode })
@@ -205,7 +212,9 @@ export default {
                         })
                             .catch(error => error)
                         this.foundToken = true
+                        this.loading = false
                     } else {
+                        this.loading = false
                         this.$toasted.show(
                             'Etherscan error: ' + data.result,
                             { type: 'error' }
@@ -214,15 +223,22 @@ export default {
                 }
             } catch (error) {
                 console.log(error)
+                this.loading = false
                 this.$toasted.show(
                     'Cannot find token. Make sure token address is corrected',
                     { type: 'error' }
                 )
             }
         },
-        async checkDuplicate () {
+        async checkDuplicate (name, symbol) {
             try {
-                const { data } = await axios.get('/api/token/getToken?token=' + this.tokenAddress)
+                const { data } = await axios.get(
+                    urljoin(
+                        '/api/token/getToken?token=' + this.tokenAddress,
+                        '&name=' + name,
+                        '&symbol=' + symbol
+                    )
+                )
                 this.duplicateToken = data.status
             } catch (error) {
                 this.$toasted.show(error, { type: 'error' })
