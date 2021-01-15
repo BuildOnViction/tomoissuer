@@ -519,8 +519,7 @@ router.post('/announceBridge', [
         )
         return res.json(data)
     } catch (error) {
-        console.log(error)
-        return next(error)
+        return next(new Error(error.response.data))
     }
 })
 

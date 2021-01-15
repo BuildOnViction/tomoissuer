@@ -749,7 +749,12 @@ export default {
                     this.isAppliedB = true
                 }
             }).catch(error => {
-                this.$toasted.show(error, { type: 'error' })
+                if (error.response && error.response.data) {
+                    this.$toasted.show(error.response.data
+                    ? error.response.data.error.message : error, { type: 'error' })
+                } else {
+                    this.$toasted.show(error, { type: 'error' })
+                }
             })
         },
         closeModal () {
