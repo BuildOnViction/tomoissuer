@@ -416,7 +416,13 @@
                     <div class="msg-txt">
                         <i class="tm-icon-checkmark-outline"/>
                         <h3><b>Successful</b></h3>
-                        <p>You’ve just applied to TomoBridge.</p>
+                        <p>You have applied to TomoBridge.</p>
+                        <p>
+                            Please update logo and token's informations on
+                            <a
+                                href="https://github.com/tomochain/tokens"
+                                target="_blank">tokens repository</a>
+                        </p>
                     </div>
                     <div class="btn-box">
                         <b-button
@@ -751,7 +757,7 @@ export default {
             }).catch(error => {
                 if (error.response && error.response.data) {
                     this.$toasted.show(error.response.data
-                    ? error.response.data.error.message : error, { type: 'error' })
+                        ? error.response.data.error.message : error, { type: 'error' })
                 } else {
                     this.$toasted.show(error, { type: 'error' })
                 }
