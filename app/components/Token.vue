@@ -417,15 +417,19 @@
                         <i class="tm-icon-checkmark-outline"/>
                         <h3><b>Successful</b></h3>
                         <p>You have applied to TomoBridge.</p>
-                        <p>
-                            Please update logo and token's informations on
-                            <a
-                                href="https://github.com/tomochain/tokens"
-                                target="_blank">tokens repository</a>
-                        </p>
+                        <div class="d-flex">
+                            <b-form-checkbox v-model="isCheckUpdateInfo"/>
+                            <p>
+                                To update the token's logo and information, please go to the
+                                <a
+                                    href="https://github.com/tomochain/tokens"
+                                    target="_blank">tokens repository</a>.
+                            </p>
+                        </div>
                     </div>
                     <div class="btn-box">
                         <b-button
+                            :disabled="!isCheckUpdateInfo"
                             class="tmp-btn-blue"
                             @click="closeModal">
                             OK
@@ -497,7 +501,8 @@ export default {
             isBridgeToken: false,
             tokenAddressURL: '',
             tokenERC20Address: '',
-            step: 1
+            step: 1,
+            isCheckUpdateInfo: false
         }
     },
     computed: {},
