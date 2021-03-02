@@ -116,7 +116,7 @@ export default {
         },
         confirm () {
             const token = this.token
-            if (new BigNumber(token.totalSupply).isLessThanOrEqualTo(
+            if (new BigNumber(token.totalSupply).isGreaterThanOrEqualTo(
                 new BigNumber(this.newFee).multipliedBy(token.decimals)
             )) {
                 this.$router.push({ name: 'EditTransactionsFeeConfirm',
