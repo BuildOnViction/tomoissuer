@@ -20,6 +20,11 @@
                     <div
                         v-if="$v.newFee.$dirty && !$v.newFee.required"
                         class="text-danger pt-2">Required field</div>
+                    <div
+                        v-if="minFeeError"
+                        class="text-danger pt-2">
+                        Min fee can not greater than total supply({{ formatNumber(totalSupply) }})
+                    </div>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
@@ -55,7 +60,9 @@ export default {
             account: '',
             newFee: '',
             currentFee: '',
-            token: {}
+            token: {},
+            totalSupply: 0,
+            minFeeError: false
         }
     },
     validations: {
@@ -84,6 +91,7 @@ export default {
                 const { data } = await axios.get(`/api/token/${self.address}`)
                 self.token = data
             }
+            self.totalSupply = self.token.totalSupplyNumber
         },
         getCurrentFee () {
             const web3 = this.web3
@@ -107,13 +115,21 @@ export default {
             }
         },
         confirm () {
-            this.$router.push({ name: 'EditTransactionsFeeConfirm',
-                params: {
-                    address: this.address,
-                    currentFee: this.currentFee,
-                    newFee: this.newFee
-                }
-            })
+            const token = this.token
+            if (new BigNumber(token.totalSupply).isLessThanOrEqualTo(
+                new BigNumber(this.newFee).multipliedBy(token.decimals)
+            )) {
+                this.$router.push({ name: 'EditTransactionsFeeConfirm',
+                    params: {
+                        address: this.address,
+                        currentFee: this.currentFee,
+                        newFee: this.newFee
+                    }
+                })
+                this.minFeeError = false
+            } else {
+                this.minFeeError = true
+            }
         }
     }
 }
