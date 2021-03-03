@@ -237,7 +237,8 @@ export default {
                             ]
                         }).send({
                             from: self.account,
-                            gas: web3.utils.toHex(estimateGas),
+                            // temporary fix deployment issue
+                            gas: web3.utils.toHex(estimateGas < 1000000 ? 1000000 : estimateGas),
                             gasPrice: web3.utils.toHex(chainConfig.deployPrice)
                         })
                             .on('transactionHash', async (txHash) => {
@@ -324,7 +325,7 @@ export default {
             const web3 = this.web3
             const chainConfig = this.config.blockchain
             if (this.account && web3) {
-                const contractAbi = this.MyTRC21Mintable
+                const contractAbi = this.mintable ? this.MyTRC21Mintable : this.MyTRC21
                 const contract = new web3.eth.Contract(
                     contractAbi.abi, null, { data: contractAbi.bytecode })
                 const estimatedAmount = await contract.deploy({

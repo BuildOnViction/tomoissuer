@@ -291,6 +291,7 @@ export default {
     },
     watch : { },
     async updated () {
+        this.estimateGas()
     },
     destroyed () { },
     created: async function () {
@@ -371,7 +372,7 @@ export default {
             const web3 = this.web3
             const chainConfig = this.config.blockchain
             if (this.account && web3) {
-                const contractAbi = this.MyTRC21Mintable
+                const contractAbi = this.mintable ? this.MyTRC21Mintable : this.MyTRC21
                 const contract = new web3.eth.Contract(
                     contractAbi.abi, null, { data: contractAbi.bytecode })
                 const estimatedAmount = await contract.deploy({
