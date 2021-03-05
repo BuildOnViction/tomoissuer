@@ -93,7 +93,7 @@ export default {
             type: 'trc21',
             balance: 0,
             txFee: 0,
-            gasPrice: 10000000000000,
+            gasPrice: 250000000,
             isEnoughTOMO: true,
             issueFee: '',
             tokenAddress: '',
@@ -121,6 +121,12 @@ export default {
         if (!this.account) {
             this.$router.push({ path: '/login' })
         }
+        this.web3.eth.getGasPrice().then(result => {
+            this.gasPrice = result
+        }).catch(error => {
+            console.log(error)
+            this.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
+        })
         await this.getBalance()
         this.config = store.get('configIssuer') || await this.appConfig()
     },
@@ -203,7 +209,7 @@ export default {
                                 'ETH' // hardcode for ethereum network
                             ]
                         }).estimateGas().then((gas) => {
-                            this.issueFee = new BigNumber(gas * config.blockchain.deployPrice)
+                            this.issueFee = new BigNumber(gas * this.gasPrice)
                                 .div(10 ** 18).toNumber()
                             if (this.balance.isLessThan(this.issueFee)) {
                                 this.isEnoughTOMO = false
