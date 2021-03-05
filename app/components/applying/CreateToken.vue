@@ -255,7 +255,7 @@ export default {
             type: 'trc21',
             balance: 0,
             txFee: 0,
-            gasPrice: 10000000000000,
+            gasPrice: 250000000,
             isEnoughTOMO: true,
             checkName: false,
             checkSymbol: false,
@@ -300,6 +300,12 @@ export default {
         if (!this.account) {
             this.$router.push({ path: '/login' })
         }
+        this.web3.eth.getGasPrice().then(result => {
+            this.gasPrice = result
+        }).catch(error => {
+            console.log(error)
+            self.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
+        })
         await this.getBalance()
         this.config = store.get('configIssuer') || await this.appConfig()
         this.estimateGas()
@@ -370,7 +376,6 @@ export default {
         },
         async estimateGas () {
             const web3 = this.web3
-            const chainConfig = this.config.blockchain
             if (this.account && web3) {
                 const contractAbi = this.mintable ? this.MyTRC21Mintable : this.MyTRC21
                 const contract = new web3.eth.Contract(
@@ -384,7 +389,7 @@ export default {
                         (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
                     ]
                 }).estimateGas()
-                this.txFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
+                this.txFee = new BigNumber(estimatedAmount * this.gasPrice)
                     .div(10 ** 18).toNumber()
                 if (this.balance.isLessThan(this.txFee)) {
                     this.isEnoughTOMO = false

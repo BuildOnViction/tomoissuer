@@ -129,7 +129,7 @@ export default {
             provider: this.NetworkProvider,
             loading: false,
             config: {},
-            gasPrice: 10000000000000,
+            gasPrice: 250000000,
             balance: 0,
             txFee: 0
         }
@@ -140,6 +140,12 @@ export default {
         const self = this
         self.account = store.get('address') ||
             self.$store.state.address || await self.getAccount()
+        self.web3.eth.getGasPrice().then(result => {
+            self.gasPrice = result
+        }).catch(error => {
+            console.log(error)
+            self.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
+        })
         if (!self.account) {
             self.$router.push({ path: '/login' })
         }
@@ -147,11 +153,9 @@ export default {
             self.$router.push({ path: '/createToken' })
         } else {
             self.config = store.get('configIssuer') || await self.appConfig()
-            // const chainConfig = self.config.blockchain
             await self.createContract()
             await self.getBalance()
             self.estimateFee()
-            // self.txFee = new BigNumber(chainConfig.gas * chainConfig.deployPrice).div(10 ** 18)
         }
     },
     methods: {
@@ -237,9 +241,8 @@ export default {
                             ]
                         }).send({
                             from: self.account,
-                            // temporary fix deployment issue
-                            gas: web3.utils.toHex(estimateGas < 1000000 ? 1000000 : estimateGas),
-                            gasPrice: web3.utils.toHex(chainConfig.deployPrice)
+                            gas: web3.utils.toHex(estimateGas),
+                            gasPrice: web3.utils.toHex(self.gasPrice)
                         })
                             .on('transactionHash', async (txHash) => {
                                 self.transactionHash = txHash
@@ -278,7 +281,7 @@ export default {
                         const dataTx = {
                             from: self.account,
                             gas: web3.utils.toHex(chainConfig.gas),
-                            gasPrice: web3.utils.toHex(chainConfig.deployPrice),
+                            gasPrice: web3.utils.toHex(self.gasPrice),
                             gasLimit: web3.utils.toHex(chainConfig.gas),
                             value: web3.utils.toHex(0),
                             chainId: chainConfig.networkId
@@ -323,7 +326,6 @@ export default {
         },
         async estimateFee () {
             const web3 = this.web3
-            const chainConfig = this.config.blockchain
             if (this.account && web3) {
                 const contractAbi = this.mintable ? this.MyTRC21Mintable : this.MyTRC21
                 const contract = new web3.eth.Contract(
@@ -337,7 +339,7 @@ export default {
                         (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
                     ]
                 }).estimateGas()
-                this.txFee = new BigNumber(estimatedAmount * chainConfig.deployPrice)
+                this.txFee = new BigNumber(estimatedAmount * this.gasPrice)
                     .div(10 ** 18).toNumber()
             }
         }
