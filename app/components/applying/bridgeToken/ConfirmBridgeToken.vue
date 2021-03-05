@@ -137,7 +137,7 @@ export default {
             provider: this.NetworkProvider,
             loading: false,
             config: {},
-            gasPrice: '',
+            gasPrice: 250000000,
             balance: 0
         }
     },
@@ -150,6 +150,12 @@ export default {
         if (!self.account) {
             self.$router.push({ path: '/login' })
         }
+        self.web3.eth.getGasPrice().then(result => {
+            self.gasPrice = result
+        }).catch(error => {
+            console.log(error)
+            self.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
+        })
         if (!self.tokenName || !self.tokenSymbol) {
             self.$router.push({ path: '/createBridgeToken' })
         } else {
@@ -239,7 +245,7 @@ export default {
                         }).send({
                             from: self.account,
                             gas: web3.utils.toHex(estimateGas),
-                            gasPrice: web3.utils.toHex(chainConfig.deployPrice)
+                            gasPrice: web3.utils.toHex(self.gasPrice)
                         })
                             .on('transactionHash', async (txHash) => {
                                 self.transactionHash = txHash
@@ -283,7 +289,7 @@ export default {
                         const dataTx = {
                             from: self.account,
                             gas: web3.utils.toHex(estimateGas),
-                            gasPrice: web3.utils.toHex(chainConfig.deployPrice),
+                            gasPrice: web3.utils.toHex(self.gasPrice),
                             gasLimit: web3.utils.toHex(estimateGas),
                             value: web3.utils.toHex(0),
                             chainId: chainConfig.networkId

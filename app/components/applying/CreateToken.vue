@@ -304,7 +304,7 @@ export default {
             this.gasPrice = result
         }).catch(error => {
             console.log(error)
-            self.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
+            this.$toasted.show('Cannot get gasPrice ' + error, { type: 'error' })
         })
         await this.getBalance()
         this.config = store.get('configIssuer') || await this.appConfig()
