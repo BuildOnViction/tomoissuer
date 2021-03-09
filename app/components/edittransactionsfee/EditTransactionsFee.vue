@@ -23,7 +23,7 @@
                     <div
                         v-if="minFeeError"
                         class="text-danger pt-2">
-                        Min fee can not greater than total supply({{ formatNumber(totalSupply) }})
+                        Min fee cannot be greater than total supply({{ formatNumber(totalSupply) }})
                     </div>
                 </b-form-group>
                 <div class="btn-box">
