@@ -42,6 +42,11 @@
                     <div
                         v-else-if="$v.burnAmount.$dirty && !$v.burnAmount.minValue"
                         class="text-danger pt-2">Deposit amount should be more than 0 TOMO</div>
+                    <div
+                        v-if="burningError"
+                        class="text-danger pt-2">
+                        Burning amount cannot be greater than total supply({{ formatNumber(totalSupply) }})
+                    </div>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
@@ -83,7 +88,9 @@ export default {
             currentFee: '',
             ownerBalance: '',
             contractCreation: '',
-            checkSupply: false
+            checkSupply: false,
+            totalSupply: '',
+            burningError: false
         }
     },
     validations: {
@@ -121,6 +128,7 @@ export default {
             const { data } = await axios.get(`/api/account/${self.address}`)
             const token = data.token
             self.token = token || {}
+            self.totalSupply = self.token.totalSupplyNumber
             self.contractCreation = data.contractCreation
         },
         getOwnerBalance () {
@@ -172,13 +180,19 @@ export default {
             } else { this.checkSupply = false }
         },
         confirm () {
-            this.$router.push({ name: 'BurnTokenConfirm',
-                params: {
-                    address: this.address,
-                    burnAmount: this.burnAmount,
-                    ownerBalance: this.ownerBalance
-                }
-            })
+            const token = this.token
+            if (new BigNumber(token.totalSupply).isGreaterThanOrEqualTo(
+                new BigNumber(this.burnAmount).multipliedBy(10 ** token.decimals)
+            )) {
+                this.$router.push({ name: 'BurnTokenConfirm',
+                    params: {
+                        address: this.address,
+                        burnAmount: this.burnAmount,
+                        ownerBalance: this.ownerBalance
+                    }
+                })
+                this.burningError = false
+            } else { this.burningError = true }
         }
     }
 }
