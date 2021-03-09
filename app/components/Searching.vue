@@ -63,7 +63,7 @@ export default {
     },
     watch: {
         search: async function (newValue, oldValue) {
-            if (newValue !== '' && !this.page.tokenAddress) {
+            if (newValue !== '' && newValue !== this.page.tokenAddress) {
                 if (regexAddress.test(newValue)) {
                     this.page.tokenAddress = newValue
                 } else { this.doSearch() }
