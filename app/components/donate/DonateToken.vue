@@ -127,6 +127,7 @@ export default {
             if (regexAddress.test(newValue)) {
                 await this.getData()
                 this.getPoolingFee()
+                this.checkAppliedZ()
             }
             if (newValue === '') {
                 this.token = {}
@@ -243,7 +244,7 @@ export default {
                     .then(result => {
                         if (result && result.length > 0) {
                             const lowerCaseArr = result.map(m => m.toLowerCase())
-                            if (lowerCaseArr.indexOf(this.address) > -1) {
+                            if (lowerCaseArr.indexOf(this.tokenAddress) > -1) {
                                 this.isAppliedZ = true
                             }
                         }
