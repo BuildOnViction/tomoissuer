@@ -45,6 +45,9 @@
                     <div
                         v-if="!tokenExist"
                         class="text-danger pt-2">Token not found</div>
+                    <div
+                        v-if="!isAppliedZ && tokenExist"
+                        class="text-danger pt-2">Token has not been applied to TomoZ yet</div>
                 </b-form-group>
                 <b-form-group
                     :description="`Available balance:  ${balance} TOMO`"
@@ -105,7 +108,8 @@ export default {
             poolingFee: '',
             token: {},
             tokenExist: true,
-            warningClass: ''
+            warningClass: '',
+            isAppliedZ: true
         }
     },
     validations: {
@@ -182,9 +186,20 @@ export default {
         },
         getPoolingFee () {
             const contract = this.TRC21Issuer
-            contract.methods.getTokenCapacity(this.tokenAddress).call().then(capacity => {
-                let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
-                this.poolingFee = balance.div(10 ** 18).toNumber()
+            contract.methods.tokens.call().then(result => {
+                const lowerCaseArr = result.map(m => m.toLowerCase())
+                if (lowerCaseArr.indexOf(this.address) > -1) {
+                    this.isAppliedZ = true
+                    contract.methods.getTokenCapacity(this.tokenAddress).call().then(capacity => {
+                        let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
+                        this.poolingFee = balance.div(10 ** 18).toNumber()
+                    }).catch(error => {
+                        console.log(error)
+                        this.$toatsed.show(error, { type: 'error' })
+                    })
+                } else {
+                    this.isAppliedZ = false
+                }
             }).catch(error => {
                 console.log(error)
                 this.$toatsed.show(error, { type: 'error' })
@@ -220,6 +235,23 @@ export default {
                     donationAmount: this.donationAmount
                 }
             })
+        },
+        checkAppliedZ () {
+            const contract = this.TRC21Issuer
+            if (contract) {
+                contract.methods.tokens.call()
+                    .then(result => {
+                        if (result && result.length > 0) {
+                            const lowerCaseArr = result.map(m => m.toLowerCase())
+                            if (lowerCaseArr.indexOf(this.address) > -1) {
+                                this.isAppliedZ = true
+                            }
+                        }
+                    }).catch(error => {
+                        console.log(error)
+                        this.$toasted.show(error, { type: 'error' })
+                    })
+            }
         }
     }
 }
