@@ -50,6 +50,11 @@
                 </b-form-group>
                 <div class="btn-box">
                     <b-button
+                        class="tmp-btn-boder-blue btn-min"
+                        @click="back">
+                        Back
+                    </b-button>
+                    <b-button
                         class="tmp-btn-blue"
                         type="submit">Next</b-button>
                 </div>
@@ -193,6 +198,9 @@ export default {
                 })
                 this.burningError = false
             } else { this.burningError = true }
+        },
+        back () {
+            this.$router.go(-1)
         }
     }
 }
