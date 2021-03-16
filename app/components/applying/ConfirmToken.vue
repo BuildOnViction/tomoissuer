@@ -258,6 +258,10 @@ export default {
                                         }, 1500)
                                     }
                                 }
+                            }).catch(error => {
+                                console.log(error)
+                                self.loading = false
+                                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
                             })
                         break
                     case 'ledger':

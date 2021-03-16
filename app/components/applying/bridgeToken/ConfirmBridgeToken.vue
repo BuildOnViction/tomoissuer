@@ -172,7 +172,7 @@ export default {
                 this.balance = new BigNumber(result).div(10 ** 18)
             } catch (error) {
                 console.log(error)
-                this.$toasted.show(error, { type: 'error' })
+                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
             }
         },
         async createContract () {
@@ -188,7 +188,7 @@ export default {
                 }
             } catch (error) {
                 self.$toasted.show(
-                    error, { type: 'error' }
+                    error.message ? error.message : error, { type: 'error' }
                 )
             }
         },
@@ -261,6 +261,10 @@ export default {
                                         }, 1500)
                                     }
                                 }
+                            }).catch(error => {
+                                console.log(error)
+                                self.loading = false
+                                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
                             })
                         break
                     case 'ledger':
