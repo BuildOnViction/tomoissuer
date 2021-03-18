@@ -53,11 +53,11 @@
                                     Issue New Token
                                     <i class="ml-1 tm-add-outline float-right" />
                                 </b-dropdown-item>
-                                <b-dropdown-item
+                                <!-- <b-dropdown-item
                                     to="/createBridgeToken">
                                     Issue Wrapped ERC-20 Token
                                     <i class="ml-1 tm-add-outline float-right"/>
-                                </b-dropdown-item>
+                                </b-dropdown-item> -->
                                 <b-dropdown-divider />
                                 <b-dropdown-item
                                     to="/donateTxFee">
