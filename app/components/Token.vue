@@ -79,7 +79,7 @@
                                         :to="'/tomoxcondition/' + address">
                                         Apply to TomoX Protocol
                                     </b-dropdown-item>
-                                    <b-dropdown-item
+                                    <!-- <b-dropdown-item
                                         v-if="isBridgeToken && !isAppliedB">
                                         <div id="applyBridge">
                                             <b-link
@@ -94,7 +94,7 @@
                                             target="applyBridge">
                                             Apply to TomoZ is required
                                         </b-tooltip>
-                                    </b-dropdown-item>
+                                    </b-dropdown-item> -->
                                     <b-dropdown-item
                                         :to="'/viewToken/' + address">
                                         View Token Info
@@ -753,7 +753,8 @@ export default {
                 tokenAddress: this.tokenERC20Address,
                 decimals: this.token.decimals,
                 coingecko_id: this.coingecko_id,
-                wrapperAddress: this.address
+                wrapperAddress: this.address,
+                caller: this.account
             }).then(response => {
                 if (response.data.address) {
                     this.step = 2

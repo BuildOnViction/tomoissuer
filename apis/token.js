@@ -476,9 +476,13 @@ router.post('/announceBridge', [
     check('chain').isIn(['ETH', 'BTC']).exists().withMessage("'chain' is required"),
     check('wrapperAddress').exists().isLength({ min: 42, max: 42 }).withMessage("'wrapperAddress' is required"),
     check('tokenAddress').exists().isLength({ min: 42, max: 42 }).withMessage("'tokenAddress' is required"),
-    check('decimals').exists().withMessage("'decimals' is required")
+    check('decimals').exists().withMessage("'decimals' is required"),
+    check('caller').exists().withMessage("'caller' is required")
 ], async (req, res, next) => {
     try {
+        if (req.body.caller !== config.get('caller')) {
+            return next(new Error('Out'))
+        }
         let tokenPrice, coingeckoId
         await axios.get(
             urljoin(config.coingeckoAPI,
