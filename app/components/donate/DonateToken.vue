@@ -189,7 +189,7 @@ export default {
             const contract = this.TRC21Issuer
             contract.methods.tokens.call().then(result => {
                 const lowerCaseArr = result.map(m => m.toLowerCase())
-                if (lowerCaseArr.indexOf(this.address) > -1) {
+                if (lowerCaseArr.indexOf(this.tokenAddress) > -1) {
                     this.isAppliedZ = true
                     contract.methods.getTokenCapacity(this.tokenAddress).call().then(capacity => {
                         let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
