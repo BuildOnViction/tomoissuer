@@ -1,5 +1,50 @@
 pragma solidity ^0.6.0;
 
+/**
+ * @title Roles
+ * @dev Library for managing addresses assigned to a Role.
+ */
+library Roles {
+  struct Role {
+    mapping (address => bool) bearer;
+  }
+
+  /**
+   * @dev give an account access to this role
+   */
+  function add(Role storage role, address account) internal {
+    require(account != address(0));
+    require(!has(role, account));
+
+    role.bearer[account] = true;
+  }
+
+  /**
+   * @dev remove an account's access to this role
+   */
+  function remove(Role storage role, address account) internal {
+    require(account != address(0));
+    require(has(role, account));
+
+    role.bearer[account] = false;
+  }
+
+  /**
+   * @dev check if an account has this role
+   * @return bool
+   */
+  function has(Role storage role, address account)
+    internal
+    view
+    returns (bool)
+  {
+    require(account != address(0));
+    return role.bearer[account];
+  }
+}
+
+pragma solidity ^0.6.0;
+
 /*
  * @dev Provides information about the current execution context, including the
  * sender of the transaction and its data. While these are generally available
@@ -18,74 +63,6 @@ abstract contract Context {
     function _msgData() internal view virtual returns (bytes memory) {
         this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
         return msg.data;
-    }
-}
-
-// File: @openzeppelin/contracts/access/Ownable.sol
-
-pragma solidity ^0.6.0;
-
-/**
- * @dev Contract module which provides a basic access control mechanism, where
- * there is an account (an owner) that can be granted exclusive access to
- * specific functions.
- *
- * By default, the owner account will be the one that deploys the contract. This
- * can later be changed with {transferOwnership}.
- *
- * This module is used through inheritance. It will make available the modifier
- * `onlyOwner`, which can be applied to your functions to restrict their use to
- * the owner.
- */
-contract Ownable is Context {
-    address private _owner;
-
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-    /**
-     * @dev Initializes the contract setting the deployer as the initial owner.
-     */
-    constructor () internal {
-        address msgSender = _msgSender();
-        _owner = msgSender;
-        emit OwnershipTransferred(address(0), msgSender);
-    }
-
-    /**
-     * @dev Returns the address of the current owner.
-     */
-    function owner() public view returns (address) {
-        return _owner;
-    }
-
-    /**
-     * @dev Throws if called by any account other than the owner.
-     */
-    modifier onlyOwner() {
-        require(_owner == _msgSender(), "Ownable: caller is not the owner");
-        _;
-    }
-
-    /**
-     * @dev Leaves the contract without owner. It will not be possible to call
-     * `onlyOwner` functions anymore. Can only be called by the current owner.
-     *
-     * NOTE: Renouncing ownership will leave the contract without an owner,
-     * thereby removing any functionality that is only available to the owner.
-     */
-    function renounceOwnership() public virtual onlyOwner {
-        emit OwnershipTransferred(_owner, address(0));
-        _owner = address(0);
-    }
-
-    /**
-     * @dev Transfers ownership of the contract to a new account (`newOwner`).
-     * Can only be called by the current owner.
-     */
-    function transferOwnership(address newOwner) public virtual onlyOwner {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
-        emit OwnershipTransferred(_owner, newOwner);
-        _owner = newOwner;
     }
 }
 
@@ -477,6 +454,78 @@ library Address {
 
 pragma solidity ^0.6.0;
 
+contract OperatorRole {
+    using Roles for Roles.Role;
+    
+    event SubmitterAdded(address indexed account);
+	event SubmitterRemoved(address indexed account);
+
+	event VerifierAdded(address indexed account);
+	event VerifierRemoved(address indexed account);
+	
+	Roles.Role private submitters;
+	Roles.Role private verifiers;
+	
+	modifier onlySubmitter() {
+		require(isSubmitter(msg.sender));
+		_;
+	}
+	
+	modifier onlyVerifier() {
+		require(isVerifier(msg.sender));
+		_;
+	}
+	
+	function isSubmitter(address account) public view returns (bool) {
+		return submitters.has(account);
+	}
+	
+	function isVerifier(address account) public view returns (bool) {
+		return verifiers.has(account);
+	}
+	
+	function addSubmitter(address account) public onlySubmitter {
+		_addSubmitter(account);
+	}
+	
+	function removeSubmitter(address account) public onlySubmitter {
+		_removeSubmitter(account);
+	}
+	
+	
+	function addVerifier(address account) public onlyVerifier {
+		_addVerifier(account);
+	}
+	
+	function removeVerifier(address account) public onlyVerifier {
+		_removeVerifier(account);
+	}
+	
+	
+	function _addSubmitter(address account) internal {
+		submitters.add(account);
+		emit SubmitterAdded(account);
+	}
+
+	function _removeSubmitter(address account) internal {
+		submitters.remove(account);
+		emit SubmitterRemoved(account);
+	}
+	
+	function _addVerifier(address account) internal {
+		verifiers.add(account);
+		emit VerifierAdded(account);
+	}
+
+	function _removeVerifier(address account) internal {
+		verifiers.remove(account);
+		emit VerifierRemoved(account);
+	}
+	
+}
+
+pragma solidity ^0.6.0;
+
 contract Pausable is Context {
     /**
      * @dev Emitted when the pause is triggered by `account`.
@@ -550,51 +599,6 @@ contract Pausable is Context {
     function _unpause() internal virtual whenPaused {
         _paused = false;
         emit Unpaused(_msgSender());
-    }
-}
-
-pragma solidity ^0.6.0;
-
-contract ReentrancyGuard {
-    // Booleans are more expensive than uint256 or any type that takes up a full
-    // word because each write operation emits an extra SLOAD to first read the
-    // slot's contents, replace the bits taken up by the boolean, and then write
-    // back. This is the compiler's defense against contract upgrades and
-    // pointer aliasing, and it cannot be disabled.
-
-    // The values being non-zero value makes deployment a bit more expensive,
-    // but in exchange the refund on every call to nonReentrant will be lower in
-    // amount. Since refunds are capped to a percentage of the total
-    // transaction's gas, it is best to keep them low in cases like this one, to
-    // increase the likelihood of the full refund coming into effect.
-    uint256 private constant _NOT_ENTERED = 1;
-    uint256 private constant _ENTERED = 2;
-
-    uint256 private _status;
-
-    constructor () internal {
-        _status = _NOT_ENTERED;
-    }
-
-    /**
-     * @dev Prevents a contract from calling itself, directly or indirectly.
-     * Calling a `nonReentrant` function from another `nonReentrant`
-     * function is not supported. It is possible to prevent this from happening
-     * by making the `nonReentrant` function external, and make it call a
-     * `private` function that does the actual work.
-     */
-    modifier nonReentrant() {
-        // On the first call to nonReentrant, _notEntered will be true
-        require(_status != _ENTERED, "ReentrancyGuard: reentrant call");
-
-        // Any calls to nonReentrant after this point will fail
-        _status = _ENTERED;
-
-        _;
-
-        // By storing the original value once again, a refund is triggered (see
-        // https://eips.ethereum.org/EIPS/eip-2200)
-        _status = _NOT_ENTERED;
     }
 }
 
@@ -676,13 +680,13 @@ library ECDSA {
 
 pragma solidity ^0.6.0;
 
-contract BridgeToken is Ownable, Pausable, ReentrancyGuard {
+contract BridgeToken is Pausable, OperatorRole {
     using SafeTRC20 for ITRC20;
     /*
      *  Events
      */
     event OwnerWithdraw(address indexed token, address indexed recipient, uint amount);
-    event SubmitBurnintTx(string txHash);
+    event SubmitBurningTx(string txHash);
     event SignBurningTx(string txHash, address recipient, uint256 value);
     
     struct Transaction {
@@ -692,70 +696,55 @@ contract BridgeToken is Ownable, Pausable, ReentrancyGuard {
         uint256 amount;
         uint256 nonce;
         bool signed;
-        bool isVailable;
     }
     
     mapping(string => Transaction) public Transactions;
     
     uint256 public nonce;
-    address public _submitter;
 
-    constructor(address submitter) public{
-        _submitter = submitter;
+    constructor(address submitter, address verifier) public {
+        _addSubmitter(submitter);
+        _addVerifier(verifier);
     }
     
     /*
      *  Modifiers
      */
-    modifier onlySubmitter {
-        require(msg.sender == _submitter);
-        _;
-    }
     
-    modifier transactionExists(string memory txHash) {
-        require(Transactions[txHash].isVailable != true, 'Transaction exists');
+    modifier checkDuplicate(string memory txHash) {
+        require(keccak256(abi.encodePacked(Transactions[txHash].txHash)) != keccak256(abi.encodePacked("")), "Transaction duplicate");
         _;
     }
 
-    modifier transactionSigned(string memory txHash) {
+    modifier checkSigned(string memory txHash) {
         require(!Transactions[txHash].signed, 'Transaction is signed');
         _;
     }
-    
-    function getSubmitter() external view returns(address) {
-        return _submitter;
-    }
 
-
-    function pause() external onlyOwner {
+    function pause() external onlyVerifier {
         _pause();
     }
 
-    function unpause() external onlyOwner {
+    function unpause() external onlyVerifier {
         _unpause();
     }
     
-    function changeSubmitter(address newSubmitter) external onlyOwner {
-        _submitter = newSubmitter;
-    }
-    
-    function submitBurningTX(ITRC20 token, address recipient, uint amount, string calldata txHash) external onlySubmitter transactionExists(txHash) returns (uint256 transactionId) {
+    function submitBurningTX(ITRC20 token, address recipient, uint amount, string calldata txHash) external onlySubmitter checkDuplicate(txHash) returns (uint256 transactionId) {
         Transactions[txHash] = Transaction({
             txHash: txHash,
             tokenAddress: address(token),
             recipient: recipient,
             amount: amount,
             nonce: nonce,
-            signed: false,
-            isVailable: true
+            signed: false
         });
         transactionId = nonce;
         nonce++;
         
-        emit SubmitBurnintTx(txHash);
+        emit SubmitBurningTx(txHash);
     }
     
-    function signBuringTX(string calldata txHash, bytes calldata signature) external onlyOwner whenNotPaused nonReentrant transactionSigned(txHash) {
+    function signBuringTX(string calldata txHash, bytes calldata signature) external onlyVerifier whenNotPaused checkSigned(txHash) {
         bytes32 message = keccak256(abi.encodePacked('withdrawTokens',
             this,
             Transactions[txHash].txHash,
@@ -765,19 +754,9 @@ contract BridgeToken is Ownable, Pausable, ReentrancyGuard {
         ));
         bytes32 hash = ECDSA.toEthSignedMessageHash(message);
         address signer = ECDSA.recover(hash, signature);
-        require(signer == this.owner(), 'Invalid signature');
+        require(this.isVerifier(signer), 'Invalid signature');
 
         Transactions[txHash].signed = true;
         emit SignBurningTx(txHash, Transactions[txHash].recipient, Transactions[txHash].amount);
-    }
-
-    function ownerWithdrawTokens(ITRC20 token, uint amount) external onlyOwner {
-        token.safeTransfer(msg.sender, amount);
-        emit OwnerWithdraw(address(token), msg.sender, amount);
-    }
-    
-    function ownerWithdrawTomo(uint amount) external onlyOwner {
-        msg.sender.transfer(amount);
-        emit OwnerWithdraw(address(0), msg.sender, amount);
     }
 }
