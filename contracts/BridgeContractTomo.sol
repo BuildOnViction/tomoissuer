@@ -686,19 +686,19 @@ contract BridgeToken is Pausable, OperatorRole {
      *  Events
      */
     event OwnerWithdraw(address indexed token, address indexed recipient, uint amount);
-    event SubmitBurningTx(string txHash);
-    event SignBurningTx(string txHash, address recipient, uint256 value);
+    event SubmitBurningTx(bytes32 txHash);
+    event SignBurningTx(bytes32 txHash, address recipient, uint256 value);
     
     struct Transaction {
-        string txHash;
-        address tokenAddress;
-        address recipient;
-        uint256 amount;
-        uint256 nonce;
         bool signed;
+        address recipient;
+        address tokenAddress;
+        bool isAvailable;
+        uint256 amount; 
+        uint256 nonce;
     }
     
-    mapping(string => Transaction) public Transactions;
+    mapping(bytes32 => Transaction) public Transactions;
     
     uint256 public nonce;
 
@@ -711,13 +711,14 @@ contract BridgeToken is Pausable, OperatorRole {
      *  Modifiers
      */
     
-    modifier checkDuplicate(string memory txHash) {
-        require(keccak256(abi.encodePacked(Transactions[txHash].txHash)) != keccak256(abi.encodePacked("")), "Transaction duplicate");
+    // use an other variable 
+    modifier nonExisted(bytes32 txHash) {
+        require(!Transactions[txHash].isAvailable, "Tx is existed");
         _;
     }
-
-    modifier checkSigned(string memory txHash) {
-        require(!Transactions[txHash].signed, 'Transaction is signed');
+    
+    modifier nonSigned(bytes32 txHash) {
+        require(!Transactions[txHash].signed, 'Tx is signed');
         _;
     }
 
@@ -729,14 +730,14 @@ contract BridgeToken is Pausable, OperatorRole {
         _unpause();
     }
     
-    function submitBurningTX(ITRC20 token, address recipient, uint amount, string calldata txHash) external onlySubmitter checkDuplicate(txHash) returns (uint256 transactionId) {
+    function submitBurningTX(ITRC20 token, address recipient, uint amount, bytes32  txHash) external onlySubmitter nonExisted(txHash) returns (uint256 transactionId) {
         Transactions[txHash] = Transaction({
-            txHash: txHash,
             tokenAddress: address(token),
             recipient: recipient,
             amount: amount,
             nonce: nonce,
-            signed: false
+            signed: false,
+            isAvailable: true
         });
         transactionId = nonce;
         nonce++;
@@ -744,10 +745,9 @@ contract BridgeToken is Pausable, OperatorRole {
         emit SubmitBurningTx(txHash);
     }
     
-    function signBuringTX(string calldata txHash, bytes calldata signature) external onlyVerifier whenNotPaused checkSigned(txHash) {
-        bytes32 message = keccak256(abi.encodePacked('withdrawTokens',
-            this,
-            Transactions[txHash].txHash,
+    function signBuringTX(bytes32  txHash, bytes calldata signature) external onlyVerifier whenNotPaused nonSigned(txHash) {
+        bytes32 message = keccak256(abi.encodePacked(
+            txHash,
             Transactions[txHash].recipient,
             Transactions[txHash].nonce,
             Transactions[txHash].amount
