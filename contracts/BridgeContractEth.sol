@@ -732,27 +732,8 @@ contract BridgeToken is Ownable, Pausable, ReentrancyGuard {
     /*
      *  Events
      */
+    event Swap(address indexed token, string recipient, uint amount);
     event Withdraw(address indexed token, address indexed recipient, uint amount);
-    
-    struct Transaction {
-        string txHash;
-        address tokenAddress;
-        address recipient;
-        uint256 amount;
-        uint256 nonce;
-        bool signed;
-    }
-    
-    mapping(string => Transaction) public Transactions;
-
-    /*
-     *  Modifiers
-     */
-    
-    modifier checkDuplicate(string memory txHash) {
-        require(keccak256(abi.encodePacked(Transactions[txHash].txHash)) != keccak256(abi.encodePacked("")), "Transaction duplicate");
-        _;
-    }
 
     function pause() external onlyOwner {
         _pause();
@@ -761,10 +742,25 @@ contract BridgeToken is Ownable, Pausable, ReentrancyGuard {
     function unpause() external onlyOwner {
         _unpause();
     }
+    
+    function swapErc20(IERC20 token, string calldata recipient, uint amount) external nonReentrant whenNotPaused {
+        require(amount > 0, "Swap amount must be positive");
+        require(token.allowance(msg.sender, address(this)) >= amount, "Swap amount exceeds allowance");
 
-    function withdrawEth(address payable recipient, uint256 amount, uint256 txId, string calldata txHash, bytes calldata signature) external nonReentrant whenNotPaused checkDuplicate(txHash) {
+        token.safeTransferFrom(msg.sender, address(this), amount);
+
+        emit Swap(address(token), recipient, amount);
+    }
+
+    function swapEth(string calldata recipient) external payable nonReentrant whenNotPaused {
+        uint amount = msg.value;
+        require(amount > 0, "Swap amount must be positive");
+
+        emit Swap(address(0), recipient, amount);
+    }
+
+    function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, bytes calldata signature) external nonReentrant whenNotPaused {
         bytes32 message = keccak256(abi.encodePacked('withdrawEth',
-            this,
             txHash,
             recipient,
             txId,
@@ -775,23 +771,13 @@ contract BridgeToken is Ownable, Pausable, ReentrancyGuard {
 
         require(signer == this.owner(), 'Invalid srinkerignature');
         
-        recipient.transfer(Transactions[txHash].amount);
-        
-        Transactions[txHash] = Transaction({
-            txHash: txHash,
-            tokenAddress: address(0),
-            recipient: recipient,
-            amount: amount,
-            nonce: txId,
-            signed: true
-        });
+        recipient.transfer(amount);
 
-        emit Withdraw(address(0), Transactions[txHash].recipient, Transactions[txHash].amount);
+        emit Withdraw(address(0), recipient, amount);
     }
     
-    function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, string calldata txHash, bytes calldata signature) external whenNotPaused nonReentrant checkDuplicate(txHash) {
+    function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, bytes calldata signature) external whenNotPaused nonReentrant {
         bytes32 message = keccak256(abi.encodePacked('withdrawTokens',
-            this,
             txHash,
             recipient,
             txId,
@@ -801,15 +787,6 @@ contract BridgeToken is Ownable, Pausable, ReentrancyGuard {
         address signer = ECDSA.recover(hash, signature);
 
         require(signer == this.owner(), 'Invalid signature');
-        
-        Transactions[txHash] = Transaction({
-            txHash: txHash,
-            tokenAddress: address(token),
-            recipient: recipient,
-            amount: amount,
-            nonce: txId,
-            signed: true
-        });
 
         token.safeTransfer(recipient, amount);
         emit Withdraw(address(token), recipient, amount);
