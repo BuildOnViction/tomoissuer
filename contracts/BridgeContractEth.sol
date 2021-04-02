@@ -727,7 +727,7 @@ library ECDSA {
 
 pragma solidity ^0.6.0;
 
-contract BridgeToken is Ownable, Pausable, ReentrancyGuard {
+contract BridgeTokenEth is Ownable, Pausable, ReentrancyGuard {
     using SafeERC20 for IERC20;
     /*
      *  Events
@@ -760,7 +760,8 @@ contract BridgeToken is Ownable, Pausable, ReentrancyGuard {
     }
 
     function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, bytes calldata signature) external nonReentrant whenNotPaused {
-        bytes32 message = keccak256(abi.encodePacked('withdrawEth',
+        bytes32 message = keccak256(abi.encodePacked(
+            address(0),
             txHash,
             recipient,
             txId,
@@ -777,7 +778,8 @@ contract BridgeToken is Ownable, Pausable, ReentrancyGuard {
     }
     
     function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, bytes calldata signature) external whenNotPaused nonReentrant {
-        bytes32 message = keccak256(abi.encodePacked('withdrawTokens',
+        bytes32 message = keccak256(abi.encodePacked(
+            address(token),
             txHash,
             recipient,
             txId,

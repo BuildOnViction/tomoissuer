@@ -294,14 +294,13 @@ library ECDSA {
 
 pragma solidity ^0.6.0;
 
-contract BridgeToken is Pausable, OperatorRole {
+contract BridgeTokenTomo is Pausable, OperatorRole {
     /*
      *  Events
      */
     event OwnerWithdraw(address indexed token, address indexed recipient, uint amount);
     event SubmitBurningTx(bytes32 txHash);
     event SignBurningTx(bytes32 txHash, address recipient, uint256 value, bytes signature);
-    event Text(bytes32);
     
     struct Transaction {
         bool signed;
@@ -353,13 +352,6 @@ contract BridgeToken is Pausable, OperatorRole {
             signed: false,
             isAvailable: true
         });
-        bytes32 message = keccak256(abi.encodePacked(
-            txHash,
-            Transactions[txHash].recipient,
-            Transactions[txHash].nonce,
-            Transactions[txHash].amount
-        ));
-        emit Text(message);
         
         transactionId = nonce;
         nonce++;
@@ -367,8 +359,9 @@ contract BridgeToken is Pausable, OperatorRole {
         emit SubmitBurningTx(txHash);
     }
     
-    function signBuringTX(bytes32  txHash, bytes calldata signature) external onlyVerifier whenNotPaused nonSigned(txHash) {
+    function signBuringTX(bytes32 txHash, bytes calldata signature) external onlyVerifier whenNotPaused nonSigned(txHash) {
         bytes32 message = keccak256(abi.encodePacked(
+            Transactions[txHash].tokenAddress,
             txHash,
             Transactions[txHash].recipient,
             Transactions[txHash].nonce,
