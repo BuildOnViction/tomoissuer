@@ -68,6 +68,72 @@ abstract contract Context {
 
 pragma solidity ^0.6.0;
 
+/**
+ * @dev Contract module which provides a basic access control mechanism, where
+ * there is an account (an owner) that can be granted exclusive access to
+ * specific functions.
+ *
+ * By default, the owner account will be the one that deploys the contract. This
+ * can later be changed with {transferOwnership}.
+ *
+ * This module is used through inheritance. It will make available the modifier
+ * `onlyOwner`, which can be applied to your functions to restrict their use to
+ * the owner.
+ */
+contract Ownable is Context {
+    address private _owner;
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    /**
+     * @dev Initializes the contract setting the deployer as the initial owner.
+     */
+    constructor () internal {
+        address msgSender = _msgSender();
+        _owner = msgSender;
+        emit OwnershipTransferred(address(0), msgSender);
+    }
+
+    /**
+     * @dev Returns the address of the current owner.
+     */
+    function owner() public view returns (address) {
+        return _owner;
+    }
+
+    /**
+     * @dev Throws if called by any account other than the owner.
+     */
+    modifier onlyOwner() {
+        require(_owner == _msgSender(), "Ownable: caller is not the owner");
+        _;
+    }
+
+    /**
+     * @dev Leaves the contract without owner. It will not be possible to call
+     * `onlyOwner` functions anymore. Can only be called by the current owner.
+     *
+     * NOTE: Renouncing ownership will leave the contract without an owner,
+     * thereby removing any functionality that is only available to the owner.
+     */
+    function renounceOwnership() public virtual onlyOwner {
+        emit OwnershipTransferred(_owner, address(0));
+        _owner = address(0);
+    }
+
+    /**
+     * @dev Transfers ownership of the contract to a new account (`newOwner`).
+     * Can only be called by the current owner.
+     */
+    function transferOwnership(address newOwner) public virtual onlyOwner {
+        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        emit OwnershipTransferred(_owner, newOwner);
+        _owner = newOwner;
+    }
+}
+
+pragma solidity ^0.6.0;
+
 contract OperatorRole {
     using Roles for Roles.Role;
     
@@ -97,25 +163,7 @@ contract OperatorRole {
 	function isVerifier(address account) public view returns (bool) {
 		return verifiers.has(account);
 	}
-	
-	function addSubmitter(address account) public onlySubmitter {
-		_addSubmitter(account);
-	}
-	
-	function removeSubmitter(address account) public onlySubmitter {
-		_removeSubmitter(account);
-	}
-	
-	
-	function addVerifier(address account) public onlyVerifier {
-		_addVerifier(account);
-	}
-	
-	function removeVerifier(address account) public onlyVerifier {
-		_removeVerifier(account);
-	}
-	
-	
+
 	function _addSubmitter(address account) internal {
 		submitters.add(account);
 		emit SubmitterAdded(account);
@@ -294,13 +342,15 @@ library ECDSA {
 
 pragma solidity ^0.6.0;
 
-contract BridgeTokenTomo is Pausable, OperatorRole {
+contract BridgeTokenTomo is Ownable, Pausable, OperatorRole {
     /*
      *  Events
      */
     event OwnerWithdraw(address indexed token, address indexed recipient, uint amount);
     event SubmitBurningTx(bytes32 txHash);
     event SignBurningTx(bytes32 txHash, address recipient, uint256 value, bytes signature);
+    event AddedBlackList(address _address);
+    event RemovedBlackList(address _address);
     
     struct Transaction {
         bool signed;
@@ -310,21 +360,22 @@ contract BridgeTokenTomo is Pausable, OperatorRole {
         uint256 amount; 
         uint256 nonce;
     }
-    
+
+    mapping (address => bool) public isAddressBlackListed;
+    mapping (address => bool) public isTokenBlackListed;
+
     mapping(bytes32 => Transaction) public Transactions;
-    
+
     uint256 public nonce;
 
     constructor(address submitter, address verifier) public {
         _addSubmitter(submitter);
         _addVerifier(verifier);
     }
-    
+
     /*
      *  Modifiers
      */
-    
-    // use an other variable 
     modifier nonExisted(bytes32 txHash) {
         require(!Transactions[txHash].isAvailable, "Tx is existed");
         _;
@@ -335,15 +386,58 @@ contract BridgeTokenTomo is Pausable, OperatorRole {
         _;
     }
 
-    function pause() external onlyVerifier {
+    // Submitter and verifier
+    function addSubmitter(address account) public onlyOwner {
+		_addSubmitter(account);
+	}
+	
+	function removeSubmitter(address account) public onlyOwner {
+		_removeSubmitter(account);
+	}
+	
+	
+	function addVerifier(address account) public onlyOwner {
+		_addVerifier(account);
+	}
+	
+	function removeVerifier(address account) public onlyOwner {
+		_removeVerifier(account);
+	}
+    
+    // Pause/unpause contract
+    function pause() external onlyOwner {
         _pause();
     }
 
-    function unpause() external onlyVerifier {
+    function unpause() external onlyOwner {
         _unpause();
     }
     
+    // Blacklist
+    function addTokenBlackList (address _token) public onlyOwner {
+        isTokenBlackListed[_token] = true;
+        emit AddedBlackList(_token);
+    }
+
+    function removeTokenBlackList (address _token) public onlyOwner {
+        delete isTokenBlackListed[_token];
+        emit RemovedBlackList(_token);
+    }
+    
+    function addAddressBlackList (address _address) public onlyOwner {
+        isAddressBlackListed[_address] = true;
+        emit AddedBlackList(_address);
+    }
+
+    function removeAddressBlackList (address _address) public onlyOwner {
+        delete isAddressBlackListed[_address];
+        emit RemovedBlackList(_address);
+    }
+
+    // Submit and sign tx
     function submitBurningTX(address token, address recipient, uint amount, bytes32  txHash) external onlySubmitter nonExisted(txHash) returns (uint256 transactionId) {
+        require(!isTokenBlackListed[token], "Token blacklisted");
+        require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         Transactions[txHash] = Transaction({
             tokenAddress: token,
             recipient: recipient,
@@ -356,10 +450,12 @@ contract BridgeTokenTomo is Pausable, OperatorRole {
         transactionId = nonce;
         nonce++;
         
-        emit SubmitBurningTx(txHash);
+        emit SubmitBurningTx(txHash);    
     }
     
     function signBuringTX(bytes32 txHash, bytes calldata signature) external onlyVerifier whenNotPaused nonSigned(txHash) {
+        require(!isTokenBlackListed[Transactions[txHash].tokenAddress], "Token blacklisted");
+        require(!isAddressBlackListed[Transactions[txHash].recipient], "Recipient blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
             Transactions[txHash].tokenAddress,
             txHash,
