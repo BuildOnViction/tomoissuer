@@ -732,8 +732,51 @@ contract BridgeTokenEth is Ownable, Pausable, ReentrancyGuard {
     /*
      *  Events
      */
-    event Swap(address indexed token, string recipient, uint amount);
+    event Swap(address indexed token, address recipient, uint amount);
     event Withdraw(address indexed token, address indexed recipient, uint amount);
+    event AddedVerifierList(address _verifier);
+    event RemovedVerifierList(address _verifier);
+    event AddedBlackList(address _address);
+    event RemovedBlackList(address _address);
+    
+    mapping (address => bool) public isVerifier;
+    mapping (address => bool) public isAddressBlackListed;
+    mapping (address => bool) public isTokenBlackListed;
+    
+    constructor (address _verifier) public {
+        isVerifier[_verifier] = true;
+    }
+    
+    function addVerifier (address _verifier) public onlyOwner {
+        isVerifier[_verifier] = true;
+        emit AddedVerifierList(_verifier);
+    }
+
+    function removeVerifier (address _verifier) public onlyOwner {
+        delete isVerifier[_verifier];
+        emit RemovedVerifierList(_verifier);
+    }
+    
+    // Blacklist
+    function addTokenBlackList (address _token) public onlyOwner {
+        isTokenBlackListed[_token] = true;
+        emit AddedBlackList(_token);
+    }
+
+    function removeTokenBlackList (address _token) public onlyOwner {
+        delete isTokenBlackListed[_token];
+        emit RemovedBlackList(_token);
+    }
+    
+    function addAddressBlackList (address _address) public onlyOwner {
+        isAddressBlackListed[_address] = true;
+        emit AddedBlackList(_address);
+    }
+
+    function removeAddressBlackList (address _address) public onlyOwner {
+        delete isAddressBlackListed[_address];
+        emit RemovedBlackList(_address);
+    }
 
     function pause() external onlyOwner {
         _pause();
@@ -743,23 +786,28 @@ contract BridgeTokenEth is Ownable, Pausable, ReentrancyGuard {
         _unpause();
     }
     
-    function swapErc20(IERC20 token, string calldata recipient, uint amount) external nonReentrant whenNotPaused {
+    function swapErc20(IERC20 token, address recipient, uint amount) external nonReentrant whenNotPaused {
         require(amount > 0, "Swap amount must be positive");
         require(token.allowance(msg.sender, address(this)) >= amount, "Swap amount exceeds allowance");
 
         token.safeTransferFrom(msg.sender, address(this), amount);
 
-        emit Swap(address(token), recipient, amount);
+        if (!isTokenBlackListed[address(token)] && !isAddressBlackListed[recipient]) {
+            emit Swap(address(token), recipient, amount);   
+        }
     }
 
-    function swapEth(string calldata recipient) external payable nonReentrant whenNotPaused {
+    function swapEth(address recipient) external payable nonReentrant whenNotPaused {
         uint amount = msg.value;
         require(amount > 0, "Swap amount must be positive");
 
-        emit Swap(address(0), recipient, amount);
+        if (!isAddressBlackListed[recipient]) {
+            emit Swap(address(0), recipient, amount);   
+        }
     }
 
     function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, bytes calldata signature) external nonReentrant whenNotPaused {
+        require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
             address(0),
             txHash,
@@ -770,7 +818,7 @@ contract BridgeTokenEth is Ownable, Pausable, ReentrancyGuard {
         bytes32 hash = ECDSA.toEthSignedMessageHash(message);
         address signer = ECDSA.recover(hash, signature);
 
-        require(signer == this.owner(), 'Invalid srinkerignature');
+        require(isVerifier[signer], 'Invalid signature');
         
         recipient.transfer(amount);
 
@@ -778,6 +826,8 @@ contract BridgeTokenEth is Ownable, Pausable, ReentrancyGuard {
     }
     
     function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, bytes calldata signature) external whenNotPaused nonReentrant {
+        require(!isTokenBlackListed[address(token)], "Token blacklisted");
+        require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
             address(token),
             txHash,
@@ -788,9 +838,10 @@ contract BridgeTokenEth is Ownable, Pausable, ReentrancyGuard {
         bytes32 hash = ECDSA.toEthSignedMessageHash(message);
         address signer = ECDSA.recover(hash, signature);
 
-        require(signer == this.owner(), 'Invalid signature');
+        require(isVerifier[signer], 'Invalid signature');
 
         token.safeTransfer(recipient, amount);
+
         emit Withdraw(address(token), recipient, amount);
     }
 
