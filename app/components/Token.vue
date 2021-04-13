@@ -15,6 +15,11 @@
                             TRC-21
                         </span>
                         <span
+                            v-if="token.type === 'trc20'"
+                            class="apply-trc">
+                            TRC-20
+                        </span>
+                        <span
                             v-if="isBridgeToken && token.type === 'trc21'"
                             id="wraperc20"
                             class="apply-trc">
