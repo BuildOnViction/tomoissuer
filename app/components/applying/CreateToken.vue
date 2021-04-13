@@ -200,11 +200,30 @@
                         v-model="type"
                         class="box-radio"
                         name="radio-sub-component">
-                        TRC21
-                        <!-- <b-form-radio
+                        <b-form-radio
+                            value="trc20">
+                            TRC20
+                            <i
+                                id="trc20"
+                                class="tm-icon-info mb-2"/>
+                            <b-tooltip
+                                target="trc20">
+                                TRC20 is the most standard token on TomoChain.
+                                Transaction fees are paid through the native TOMO token.
+                            </b-tooltip>
+                        </b-form-radio>
+                        <b-form-radio
                             value="trc21">
                             TRC21
-                        </b-form-radio> -->
+                            <i
+                                id="trc21"
+                                class="tm-icon-info mb-2"/>
+                            <b-tooltip
+                                target="trc21">
+                                TRC21 is the standard token that goes along with TomoZ.
+                                Transaction fees are paid by the token itself.
+                            </b-tooltip>
+                        </b-form-radio>
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group flex-box mb-4">
@@ -223,6 +242,38 @@
                 </div>
             </b-form>
         </div>
+        <b-modal
+            id="tokenWarningModal"
+            ref="tokenWarningModal"
+            centered
+            scrollable
+            size="md"
+            hide-footer>
+            <template #modal-title>
+                <div class="">Reminder</div>
+            </template>
+            <div class="tomo-modal-default text-left token-warning">
+                <div
+                    v-if="type === 'trc20'">
+                    <ul>
+                        <li>TRC20 tokens can easily be integrated into Layer-2 Dapps.</li>
+                    </ul>
+                </div>
+                <div
+                    v-else>
+                    <ul>
+                        <li>TRC21 tokens can be used to pay transaction fees without the need for TOMO.</li>
+                        <li>TRC21 tokens can be used to support Layer-1 transactions like TomoX.</li>
+                        <li>May not be compatible with future Dapps built on TomoChain.</li>
+                    </ul>
+                </div>
+                <div class="btn-box">
+                    <b-button
+                        class="tmp-btn-blue"
+                        @click="confirm">Understane</b-button>
+                </div>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -252,7 +303,7 @@ export default {
             decimals: 18,
             totalSupply: '',
             account: '',
-            type: 'trc21',
+            type: 'trc20',
             balance: 0,
             txFee: 0,
             gasPrice: 250000000,
@@ -261,7 +312,6 @@ export default {
             checkSymbol: false,
             checkSupply: false,
             checkDecimals: false,
-            // issueFee: '',
             isEditDecimals: false,
             warningName: '',
             warningSymbol: '',
@@ -319,10 +369,14 @@ export default {
         validate: function () {
             this.$v.$touch()
             if (!this.$v.$invalid && this.isEnoughTOMO) {
-                this.confirm()
+                this.openTokenWarning()
             }
         },
+        openTokenWarning () {
+            this.$refs.tokenWarningModal.show()
+        },
         confirm () {
+            this.$refs.tokenWarningModal.hide()
             this.$router.push({ name: 'ConfirmToken',
                 params: {
                     name: this.tokenName,
@@ -330,7 +384,7 @@ export default {
                     decimals: this.decimals,
                     type: this.type,
                     totalSupply: this.totalSupply,
-                    issueFee: this.issueFee,
+                    txFee: this.txFee,
                     estimatedAmount: this.estimatedAmount,
                     mintable: this.mintable
                 }
@@ -374,13 +428,32 @@ export default {
                 this.warningDecimals = ' input-warn'
             }
         },
-        async estimateGas () {
-            const web3 = this.web3
-            if (this.account && web3) {
-                const contractAbi = this.mintable ? this.MyTRC21Mintable : this.MyTRC21
-                const contract = new web3.eth.Contract(
-                    contractAbi.abi, null, { data: contractAbi.bytecode })
-                const estimatedAmount = await contract.deploy({
+        getAbi () {
+            if (this.type === 'trc20' && this.mintable) {
+                return {
+                    contractAbi: this.MyTRC20Mintable,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+            if (this.type === 'trc20' && !this.mintable) {
+                return {
+                    contractAbi: this.MyTRC20,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+            if (this.type === 'trc21' && this.mintable) {
+                return {
+                    contractAbi: this.MyTRC21Mintable,
                     arguments: [
                         'example',
                         'example',
@@ -388,6 +461,29 @@ export default {
                         (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
                         (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
                     ]
+                }
+            }
+            if (this.type === 'trc21' && !this.mintable) {
+                return {
+                    contractAbi: this.MyTRC21,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
+                        (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+        },
+        async estimateGas () {
+            const web3 = this.web3
+            if (this.account && web3) {
+                const tokenAbi = this.getAbi()
+                const contract = new web3.eth.Contract(
+                    tokenAbi.contractAbi.abi, null, { data: tokenAbi.contractAbi.bytecode })
+                const estimatedAmount = await contract.deploy({
+                    arguments: tokenAbi.arguments
                 }).estimateGas()
                 this.txFee = new BigNumber(estimatedAmount * this.gasPrice)
                     .div(10 ** 18).toNumber()

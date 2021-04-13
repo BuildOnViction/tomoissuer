@@ -53,3 +53,17 @@
         }
     }
 }
+
+.token-warning {
+    padding-top: 35px;
+    padding-bottom: 35px;
+    ul {
+        padding-left: 15px;
+        li {
+            @include fsz(15);
+            list-style-type: circle;
+            padding: 3px 0;
+            font-weight: 500;
+        }
+    }
+}

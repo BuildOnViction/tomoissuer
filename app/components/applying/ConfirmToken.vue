@@ -131,7 +131,7 @@ export default {
             config: {},
             gasPrice: 250000000,
             balance: 0,
-            txFee: 0
+            txFee: this.$route.params.txFee || 0
         }
     },
     async updated () {},
@@ -155,7 +155,7 @@ export default {
             self.config = store.get('configIssuer') || await self.appConfig()
             await self.createContract()
             await self.getBalance()
-            self.estimateFee()
+            // self.estimateFee()
         }
     },
     methods: {
