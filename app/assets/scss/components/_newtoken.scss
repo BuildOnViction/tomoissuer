@@ -67,3 +67,24 @@
         }
     }
 }
+
+@keyframes newGif {
+    0% {opacity: 1;}
+    50% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+.new-gif {
+    color: #fff;
+    background-color: red;
+    padding: 0px 8px;
+    border-radius: 15px;
+    position: absolute;
+    right: 10px;
+    top: -10px;
+    font-size: 10px;
+    text-transform: uppercase;
+    animation: newGif 1s infinite;
+    font-weight: bold;
+
+}

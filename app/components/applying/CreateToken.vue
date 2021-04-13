@@ -201,11 +201,13 @@
                         class="box-radio"
                         name="radio-sub-component">
                         <b-form-radio
-                            value="trc20">
+                            value="trc20"
+                            class="font-weight-bold">
                             TRC20
                             <i
                                 id="trc20"
                                 class="tm-icon-info mb-2"/>
+                            <span class="new-gif">new</span>
                             <b-tooltip
                                 target="trc20">
                                 TRC20 is the most standard token on TomoChain.
@@ -270,7 +272,7 @@
                 <div class="btn-box">
                     <b-button
                         class="tmp-btn-blue"
-                        @click="confirm">Understane</b-button>
+                        @click="confirm">Understand</b-button>
                 </div>
             </div>
         </b-modal>
