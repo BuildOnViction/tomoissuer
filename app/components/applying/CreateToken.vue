@@ -200,32 +200,49 @@
                         v-model="type"
                         class="box-radio"
                         name="radio-sub-component">
-                        <b-form-radio
-                            value="trc20"
-                            class="font-weight-bold">
-                            TRC20
-                            <i
-                                id="trc20"
-                                class="tm-icon-info mb-2"/>
-                            <span class="new-gif">new</span>
-                            <b-tooltip
-                                target="trc20">
-                                TRC20 is the most standard token on TomoChain.
-                                Transaction fees are paid through the native TOMO token.
-                            </b-tooltip>
-                        </b-form-radio>
-                        <b-form-radio
-                            value="trc21">
-                            TRC21
-                            <i
-                                id="trc21"
-                                class="tm-icon-info mb-2"/>
-                            <b-tooltip
-                                target="trc21">
-                                TRC21 is the standard token that goes along with TomoZ.
-                                Transaction fees are paid by the token itself.
-                            </b-tooltip>
-                        </b-form-radio>
+                        <b-row class="mt-3 mt-md-0">
+                            <b-col
+                                cols="3"
+                                md="4">
+                                <b-form-radio
+                                    value="trc20"
+                                    class="font-weight-bold">
+                                    TRC20
+                                    <i
+                                        id="trc20"
+                                        class="tm-icon-info mb-2"/>
+                                    <span class="new-gif">new</span>
+                                    <b-tooltip
+                                        target="trc20">
+                                        TRC20 is the most standard token on TomoChain.
+                                        Transaction fees are paid through the native TOMO token.
+                                    </b-tooltip>
+                                </b-form-radio>
+                            </b-col>
+                            <b-col
+                                cols="3"
+                                md="4">
+                                <b-form-radio
+                                    value="trc21">
+                                    TRC21
+                                    <i
+                                        id="trc21"
+                                        class="tm-icon-info mb-2"/>
+                                    <b-tooltip
+                                        target="trc21">
+                                        TRC21 is the standard token that goes along with TomoZ.
+                                        Transaction fees are paid by the token itself.
+                                    </b-tooltip>
+                                </b-form-radio>
+                            </b-col>
+                            <b-col
+                                cols="4"
+                                md="3">
+                                <div
+                                    class="tokenInfotrc2021"
+                                    @click="showModal">What difference?</div>
+                            </b-col>
+                        </b-row>
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group flex-box mb-4">
@@ -245,34 +262,40 @@
             </b-form>
         </div>
         <b-modal
-            id="tokenWarningModal"
-            ref="tokenWarningModal"
+            id="moreInfoModal"
+            ref="moreInfoModal"
             centered
             scrollable
             size="md"
             hide-footer>
-            <template #modal-title>
-                <div class="">Reminder</div>
+            <template
+                #modal-header>
+                <div class="mx-auto">
+                    <h5>
+                        More information on TRC20/TRC21
+                    </h5>
+                </div>
             </template>
-            <div class="tomo-modal-default text-left token-warning">
-                <div
-                    v-if="type === 'trc20'">
-                    <ul>
-                        <li>TRC20 tokens can easily be integrated into Layer-2 Dapps.</li>
-                    </ul>
+            <div class="tomo-modal-default text-left token-warning tmp-table-tokenInfo">
+                <div class="tomo_main_table">
+                    <b-table
+                        :items="tokenInfoItems"
+                        :fields="tokenInfoFields"
+                        striped>
+                        <template
+                            #cell(trc21)="data">
+                            {{ typeof(data.value) === 'boolean' ? (data.value ? '&#10004;' : '&#10006;') : data.value }}
+                        </template>
+                        <template
+                            #cell(trc20)="data">
+                            {{ typeof(data.value) === 'boolean' ? (data.value ? '&#10004;' : '&#10006;') : data.value }}
+                        </template>
+                    </b-table>
                 </div>
-                <div
-                    v-else>
-                    <ul>
-                        <li>TRC21 tokens can be used to pay transaction fees without the need for TOMO.</li>
-                        <li>TRC21 tokens can be used to support Layer-1 transactions like TomoX.</li>
-                        <li>May not be compatible with future Dapps built on TomoChain.</li>
-                    </ul>
-                </div>
-                <div class="btn-box">
+                <div class="btn-box mt-2">
                     <b-button
                         class="tmp-btn-blue"
-                        @click="confirm">Understand</b-button>
+                        @click="closeModal">Understand</b-button>
                 </div>
             </div>
         </b-modal>
@@ -319,7 +342,23 @@ export default {
             warningSymbol: '',
             warningDecimals: '',
             warningMintable: '',
-            mintable: ''
+            mintable: '',
+            tokenInfoFields: [
+                { key: 'title', label: '' },
+                { key: 'trc20', label: 'TRC20' },
+                { key: 'trc21', label: 'TRC21' }
+            ],
+            tokenInfoItems: [
+                { title: 'Dapp Integration', trc20: 'Easy', trc21: 'Difficult' },
+                { title: 'Exchange Listing', trc20: 'Easy', trc21: 'Difficult' },
+                { title: 'TomoP Compatibility', trc20: true, trc21: true },
+                { title: 'TomoX Compatibility', trc20: false, trc21: true },
+                {
+                    title: 'Transaction Fees',
+                    trc20: 'By TOMO',
+                    trc21: 'By Token(customizable)'
+                }
+            ]
         }
     },
     validations: {
@@ -371,14 +410,14 @@ export default {
         validate: function () {
             this.$v.$touch()
             if (!this.$v.$invalid && this.isEnoughTOMO) {
-                this.openTokenWarning()
+                this.confirm()
             }
         },
         openTokenWarning () {
-            this.$refs.tokenWarningModal.show()
+            this.$refs.moreInfoModal.show()
         },
         confirm () {
-            this.$refs.tokenWarningModal.hide()
+            this.$refs.moreInfoModal.hide()
             this.$router.push({ name: 'ConfirmToken',
                 params: {
                     name: this.tokenName,
@@ -497,6 +536,12 @@ export default {
         editDecimals () {
             this.isEditDecimals = true
             this.decimals = ''
+        },
+        showModal () {
+            this.$refs.moreInfoModal.show()
+        },
+        closeModal () {
+            this.$refs.moreInfoModal.hide()
         }
     }
 }
