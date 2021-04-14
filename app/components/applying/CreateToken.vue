@@ -240,7 +240,7 @@
                                 md="3">
                                 <div
                                     class="tokenInfotrc2021"
-                                    @click="showModal">What difference?</div>
+                                    @click="showModal">Differences?</div>
                             </b-col>
                         </b-row>
                     </b-form-radio-group>
