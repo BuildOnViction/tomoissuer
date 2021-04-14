@@ -15,6 +15,9 @@
     .flex-box {
         display: flex;
         align-items: center;
+        @include media-breakpoint-down(sm) {
+            flex-wrap: wrap;
+        }
         &.custom-radio {
             display: flex;
             align-items: center;
@@ -55,7 +58,6 @@
 }
 
 .token-warning {
-    padding-top: 35px;
     padding-bottom: 35px;
     ul {
         padding-left: 15px;
@@ -87,4 +89,12 @@
     animation: newGif 1s infinite;
     font-weight: bold;
 
+}
+
+.tokenInfotrc2021 {
+    font-size: 14px;
+    min-width: 150px;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    cursor: pointer;
 }
