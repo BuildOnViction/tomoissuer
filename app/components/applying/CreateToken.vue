@@ -240,7 +240,7 @@
                                 md="3">
                                 <div
                                     class="tokenInfotrc2021"
-                                    @click="showModal">What difference?</div>
+                                    @click="showModal">Differences?</div>
                             </b-col>
                         </b-row>
                     </b-form-radio-group>
@@ -349,14 +349,15 @@ export default {
                 { key: 'trc21', label: 'TRC21' }
             ],
             tokenInfoItems: [
-                { title: 'Dapp Integration', trc20: 'Easy', trc21: 'Difficult' },
-                { title: 'Exchange Listing', trc20: 'Easy', trc21: 'Difficult' },
+                { title: 'Technical Requirements for Dapp Integration', trc20: 'Low', trc21: 'Moderate' },
+                { title: 'Technical Requirements for Exchange Listing ', trc20: 'Low', trc21: 'Moderate' },
                 { title: 'TomoP Compatibility', trc20: true, trc21: true },
                 { title: 'TomoX Compatibility', trc20: false, trc21: true },
+                { title: 'TomoZ Compatibility', trc20: false, trc21: true },
                 {
                     title: 'Transaction Fees',
-                    trc20: 'By TOMO',
-                    trc21: 'By Token(customizable)'
+                    trc20: 'Native TOMO',
+                    trc21: 'By the transaction token itself (no need for native TOMO)'
                 }
             ]
         }
