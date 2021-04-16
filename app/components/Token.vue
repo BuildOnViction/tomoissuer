@@ -122,12 +122,12 @@
                                         Transfer Token
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="isAppliedZ && contractCreation === account"
+                                        v-if="token.type === 'trc21' && isAppliedZ && contractCreation === account"
                                         :to="'/edittransactionsfee/' + address">
                                         Edit transaction fee
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="isAppliedZ"
+                                        v-if="token.type === 'trc21' && isAppliedZ"
                                         :to="'/depositfee/' + address">
                                         Deposit TRC-21 fee fund
                                     </b-dropdown-item>
@@ -208,7 +208,7 @@
                                             <p class="title-small">Decimals</p>
                                             <p>{{ token.decimals }}</p>
                                         </li>
-                                        <li v-if="isAppliedZ">
+                                        <li v-if="token.type === 'trc21' && isAppliedZ">
                                             <p class="title-small">
                                                 Transactions fee
                                                 <b-link
@@ -242,7 +242,7 @@
                                                 </span>
                                             </div>
                                         </li>
-                                        <li v-if="isAppliedZ">
+                                        <li v-if="token.type === 'trc21' && isAppliedZ">
                                             <p class="title-small">TRC-21 fee fund</p>
                                             <div class="flex-box">
                                                 <span>{{ formatNumber(poolingFee) }} TOMO</span>
