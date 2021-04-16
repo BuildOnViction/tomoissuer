@@ -51,7 +51,7 @@
                         <ul>
                             <li>
                                 <b-link
-                                    v-if="!isAppliedZ && account === contractCreation"
+                                    v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
                                     :to="'/tomozcondition/' + address"
                                     class="tmp-btn-violet"
                                     style="width: 270px">
@@ -75,12 +75,12 @@
                                         <i class="tm-icon-cog" />
                                     </template>
                                     <b-dropdown-item
-                                        v-if="!isAppliedZ && account === contractCreation"
+                                        v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
                                         :to="'/tomozcondition/' + address">
                                         Apply to TomoZ Protocol
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="!isAppliedX && account === contractCreation"
+                                        v-if="token.type === 'trc21' && !isAppliedX && account === contractCreation"
                                         :to="'/tomoxcondition/' + address">
                                         Apply to TomoX Protocol
                                     </b-dropdown-item>
@@ -531,7 +531,7 @@ export default {
             self.checkAppliedZ()
             self.checkAppliedX()
             self.getTransactionFee()
-            self.checkBridgeToken()
+            // self.checkBridgeToken()
         } catch (error) {
             console.log(error)
             this.$toasted.show(error, { type :'error' })
@@ -729,14 +729,16 @@ export default {
                 )
                 await contract.methods.original_contract.call()
                     .then(result => {
-                        self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
-                        self.tokenERC20Address = result
-                        self.checkAppliedB()
-                        self.tokenAddressURL = urljoin(
-                            self.config.etherChain.etherScanURL,
-                            'token',
-                            result
-                        )
+                        if (result) {
+                            self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
+                            self.tokenERC20Address = result
+                            self.checkAppliedB()
+                            self.tokenAddressURL = urljoin(
+                                self.config.etherChain.etherScanURL,
+                                'token',
+                                result
+                            )
+                        }
                     })
                     .catch(error => {
                         console.log(error)

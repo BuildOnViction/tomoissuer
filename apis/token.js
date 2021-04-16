@@ -100,11 +100,21 @@ router.post('/createToken', [
     let contractCode
     let p
     if (mintable) {
-        p = path.resolve(__dirname, '../contracts', 'TRC21Mintable.sol')
-        contractCode = fs.readFileSync(p, 'UTF-8')
+        if (type === 'trc21') {
+            p = path.resolve(__dirname, '../contracts', 'TRC21Mintable.sol')
+            contractCode = fs.readFileSync(p, 'UTF-8')
+        } else {
+            p = path.resolve(__dirname, '../contracts', 'TRC20Mintable.sol')
+            contractCode = fs.readFileSync(p, 'UTF-8')
+        }
     } else {
-        p = path.resolve(__dirname, '../contracts', 'TRC21.sol')
-        contractCode = fs.readFileSync(p, 'UTF-8')
+        if (type === 'trc21') {
+            p = path.resolve(__dirname, '../contracts', 'TRC21.sol')
+            contractCode = fs.readFileSync(p, 'UTF-8')
+        } else {
+            p = path.resolve(__dirname, '../contracts', 'TRC20.sol')
+            contractCode = fs.readFileSync(p, 'UTF-8')
+        }
     }
     return res.json({
         name,
