@@ -342,7 +342,7 @@ library ECDSA {
 
 pragma solidity ^0.6.0;
 
-contract BridgeTokenTomo is Ownable, Pausable, OperatorRole {
+contract BridgeContract is Ownable, Pausable, OperatorRole {
     /*
      *  Events
      */
