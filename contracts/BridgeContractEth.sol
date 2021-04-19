@@ -727,7 +727,7 @@ library ECDSA {
 
 pragma solidity ^0.6.0;
 
-contract BridgeTokenEth is Ownable, Pausable, ReentrancyGuard {
+contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
     using SafeERC20 for IERC20;
     /*
      *  Events
