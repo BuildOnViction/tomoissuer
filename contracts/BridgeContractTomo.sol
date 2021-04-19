@@ -438,6 +438,7 @@ contract BridgeTokenTomo is Ownable, Pausable, OperatorRole {
     function submitBurningTX(address token, address recipient, uint amount, bytes32  txHash) external onlySubmitter nonExisted(txHash) returns (uint256 transactionId) {
         require(!isTokenBlackListed[token], "Token blacklisted");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
+        require(!isAddressBlackListed[msg.sender], "Sedner blacklisted");
         Transactions[txHash] = Transaction({
             tokenAddress: token,
             recipient: recipient,
@@ -455,6 +456,7 @@ contract BridgeTokenTomo is Ownable, Pausable, OperatorRole {
     
     function signBuringTX(bytes32 txHash, bytes calldata signature) external onlyVerifier whenNotPaused nonSigned(txHash) {
         require(!isTokenBlackListed[Transactions[txHash].tokenAddress], "Token blacklisted");
+        require(!isAddressBlackListed[msg.sender], "Sedner blacklisted");
         require(!isAddressBlackListed[Transactions[txHash].recipient], "Recipient blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
             Transactions[txHash].tokenAddress,

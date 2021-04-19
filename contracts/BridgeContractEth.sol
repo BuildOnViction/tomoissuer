@@ -792,7 +792,7 @@ contract BridgeTokenEth is Ownable, Pausable, ReentrancyGuard {
 
         token.safeTransferFrom(msg.sender, address(this), amount);
 
-        if (!isTokenBlackListed[address(token)] && !isAddressBlackListed[recipient]) {
+        if (!isTokenBlackListed[address(token)] && !isAddressBlackListed[recipient] && !isAddressBlackListed[msg.sender]) {
             emit Swap(address(token), recipient, amount);   
         }
     }
@@ -808,6 +808,7 @@ contract BridgeTokenEth is Ownable, Pausable, ReentrancyGuard {
 
     function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, bytes calldata signature) external nonReentrant whenNotPaused {
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
+        require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
             address(0),
             txHash,
@@ -828,6 +829,7 @@ contract BridgeTokenEth is Ownable, Pausable, ReentrancyGuard {
     function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, bytes calldata signature) external whenNotPaused nonReentrant {
         require(!isTokenBlackListed[address(token)], "Token blacklisted");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
+        require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
             address(token),
             txHash,
