@@ -131,7 +131,7 @@ export default {
             config: {},
             gasPrice: 250000000,
             balance: 0,
-            txFee: 0
+            txFee: this.$route.params.txFee || 0
         }
     },
     async updated () {},
@@ -155,7 +155,7 @@ export default {
             self.config = store.get('configIssuer') || await self.appConfig()
             await self.createContract()
             await self.getBalance()
-            self.estimateFee()
+            // self.estimateFee()
         }
     },
     methods: {
@@ -211,10 +211,31 @@ export default {
                     //     sourceCode: self.sourceCode,
                     //     mintable: this.mintable
                     // })
-                    const compiledContract = self.mintable ? self.MyTRC21Mintable : self.MyTRC21
+                    // const compiledContract = self.mintable ? self.MyTRC21Mintable : self.MyTRC21
+
+                    const tokenAbi = this.getAbi()
 
                     const contract = new web3.eth.Contract(
-                        compiledContract.abi, null, { data: compiledContract.bytecode })
+                        tokenAbi.contractAbi.abi, null, { data: tokenAbi.contractAbi.bytecode })
+
+                    // Set arguments
+                    let args
+                    if (this.type === 'trc21') {
+                        args = [
+                            self.tokenName,
+                            self.tokenSymbol,
+                            self.decimals,
+                            (new BigNumber(self.totalSupply).multipliedBy(10 ** self.decimals)).toString(10),
+                            (new BigNumber(self.minFee).multipliedBy(10 ** self.decimals)).toString(10)
+                        ]
+                    } else {
+                        args = [
+                            self.tokenName,
+                            self.tokenSymbol,
+                            self.decimals,
+                            (new BigNumber(self.totalSupply).multipliedBy(10 ** self.decimals)).toString(10)
+                        ]
+                    }
 
                     // deployment
                     switch (self.provider) {
@@ -223,22 +244,10 @@ export default {
                     case 'tomowallet':
                     case 'pantograph':
                         const estimateGas = await contract.deploy({
-                            arguments: [
-                                self.tokenName,
-                                self.tokenSymbol,
-                                self.decimals,
-                                (new BigNumber(self.totalSupply).multipliedBy(10 ** self.decimals)).toString(10),
-                                (new BigNumber(self.minFee).multipliedBy(10 ** self.decimals)).toString(10)
-                            ]
+                            arguments: args
                         }).estimateGas()
                         await contract.deploy({
-                            arguments: [
-                                self.tokenName,
-                                self.tokenSymbol,
-                                self.decimals,
-                                (new BigNumber(self.totalSupply).multipliedBy(10 ** self.decimals)).toString(10),
-                                (new BigNumber(self.minFee).multipliedBy(10 ** self.decimals)).toString(10)
-                            ]
+                            arguments: args
                         }).send({
                             from: self.account,
                             gas: web3.utils.toHex(estimateGas),
@@ -267,13 +276,7 @@ export default {
                     case 'ledger':
                     case 'trezor':
                         let deploy = await contract.deploy({
-                            arguments: [
-                                self.tokenName,
-                                self.tokenSymbol,
-                                self.decimals,
-                                (new BigNumber(self.totalSupply).multipliedBy(1e+18)).toString(10),
-                                (new BigNumber(self.minFee).multipliedBy(1e+18)).toString(10)
-                            ]
+                            arguments: args
                         }).encodeABI()
 
                         const data = {
@@ -345,6 +348,54 @@ export default {
                 }).estimateGas()
                 this.txFee = new BigNumber(estimatedAmount * this.gasPrice)
                     .div(10 ** 18).toNumber()
+            }
+        },
+        getAbi () {
+            if (this.type === 'trc20' && this.mintable) {
+                return {
+                    contractAbi: this.MyTRC20Mintable,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+            if (this.type === 'trc20' && !this.mintable) {
+                return {
+                    contractAbi: this.MyTRC20,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+            if (this.type === 'trc21' && this.mintable) {
+                return {
+                    contractAbi: this.MyTRC21Mintable,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
+                        (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+            if (this.type === 'trc21' && !this.mintable) {
+                return {
+                    contractAbi: this.MyTRC21,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
+                        (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
             }
         }
     }

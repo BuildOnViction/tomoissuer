@@ -200,11 +200,49 @@
                         v-model="type"
                         class="box-radio"
                         name="radio-sub-component">
-                        TRC21
-                        <!-- <b-form-radio
-                            value="trc21">
-                            TRC21
-                        </b-form-radio> -->
+                        <b-row class="mt-3 mt-md-0">
+                            <b-col
+                                cols="3"
+                                md="4">
+                                <b-form-radio
+                                    value="trc20"
+                                    class="font-weight-bold">
+                                    TRC20
+                                    <i
+                                        id="trc20"
+                                        class="tm-icon-info mb-2"/>
+                                    <span class="new-gif">new</span>
+                                    <b-tooltip
+                                        target="trc20">
+                                        TRC20 is the most standard token on TomoChain.
+                                        Transaction fees are paid through the native TOMO token.
+                                    </b-tooltip>
+                                </b-form-radio>
+                            </b-col>
+                            <b-col
+                                cols="3"
+                                md="4">
+                                <b-form-radio
+                                    value="trc21">
+                                    TRC21
+                                    <i
+                                        id="trc21"
+                                        class="tm-icon-info mb-2"/>
+                                    <b-tooltip
+                                        target="trc21">
+                                        TRC21 is the standard token that goes along with TomoZ.
+                                        Transaction fees are paid by the token itself.
+                                    </b-tooltip>
+                                </b-form-radio>
+                            </b-col>
+                            <b-col
+                                cols="4"
+                                md="3">
+                                <div
+                                    class="tokenInfotrc2021"
+                                    @click="showModal">Differences?</div>
+                            </b-col>
+                        </b-row>
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group flex-box mb-4">
@@ -223,6 +261,44 @@
                 </div>
             </b-form>
         </div>
+        <b-modal
+            id="moreInfoModal"
+            ref="moreInfoModal"
+            centered
+            scrollable
+            size="md"
+            hide-footer>
+            <template
+                #modal-header>
+                <div class="mx-auto">
+                    <h5>
+                        More information on TRC20/TRC21
+                    </h5>
+                </div>
+            </template>
+            <div class="tomo-modal-default text-left token-warning tmp-table-tokenInfo">
+                <div class="tomo_main_table">
+                    <b-table
+                        :items="tokenInfoItems"
+                        :fields="tokenInfoFields"
+                        striped>
+                        <template
+                            #cell(trc21)="data">
+                            {{ typeof(data.value) === 'boolean' ? (data.value ? '&#10004;' : '&#10006;') : data.value }}
+                        </template>
+                        <template
+                            #cell(trc20)="data">
+                            {{ typeof(data.value) === 'boolean' ? (data.value ? '&#10004;' : '&#10006;') : data.value }}
+                        </template>
+                    </b-table>
+                </div>
+                <div class="btn-box mt-2">
+                    <b-button
+                        class="tmp-btn-blue"
+                        @click="closeModal">Understand</b-button>
+                </div>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -252,7 +328,7 @@ export default {
             decimals: 18,
             totalSupply: '',
             account: '',
-            type: 'trc21',
+            type: 'trc20',
             balance: 0,
             txFee: 0,
             gasPrice: 250000000,
@@ -261,13 +337,29 @@ export default {
             checkSymbol: false,
             checkSupply: false,
             checkDecimals: false,
-            // issueFee: '',
             isEditDecimals: false,
             warningName: '',
             warningSymbol: '',
             warningDecimals: '',
             warningMintable: '',
-            mintable: ''
+            mintable: '',
+            tokenInfoFields: [
+                { key: 'title', label: '' },
+                { key: 'trc20', label: 'TRC20' },
+                { key: 'trc21', label: 'TRC21' }
+            ],
+            tokenInfoItems: [
+                { title: 'Technical Requirements for Dapp Integration', trc20: 'Low', trc21: 'Moderate' },
+                { title: 'Technical Requirements for Exchange Listing ', trc20: 'Low', trc21: 'Moderate' },
+                { title: 'TomoP Compatibility', trc20: true, trc21: true },
+                { title: 'TomoX Compatibility', trc20: false, trc21: true },
+                { title: 'TomoZ Compatibility', trc20: false, trc21: true },
+                {
+                    title: 'Transaction Fees',
+                    trc20: 'Native TOMO',
+                    trc21: 'By the transaction token itself (no need for native TOMO)'
+                }
+            ]
         }
     },
     validations: {
@@ -322,7 +414,11 @@ export default {
                 this.confirm()
             }
         },
+        openTokenWarning () {
+            this.$refs.moreInfoModal.show()
+        },
         confirm () {
+            this.$refs.moreInfoModal.hide()
             this.$router.push({ name: 'ConfirmToken',
                 params: {
                     name: this.tokenName,
@@ -330,7 +426,7 @@ export default {
                     decimals: this.decimals,
                     type: this.type,
                     totalSupply: this.totalSupply,
-                    issueFee: this.issueFee,
+                    txFee: this.txFee,
                     estimatedAmount: this.estimatedAmount,
                     mintable: this.mintable
                 }
@@ -374,13 +470,32 @@ export default {
                 this.warningDecimals = ' input-warn'
             }
         },
-        async estimateGas () {
-            const web3 = this.web3
-            if (this.account && web3) {
-                const contractAbi = this.mintable ? this.MyTRC21Mintable : this.MyTRC21
-                const contract = new web3.eth.Contract(
-                    contractAbi.abi, null, { data: contractAbi.bytecode })
-                const estimatedAmount = await contract.deploy({
+        getAbi () {
+            if (this.type === 'trc20' && this.mintable) {
+                return {
+                    contractAbi: this.MyTRC20Mintable,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+            if (this.type === 'trc20' && !this.mintable) {
+                return {
+                    contractAbi: this.MyTRC20,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+            if (this.type === 'trc21' && this.mintable) {
+                return {
+                    contractAbi: this.MyTRC21Mintable,
                     arguments: [
                         'example',
                         'example',
@@ -388,6 +503,29 @@ export default {
                         (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
                         (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
                     ]
+                }
+            }
+            if (this.type === 'trc21' && !this.mintable) {
+                return {
+                    contractAbi: this.MyTRC21,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10),
+                        (new BigNumber(0).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+        },
+        async estimateGas () {
+            const web3 = this.web3
+            if (this.account && web3) {
+                const tokenAbi = this.getAbi()
+                const contract = new web3.eth.Contract(
+                    tokenAbi.contractAbi.abi, null, { data: tokenAbi.contractAbi.bytecode })
+                const estimatedAmount = await contract.deploy({
+                    arguments: tokenAbi.arguments
                 }).estimateGas()
                 this.txFee = new BigNumber(estimatedAmount * this.gasPrice)
                     .div(10 ** 18).toNumber()
@@ -399,6 +537,12 @@ export default {
         editDecimals () {
             this.isEditDecimals = true
             this.decimals = ''
+        },
+        showModal () {
+            this.$refs.moreInfoModal.show()
+        },
+        closeModal () {
+            this.$refs.moreInfoModal.hide()
         }
     }
 }

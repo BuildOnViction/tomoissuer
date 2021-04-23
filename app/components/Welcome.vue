@@ -17,7 +17,7 @@
                     class="mb-5 tomo-logo"/>
                 <h2 class="tmp-title-big">Issue Your Own Token in Minutes!</h2>
                 <p class="custom-welcome-title">
-                    Create TRC21 tokens and let token holders pay transaction fees in the token itself
+                    A user-friendly interface to issue a token on TomoChain without any coding experience
                 </p>
                 <div class="btn-box">
                     <b-button

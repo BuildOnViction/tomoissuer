@@ -15,6 +15,9 @@
     .flex-box {
         display: flex;
         align-items: center;
+        @include media-breakpoint-down(sm) {
+            flex-wrap: wrap;
+        }
         &.custom-radio {
             display: flex;
             align-items: center;
@@ -52,4 +55,46 @@
             text-align: left;
         }
     }
+}
+
+.token-warning {
+    padding-bottom: 35px;
+    ul {
+        padding-left: 15px;
+        li {
+            @include fsz(15);
+            list-style-type: circle;
+            padding: 3px 0;
+            font-weight: 500;
+        }
+    }
+}
+
+@keyframes newGif {
+    0% {opacity: 1;}
+    50% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+.new-gif {
+    color: #fff;
+    background-color: red;
+    padding: 0px 8px;
+    border-radius: 15px;
+    position: absolute;
+    right: 10px;
+    top: -10px;
+    font-size: 10px;
+    text-transform: uppercase;
+    animation: newGif 1s infinite;
+    font-weight: bold;
+
+}
+
+.tokenInfotrc2021 {
+    font-size: 14px;
+    min-width: 150px;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    cursor: pointer;
 }

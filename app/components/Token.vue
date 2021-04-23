@@ -15,6 +15,11 @@
                             TRC-21
                         </span>
                         <span
+                            v-if="token.type === 'trc20'"
+                            class="apply-trc">
+                            TRC-20
+                        </span>
+                        <span
                             v-if="isBridgeToken && token.type === 'trc21'"
                             id="wraperc20"
                             class="apply-trc">
@@ -46,7 +51,7 @@
                         <ul>
                             <li>
                                 <b-link
-                                    v-if="!isAppliedZ && account === contractCreation"
+                                    v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
                                     :to="'/tomozcondition/' + address"
                                     class="tmp-btn-violet"
                                     style="width: 270px">
@@ -70,12 +75,12 @@
                                         <i class="tm-icon-cog" />
                                     </template>
                                     <b-dropdown-item
-                                        v-if="!isAppliedZ && account === contractCreation"
+                                        v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
                                         :to="'/tomozcondition/' + address">
                                         Apply to TomoZ Protocol
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="!isAppliedX && account === contractCreation"
+                                        v-if="token.type === 'trc21' && !isAppliedX && account === contractCreation"
                                         :to="'/tomoxcondition/' + address">
                                         Apply to TomoX Protocol
                                     </b-dropdown-item>
@@ -117,12 +122,12 @@
                                         Transfer Token
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="isAppliedZ && contractCreation === account"
+                                        v-if="token.type === 'trc21' && isAppliedZ && contractCreation === account"
                                         :to="'/edittransactionsfee/' + address">
                                         Edit transaction fee
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="isAppliedZ"
+                                        v-if="token.type === 'trc21' && isAppliedZ"
                                         :to="'/depositfee/' + address">
                                         Deposit TRC-21 fee fund
                                     </b-dropdown-item>
@@ -203,7 +208,7 @@
                                             <p class="title-small">Decimals</p>
                                             <p>{{ token.decimals }}</p>
                                         </li>
-                                        <li v-if="isAppliedZ">
+                                        <li v-if="token.type === 'trc21' && isAppliedZ">
                                             <p class="title-small">
                                                 Transactions fee
                                                 <b-link
@@ -237,7 +242,7 @@
                                                 </span>
                                             </div>
                                         </li>
-                                        <li v-if="isAppliedZ">
+                                        <li v-if="token.type === 'trc21' && isAppliedZ">
                                             <p class="title-small">TRC-21 fee fund</p>
                                             <div class="flex-box">
                                                 <span>{{ formatNumber(poolingFee) }} TOMO</span>
@@ -526,7 +531,7 @@ export default {
             self.checkAppliedZ()
             self.checkAppliedX()
             self.getTransactionFee()
-            self.checkBridgeToken()
+            // self.checkBridgeToken()
         } catch (error) {
             console.log(error)
             this.$toasted.show(error, { type :'error' })
@@ -724,14 +729,16 @@ export default {
                 )
                 await contract.methods.original_contract.call()
                     .then(result => {
-                        self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
-                        self.tokenERC20Address = result
-                        self.checkAppliedB()
-                        self.tokenAddressURL = urljoin(
-                            self.config.etherChain.etherScanURL,
-                            'token',
-                            result
-                        )
+                        if (result) {
+                            self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
+                            self.tokenERC20Address = result
+                            self.checkAppliedB()
+                            self.tokenAddressURL = urljoin(
+                                self.config.etherChain.etherScanURL,
+                                'token',
+                                result
+                            )
+                        }
                     })
                     .catch(error => {
                         console.log(error)

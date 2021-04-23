@@ -82,12 +82,12 @@
                                         <i class="tm-three-dots" />
                                     </template>
                                     <b-dropdown-item
-                                        v-if="!data.item.applytomoz"
+                                        v-if="data.type === 'trc21' && !data.item.applytomoz"
                                         :to="'/tomozcondition/' + data.item.hash">
                                         Apply to TomoZ
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="!data.item.applytomox"
+                                        v-if="data.type === 'trc21' && !data.item.applytomox"
                                         :to="'/tomoxcondition/' + data.item.hash">
                                         Apply to TomoX
                                     </b-dropdown-item>
@@ -227,7 +227,8 @@ export default {
                             applytomoz: ((self.appliedZList || []).indexOf(i.hash) > -1),
                             applytomox: ((self.appliedXList || []).indexOf(i.hash) > -1),
                             logo: await self.getLogo(i.hash),
-                            mintable: i.isMintable
+                            mintable: i.isMintable,
+                            type: i.type
                         }
                     }))
                     self.listokenItems = map
