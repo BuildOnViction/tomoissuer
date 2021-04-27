@@ -743,8 +743,11 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
     mapping (address => bool) public isAddressBlackListed;
     mapping (address => bool) public isTokenBlackListed;
     
-    constructor (address _verifier) public {
+    uint public targetChainId;
+    
+    constructor (address _verifier, uint _targetChainId) public {
         isVerifier[_verifier] = true;
+        targetChainId = _targetChainId;
     }
     
     function addVerifier (address _verifier) public onlyOwner {
@@ -806,7 +809,8 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         }
     }
 
-    function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, bytes calldata signature) external nonReentrant whenNotPaused {
+    function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, bytes calldata signature) external nonReentrant whenNotPaused {
+        require(target_chain != targetChainId, "must not transfer to the same chain");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
@@ -814,7 +818,8 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
             txHash,
             recipient,
             txId,
-            amount
+            amount,
+            target_chain
         ));
         bytes32 hash = ECDSA.toEthSignedMessageHash(message);
         address signer = ECDSA.recover(hash, signature);
@@ -826,7 +831,8 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         emit Withdraw(address(0), recipient, amount);
     }
     
-    function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, bytes calldata signature) external whenNotPaused nonReentrant {
+    function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, bytes calldata signature) external whenNotPaused nonReentrant {
+        require(target_chain != targetChainId, "must not transfer to the same chain");
         require(!isTokenBlackListed[address(token)], "Token blacklisted");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
@@ -835,7 +841,8 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
             txHash,
             recipient,
             txId,
-            amount
+            amount,
+            target_chain
         ));
         bytes32 hash = ECDSA.toEthSignedMessageHash(message);
         address signer = ECDSA.recover(hash, signature);

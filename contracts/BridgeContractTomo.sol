@@ -359,6 +359,7 @@ contract BridgeContract is Ownable, Pausable, OperatorRole {
         bool isAvailable;
         uint256 amount; 
         uint256 nonce;
+        uint target_chain;
     }
 
     mapping (address => bool) public isAddressBlackListed;
@@ -435,7 +436,7 @@ contract BridgeContract is Ownable, Pausable, OperatorRole {
     }
 
     // Submit and sign tx
-    function submitBurningTX(address token, address recipient, uint amount, bytes32  txHash) external onlySubmitter nonExisted(txHash) returns (uint256 transactionId) {
+    function submitBurningTX(address token, address recipient, uint amount, bytes32  txHash, uint target_chain) external onlySubmitter nonExisted(txHash) returns (uint256 transactionId) {
         require(!isTokenBlackListed[token], "Token blacklisted");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         require(!isAddressBlackListed[msg.sender], "Sedner blacklisted");
@@ -445,7 +446,8 @@ contract BridgeContract is Ownable, Pausable, OperatorRole {
             amount: amount,
             nonce: nonce,
             signed: false,
-            isAvailable: true
+            isAvailable: true,
+            target_chain: target_chain
         });
         
         transactionId = nonce;
@@ -463,7 +465,8 @@ contract BridgeContract is Ownable, Pausable, OperatorRole {
             txHash,
             Transactions[txHash].recipient,
             Transactions[txHash].nonce,
-            Transactions[txHash].amount
+            Transactions[txHash].amount,
+            Transactions[txHash].target_chain
         ));
         bytes32 hash = ECDSA.toEthSignedMessageHash(message);
         address signer = ECDSA.recover(hash, signature);
