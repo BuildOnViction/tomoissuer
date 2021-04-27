@@ -436,7 +436,7 @@ contract BridgeContract is Ownable, Pausable, OperatorRole {
     }
 
     // Submit and sign tx
-    function submitBurningTX(address token, address recipient, uint amount, bytes32  txHash, uint target_chain) external onlySubmitter nonExisted(txHash) returns (uint256 transactionId) {
+    function submitBurningTX(address token, address recipient, uint256 amount, bytes32  txHash, uint target_chain) external onlySubmitter nonExisted(txHash) returns (uint256 transactionId) {
         require(!isTokenBlackListed[token], "Token blacklisted");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         require(!isAddressBlackListed[msg.sender], "Sedner blacklisted");
@@ -458,7 +458,7 @@ contract BridgeContract is Ownable, Pausable, OperatorRole {
     
     function signBuringTX(bytes32 txHash, bytes calldata signature) external onlyVerifier whenNotPaused nonSigned(txHash) {
         require(!isTokenBlackListed[Transactions[txHash].tokenAddress], "Token blacklisted");
-        require(!isAddressBlackListed[msg.sender], "Sedner blacklisted");
+        require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
         require(!isAddressBlackListed[Transactions[txHash].recipient], "Recipient blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
             Transactions[txHash].tokenAddress,

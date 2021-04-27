@@ -742,15 +742,17 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
     mapping (address => bool) public isVerifier;
     mapping (address => bool) public isAddressBlackListed;
     mapping (address => bool) public isTokenBlackListed;
-    mapping (bytes => bool) public usedSignature;
+    mapping (uint256 => bool) public usedNonce;
     
     uint public targetChainId;
+    uint256 public nonce;
     
     constructor (address _verifier, uint _targetChainId) public {
         isVerifier[_verifier] = true;
         targetChainId = _targetChainId;
     }
     
+    // Verifier
     function addVerifier (address _verifier) public onlyOwner {
         isVerifier[_verifier] = true;
         emit AddedVerifierList(_verifier);
@@ -782,6 +784,7 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         emit RemovedBlackList(_address);
     }
 
+    // Pause/Unpause
     function pause() external onlyOwner {
         _pause();
     }
@@ -790,15 +793,22 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         _unpause();
     }
     
+    // Get nonce
+    function getNonce () public view returns (uint256) {
+        return nonce;
+    }
+    
+    // Swap/Unswap
     function swapErc20(IERC20 token, address recipient, uint amount) external nonReentrant whenNotPaused {
         require(amount > 0, "Swap amount must be positive");
         require(token.allowance(msg.sender, address(this)) >= amount, "Swap amount exceeds allowance");
 
         token.safeTransferFrom(msg.sender, address(this), amount);
+        emit Swap(address(token), recipient, amount);
 
-        if (!isTokenBlackListed[address(token)] && !isAddressBlackListed[recipient] && !isAddressBlackListed[msg.sender]) {
-            emit Swap(address(token), recipient, amount);   
-        }
+        // if (!isTokenBlackListed[address(token)] && !isAddressBlackListed[recipient] && !isAddressBlackListed[msg.sender]) {
+        //     emit Swap(address(token), recipient, amount);   
+        // }
     }
 
     function swapEth(address recipient) external payable nonReentrant whenNotPaused {
@@ -810,8 +820,8 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         }
     }
 
-    function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, bytes calldata signature) external nonReentrant whenNotPaused {
-        require(target_chain != targetChainId, "must not transfer to the same chain");
+    function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, uint256 receivedNonce, bytes calldata signature) external nonReentrant whenNotPaused {
+        require(target_chain == targetChainId, "Must not transfer to the same chain");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
@@ -826,16 +836,17 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         address signer = ECDSA.recover(hash, signature);
 
         require(isVerifier[signer], 'Invalid signature');
-        require(!usedSignature[signature], "Used signature");
-        usedSignature[signature] = true;
+        require(!usedNonce[receivedNonce], "Used nonce");
+        usedNonce[receivedNonce] = true;
+        nonce++;
         
         recipient.transfer(amount);
 
         emit Withdraw(address(0), recipient, amount);
     }
     
-    function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, bytes calldata signature) external whenNotPaused nonReentrant {
-        require(target_chain != targetChainId, "must not transfer to the same chain");
+    function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, uint256 receivedNonce, bytes calldata signature) external whenNotPaused nonReentrant {
+        require(target_chain == targetChainId, "Must not transfer to the same chain");
         require(!isTokenBlackListed[address(token)], "Token blacklisted");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
@@ -851,8 +862,9 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         address signer = ECDSA.recover(hash, signature);
 
         require(isVerifier[signer], 'Invalid signature');
-        require(!usedSignature[signature], "Used signature");
-        usedSignature[signature] = true;
+        require(!usedNonce[receivedNonce], "Used signature");
+        usedNonce[receivedNonce] = true;
+        nonce++;
 
         token.safeTransfer(recipient, amount);
 
