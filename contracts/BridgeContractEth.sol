@@ -742,6 +742,7 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
     mapping (address => bool) public isVerifier;
     mapping (address => bool) public isAddressBlackListed;
     mapping (address => bool) public isTokenBlackListed;
+    mapping (bytes => bool) public usedSignature;
     
     uint public targetChainId;
     
@@ -825,6 +826,8 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         address signer = ECDSA.recover(hash, signature);
 
         require(isVerifier[signer], 'Invalid signature');
+        require(!usedSignature[signature], "Used signature");
+        usedSignature[signature] = true;
         
         recipient.transfer(amount);
 
@@ -848,6 +851,8 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         address signer = ECDSA.recover(hash, signature);
 
         require(isVerifier[signer], 'Invalid signature');
+        require(!usedSignature[signature], "Used signature");
+        usedSignature[signature] = true;
 
         token.safeTransfer(recipient, amount);
 
