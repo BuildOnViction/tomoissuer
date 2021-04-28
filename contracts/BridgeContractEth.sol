@@ -742,10 +742,9 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
     mapping (address => bool) public isVerifier;
     mapping (address => bool) public isAddressBlackListed;
     mapping (address => bool) public isTokenBlackListed;
-    mapping (uint256 => bool) public usedNonce;
+    mapping (bytes => bool) public usedNonce;
     
     uint public targetChainId;
-    uint256 public nonce;
     
     constructor (address _verifier, uint _targetChainId) public {
         isVerifier[_verifier] = true;
@@ -793,22 +792,16 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         _unpause();
     }
     
-    // Get nonce
-    function getNonce () public view returns (uint256) {
-        return nonce;
-    }
-    
     // Swap/Unswap
     function swapErc20(IERC20 token, address recipient, uint amount) external nonReentrant whenNotPaused {
         require(amount > 0, "Swap amount must be positive");
         require(token.allowance(msg.sender, address(this)) >= amount, "Swap amount exceeds allowance");
 
         token.safeTransferFrom(msg.sender, address(this), amount);
-        emit Swap(address(token), recipient, amount);
 
-        // if (!isTokenBlackListed[address(token)] && !isAddressBlackListed[recipient] && !isAddressBlackListed[msg.sender]) {
-        //     emit Swap(address(token), recipient, amount);   
-        // }
+        if (!isTokenBlackListed[address(token)] && !isAddressBlackListed[recipient] && !isAddressBlackListed[msg.sender]) {
+            emit Swap(address(token), recipient, amount);   
+        }
     }
 
     function swapEth(address recipient) external payable nonReentrant whenNotPaused {
@@ -820,8 +813,8 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         }
     }
 
-    function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, uint256 receivedNonce, bytes calldata signature) external nonReentrant whenNotPaused {
-        require(target_chain == targetChainId, "Must not transfer to the same chain");
+    function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, bytes calldata signature) external nonReentrant whenNotPaused {
+        require(target_chain != targetChainId, "must not transfer to the same chain");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
@@ -834,19 +827,19 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         ));
         bytes32 hash = ECDSA.toEthSignedMessageHash(message);
         address signer = ECDSA.recover(hash, signature);
+        bytes memory nonce = split4FirstBytes(signature);
 
         require(isVerifier[signer], 'Invalid signature');
-        require(!usedNonce[receivedNonce], "Used nonce");
-        usedNonce[receivedNonce] = true;
-        nonce++;
+        require(!usedNonce[nonce], "Used nonce");
+        usedNonce[nonce] = true;
         
         recipient.transfer(amount);
 
         emit Withdraw(address(0), recipient, amount);
     }
     
-    function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, uint256 receivedNonce, bytes calldata signature) external whenNotPaused nonReentrant {
-        require(target_chain == targetChainId, "Must not transfer to the same chain");
+    function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, bytes calldata signature) external whenNotPaused nonReentrant {
+        require(target_chain != targetChainId, "must not transfer to the same chain");
         require(!isTokenBlackListed[address(token)], "Token blacklisted");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
@@ -860,11 +853,11 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         ));
         bytes32 hash = ECDSA.toEthSignedMessageHash(message);
         address signer = ECDSA.recover(hash, signature);
+        bytes memory nonce = split4FirstBytes(signature);
 
         require(isVerifier[signer], 'Invalid signature');
-        require(!usedNonce[receivedNonce], "Used signature");
-        usedNonce[receivedNonce] = true;
-        nonce++;
+        require(!usedNonce[nonce], "Used signature");
+        usedNonce[nonce] = true;
 
         token.safeTransfer(recipient, amount);
 
@@ -879,5 +872,13 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
     function ownerWithdrawEth(uint amount) external onlyOwner {
         msg.sender.transfer(amount);
         emit Withdraw(address(0), msg.sender, amount);
+    }
+
+    function split4FirstBytes(bytes memory data) internal pure returns(bytes memory) {
+        bytes memory result = new bytes(4);
+        for (uint i = 0; i < 3; i++) {
+            result[i] = data[i];
+        }
+        return result;
     }
 }
