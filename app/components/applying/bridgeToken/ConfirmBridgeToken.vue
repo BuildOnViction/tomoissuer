@@ -95,7 +95,7 @@
                         <!-- <router-link
                             :to="'/tomozcondition/' + contractAddress"
                             class="tmp-btn-violet">
-                            <span class="tm-icon-tomoz-new-white mr-1">
+                            <span class="tm-icon-tomoz-new-w mr-1">
                                 <span class="path1"/><span class="path2"/>
                             </span>
                             Apply TomoZ

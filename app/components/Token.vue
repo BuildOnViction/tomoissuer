@@ -2,7 +2,7 @@
     <div class="container">
         <div class="main-box-header">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <h2 class="tmp-title-large">{{ token.name }}</h2>
                     <div class="under">
                         <span
@@ -46,7 +46,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-md-6 text-right">
+                <div class="col-md-8 text-right">
                     <div class="tomo-btn">
                         <ul>
                             <li>
@@ -54,12 +54,25 @@
                                     v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
                                     :to="'/tomozcondition/' + address"
                                     class="tmp-btn-violet"
-                                    style="width: 270px">
-                                    <span class="tm-icon-tomoz-new-white mr-1">
+                                    style="width: 240px">
+                                    <span class="tm-icon-tomoz-new-w mr-1">
                                         <span class="path1"/><span class="path2"/>
                                     </span>
                                     <!-- <i class="tm-icon-tomoz mr-1"/> -->
                                     Apply to TomoZ Protocol
+                                </b-link>
+                            </li>
+                            <li>
+                                <b-link
+                                    v-if="token.type === 'trc21' && !isAppliedX && account === contractCreation"
+                                    :to="'/tomoxcondition/' + address"
+                                    class="tmp-btn-violet"
+                                    style="width: 240px">
+                                    <span class="tm-icon-tomox-new-w mr-1">
+                                        <span class="path1"/><span class="path2"/><span class="path3"/>
+                                    </span>
+                                    <!-- <i class="tm-icon-tomoz mr-1"/> -->
+                                    Apply to TomoX Protocol
                                 </b-link>
                             </li>
                             <li>
@@ -74,7 +87,7 @@
                                         class="tmp-btn-transparent">
                                         <i class="tm-icon-cog" />
                                     </template>
-                                    <b-dropdown-item
+                                    <!-- <b-dropdown-item
                                         v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
                                         :to="'/tomozcondition/' + address">
                                         Apply to TomoZ Protocol
@@ -83,7 +96,7 @@
                                         v-if="token.type === 'trc21' && !isAppliedX && account === contractCreation"
                                         :to="'/tomoxcondition/' + address">
                                         Apply to TomoX Protocol
-                                    </b-dropdown-item>
+                                    </b-dropdown-item> -->
                                     <!-- <b-dropdown-item
                                         v-if="isBridgeToken && !isAppliedB">
                                         <div id="applyBridge">

@@ -41,7 +41,7 @@
                     </b-button>
                     <b-button
                         class="tmp-btn-blue"
-                        @click="applyTomoX">
+                        @click="showModal">
                         Apply to TomoX protocol
                     </b-button>
                 </div>
@@ -86,6 +86,43 @@
                             :to="{ path: `/token/${address}` }"
                             class="btn tmp-btn-blue btn-secondary">Token detail
                         </router-link>
+                    </div>
+                </div>
+            </b-modal>
+            <b-modal
+                id="applyTomoXWarning"
+                ref="applyTomoXWarning"
+                size="md"
+                hide-header
+                hide-footer
+                centered>
+                <template #modal-title>
+                    Warning
+                </template>
+                <div class="tomo-modal-default icon-blue">
+                    <div class="msg-txt tomox-warning">
+                        <h3><b>Warning</b></h3>
+                        <ul class="text-left">
+                            <li>
+                                Applying TomoX protocol only provides your token with the technical
+                                requirement to be listed on a DEX.
+                            </li>
+                            <li>
+                                Applying TomoX protocol does not guarantee a listing spot on other DEXes of TomoX.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="btn-box">
+                        <b-button
+                            class="tmp-btn-boder-blue btn-min"
+                            @click="hideModal">
+                            Back
+                        </b-button>
+                        <b-button
+                            class="tmp-btn-blue"
+                            @click="applyTomoX">
+                            Confirm
+                        </b-button>
                     </div>
                 </div>
             </b-modal>
@@ -188,6 +225,7 @@ export default {
         async applyTomoX () {
             try {
                 if (!this.isAppliedX) {
+                    this.hideModal()
                     const self = this
                     this.loading = true
                     const tomoXContract = this.TomoXListing
@@ -291,6 +329,12 @@ export default {
                     }
                 }
             }
+        },
+        showModal () {
+            this.$refs.applyTomoXWarning.show()
+        },
+        hideModal () {
+            this.$refs.applyTomoXWarning.hide()
         }
     }
 }
