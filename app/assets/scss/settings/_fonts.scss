@@ -124,46 +124,55 @@ $font-roboto: 'Roboto', sans-serif;
 .tm-icon-tomox1:before {
   content: "\e91e";
 }
-
-.tm-icon-tomoz-new-white .path1:before {
-  content: "\e91f";
-  color: #fff;
+.tm-icon-menu:before {
+  content: "\e926";
 }
-.tm-icon-tomoz-new-white .path2:before {
+.tm-add-outline:before {
+  content: "\e927";
+}
+.tm-icon-tomoz-new .path1:before {
+  content: "\e91f";
+  color: #242828;
+}
+.tm-icon-tomoz-new .path2:before {
   content: "\e920";
   color: #00e8b5;
   margin-left: -1.3505859375em;
 }
-
-.tm-icon-tomoz-new .path1:before {
+.tm-icon-tomox-new .path1:before {
   content: "\e921";
   color: #242828;
 }
-.tm-icon-tomoz-new .path2:before {
-  content: "\e922";
-  color: #00e8b5;
-  margin-left: -1.3505859375em;
-}
-
-.tm-icon-tomox-new .path1:before {
-  content: "\e923";
-  color: #242828;
-}
 .tm-icon-tomox-new .path2:before {
-  content: "\e924";
+  content: "\e922";
   color: #242828;
   margin-left: -1.2509765625em;
 }
 .tm-icon-tomox-new .path3:before {
-  content: "\e925";
+  content: "\e923";
   color: #00e8b5;
   margin-left: -1.2509765625em;
 }
-
-.tm-icon-menu:before {
-  content: "\e926";
+.tm-icon-tomoz-new-w .path1:before {
+  content: "\e924";
+  color: #fff;
 }
-
-.tm-add-outline:before {
-  content: "\e927";
+.tm-icon-tomoz-new-w .path2:before {
+  content: "\e925";
+  color: #00e8b5;
+  margin-left: -1.3505859375em;
+}
+.tm-icon-tomox-new-w .path1:before {
+  content: "\e928";
+  color: #fff;
+}
+.tm-icon-tomox-new-w .path2:before {
+  content: "\e929";
+  color: #fff;
+  margin-left: -1.2509765625em;
+}
+.tm-icon-tomox-new-w .path3:before {
+  content: "\e92a";
+  color: #00e8b5;
+  margin-left: -1.2509765625em;
 }
