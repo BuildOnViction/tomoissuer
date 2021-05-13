@@ -814,7 +814,7 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
     }
 
     function withdrawEth(address payable recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, bytes calldata signature) external nonReentrant whenNotPaused {
-        require(target_chain != targetChainId, "must not transfer to the same chain");
+        require(target_chain == targetChainId, "Must not transfer to the same chain");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
         bytes32 message = keccak256(abi.encodePacked(
@@ -839,7 +839,7 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
     }
     
     function withdrawERC20(IERC20 token, address recipient, uint256 amount, uint256 txId, bytes32 txHash, uint target_chain, bytes calldata signature) external whenNotPaused nonReentrant {
-        require(target_chain != targetChainId, "must not transfer to the same chain");
+        require(target_chain == targetChainId, "Must not transfer to the same chain");
         require(!isTokenBlackListed[address(token)], "Token blacklisted");
         require(!isAddressBlackListed[recipient], "Recipient blacklisted");
         require(!isAddressBlackListed[msg.sender], "Sender blacklisted");
