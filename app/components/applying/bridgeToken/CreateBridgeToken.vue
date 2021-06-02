@@ -174,6 +174,7 @@ export default {
                         const ethWeb3 = new Web3(new Web3.providers.HttpProvider(config.etherChain.rpc))
                         let contract = new ethWeb3.eth.Contract(
                             JSON.parse(data.result),
+                            // this.ERC20.abi,
                             this.tokenAddress
                         )
                         // In case etherscan cannot find contract
