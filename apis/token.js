@@ -134,7 +134,7 @@ router.get('/getBridgeTokenContract', [
         return next(errors.array())
     }
     try {
-        const p = path.resolve(__dirname, '../contracts', 'TomoBridgeWrapToken.sol')
+        const p = path.resolve(__dirname, '../contracts', 'TomoBridgeWrapTokenV2.sol')
         const contractCode = fs.readFileSync(p, 'UTF-8')
         return res.json({ contractCode })
     } catch (error) {
@@ -193,7 +193,7 @@ router.get('/compileBridgeTokenContract', [
         let sourceCode
         let bytecode
         let abi
-        const p = path.resolve(__dirname, '../contracts', 'TomoBridgeWrapToken.sol')
+        const p = path.resolve(__dirname, '../contracts', 'TomoBridgeWrapTokenV2.sol')
         sourceCode = fs.readFileSync(p, 'UTF-8')
         let contract
         const compiledContract = solc.compile(sourceCode, 1)
@@ -486,13 +486,13 @@ router.post('/announceBridge', [
     check('chain').isIn(['ETH', 'BTC']).exists().withMessage("'chain' is required"),
     check('wrapperAddress').exists().isLength({ min: 42, max: 42 }).withMessage("'wrapperAddress' is required"),
     check('tokenAddress').exists().isLength({ min: 42, max: 42 }).withMessage("'tokenAddress' is required"),
-    check('decimals').exists().withMessage("'decimals' is required"),
-    check('caller').exists().withMessage("'caller' is required")
+    check('decimals').exists().withMessage("'decimals' is required")
 ], async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return next(errors.array())
+    }
     try {
-        if (req.body.caller !== config.get('caller')) {
-            return next(new Error('Out'))
-        }
         let tokenPrice, coingeckoId
         await axios.get(
             urljoin(config.coingeckoAPI,
@@ -533,6 +533,7 @@ router.post('/announceBridge', [
         )
         return res.json(data)
     } catch (error) {
+        console.log(error)
         return next(new Error(error.response.data))
     }
 })

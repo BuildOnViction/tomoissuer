@@ -7,6 +7,7 @@ import './utils/codemirror'
 import TRC21IssuerAritfacts from '../build/contracts/TRC21Issuer.json'
 import TomoXListingAritfacts from '../build/contracts/TOMOXListing.json'
 import TomoBridgeWrapTokenAbi from '../build/contracts/TomoBridgeWrapToken'
+import TomoBridgeWrapTokenV2Abi from '../build/contracts/TomoBridgeWrapTokenV2'
 import MyTRC21Abi from '../build/contracts/MyTRC21'
 import MyTRC21MintableAbi from '../build/contracts/MyTRC21Mintable'
 import MyTRC20Abi from '../build/contracts/MyTRC20'
@@ -85,6 +86,7 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
         localStorage.set('configIssuer', config)
         const chainConfig = config.blockchain
         Vue.prototype.TomoBridgeWrapToken = TomoBridgeWrapTokenAbi
+        Vue.prototype.TomoBridgeWrapTokenV2 = TomoBridgeWrapTokenV2Abi
         Vue.prototype.MyTRC21 = MyTRC21Abi
         Vue.prototype.MyTRC21Mintable = MyTRC21MintableAbi
         Vue.prototype.MyTRC20 = MyTRC20Abi

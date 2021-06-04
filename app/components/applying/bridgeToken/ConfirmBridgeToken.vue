@@ -203,7 +203,7 @@ export default {
                     self.loading = false
                     self.$toasted.show('Not enough TOMO', { type: 'error' })
                 } else {
-                    const compiledContract = this.TomoBridgeWrapToken
+                    const compiledContract = this.TomoBridgeWrapTokenV2
 
                     const contract = new web3.eth.Contract(
                         compiledContract.abi, null, { data: compiledContract.bytecode })
@@ -217,7 +217,7 @@ export default {
                             self.tokenSymbol,
                             self.decimals,
                             self.totalSupply,
-                            self.minFee,
+                            // self.minFee,
                             [0, 0], // deposit fee and withdraw fee
                             this.tokenAddress, // erc20 token address
                             'ETH' // network
@@ -237,7 +237,7 @@ export default {
                                 self.tokenSymbol,
                                 self.decimals,
                                 0,
-                                0,
+                                // 0,
                                 [0, 0], // deposit fee and withdraw fee
                                 this.tokenAddress, // erc20 token address
                                 'ETH' // network
