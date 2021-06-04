@@ -97,22 +97,15 @@
                                         :to="'/tomoxcondition/' + address">
                                         Apply to TomoX Protocol
                                     </b-dropdown-item> -->
-                                    <!-- <b-dropdown-item
+                                    <b-dropdown-item
                                         v-if="isBridgeToken && !isAppliedB">
                                         <div id="applyBridge">
                                             <b-link
-                                                :disabled="!isAppliedZ"
-                                                :style="!isAppliedZ ? `cursor: not-allowed` : ''"
                                                 @click="showAnnounceBridgeModal">
                                                 Apply to TomoBridge
                                             </b-link>
                                         </div>
-                                        <b-tooltip
-                                            v-if="!isAppliedZ"
-                                            target="applyBridge">
-                                            Apply to TomoZ is required
-                                        </b-tooltip>
-                                    </b-dropdown-item> -->
+                                    </b-dropdown-item>
                                     <b-dropdown-item
                                         :to="'/viewToken/' + address">
                                         View Token Info
@@ -544,7 +537,7 @@ export default {
             self.checkAppliedZ()
             self.checkAppliedX()
             self.getTransactionFee()
-            // self.checkBridgeToken()
+            self.checkBridgeToken()
         } catch (error) {
             console.log(error)
             this.$toasted.show(error, { type :'error' })

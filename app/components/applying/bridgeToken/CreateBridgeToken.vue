@@ -90,7 +90,7 @@ export default {
             decimals: 18,
             totalSupply: '',
             account: '',
-            type: 'trc21',
+            type: 'trc20',
             balance: 0,
             txFee: 0,
             gasPrice: 250000000,
@@ -199,12 +199,16 @@ export default {
                         await this.checkDuplicate(this.tokenName, this.tokenSymbol)
 
                         const contractBridge = new this.web3.eth.Contract(
-                            this.TomoBridgeWrapToken.abi, null, { data: this.TomoBridgeWrapToken.bytecode })
+                            this.TomoBridgeWrapTokenV2.abi, null, { data: this.TomoBridgeWrapTokenV2.bytecode })
                         contractBridge.deploy({
                             arguments: [
                                 config.blockchain.bridgeTokenOwners,
                                 config.blockchain.defaultRequired,
-                                'BridgeToken', 'BTK', 18, 0, 0,
+                                'BridgeToken',
+                                'BTK',
+                                18,
+                                0,
+                                // 0, // minFee
                                 [0, 0], // deposit fee and withdraw fee
                                 this.tokenAddress,
                                 'ETH' // hardcode for ethereum network
