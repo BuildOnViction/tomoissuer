@@ -198,8 +198,8 @@ router.get('/compileBridgeTokenContract', [
         let contract
         const compiledContract = solc.compile(sourceCode, 1)
 
-        contract = compiledContract.contracts['TomoBridgeWrapToken'] ||
-            compiledContract.contracts[':' + 'TomoBridgeWrapToken']
+        contract = compiledContract.contracts['TomoBridgeWrapTokenV2'] ||
+            compiledContract.contracts[':' + 'TomoBridgeWrapTokenV2']
         bytecode = contract.bytecode
         abi = JSON.parse(contract.interface)
 
