@@ -254,7 +254,7 @@ contract TomoBridgeWrapToken is TRC20 {
     uint public WITHDRAW_FEE = 0;
     uint public DEPOSIT_FEE = 0;
     uint public WITHDRAW_FEE_TOMO = 4 ether; // 4 TOMO
-    bool public TOMO_FEE_MODE = true;
+    bool public TOMO_FEE_MODE = false;
     
     /*
      *  Storage
