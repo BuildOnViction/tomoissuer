@@ -738,7 +738,7 @@ export default {
             const self = this
             try {
                 const contract = new this.web3.eth.Contract(
-                    this.TomoBridgeWrapToken.abi,
+                    this.TomoBridgeWrapTokenV2.abi,
                     this.address
                 )
                 await contract.methods.original_contract.call()
