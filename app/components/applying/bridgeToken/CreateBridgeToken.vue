@@ -174,6 +174,7 @@ export default {
                         const ethWeb3 = new Web3(new Web3.providers.HttpProvider(config.etherChain.rpc))
                         let contract = new ethWeb3.eth.Contract(
                             JSON.parse(data.result),
+                            // this.ERC20.abi,
                             this.tokenAddress
                         )
                         // In case etherscan cannot find contract
@@ -185,12 +186,6 @@ export default {
                         }
                         this.tokenName = this.checkTokenName(await contract.methods.name.call())
                         this.tokenSymbol = this.checkTokenName(await contract.methods.symbol.call())
-                        // contract.methods.name.call().then(name => {
-                        //     this.tokenName = this.checkTokenName(name)
-                        // }).catch(error => error)
-                        // contract.methods.symbol.call().then(symbol => {
-                        //     this.tokenSymbol = this.checkTokenName(symbol)
-                        // }).catch(error => error)
                         contract.methods.decimals.call().then(decimals => {
                             this.decimals = new BigNumber(decimals).toNumber()
                         }).catch(error => error)
