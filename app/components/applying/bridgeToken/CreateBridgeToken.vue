@@ -186,12 +186,6 @@ export default {
                         }
                         this.tokenName = this.checkTokenName(await contract.methods.name.call())
                         this.tokenSymbol = this.checkTokenName(await contract.methods.symbol.call())
-                        // contract.methods.name.call().then(name => {
-                        //     this.tokenName = this.checkTokenName(name)
-                        // }).catch(error => error)
-                        // contract.methods.symbol.call().then(symbol => {
-                        //     this.tokenSymbol = this.checkTokenName(symbol)
-                        // }).catch(error => error)
                         contract.methods.decimals.call().then(decimals => {
                             this.decimals = new BigNumber(decimals).toNumber()
                         }).catch(error => error)

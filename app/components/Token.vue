@@ -97,22 +97,20 @@
                                         :to="'/tomoxcondition/' + address">
                                         Apply to TomoX Protocol
                                     </b-dropdown-item> -->
-                                    <!-- <b-dropdown-item
+                                    <b-dropdown-item
                                         v-if="isBridgeToken && !isAppliedB">
                                         <div id="applyBridge">
                                             <b-link
-                                                :disabled="!isAppliedZ"
-                                                :style="!isAppliedZ ? `cursor: not-allowed` : ''"
                                                 @click="showAnnounceBridgeModal">
                                                 Apply to TomoBridge
                                             </b-link>
                                         </div>
-                                        <b-tooltip
+                                        <!-- <b-tooltip
                                             v-if="!isAppliedZ"
                                             target="applyBridge">
                                             Apply to TomoZ is required
-                                        </b-tooltip>
-                                    </b-dropdown-item> -->
+                                        </b-tooltip> -->
+                                    </b-dropdown-item>
                                     <b-dropdown-item
                                         :to="'/viewToken/' + address">
                                         View Token Info
@@ -455,6 +453,8 @@
                     </div>
                 </div>
             </div>
+            <div
+                :class="(pageLoading ? 'tomo-loading' : '')"/>
         </b-modal>
     </div>
 </template>
@@ -483,6 +483,7 @@ export default {
             tokenHolders: 0,
             moreInfo: '',
             loading: false,
+            pageLoading: false,
             depositeAmount: '',
             isAppliedZ: false,
             transactionHash: '',
@@ -544,7 +545,7 @@ export default {
             self.checkAppliedZ()
             self.checkAppliedX()
             self.getTransactionFee()
-            // self.checkBridgeToken()
+            self.checkBridgeToken()
         } catch (error) {
             console.log(error)
             this.$toasted.show(error, { type :'error' })
@@ -766,6 +767,7 @@ export default {
             this.$refs.announceBridgeModal.show()
         },
         async announceBridge () {
+            this.pageLoading = true
             axios.post('/api/token/announceBridge', {
                 chain: 'ETH',
                 tokenName: this.tokenName,
@@ -779,8 +781,10 @@ export default {
                 if (response.data.address) {
                     this.step = 2
                     this.isAppliedB = true
+                    this.pageLoading = false
                 }
             }).catch(error => {
+                this.pageLoading = false
                 if (error.response && error.response.data) {
                     this.$toasted.show(error.response.data
                         ? error.response.data.error.message : error, { type: 'error' })
