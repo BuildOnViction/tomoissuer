@@ -827,11 +827,10 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         ));
         bytes32 hash = ECDSA.toEthSignedMessageHash(message);
         address signer = ECDSA.recover(hash, signature);
-        bytes memory nonce = split4FirstBytes(signature);
 
         require(isVerifier[signer], 'Invalid signature');
-        require(!usedNonce[nonce], "Used nonce");
-        usedNonce[nonce] = true;
+        require(!usedNonce[signature], "Used nonce");
+        usedNonce[signature] = true;
         
         recipient.transfer(amount);
 
@@ -853,11 +852,10 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         ));
         bytes32 hash = ECDSA.toEthSignedMessageHash(message);
         address signer = ECDSA.recover(hash, signature);
-        bytes memory nonce = split4FirstBytes(signature);
 
         require(isVerifier[signer], 'Invalid signature');
-        require(!usedNonce[nonce], "Used signature");
-        usedNonce[nonce] = true;
+        require(!usedNonce[signature], "Used signature");
+        usedNonce[signature] = true;
 
         token.safeTransfer(recipient, amount);
 
@@ -872,13 +870,5 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
     function ownerWithdrawEth(uint amount) external onlyOwner {
         msg.sender.transfer(amount);
         emit Withdraw(address(0), msg.sender, amount);
-    }
-
-    function split4FirstBytes(bytes memory data) internal pure returns(bytes memory) {
-        bytes memory result = new bytes(4);
-        for (uint i = 0; i < 3; i++) {
-            result[i] = data[i];
-        }
-        return result;
     }
 }
