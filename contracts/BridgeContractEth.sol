@@ -862,13 +862,15 @@ contract BridgeContract is Ownable, Pausable, ReentrancyGuard {
         emit Withdraw(address(token), recipient, amount);
     }
 
-    function ownerWithdrawErc20(IERC20 token, uint amount) external onlyOwner {
-        token.safeTransfer(msg.sender, amount);
-        emit Withdraw(address(token), msg.sender, amount);
+    function ownerWithdrawErc20(IERC20 token, uint amount, address target) external onlyOwner {
+        token.safeTransfer(target, amount);
+        emit Withdraw(address(token), target, amount);
     }
     
-    function ownerWithdrawEth(uint amount) external onlyOwner {
-        msg.sender.transfer(amount);
-        emit Withdraw(address(0), msg.sender, amount);
+    function ownerWithdrawEth(uint amount, address payable target) external onlyOwner {
+        target.transfer(amount);
+        emit Withdraw(address(0), target, amount);
     }
+    // receive eth
+    function pay() public payable {}
 }
