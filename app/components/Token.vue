@@ -105,6 +105,11 @@
                                                 Apply to TomoBridge
                                             </b-link>
                                         </div>
+                                        <!-- <b-tooltip
+                                            v-if="!isAppliedZ"
+                                            target="applyBridge">
+                                            Apply to TomoZ is required
+                                        </b-tooltip> -->
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         :to="'/viewToken/' + address">
@@ -448,6 +453,8 @@
                     </div>
                 </div>
             </div>
+            <div
+                :class="(pageLoading ? 'tomo-loading' : '')"/>
         </b-modal>
     </div>
 </template>
@@ -476,6 +483,7 @@ export default {
             tokenHolders: 0,
             moreInfo: '',
             loading: false,
+            pageLoading: false,
             depositeAmount: '',
             isAppliedZ: false,
             transactionHash: '',
@@ -730,7 +738,7 @@ export default {
             const self = this
             try {
                 const contract = new this.web3.eth.Contract(
-                    this.TomoBridgeWrapToken.abi,
+                    this.TomoBridgeWrapTokenV2.abi,
                     this.address
                 )
                 await contract.methods.original_contract.call()
@@ -759,6 +767,7 @@ export default {
             this.$refs.announceBridgeModal.show()
         },
         async announceBridge () {
+            this.pageLoading = true
             axios.post('/api/token/announceBridge', {
                 chain: 'ETH',
                 tokenName: this.tokenName,
@@ -772,8 +781,10 @@ export default {
                 if (response.data.address) {
                     this.step = 2
                     this.isAppliedB = true
+                    this.pageLoading = false
                 }
             }).catch(error => {
+                this.pageLoading = false
                 if (error.response && error.response.data) {
                     this.$toasted.show(error.response.data
                         ? error.response.data.error.message : error, { type: 'error' })

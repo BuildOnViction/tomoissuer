@@ -186,12 +186,6 @@ export default {
                         }
                         this.tokenName = this.checkTokenName(await contract.methods.name.call())
                         this.tokenSymbol = this.checkTokenName(await contract.methods.symbol.call())
-                        // contract.methods.name.call().then(name => {
-                        //     this.tokenName = this.checkTokenName(name)
-                        // }).catch(error => error)
-                        // contract.methods.symbol.call().then(symbol => {
-                        //     this.tokenSymbol = this.checkTokenName(symbol)
-                        // }).catch(error => error)
                         contract.methods.decimals.call().then(decimals => {
                             this.decimals = new BigNumber(decimals).toNumber()
                         }).catch(error => error)
@@ -204,11 +198,8 @@ export default {
                             arguments: [
                                 config.blockchain.bridgeTokenOwners,
                                 config.blockchain.defaultRequired,
-                                'BridgeToken',
-                                'BTK',
-                                18,
-                                0,
-                                // 0, // minFee
+                                'BridgeToken', 'BTK', 18, 0,
+                                // 0, minFee
                                 [0, 0], // deposit fee and withdraw fee
                                 this.tokenAddress,
                                 'ETH' // hardcode for ethereum network
@@ -221,7 +212,10 @@ export default {
                             }
                             this.issueFee = this.issueFee.toFixed(4)
                         })
-                            .catch(error => error)
+                            .catch(error => {
+                                console.log(error)
+                                this.$toasted.show(error.message ? error.message : error, { type: 'error' })
+                            })
                         this.foundToken = true
                         this.loading = false
                     } else {

@@ -237,7 +237,7 @@ export default {
                                 self.tokenSymbol,
                                 self.decimals,
                                 0,
-                                // 0,
+                                // 0, minFee
                                 [0, 0], // deposit fee and withdraw fee
                                 this.tokenAddress, // erc20 token address
                                 'ETH' // network
@@ -277,7 +277,7 @@ export default {
                                 self.tokenSymbol,
                                 self.decimals,
                                 0, // capacity
-                                0, // minFee
+                                // 0, // minFee
                                 [0, 0], // deposit fee and withdraw fee
                                 this.tokenAddress, // erc20 token address
                                 'ETH' // network
