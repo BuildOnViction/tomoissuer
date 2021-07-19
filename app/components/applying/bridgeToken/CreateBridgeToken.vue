@@ -90,7 +90,7 @@ export default {
             decimals: 18,
             totalSupply: '',
             account: '',
-            type: 'trc21',
+            type: 'trc20',
             balance: 0,
             txFee: 0,
             gasPrice: 250000000,
