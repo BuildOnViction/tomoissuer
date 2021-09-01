@@ -27,8 +27,10 @@ const getChainExplorer = (chain) => {
 const calculateMinDeposit = (tokenPrice, decimals) => {
     if (tokenPrice !== 0) {
         let minimum = 5 / tokenPrice
+        console.log('minimum', minimum)
         if (minimum > 1) {
             minimum = Math.round(minimum)
+            console.log('minimumminimum', minimum)
         } else {
             let count = -Math.floor(Math.log(minimum) / Math.log(10) + 1)
             minimum = minimum.toFixed(count + 1)
@@ -37,6 +39,10 @@ const calculateMinDeposit = (tokenPrice, decimals) => {
         const a = new BigNumber(
             minimum
         ).multipliedBy(10 ** decimals).toString()
+        // If price is too small
+        if (new BigNumber(a).isGreaterThan(new BigNumber(1).multipliedBy(10 ** 18))) {
+            return '0'
+        }
         return a
     } else {
         return '0'
