@@ -33,7 +33,7 @@
                         <div>
                             Contract address:
                             <b-link
-                                :href="config.tomoscanUrl + '/tokens/' + tokenAddress"
+                                :href="config.tomoscanUrl + '/token/' + tokenAddress"
                                 target="_blank">
                                 {{ tokenAddress }}
                             </b-link>

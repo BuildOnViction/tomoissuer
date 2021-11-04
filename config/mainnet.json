@@ -10,7 +10,7 @@
         "https://swagger.tomochain.com",
         "https://api.etherscan.io"
     ],
-    "tomoscanUrl": "https://scan.tomochain.com",
+    "tomoscanUrl": "https://tomoscan.io",
     "tomoscanAPI": "https://scan.tomochain.com",
     "tomowalletUrl": "https://wallet.tomochain.com",
     "relayerAuthorityKey": "",
