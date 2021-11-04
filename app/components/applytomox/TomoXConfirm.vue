@@ -73,7 +73,7 @@
                             style="font-size: 14px">
                             Transaction hash:
                             <a
-                                :href="config.tomoscanUrl + '/txs/' +
+                                :href="config.tomoscanUrl + '/tx/' +
                                 transactionHash.toLowerCase()"
                                 :title="transactionHash"
                                 target="_blank">

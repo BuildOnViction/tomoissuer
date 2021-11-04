@@ -122,7 +122,7 @@
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         v-if="!token.contract"
-                                        :href="config.tomoscanUrl + '/contracts/verify?address=' + address"
+                                        :href="config.tomoscanUrl + '/contracts/verify/' + address"
                                         target="_blank">
                                         Verify & Publish Contract
                                     </b-dropdown-item>
@@ -209,7 +209,7 @@
                                             <p class="common_txt_ellipsis text-blue">
                                                 <a
                                                     :title="token.hash"
-                                                    :href="config.tomoscanUrl + '/tokens/' + address"
+                                                    :href="config.tomoscanUrl + '/token/' + address"
                                                     target="_blank">
                                                     {{ token.hash }}
                                                 </a>
@@ -300,7 +300,7 @@
                                     <template
                                         #cell(txn_hash)="data">
                                         <a
-                                            :href="config.tomoscanUrl + '/txs/' +
+                                            :href="config.tomoscanUrl + '/tx/' +
                                             data.value.toLowerCase()"
                                             :title="data.value"
                                             target="_blank">
