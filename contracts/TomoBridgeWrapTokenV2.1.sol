@@ -191,7 +191,7 @@ interface ITRC20 {
  * @title Standard TRC20 token
  * @dev Implementation of the basic standard token.
  */
-contract TRC20 is ITRC20 {
+contract TRC20 is ITRC20, Pausable {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
@@ -251,7 +251,7 @@ contract TRC20 is ITRC20 {
      * @param to The address to transfer to.
      * @param value The amount to be transferred.
      */
-    function transfer(address to, uint256 value) public returns (bool) {
+    function transfer(address to, uint256 value) public whenNotPaused returns (bool) {
         _transfer(msg.sender, to, value);
         return true;
     }
@@ -266,7 +266,7 @@ contract TRC20 is ITRC20 {
      * @param spender The address which will spend the funds.
      * @param value The amount of tokens to be spent.
      */
-    function approve(address spender, uint256 value) public returns (bool) {
+    function approve(address spender, uint256 value) public whenNotPaused returns (bool) {
         require(spender != address(0));
 
         _allowed[msg.sender][spender] = value;
@@ -280,7 +280,7 @@ contract TRC20 is ITRC20 {
      * @param to address The address which you want to transfer to
      * @param value uint256 the amount of tokens to be transferred
      */
-    function transferFrom(address from,	address to,	uint256 value)	public returns (bool) {
+    function transferFrom(address from,	address to,	uint256 value)	public whenNotPaused returns (bool) {
         require(value <= _allowed[from][msg.sender]);
 
         _allowed[from][msg.sender] = _allowed[from][msg.sender].sub(value);
@@ -309,7 +309,7 @@ contract TRC20 is ITRC20 {
      * @param account The account that will receive the created tokens.
      * @param value The amount that will be created.
      */
-    function _mint(address account, uint256 value) internal {
+    function _mint(address account, uint256 value) internal whenNotPaused {
         require(account != 0);
         _totalSupply = _totalSupply.add(value);
         _balances[account] = _balances[account].add(value);
@@ -333,7 +333,7 @@ contract TRC20 is ITRC20 {
 }
 
 //Wrap token based on multisig wallet that only mints new token if there are user deposits 
-contract TomoBridgeWrapToken is TRC20, Ownable, Pausable {
+contract TomoBridgeWrapToken is Ownable, TRC20 {
     /*
      *  Events
      */
@@ -583,7 +583,6 @@ contract TomoBridgeWrapToken is TRC20, Ownable, Pausable {
     /// @return Returns transaction ID.
     function submitTransaction(address destination, uint value, bytes data) 
     public
-    whenNotPaused
     returns (uint transactionId)
     {
         //transaction is considered as minting if no data provided, otherwise it's owner changing transaction
@@ -599,7 +598,6 @@ contract TomoBridgeWrapToken is TRC20, Ownable, Pausable {
     ownerExists(msg.sender)
     transactionExists(transactionId)
     notConfirmed(transactionId, msg.sender)
-    whenNotPaused
     {
         confirmations[transactionId][msg.sender] = true;
         emit Confirmation(msg.sender, transactionId);
@@ -613,7 +611,6 @@ contract TomoBridgeWrapToken is TRC20, Ownable, Pausable {
     ownerExists(msg.sender)
     confirmed(transactionId, msg.sender)
     notExecuted(transactionId)
-    whenNotPaused
     {
         confirmations[transactionId][msg.sender] = false;
         emit Revocation(msg.sender, transactionId);
@@ -623,6 +620,7 @@ contract TomoBridgeWrapToken is TRC20, Ownable, Pausable {
     function burn(uint value, bytes data)
     payable
     public
+    whenNotPaused
     {
         if (TOMO_FEE_MODE) {
             require(msg.value >= WITHDRAW_FEE_TOMO);  //avoid spamming
@@ -662,7 +660,6 @@ contract TomoBridgeWrapToken is TRC20, Ownable, Pausable {
     ownerExists(msg.sender)
     confirmed(transactionId, msg.sender)
     notExecuted(transactionId)
-    whenNotPaused
     {
         if (isConfirmed(transactionId)) {
             Transaction storage txn = transactions[transactionId];
@@ -717,7 +714,6 @@ contract TomoBridgeWrapToken is TRC20, Ownable, Pausable {
     function addTransaction(address destination, uint value, bytes data)
     internal
     notNull(destination)
-    whenNotPaused
     returns (uint transactionId)
     {
         transactionId = transactionCount;
