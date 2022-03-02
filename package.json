@@ -30,8 +30,9 @@
   },
   "homepage": "https://github.com/tomochain/tomoissuer#readme",
   "dependencies": {
-    "@ledgerhq/hw-app-eth": "^4.56.0",
+    "@ledgerhq/hw-app-eth": "^6.24.1",
     "@ledgerhq/hw-transport-u2f": "^4.56.0",
+    "@ledgerhq/hw-transport-webusb": "^6.24.1",
     "axios": "^0.21.1",
     "bignumber.js": "^8.1.1",
     "bip39": "^3.0.2",
