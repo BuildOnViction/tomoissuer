@@ -62,7 +62,7 @@
                                     Apply to TomoZ Protocol
                                 </b-link>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <b-link
                                     v-if="token.type === 'trc21' && !isAppliedX && account === contractCreation"
                                     :to="'/tomoxcondition/' + address"
@@ -71,10 +71,9 @@
                                     <span class="tm-icon-tomox-new-w mr-1">
                                         <span class="path1"/><span class="path2"/><span class="path3"/>
                                     </span>
-                                    <!-- <i class="tm-icon-tomoz mr-1"/> -->
                                     Apply to TomoX Protocol
                                 </b-link>
-                            </li>
+                            </li> -->
                             <li>
                                 <b-dropdown
                                     right
