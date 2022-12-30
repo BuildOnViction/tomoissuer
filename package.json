@@ -88,7 +88,7 @@
     "node-sass": "^4.14.1",
     "nodemon": "^1.19.0",
     "sass-loader": "^7.1.0",
-    "truffle": "^5.1.52",
+    "truffle": "^5.7.1",
     "uglifyjs-webpack-plugin": "^2.1.2",
     "vue": "^2.6.10",
     "vue-codemirror": "^4.0.6",
