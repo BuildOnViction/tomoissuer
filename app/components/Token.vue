@@ -174,11 +174,11 @@
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
-                                    <p class="tmp-title-medium">Total supply</p>
+                                    <p class="tmp-title-medium">Total Supply</p>
                                     <p
                                         :title="formatNumber(token.totalSupplyNumber)"
                                         class="fsz-size text-blue common_txt_ellipsis">
-                                        {{ formatNumber(formatCapacity(token.totalSupplyNumber)) }}
+                                        {{ formatNumber(token.totalSupplyNumber) }}
                                     </p>
                                 </div>
                             </div>
@@ -554,15 +554,14 @@ export default {
     methods: {
         async getTokenDetail () {
             const self = this
-            const { data } = await axios.get(`/api/account/${self.address}`)
-            const token = data.token
-            self.token = token || {}
-            self.token.contract = data.contract || null
-            self.tokenName = token.name
-            self.symbol = token.symbol
+            const { data } = await axios.get(`/api/token/${self.address}`)
+            self.token = data
+            self.token.contract = data.hash
+            self.tokenName = data.name
+            self.symbol = data.symbol
             self.contractCreation = data.contractCreation
 
-            self.$store.state.token = data.token
+            self.$store.state.token = self.token
         },
         getTokenTransfer () {
             const self = this
