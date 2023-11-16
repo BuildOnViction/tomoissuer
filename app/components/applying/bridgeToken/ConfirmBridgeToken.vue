@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <td>Est. Issuance Fee</td>
-                        <td>~{{ issueFee }} TOMO</td>
+                        <td>~{{ issueFee }} VIC</td>
                     </tr>
                     <tr>
                         <td >Code review</td>
@@ -201,7 +201,7 @@ export default {
                 self.account = await self.getAccount()
                 if (self.balance.isLessThan(self.issueFee)) {
                     self.loading = false
-                    self.$toasted.show('Not enough TOMO', { type: 'error' })
+                    self.$toasted.show('Not enough VIC', { type: 'error' })
                 } else {
                     const compiledContract = this.TomoBridgeWrapToken
 

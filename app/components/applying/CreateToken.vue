@@ -15,7 +15,7 @@
                         type="text"
                         autocomplete="off"
                         maxlength="20"
-                        placeholder="Please use only Latin letters and numbers, e.g. “TomoChain”"
+                        placeholder="Please use only Latin letters and numbers, e.g. “Viction”"
                         @input="onChangeName"
                         @change="onChangeName"/>
                     <div
@@ -26,7 +26,7 @@
                     <!-- <small
                         tabindex="-1"
                         class="form-text text-muted">
-                        Please use only Latin letters and numbers, e.g. “TomoChain”
+                        Please use only Latin letters and numbers, e.g. Viction
                     </small> -->
                     <small
                         class="float-right txt-fixed-description">
@@ -46,7 +46,7 @@
                         autocomplete="off"
                         type="text"
                         maxlength="5"
-                        placeholder="Please use only Latin letters and numbers, e.g. “TOMO”"
+                        placeholder="Please use only Latin letters and numbers, e.g. “VIC”"
                         @input="onChangeSymbol"
                         @change="onChangeSymbol"/>
                     <div
@@ -57,7 +57,7 @@
                     <!-- <small
                         tabindex="-1"
                         class="form-text text-muted">
-                        Please use only Latin letters and numbers, e.g. “TOMO”
+                        Please use only Latin letters and numbers, e.g. “VIC”
                     </small> -->
                     <small
                         class="float-right txt-fixed-description">
@@ -214,8 +214,8 @@
                                     <span class="new-gif">new</span>
                                     <b-tooltip
                                         target="trc20">
-                                        TRC20 is the most standard token on TomoChain.
-                                        Transaction fees are paid through the native TOMO token.
+                                        TRC20 is the most standard token on Viction.
+                                        Transaction fees are paid through the native VIC token.
                                     </b-tooltip>
                                 </b-form-radio>
                             </b-col>
@@ -246,7 +246,7 @@
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group flex-box mb-4">
-                    <label>Est. Issuance Fee</label><span>~{{ txFee }} TOMO</span>
+                    <label>Est. Issuance Fee</label><span>~{{ txFee }} VIC</span>
                 </div>
                 <div class="btn-box">
                     <b-button
@@ -351,13 +351,13 @@ export default {
             tokenInfoItems: [
                 { title: 'Technical Requirements for Dapp Integration', trc20: 'Low', trc21: 'Moderate' },
                 { title: 'Technical Requirements for Exchange Listing ', trc20: 'Low', trc21: 'Moderate' },
-                { title: 'TomoP Compatibility', trc20: true, trc21: true },
-                { title: 'TomoX Compatibility', trc20: false, trc21: true },
-                { title: 'TomoZ Compatibility', trc20: false, trc21: true },
+                { title: 'VICP Compatibility', trc20: true, trc21: true },
+                { title: 'VICX Compatibility', trc20: false, trc21: true },
+                { title: 'VICZ Compatibility', trc20: false, trc21: true },
                 {
                     title: 'Transaction Fees',
-                    trc20: 'Native TOMO',
-                    trc21: 'By the transaction token itself (no need for native TOMO)'
+                    trc20: 'Native VIC',
+                    trc21: 'By the transaction token itself (no need for native VIC)'
                 }
             ]
         }

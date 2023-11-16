@@ -41,7 +41,7 @@
                         class="text-danger pt-2">Required field</div>
                     <div
                         v-else-if="$v.reissueAmount.$dirty && !$v.reissueAmount.minValue"
-                        class="text-danger pt-2">Deposit amount should be more than 0 TOMO</div>
+                        class="text-danger pt-2">Deposit amount should be more than 0 VIC</div>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button

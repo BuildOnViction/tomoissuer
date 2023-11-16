@@ -257,7 +257,7 @@
                                         <li v-if="token.type === 'trc21' && isAppliedZ">
                                             <p class="title-small">TRC-21 fee fund</p>
                                             <div class="flex-box">
-                                                <span>{{ formatNumber(poolingFee) }} TOMO</span>
+                                                <span>{{ formatNumber(poolingFee) }} VIC</span>
                                                 <span>
                                                     <b-link :to="'/depositfee/' + address">Deposit more</b-link>
                                                 </span>

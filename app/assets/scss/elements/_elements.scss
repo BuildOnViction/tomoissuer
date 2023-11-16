@@ -10,7 +10,7 @@ html {
 
 body {
     @include fsz(14);
-	background-color: #ffffff;
+	background-color: $background-default;
 	color: $color-text-default;
     font-family: $font-quicksand;
 }

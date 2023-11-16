@@ -84,12 +84,12 @@
                                     <b-dropdown-item
                                         v-if="data.type === 'trc21' && !data.item.applytomoz"
                                         :to="'/tomozcondition/' + data.item.hash">
-                                        Apply to TomoZ
+                                        Apply to VICZ
                                     </b-dropdown-item>
                                     <!-- <b-dropdown-item
                                         v-if="data.type === 'trc21' && !data.item.applytomox"
                                         :to="'/tomoxcondition/' + data.item.hash">
-                                        Apply to TomoX
+                                        Apply to VICX
                                     </b-dropdown-item> -->
                                     <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"
@@ -110,7 +110,7 @@
                                 <!-- <router-link
                                     v-if="!data.value"
                                     :to="`/tomozcondition/${data.item.hash}`">
-                                    Apply TomoZ
+                                    Apply VICZ
                                 </router-link> -->
                             </template>
                         </b-table>

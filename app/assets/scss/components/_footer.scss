@@ -8,6 +8,8 @@
         align-items: flex-end;
     }
     .tomo-copyright {
+        color: $color-sig;
+        font-weight: 600;
     }
     .tomo-meta-links {
         padding-top: 15px;
@@ -17,39 +19,45 @@
             }
             li {
                 display: inline-block;
-                padding: 0px 25px;
+                padding: 0px 16px;
                 position: relative;
+                &:first-child{
+                    padding-left: 0;
+                }
                 @include media-breakpoint-down(md) {
                     padding: 2px 10px;
                 }
-                &::after {
-                    content: "";
-                    background: $color-text-gray;
-                    width: 1px;
-                    height: 15px;
-                    position: absolute;
-                    right: 0;
-                    margin-top: 4px;
-                    @include media-breakpoint-down(md) {
-                        height: 12px;
-                        margin-top: 5px;
-                    }
-                }
-                &:first-child {
-                    @include media-breakpoint-up(lg) {
-                        padding-left: 0;
-                    }
-                }
-                &:last-child {
-                    @include media-breakpoint-up(lg) {
-                        padding-right: 0;
-                    }
-                    &::after {
-                        display: none;
-                    }
-                }
+                // &::after {
+                //     content: "";
+                //     background: $color-text-gray;
+                //     width: 1px;
+                //     height: 15px;
+                //     position: absolute;
+                //     right: 0;
+                //     margin-top: 4px;
+                //     @include media-breakpoint-down(md) {
+                //         height: 12px;
+                //         margin-top: 5px;
+                //     }
+                // }
+                // &:first-child {
+                //     @include media-breakpoint-up(lg) {
+                //         padding-left: 0;
+                //     }
+                // }
+                // &:last-child {
+                //     @include media-breakpoint-up(lg) {
+                //         padding-right: 0;
+                //     }
+                //     &::after {
+                //         display: none;
+                //     }
+                // }
                 a {
-                    color: $color-text-gray;
+                    color: $color-sig;
+                    border-bottom: 1px solid $color-border-default;
+                    padding-bottom: 3px;
+                    text-transform: uppercase;
                     &:hover {
                         color: $color-text-violet;
                     }

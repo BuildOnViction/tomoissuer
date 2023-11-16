@@ -37,7 +37,7 @@
                     </tr>
                     <tr>
                         <td>Est. Issuance Fee</td>
-                        <td>~{{ txFee }} TOMO</td>
+                        <td>~{{ txFee }} VIC</td>
                     </tr>
                     <tr>
                         <td >Code review</td>
@@ -204,7 +204,7 @@ export default {
                 self.account = await self.getAccount()
                 if (self.balance.isLessThan(self.txFee)) {
                     self.loading = false
-                    self.$toasted.show('Not enough TOMO', { type: 'error' })
+                    self.$toasted.show('Not enough VIC', { type: 'error' })
                 } else {
                     // const compiledContract = await axios.post('/api/token/compileContract', {
                     //     name: self.tokenName,

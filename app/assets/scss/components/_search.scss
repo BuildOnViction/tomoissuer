@@ -59,8 +59,8 @@
 }
 .autocomplete-results {
     background: #fff;
-    border-radius:  0 0 10px 10px;
-    box-shadow: $boxshadow-default;
+    border-radius: 0;
+    box-shadow: 0 !important;
     list-style: none;
     margin: 0;
     max-height: 268px;

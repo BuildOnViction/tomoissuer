@@ -13,25 +13,25 @@
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
-                    :description="`TX fee: 0.0005 TOMO, Available balance: ${balance} TOMO`"
+                    :description="`TX fee: 0.0005 VIC, Available balance: ${balance} VIC`"
                     :class="'mb-4' + ($v.depositFee.$dirty ? ' input-warn' : '') + warningClass"
                     label="Deposit amount"
                     label-for="depositFee">
-                    <span class="txt-fixed">TOMO</span>
+                    <span class="txt-fixed">VIC</span>
                     <b-form-input
                         v-model="depositFee"
                         type="text"
-                        placeholder="How much TOMO do you want to deposit? (Min: 10 TOMO)..."
+                        placeholder="How much VIC do you want to deposit? (Min: 10 VIC)..."
                         @input="onChange"/>
                     <div
                         v-if="$v.depositFee.$dirty && !$v.depositFee.required"
                         class="text-danger pt-2">Required field</div>
                     <div
                         v-else-if="$v.depositFee.$dirty && !$v.depositFee.minValue"
-                        class="text-danger pt-2">Minimum of depositing is 10 TOMO</div>
+                        class="text-danger pt-2">Minimum of depositing is 10 VIC</div>
                     <div
                         v-else-if="depositingError"
-                        class="text-danger pt-2">Not enough TOMO</div>
+                        class="text-danger pt-2">Not enough VIC</div>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button

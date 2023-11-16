@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <td>Deposit amount</td>
-                        <td>{{ formatNumber(depositeFee) }} TOMO</td>
+                        <td>{{ formatNumber(depositeFee) }} VIC</td>
                     </tr>
                 </table>
             </div>

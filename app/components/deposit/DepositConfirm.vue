@@ -32,7 +32,7 @@
                     </tr>
                     <tr>
                         <td>Deposit amount</td>
-                        <td>{{ formatNumber(depositFee) }} TOMO</td>
+                        <td>{{ formatNumber(depositFee) }} VIC</td>
                     </tr>
                     <tr>
                         <td>Transaction fee</td>
@@ -76,7 +76,7 @@
                     <div class="msg-txt">
                         <i class="tm-icon-checkmark-outline"/>
                         <h3><b>Successful</b></h3>
-                        <p>You’ve just successfully deposited {{ depositFee }} TOMO</p>
+                        <p>You’ve just successfully deposited {{ depositFee }} VIC</p>
                         <p>
                             Transaction hash:
                             <a

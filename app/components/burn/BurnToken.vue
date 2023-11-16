@@ -41,7 +41,7 @@
                         class="text-danger pt-2">Required field</div>
                     <div
                         v-else-if="$v.burnAmount.$dirty && !$v.burnAmount.minValue"
-                        class="text-danger pt-2">Deposit amount should be more than 0 TOMO</div>
+                        class="text-danger pt-2">Deposit amount should be more than 0 VIC</div>
                     <div
                         v-if="burningError"
                         class="text-danger pt-2">

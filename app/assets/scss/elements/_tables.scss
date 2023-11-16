@@ -19,8 +19,8 @@ table,
 	.tomo_main_table {
 		@include media-breakpoint-up(lg) {
 			background: $background-white;
-			border-radius: $boderradius-default;
-			box-shadow: $boxshadow-default;
+			// border-radius: $boderradius-default;
+			// box-shadow: $boxshadow-default;
 			padding: 1em;
 		}
 		tbody {

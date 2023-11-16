@@ -100,7 +100,7 @@
                                             <span
                                                 class="hd-path"
                                                 @click="changePath(`m/44'/889'/0'/0`)">m/44'/889'/0'/0</span>
-                                            with TomoChain App (on Ledger).
+                                            with Viction App (on Ledger).
                                         </b-form-text>
                                     </b-form-group>
                                     <div class="btn-box">
@@ -197,7 +197,7 @@
                                         <span
                                             class="hd-path"
                                             @click="changePath(`m/44'/889'/0'/0`)">m/44'/889'/0'/0</span>
-                                        for TomoChain path.
+                                        for Viction path.
                                     </b-form-text>
                                 </b-form-group>
                                 <div class="btn-box">
