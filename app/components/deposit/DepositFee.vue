@@ -2,7 +2,7 @@
     <div class="container container-small flex-content-center">
         <div class="tomo-body-fullw">
             <div class="info-header">
-                <h2 class="tmp-title-large">Deposit TRC-21 fee</h2>
+                <h2 class="tmp-title-large">Deposit fee</h2>
                 <p>Current {{ token.name }} fee fund: {{ currentPoolingFee }} VIC</p>
             </div>
             <b-form
