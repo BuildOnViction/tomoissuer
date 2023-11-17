@@ -272,7 +272,7 @@
                 #modal-header>
                 <div class="mx-auto">
                     <h5>
-                        More information on TRC20/TRC21
+                        More information on VRC20/VRC21
                     </h5>
                 </div>
             </template>
