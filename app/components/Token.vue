@@ -178,7 +178,7 @@
                                     <p
                                         :title="formatNumber(token.totalSupplyNumber)"
                                         class="fsz-size text-blue common_txt_ellipsis">
-                                        {{ formatNumber(token.totalSupplyNumber) }}
+                                        {{ formatCapacity(token.totalSupplyNumber) }}
                                     </p>
                                 </div>
                             </div>
