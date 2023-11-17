@@ -21,14 +21,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tomochain/tomoissuer.git"
+    "url": "git+https://github.com/buildOnViction/tomoissuer.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tomochain/tomoissuer/issues"
+    "url": "https://github.com/buildOnViction/tomoissuer/issues"
   },
-  "homepage": "https://github.com/tomochain/tomoissuer#readme",
+  "homepage": "https://github.com/buildOnViction/tomoissuer#readme",
   "dependencies": {
     "@ledgerhq/hw-app-eth": "^6.24.1",
     "@ledgerhq/hw-transport-u2f": "^4.56.0",

@@ -92,7 +92,7 @@
                             <div class="tomo-copyright">
                                 VICIssuer &copy; {{ (new Date()).getFullYear() }} -
                                 <a
-                                    :href="`https://github.com/tomochain/tomoissuer/releases/tag/v${version}`"
+                                    :href="`https://github.com/buildOnViction/tomoissuer/releases/tag/v${version}`"
                                     target="_blank"
                                     class="version-tag">
                                     v{{ version }}</a>

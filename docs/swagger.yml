@@ -5,14 +5,14 @@ info:
   description: Happy to code TomoIssuer APIs
   license:
     name: Github
-    url: 'https://github.com/tomochain/tomoissuer'
+    url: 'https://github.com/buildOnViction/tomoissuer'
 tags:
   - name: Config
     description: Get TomoIssuer Application Configuration
   - name: Account
-    description: Get account's informations(from TomoScan)
+    description: Get account's informations(from VicScan)
   - name: Token
-    description: Get token's information(from TomoScan)
+    description: Get token's information(from VicScan)
 schemes:
   - https
   - http
@@ -41,7 +41,7 @@ paths:
     get:
       tags:
         - Account
-      summary: Get account's informations(calling TomoScan API)
+      summary: Get account's informations(calling VicScan API)
       parameters:
         - name: address
           in: path
@@ -63,7 +63,7 @@ paths:
     get:
       tags:
         - Account
-      summary: Get token list following an address(calling TomoScan API)
+      summary: Get token list following an address(calling VicScan API)
       parameters:
         - name: address
           in: path
@@ -124,7 +124,7 @@ paths:
     get:
       tags:
         - Token
-      summary: Get token's informations(calling TomoScan API)
+      summary: Get token's informations(calling VicScan API)
       parameters:
         - name: token
           in: path
@@ -146,7 +146,7 @@ paths:
     get:
       tags:
         - Token
-      summary: Get token's holders of trc21 token(calling TomoScan API)
+      summary: Get token's holders of trc21 token(calling VicScan API)
       parameters:
         - name: token
           in: path
@@ -176,7 +176,7 @@ paths:
     get:
       tags:
         - Token
-      summary: Get token's holders of trc20 token(calling TomoScan API)
+      summary: Get token's holders of trc20 token(calling VicScan API)
       parameters:
         - name: token
           in: path
@@ -206,7 +206,7 @@ paths:
     get:
       tags:
         - Token
-      summary: Get token's transactions of trc21 token(calling TomoScan API)
+      summary: Get token's transactions of trc21 token(calling VicScan API)
       parameters:
         - name: token
           in: path
@@ -236,7 +236,7 @@ paths:
     get:
       tags:
         - Token
-      summary: Get token's transactions of trc20 token(calling TomoScan API)
+      summary: Get token's transactions of trc20 token(calling VicScan API)
       parameters:
         - name: token
           in: path
@@ -266,7 +266,7 @@ paths:
     get:
       tags:
         - Token
-      summary: Search token(calling TomoScan API)
+      summary: Search token(calling VicScan API)
       parameters:
         - name: query
           in: query
