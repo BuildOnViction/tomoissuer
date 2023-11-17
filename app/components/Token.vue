@@ -12,12 +12,12 @@
                         <span
                             v-if="token.type === 'trc21'"
                             class="apply-trc">
-                            TRC-21
+                            VRC-21
                         </span>
                         <span
                             v-if="token.type === 'trc20'"
                             class="apply-trc">
-                            TRC-20
+                            VRC-20
                         </span>
                         <span
                             v-if="isBridgeToken && token.type === 'trc21'"
@@ -26,15 +26,15 @@
                             Wrapped: ERC-20
                             <b-tooltip
                                 target="wraperc20">
-                                This is a TRC-21 standard wrapped token backed by an ERC-20 asset.
+                                This is a VRC-21 standard wrapped token backed by an ERC-20 asset.
                             </b-tooltip>
                         </span>
                         <span
                             v-if="isAppliedZ"
                             class="apply-tomoz">
-                            TomoZ
+                            VicZ
                         </span>
-                        <span
+                        <!-- <span
                             v-if="isAppliedX"
                             class="apply-tomoz">
                             TomoX
@@ -43,7 +43,7 @@
                             v-if="isAppliedB"
                             class="apply-tomoz">
                             TomoBridge
-                        </span>
+                        </span> -->
                     </div>
                 </div>
                 <div class="col-md-8 text-right">
@@ -141,7 +141,7 @@
                                     <b-dropdown-item
                                         v-if="token.type === 'trc21' && isAppliedZ"
                                         :to="'/depositfee/' + address">
-                                        Deposit TRC-21 fee fund
+                                        Deposit VRC-21 fee fund
                                     </b-dropdown-item>
                                     <b-dropdown-divider v-if="token.isMintable"/>
                                     <b-dropdown-item
@@ -255,7 +255,7 @@
                                             </div>
                                         </li>
                                         <li v-if="token.type === 'trc21' && isAppliedZ">
-                                            <p class="title-small">TRC-21 fee fund</p>
+                                            <p class="title-small">VRC-21 fee fund</p>
                                             <div class="flex-box">
                                                 <span>{{ formatNumber(poolingFee) }} VIC</span>
                                                 <span>
@@ -720,7 +720,7 @@ export default {
             this.getTokenHolders()
         },
         transferToken () {
-            alert('You can use TomoWallet mobile version to transfer TRC21 Tokens.' +
+            alert('You can use TomoWallet mobile version to transfer VRC21 Tokens.' +
                 'We will release TomoWallet web version soon.')
         },
         async checkAppliedB () {
