@@ -9,7 +9,7 @@
                 active>
                 <template>
                     <div
-                        class="tomo_main_table colum-8">
+                        class="tomo_main_table colum-7">
                         <b-table
                             id="transfer_table"
                             :items="listokenItems"
@@ -61,14 +61,14 @@
                                 #cell(holders)="data">
                                 {{ data.item.holders || '---' }}
                             </template>
-                            <template
+                            <!-- <template
                                 #cell(transferToken)="">
                                 <b-link
                                     :href="config.tomowalletUrl"
                                     target="_blank">
                                     Transfer Token
                                 </b-link>
-                            </template>
+                            </template> -->
                             <template
                                 #cell(applytomoz)="data">
                                 <b-dropdown
@@ -171,7 +171,7 @@ export default {
                 { key: 'price', label: 'Price' },
                 { key: 'value', label: 'Value' },
                 // { key: 'totalSupply', label: 'Total supply' },
-                { key: 'transferToken', label: '', variant: 'sp-text-center' },
+                // { key: 'transferToken', label: '', variant: 'sp-text-center' },
                 { key: 'applytomoz', label: '', variant: 'sp-text-center' }
             ],
             listokenItems: [],

@@ -108,6 +108,7 @@ Vue.prototype.getAccount = async function () {
     const provider = Vue.prototype.NetworkProvider || ''
     const wjs = Vue.prototype.web3
     let account
+    console.log('provider', provider)
     switch (provider) {
     case 'metamask':
         // Request account access if needed - for metamask
@@ -300,6 +301,7 @@ Vue.prototype.detectNetwork = async function (provider) {
         if (!wjs) {
             switch (provider) {
             case 'tomowallet':
+            case 'pantograph':
             case 'metamask':
                 if (window.ethereum) {
                     // var p = window.web3.currentProvider
@@ -307,16 +309,16 @@ Vue.prototype.detectNetwork = async function (provider) {
                     wjs = new Web3(p)
                 }
                 break
-            case 'pantograph':
-                if (window.tomoWeb3) {
-                    if (window.tomoWeb3.currentProvider) {
-                        let pp = window.tomoWeb3.currentProvider
-                        wjs = new Web3(pp)
-                    } else {
-                        wjs = window.tomoWeb3
-                    }
-                }
-                break
+            // case 'pantograph':
+            //     if (window.tomoWeb3) {
+            //         if (window.tomoWeb3.currentProvider) {
+            //             let pp = window.tomoWeb3.currentProvider
+            //             wjs = new Web3(pp)
+            //         } else {
+            //             wjs = window.tomoWeb3
+            //         }
+            //     }
+            //     break
             case 'trezor':
             case 'ledger':
                 if (provider === 'ledger') {

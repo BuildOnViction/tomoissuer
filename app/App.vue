@@ -61,13 +61,13 @@
                                 <b-dropdown-divider />
                                 <b-dropdown-item
                                     to="/donateTxFee">
-                                    Donate TRC-21 fee
+                                    Donate transaction fee
                                 </b-dropdown-item>
-                                <b-dropdown-item
+                                <!-- <b-dropdown-item
                                     href="/help"
                                     target="_blank">
                                     Help
-                                </b-dropdown-item>
+                                </b-dropdown-item> -->
                                 <b-dropdown-item
                                     v-if="!mobileCheck"
                                     class="sign_out"

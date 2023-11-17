@@ -128,11 +128,11 @@
                                         Verify & Publish Contract
                                     </b-dropdown-item>
                                     <b-dropdown-divider/>
-                                    <b-dropdown-item
+                                    <!-- <b-dropdown-item
                                         :href="config.tomowalletUrl"
                                         target="_blank">
                                         Transfer Token
-                                    </b-dropdown-item>
+                                    </b-dropdown-item> -->
                                     <b-dropdown-item
                                         v-if="token.type === 'trc21' && isAppliedZ && contractCreation === account"
                                         :to="'/edittransactionsfee/' + address">
@@ -247,11 +247,11 @@
                                             <div class="flex-box">
                                                 <span>{{ formatCurrencySymbol(
                                                 formatNumber(ownerBalance), token.symbol) }}</span>
-                                                <span>
+                                                <!-- <span>
                                                     <b-link
                                                         :href="config.tomowalletUrl"
                                                         target="_blank">Transfer</b-link>
-                                                </span>
+                                                </span> -->
                                             </div>
                                         </li>
                                         <li v-if="token.type === 'trc21' && isAppliedZ">

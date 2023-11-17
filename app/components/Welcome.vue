@@ -42,7 +42,7 @@
                     <b-button
                         class="tmp-btn-boder-blue"
                         @click="redirectTo('donateTxFee')">
-                        Donate TRC-21 fee
+                        Donate transaction fee
                     </b-button>
                 </div>
                 <div
