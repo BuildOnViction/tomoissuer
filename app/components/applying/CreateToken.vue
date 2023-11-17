@@ -207,14 +207,14 @@
                                 <b-form-radio
                                     value="trc20"
                                     class="font-weight-bold">
-                                    TRC20
+                                    VRC20
                                     <i
                                         id="trc20"
                                         class="tm-icon-info mb-2"/>
-                                    <span class="new-gif">new</span>
+                                    <!-- <span class="new-gif">new</span> -->
                                     <b-tooltip
                                         target="trc20">
-                                        TRC20 is the most standard token on Viction.
+                                        VRC20 is the most standard token on Viction.
                                         Transaction fees are paid through the native VIC token.
                                     </b-tooltip>
                                 </b-form-radio>
@@ -224,13 +224,13 @@
                                 md="4">
                                 <b-form-radio
                                     value="trc21">
-                                    TRC21
+                                    VRC21
                                     <i
                                         id="trc21"
                                         class="tm-icon-info mb-2"/>
                                     <b-tooltip
                                         target="trc21">
-                                        TRC21 is the standard token that goes along with TomoZ.
+                                        VRC21 is the standard token that goes along with TomoZ.
                                         Transaction fees are paid by the token itself.
                                     </b-tooltip>
                                 </b-form-radio>
