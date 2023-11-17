@@ -351,8 +351,8 @@ export default {
             tokenInfoItems: [
                 { title: 'Technical Requirements for Dapp Integration', trc20: 'Low', trc21: 'Moderate' },
                 { title: 'Technical Requirements for Exchange Listing ', trc20: 'Low', trc21: 'Moderate' },
-                { title: 'VICP Compatibility', trc20: true, trc21: true },
-                { title: 'VICX Compatibility', trc20: false, trc21: true },
+                // { title: 'VICP Compatibility', trc20: true, trc21: true },
+                // { title: 'VICX Compatibility', trc20: false, trc21: true },
                 { title: 'VICZ Compatibility', trc20: false, trc21: true },
                 {
                     title: 'Transaction Fees',
