@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: TomoIssuer APIs
-  description: Happy to code TomoIssuer APIs
+  title: VicIssuer APIs
+  description: Happy to code VicIssuer APIs
   license:
     name: Github
     url: 'https://github.com/buildOnViction/tomoissuer'
