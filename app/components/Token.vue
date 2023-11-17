@@ -59,7 +59,7 @@
                                         <span class="path1"/><span class="path2"/>
                                     </span>
                                     <!-- <i class="tm-icon-tomoz mr-1"/> -->
-                                    Apply to TomoZ Protocol
+                                    Apply to Viction Zero Gas Protocol
                                 </b-link>
                             </li>
                             <!-- <li>
@@ -89,7 +89,7 @@
                                     <!-- <b-dropdown-item
                                         v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
                                         :to="'/tomozcondition/' + address">
-                                        Apply to TomoZ Protocol
+                                        Apply to Viction Zero Gas Protocol
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         v-if="token.type === 'trc21' && !isAppliedX && account === contractCreation"
@@ -117,7 +117,7 @@
                                         View Token Info
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        href="https://github.com/tomochain/tokens"
+                                        href="https://github.com/buildOnViction/tokens"
                                         target="_blank">
                                         Update Token Info
                                     </b-dropdown-item>

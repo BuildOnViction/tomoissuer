@@ -230,7 +230,7 @@
                                         class="tm-icon-info mb-2"/>
                                     <b-tooltip
                                         target="trc21">
-                                        VRC21 is the standard token that goes along with TomoZ.
+                                        VRC21 is the standard token that goes along with Viction Zero Gas Protocol.
                                         Transaction fees are paid by the token itself.
                                     </b-tooltip>
                                 </b-form-radio>
