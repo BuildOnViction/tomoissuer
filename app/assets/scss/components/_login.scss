@@ -19,7 +19,6 @@
                     margin-bottom: 15px;
                 }
                 a {
-                    border-radius: $boderradius-default;
                     color: $color-text-gray;
                     border: 0;
                     display: flex;
@@ -31,6 +30,7 @@
                     margin: 2px;
                     max-width: 250px;
                     padding: 2em 1em;
+                    border: 1px solid transparent;
                     @include media-breakpoint-only(md) {
                         width: 60%;
                         margin: 0 auto!important;
@@ -50,7 +50,7 @@
                     &.active,
                     &:hover {
                         background: #fff;
-                        box-shadow: $boxshadow-default;
+                        border-color: $background-blue;
                     }
                     &.active {
                         font-weight: 500;

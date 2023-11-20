@@ -9,7 +9,7 @@
                 active>
                 <template>
                     <div
-                        class="tomo_main_table colum-8">
+                        class="tomo_main_table colum-7">
                         <b-table
                             id="transfer_table"
                             :items="listokenItems"
@@ -61,14 +61,14 @@
                                 #cell(holders)="data">
                                 {{ data.item.holders || '---' }}
                             </template>
-                            <template
+                            <!-- <template
                                 #cell(transferToken)="">
                                 <b-link
                                     :href="config.tomowalletUrl"
                                     target="_blank">
                                     Transfer Token
                                 </b-link>
-                            </template>
+                            </template> -->
                             <template
                                 #cell(applytomoz)="data">
                                 <b-dropdown
@@ -84,12 +84,12 @@
                                     <b-dropdown-item
                                         v-if="data.type === 'trc21' && !data.item.applytomoz"
                                         :to="'/tomozcondition/' + data.item.hash">
-                                        Apply to TomoZ
+                                        Apply to VICZ
                                     </b-dropdown-item>
                                     <!-- <b-dropdown-item
                                         v-if="data.type === 'trc21' && !data.item.applytomox"
                                         :to="'/tomoxcondition/' + data.item.hash">
-                                        Apply to TomoX
+                                        Apply to VICX
                                     </b-dropdown-item> -->
                                     <b-dropdown-item
                                         href="https://github.com/tomochain/tokens"
@@ -110,7 +110,7 @@
                                 <!-- <router-link
                                     v-if="!data.value"
                                     :to="`/tomozcondition/${data.item.hash}`">
-                                    Apply TomoZ
+                                    Apply VICZ
                                 </router-link> -->
                             </template>
                         </b-table>
@@ -171,7 +171,7 @@ export default {
                 { key: 'price', label: 'Price' },
                 { key: 'value', label: 'Value' },
                 // { key: 'totalSupply', label: 'Total supply' },
-                { key: 'transferToken', label: '', variant: 'sp-text-center' },
+                // { key: 'transferToken', label: '', variant: 'sp-text-center' },
                 { key: 'applytomoz', label: '', variant: 'sp-text-center' }
             ],
             listokenItems: [],

@@ -12,12 +12,12 @@
                         <span
                             v-if="token.type === 'trc21'"
                             class="apply-trc">
-                            TRC-21
+                            VRC-21
                         </span>
                         <span
                             v-if="token.type === 'trc20'"
                             class="apply-trc">
-                            TRC-20
+                            VRC-20
                         </span>
                         <span
                             v-if="isBridgeToken && token.type === 'trc21'"
@@ -26,15 +26,15 @@
                             Wrapped: ERC-20
                             <b-tooltip
                                 target="wraperc20">
-                                This is a TRC-21 standard wrapped token backed by an ERC-20 asset.
+                                This is a VRC-21 standard wrapped token backed by an ERC-20 asset.
                             </b-tooltip>
                         </span>
                         <span
                             v-if="isAppliedZ"
                             class="apply-tomoz">
-                            TomoZ
+                            VicZ
                         </span>
-                        <span
+                        <!-- <span
                             v-if="isAppliedX"
                             class="apply-tomoz">
                             TomoX
@@ -43,7 +43,7 @@
                             v-if="isAppliedB"
                             class="apply-tomoz">
                             TomoBridge
-                        </span>
+                        </span> -->
                     </div>
                 </div>
                 <div class="col-md-8 text-right">
@@ -59,7 +59,7 @@
                                         <span class="path1"/><span class="path2"/>
                                     </span>
                                     <!-- <i class="tm-icon-tomoz mr-1"/> -->
-                                    Apply to TomoZ Protocol
+                                    Apply to Viction Zero Gas Protocol
                                 </b-link>
                             </li>
                             <!-- <li>
@@ -89,7 +89,7 @@
                                     <!-- <b-dropdown-item
                                         v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
                                         :to="'/tomozcondition/' + address">
-                                        Apply to TomoZ Protocol
+                                        Apply to Viction Zero Gas Protocol
                                     </b-dropdown-item>
                                     <b-dropdown-item
                                         v-if="token.type === 'trc21' && !isAppliedX && account === contractCreation"
@@ -117,7 +117,7 @@
                                         View Token Info
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        href="https://github.com/tomochain/tokens"
+                                        href="https://github.com/buildOnViction/tokens"
                                         target="_blank">
                                         Update Token Info
                                     </b-dropdown-item>
@@ -128,11 +128,11 @@
                                         Verify & Publish Contract
                                     </b-dropdown-item>
                                     <b-dropdown-divider/>
-                                    <b-dropdown-item
+                                    <!-- <b-dropdown-item
                                         :href="config.tomowalletUrl"
                                         target="_blank">
                                         Transfer Token
-                                    </b-dropdown-item>
+                                    </b-dropdown-item> -->
                                     <b-dropdown-item
                                         v-if="token.type === 'trc21' && isAppliedZ && contractCreation === account"
                                         :to="'/edittransactionsfee/' + address">
@@ -141,7 +141,7 @@
                                     <b-dropdown-item
                                         v-if="token.type === 'trc21' && isAppliedZ"
                                         :to="'/depositfee/' + address">
-                                        Deposit TRC-21 fee fund
+                                        Deposit VRC-21 fee fund
                                     </b-dropdown-item>
                                     <b-dropdown-divider v-if="token.isMintable"/>
                                     <b-dropdown-item
@@ -174,11 +174,11 @@
                             </div>
                             <div class="col-6">
                                 <div class="box-item">
-                                    <p class="tmp-title-medium">Total supply</p>
+                                    <p class="tmp-title-medium">Total Supply</p>
                                     <p
                                         :title="formatNumber(token.totalSupplyNumber)"
                                         class="fsz-size text-blue common_txt_ellipsis">
-                                        {{ formatNumber(formatCapacity(token.totalSupplyNumber)) }}
+                                        {{ formatCapacity(token.totalSupplyNumber) }}
                                     </p>
                                 </div>
                             </div>
@@ -247,17 +247,17 @@
                                             <div class="flex-box">
                                                 <span>{{ formatCurrencySymbol(
                                                 formatNumber(ownerBalance), token.symbol) }}</span>
-                                                <span>
+                                                <!-- <span>
                                                     <b-link
                                                         :href="config.tomowalletUrl"
                                                         target="_blank">Transfer</b-link>
-                                                </span>
+                                                </span> -->
                                             </div>
                                         </li>
                                         <li v-if="token.type === 'trc21' && isAppliedZ">
-                                            <p class="title-small">TRC-21 fee fund</p>
+                                            <p class="title-small">VRC-21 fee fund</p>
                                             <div class="flex-box">
-                                                <span>{{ formatNumber(poolingFee) }} TOMO</span>
+                                                <span>{{ formatNumber(poolingFee) }} VIC</span>
                                                 <span>
                                                     <b-link :to="'/depositfee/' + address">Deposit more</b-link>
                                                 </span>
@@ -554,15 +554,14 @@ export default {
     methods: {
         async getTokenDetail () {
             const self = this
-            const { data } = await axios.get(`/api/account/${self.address}`)
-            const token = data.token
-            self.token = token || {}
-            self.token.contract = data.contract || null
-            self.tokenName = token.name
-            self.symbol = token.symbol
+            const { data } = await axios.get(`/api/token/${self.address}`)
+            self.token = data
+            self.token.contract = data.hash
+            self.tokenName = data.name
+            self.symbol = data.symbol
             self.contractCreation = data.contractCreation
 
-            self.$store.state.token = data.token
+            self.$store.state.token = self.token
         },
         getTokenTransfer () {
             const self = this
@@ -721,7 +720,7 @@ export default {
             this.getTokenHolders()
         },
         transferToken () {
-            alert('You can use TomoWallet mobile version to transfer TRC21 Tokens.' +
+            alert('You can use TomoWallet mobile version to transfer VRC21 Tokens.' +
                 'We will release TomoWallet web version soon.')
         },
         async checkAppliedB () {

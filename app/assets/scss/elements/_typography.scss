@@ -62,7 +62,7 @@
 .tmp-title-large {
 	@include fsz-cha(28,24,24);
 	font-family: $font-baijam;
-	color: $color-text-default;
+	color: $color-sig;
 	font-weight: 650;
 	&.oranges {
 		color: $color-text-oranges;
@@ -81,7 +81,7 @@
 .tmp-title-big {
 	@include fsz-cha(55, 45,25);
 	font-family: $font-baijam;
-	color: $color-text-default;
+	color: $color-sig;
 	font-weight: 650;
 	&.oranges {
 		color: $color-text-oranges;
@@ -107,6 +107,6 @@
 }
 
 .custom-checkmark {
-	color: #00bad1;
+	color: $background-blue;
 	font-size: 20px;
 }

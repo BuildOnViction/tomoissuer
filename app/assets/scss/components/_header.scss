@@ -1,6 +1,6 @@
 // Style CSS Header
 .tomo-header {
-    box-shadow: $boxshadow-default;
+ background-color: $background-primary;
     .tmp-btn-transparent {
         a.nav-link {
             @include transit;

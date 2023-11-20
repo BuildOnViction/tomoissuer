@@ -2,32 +2,32 @@
     <div class="container container-small flex-content-center">
         <div class="tomo-body-fullw">
             <div class="info-header">
-                <h2 class="tmp-title-large">Deposit TRC-21 fee</h2>
-                <p>Current {{ token.name }} fee fund: {{ currentPoolingFee }} TOMO</p>
+                <h2 class="tmp-title-large">Deposit fee</h2>
+                <p>Current {{ token.name }} fee fund: {{ currentPoolingFee }} VIC</p>
             </div>
             <b-form
                 class="tmp-form-one"
                 novalidate
                 @submit.prevent="validate()">
                 <b-form-group
-                    :description="`TX fee: 0.0005 TOMO, Available balance: ${showingBalance} TOMO`"
+                    :description="`TX fee: 0.0005 VIC, Available balance: ${showingBalance} VIC`"
                     :class="'mb-4' + ($v.depositFee.$dirty ? ' input-warn' : '') + warningClass"
                     label-for="depositFee">
-                    <span class="txt-fixed">TOMO</span>
+                    <span class="txt-fixed">VIC</span>
                     <b-form-input
                         v-model="depositFee"
                         type="number"
-                        placeholder="How much TOMO do you want to deposit?..."
+                        placeholder="How much VIC do you want to deposit?..."
                         @input="onChange"/>
                     <div
                         v-if="$v.depositFee.$dirty && !$v.depositFee.required"
                         class="text-danger pt-2">Required field</div>
                     <div
                         v-else-if="$v.depositFee.$dirty && !$v.depositFee.minValue"
-                        class="text-danger pt-2">Deposit amount should be more than 0 TOMO</div>
+                        class="text-danger pt-2">Deposit amount should be more than 0 VIC</div>
                     <div
                         v-else-if="depositingError"
-                        class="text-danger pt-2">Not enough TOMO</div>
+                        class="text-danger pt-2">Not enough VIC</div>
                 </b-form-group>
                 <div class="btn-box">
                     <b-button

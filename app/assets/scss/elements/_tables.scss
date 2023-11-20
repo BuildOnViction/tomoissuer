@@ -19,8 +19,8 @@ table,
 	.tomo_main_table {
 		@include media-breakpoint-up(lg) {
 			background: $background-white;
-			border-radius: $boderradius-default;
-			box-shadow: $boxshadow-default;
+			// border-radius: $boderradius-default;
+			// box-shadow: $boxshadow-default;
 			padding: 1em;
 		}
 		tbody {
@@ -86,11 +86,11 @@ table,
 				}
 			}
 		}
-		&.colum-8 {
+		&.colum-7 {
 			tr {
 				@include media-breakpoint-up(lg) {
 					display: grid;
-					grid-template-columns: 40px auto 14% 14% 14% 14% 14% 3%;
+					grid-template-columns: 40px auto 17% 17% 17% 17% 3%;
 					td {
 						&:first-child {
 							padding-right: 0;

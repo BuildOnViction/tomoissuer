@@ -77,7 +77,7 @@
                             </div>
                             <span
                                 v-else
-                                class="w-100">This is not TRC21 or TRC20 token</span>
+                                class="w-100">This is not VRC21 or VRC20 token</span>
                         </td>
                         <td />
                     </tr>
@@ -204,6 +204,10 @@ export default {
                     .then(result => {
                         self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
                         self.tokenERC20Address = result
+                        if (!result) {
+                            self.isBridgeToken = false
+                            return
+                        }
                         self.tokenAddressURL = urljoin(
                             self.config.etherChain.etherScanURL,
                             'token',

@@ -4,7 +4,7 @@ input[type="reset"],
 input[type="submit"] {
 	@include fsz(14);
 	border: 0px;
-	border-radius: 50%;
+	border-radius: 0;
 	padding: .6em 1em;
 
 	&:active,
@@ -25,7 +25,7 @@ button {
         background: $background-blue;
         border: 2px solid $background-blue;
         color: $color-text-white!important;
-        border-radius: 30px;
+        border-radius: 0 !important;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -73,7 +73,7 @@ input {
         background: $background-blue;
         border: 2px solid $background-blue;
         color: $color-text-white!important;
-        border-radius: 30px;
+        border-radius: 0 !important;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -102,7 +102,7 @@ input {
         background: transparent;
         border: 2px solid $background-blue;
         color: $color-text-blue!important;
-        border-radius: 30px;
+        border-radius: 0 !important;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -132,7 +132,7 @@ input {
         background: $background-blue;
         border: 2px solid $background-blue;
         color: $color-text-white!important;
-        border-radius: 10px;
+        // border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -161,7 +161,7 @@ input {
         background: $background-violet;
         border: 2px solid $background-violet;
         color: $color-text-white!important;
-        border-radius: 30px;
+        border-radius: 0 !important;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -187,7 +187,7 @@ input {
         background: transparent;
         border: 2px solid $background-violet;
         color: $color-text-violet!important;
-        border-radius: 30px;
+        border-radius: 0 !important;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -220,7 +220,7 @@ input {
         background: $background-blue;
         border: 2px solid $background-blue;
         color: $color-text-white!important;
-        border-radius: 30px;
+        border-radius: 0 !important;
         display: flex;
         align-items: center;
         justify-content: center;

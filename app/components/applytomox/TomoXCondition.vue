@@ -14,7 +14,7 @@
                 <b-col class="box-step col-12 col-md-4">
                     <i class="tm-icon-tomox3"/>
                     <p class="mt-3 tmp-title-small weightbold tomox-font">
-                        Apply your tokens to TomoX(Fee: 1000 TOMO)
+                        Apply your tokens to TomoX(Fee: 1000 VIC)
                     </p>
                 </b-col>
                 <b-col class="box-step col-12 col-md-4">

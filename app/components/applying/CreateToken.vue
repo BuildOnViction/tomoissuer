@@ -15,7 +15,7 @@
                         type="text"
                         autocomplete="off"
                         maxlength="20"
-                        placeholder="Please use only Latin letters and numbers, e.g. “TomoChain”"
+                        placeholder="Please use only Latin letters and numbers, e.g. “Viction”"
                         @input="onChangeName"
                         @change="onChangeName"/>
                     <div
@@ -26,7 +26,7 @@
                     <!-- <small
                         tabindex="-1"
                         class="form-text text-muted">
-                        Please use only Latin letters and numbers, e.g. “TomoChain”
+                        Please use only Latin letters and numbers, e.g. Viction
                     </small> -->
                     <small
                         class="float-right txt-fixed-description">
@@ -46,7 +46,7 @@
                         autocomplete="off"
                         type="text"
                         maxlength="5"
-                        placeholder="Please use only Latin letters and numbers, e.g. “TOMO”"
+                        placeholder="Please use only Latin letters and numbers, e.g. “VIC”"
                         @input="onChangeSymbol"
                         @change="onChangeSymbol"/>
                     <div
@@ -57,7 +57,7 @@
                     <!-- <small
                         tabindex="-1"
                         class="form-text text-muted">
-                        Please use only Latin letters and numbers, e.g. “TOMO”
+                        Please use only Latin letters and numbers, e.g. “VIC”
                     </small> -->
                     <small
                         class="float-right txt-fixed-description">
@@ -207,15 +207,15 @@
                                 <b-form-radio
                                     value="trc20"
                                     class="font-weight-bold">
-                                    TRC20
+                                    VRC20
                                     <i
                                         id="trc20"
                                         class="tm-icon-info mb-2"/>
-                                    <span class="new-gif">new</span>
+                                    <!-- <span class="new-gif">new</span> -->
                                     <b-tooltip
                                         target="trc20">
-                                        TRC20 is the most standard token on TomoChain.
-                                        Transaction fees are paid through the native TOMO token.
+                                        VRC20 is the most standard token on Viction.
+                                        Transaction fees are paid through the native VIC token.
                                     </b-tooltip>
                                 </b-form-radio>
                             </b-col>
@@ -224,13 +224,13 @@
                                 md="4">
                                 <b-form-radio
                                     value="trc21">
-                                    TRC21
+                                    VRC21
                                     <i
                                         id="trc21"
                                         class="tm-icon-info mb-2"/>
                                     <b-tooltip
                                         target="trc21">
-                                        TRC21 is the standard token that goes along with TomoZ.
+                                        VRC21 is the standard token that goes along with Viction Zero Gas Protocol.
                                         Transaction fees are paid by the token itself.
                                     </b-tooltip>
                                 </b-form-radio>
@@ -246,7 +246,7 @@
                     </b-form-radio-group>
                 </b-form-group>
                 <div class="form-group flex-box mb-4">
-                    <label>Est. Issuance Fee</label><span>~{{ txFee }} TOMO</span>
+                    <label>Est. Issuance Fee</label><span>~{{ txFee }} VIC</span>
                 </div>
                 <div class="btn-box">
                     <b-button
@@ -272,7 +272,7 @@
                 #modal-header>
                 <div class="mx-auto">
                     <h5>
-                        More information on TRC20/TRC21
+                        More information on VRC20/VRC21
                     </h5>
                 </div>
             </template>
@@ -351,13 +351,13 @@ export default {
             tokenInfoItems: [
                 { title: 'Technical Requirements for Dapp Integration', trc20: 'Low', trc21: 'Moderate' },
                 { title: 'Technical Requirements for Exchange Listing ', trc20: 'Low', trc21: 'Moderate' },
-                { title: 'TomoP Compatibility', trc20: true, trc21: true },
-                { title: 'TomoX Compatibility', trc20: false, trc21: true },
-                { title: 'TomoZ Compatibility', trc20: false, trc21: true },
+                // { title: 'VICP Compatibility', trc20: true, trc21: true },
+                // { title: 'VICX Compatibility', trc20: false, trc21: true },
+                { title: 'VICZ Compatibility', trc20: false, trc21: true },
                 {
                     title: 'Transaction Fees',
-                    trc20: 'Native TOMO',
-                    trc21: 'By the transaction token itself (no need for native TOMO)'
+                    trc20: 'Native VIC',
+                    trc21: 'By the transaction token itself (no need for native VIC)'
                 }
             ]
         }

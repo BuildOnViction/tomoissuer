@@ -14,43 +14,6 @@
                         <b-tab>
                             <template slot="title">
                                 <b-img
-                                    src="/app/assets/images/logo-pantograph.png"
-                                    alt="logo-pantograph.png"
-                                    @click="changeView"/>
-                                <span>Pantograph</span>
-                            </template>
-                            <div class="inner-content tab-pantograph">
-                                <div class="btn-box">
-                                    <b-button
-                                        class="tmp-btn-blue"
-                                        type="submit">
-                                        Unlock
-                                    </b-button>
-                                </div>
-                            </div>
-                        </b-tab>
-                        <!-- <b-tab>
-                            <template slot="title">
-                                <b-img
-                                    src="/app/assets/images/logo-tomowallet.png"
-                                    alt="logo-tomowallet.png"
-                                    style="width: 28px"
-                                    @click="changeView"/>
-                                <span>TomoWallet</span>
-                            </template>
-                            <div class="inner-content tab-tomowallet">
-                                <div class="btn-box">
-                                    <b-button
-                                        class="tmp-btn-blue"
-                                        @click="loginWallet">
-                                        Unlock
-                                    </b-button>
-                                </div>
-                            </div>
-                        </b-tab> -->
-                        <b-tab>
-                            <template slot="title">
-                                <b-img
                                     src="/app/assets/images/logo-metamask.png"
                                     alt="logo-metamask.png"
                                     @click="changeView"/>
@@ -100,7 +63,7 @@
                                             <span
                                                 class="hd-path"
                                                 @click="changePath(`m/44'/889'/0'/0`)">m/44'/889'/0'/0</span>
-                                            with TomoChain App (on Ledger).
+                                            with Viction App (on Ledger).
                                         </b-form-text>
                                     </b-form-group>
                                     <div class="btn-box">
@@ -197,7 +160,7 @@
                                         <span
                                             class="hd-path"
                                             @click="changePath(`m/44'/889'/0'/0`)">m/44'/889'/0'/0</span>
-                                        for TomoChain path.
+                                        for Viction path.
                                     </b-form-text>
                                 </b-form-group>
                                 <div class="btn-box">
@@ -422,29 +385,29 @@ export default {
         },
         validate: function () {
             const tabIndex = this.tabIndex
-            if (tabIndex === 1) {
+            if (tabIndex === 0) {
                 this.provider = 'metamask'
                 this.login()
             }
 
-            if (tabIndex === 0) {
-                this.provider = 'pantograph'
-                this.login()
-            }
+            // if (tabIndex === 0) {
+            //     this.provider = 'pantograph'
+            //     this.login()
+            // }
 
             this.$v.$touch()
             // ledger
-            if (tabIndex === 2 && !this.$v.hdPath.$invalid) {
+            if (tabIndex === 1 && !this.$v.hdPath.$invalid) {
                 this.provider = 'ledger'
                 this.selectHdPath()
             }
             // trezor
-            if (tabIndex === 3) {
+            if (tabIndex === 2) {
                 this.hdPath = "m/44'/60'/0'/0"
                 this.provider = 'trezor'
                 this.selectHdPath()
             }
-            if ((tabIndex === 4 || tabIndex === 5) && !this.$v.mnemonic.$invalid) {
+            if ((tabIndex === 3 || tabIndex === 4) && !this.$v.mnemonic.$invalid) {
                 this.provider = 'custom'
                 this.login()
             }

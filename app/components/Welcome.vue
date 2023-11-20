@@ -1,7 +1,7 @@
 <template>
     <div class="page-welcome">
         <div class="container">
-            <div class="animation_bg">
+            <!-- <div class="animation_bg">
                 <span id="blue-circle-container"/>
                 <span id="green-rectangle"/>
                 <span id="grey-oval"/>
@@ -9,15 +9,15 @@
                 <span id="red-triangle"/>
                 <span id="yellow-dots"/>
                 <span id="yellow-semicircle"/>
-            </div>
+            </div> -->
             <div class="step-login">
-                <b-img
+                <!-- <b-img
                     src="../app/assets/images/logo-tomoissuer.svg"
                     alt="logo tomoissuer"
-                    class="mb-5 tomo-logo"/>
+                    class="mb-5 tomo-logo"/> -->
                 <h2 class="tmp-title-big">Issue Your Own Token in Minutes!</h2>
                 <p class="custom-welcome-title">
-                    A user-friendly interface to issue a token on TomoChain without any coding experience
+                    A user-friendly interface to issue a token on Viction without any coding experience
                 </p>
                 <div class="btn-box">
                     <b-button
@@ -42,7 +42,7 @@
                     <b-button
                         class="tmp-btn-boder-blue"
                         @click="redirectTo('donateTxFee')">
-                        Donate TRC-21 fee
+                        Donate transaction fee
                     </b-button>
                 </div>
                 <div

@@ -16,8 +16,8 @@ input[type="color"],
 textarea {
     background-color: $background-white;
     color: $color-text-default;
-    border-radius: $boderradius-default;
-    box-shadow: $boxshadow-default;
+    border-radius: 0;
+    // box-shadow: $boxshadow-default;
     border: none;
     display: block;
     width: 100%;
@@ -44,12 +44,23 @@ textarea {
         color: #ccc;
     }
 }
+.form-control:focus{
+    border-color: $color-border-default;
+    box-shadow: unset !important;
+}
 
 // Style input radio
 .custom-control-input:checked ~
 .custom-control-label::before {
-    border-color: #01b2c8;
-    background-color: #01b2c8;
+    border-color: $background-blue;
+    background-color: $background-blue;
+}
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: unset !important;
+}
+.custom-control-input:not(:disabled):active ~ .custom-control-label::before{
+    background: transparent;
+    border: $background-blue;
 }
 
 //template style form

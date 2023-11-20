@@ -6,12 +6,12 @@
                 toggleable="lg"
                 type="light"
                 class="tomo-header"
-                variant="white">
+            >
                 <section class="container container-tomochain">
                     <b-navbar-brand to="/">
                         <b-img
                             src="../app/assets/images/logo-tomoissuer.svg"
-                            alt="logo tomoissuer"/>
+                            alt="logo vicissuer"/>
                     </b-navbar-brand>
                     <!-- button menu SP -->
                     <b-navbar-toggle
@@ -45,7 +45,7 @@
                                 <b-dropdown-text
                                     class="flex_box">
                                     <span>Balance:</span>
-                                    <strong>{{ balance }} TOMO</strong>
+                                    <strong>{{ balance }} VIC</strong>
                                 </b-dropdown-text>
                                 <b-dropdown-divider />
                                 <b-dropdown-item
@@ -61,13 +61,13 @@
                                 <b-dropdown-divider />
                                 <b-dropdown-item
                                     to="/donateTxFee">
-                                    Donate TRC-21 fee
+                                    Donate transaction fee
                                 </b-dropdown-item>
-                                <b-dropdown-item
+                                <!-- <b-dropdown-item
                                     href="/help"
                                     target="_blank">
                                     Help
-                                </b-dropdown-item>
+                                </b-dropdown-item> -->
                                 <b-dropdown-item
                                     v-if="!mobileCheck"
                                     class="sign_out"
@@ -90,9 +90,9 @@
                     <div class="row">
                         <div class="col-md-7 col-lg-8">
                             <div class="tomo-copyright">
-                                TomoIssuer &copy; {{ (new Date()).getFullYear() }} -
+                                VICIssuer &copy; {{ (new Date()).getFullYear() }} -
                                 <a
-                                    :href="`https://github.com/tomochain/tomoissuer/releases/tag/v${version}`"
+                                    :href="`https://github.com/buildOnViction/tomoissuer/releases/tag/v${version}`"
                                     target="_blank"
                                     class="version-tag">
                                     v{{ version }}</a>
@@ -125,24 +125,24 @@
                         <div class="col-md-5 col-lg-4">
                             <div class="tomo-social">
                                 <ul>
-                                    <li><a
+                                    <!-- <li><a
                                         href="https://www.facebook.com/tomochainofficial"
-                                        target="_blank"><i class="tm-icon-facebook"/></a></li>
+                                        target="_blank"><i class="tm-icon-facebook"/></a></li> -->
                                     <li><a
-                                        href="https://twitter.com/TomoChainANN"
+                                        href="https://viction.link/twitter"
                                         target="_blank"><i class="tm-icon-twiter"/></a></li>
                                     <li><a
-                                        href="https://t.me/tomochain"
+                                        href="https://viction.link/telegram"
                                         target="_blank"><i class="tm-icon-telegram"/></a></li>
                                     <li><a
-                                        href="https://github.com/tomochain/"
+                                        href="https://github.com/BuildOnViction"
                                         target="_blank"><i class="tm-icon-github"/></a></li>
-                                    <li><a
+                                        <!-- <li><a
                                         href="https://www.linkedin.com/company/tomochain"
-                                        target="_blank"><i class="tm-icon-linkedin"/></a></li>
-                                    <li><a
+                                        target="_blank"><i class="tm-icon-linkedin"/></a></li> -->
+                                        <!-- <li><a
                                         href="https://www.reddit.com/r/Tomochain/"
-                                        target="_blank"><i class="tm-icon-reddit"/></a></li>
+                                        target="_blank"><i class="tm-icon-reddit"/></a></li> -->
                                 </ul>
                             </div>
                         </div>

@@ -9,7 +9,7 @@
                     to pay transaction fees with the same token the user is holding. Along with
                     the TomoZ protocol, TRC21 is also proposed as a new smart contract-based
                     token standard that allows users to pay fees of any transaction sent to a
-                    TRC21 smart contract in terms of the TRC21 token itself, without holding TOMO in their wallet.
+                    TRC21 smart contract in terms of the TRC21 token itself, without holding VIC in their wallet.
                 </p>
             </div>
             <div class="box-condition">
@@ -22,7 +22,7 @@
                                 src="/app/assets/images/img_condition_1@3x.png"/>
                         </p>
                         <p>
-                            The token issuer has to deposit a minimum amount of 10 TOMO to apply
+                            The token issuer has to deposit a minimum amount of 10 VIC to apply
                             to the TomoZ protocol. The deposit cannot be withdrawn.
                         </p>
                     </b-col>
@@ -55,9 +55,9 @@
                                 src="/app/assets/images/img_condition_4@3x.png"/>
                         </p>
                         <p>
-                            Token transactions will not be processed if the TOMO deposit is not
+                            Token transactions will not be processed if the VIC deposit is not
                             enough for paying masternodes. In that case, any one can donate
-                            TOMO to resume the token transaction processing.
+                            VIC to resume the token transaction processing.
                         </p>
                     </b-col>
                 </b-row>

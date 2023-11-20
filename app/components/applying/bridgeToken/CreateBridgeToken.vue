@@ -2,7 +2,7 @@
     <div class="container container-small">
         <div class="newtoken">
             <h2 class="tmp-title-large">Wrap-ERC20 Token Issuance</h2>
-            <p>Bring your ERC-20 token to TomoChain network.</p>
+            <p>Bring your ERC-20 token to Viction network.</p>
             <b-form
                 class="form-new-token"
                 novalidate
