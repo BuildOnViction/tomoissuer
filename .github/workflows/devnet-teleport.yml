@@ -52,6 +52,7 @@ jobs:
         run: |
             tsh -i ${{ steps.auth.outputs.identity-file }} ssh ${{ secrets.TELEPORT_USERNAME_DEVNET }}@${{ secrets.TELEPORT_HOSTNAME_DEVNET }} "rm -rf ${{ secrets.DEVNET_DEPLOY_PATH }} && mkdir ${{ secrets.DEVNET_DEPLOY_PATH }}"
             rsync -r -e 'tsh ssh -i ${{ steps.auth.outputs.identity-file }}' ./build  ${{ secrets.TELEPORT_USERNAME_DEVNET }}@${{ secrets.TELEPORT_HOSTNAME_DEVNET }}:${{ secrets.DEVNET_DEPLOY_PATH }}
+            tsh -i ${{ steps.auth.outputs.identity-file }} ssh ${{ secrets.TELEPORT_USERNAME_DEVNET }}@${{ secrets.TELEPORT_HOSTNAME_DEVNET }} "cd ${{ secrets.DEVNET_DEPLOY_PATH }} && bash deploy-dev.sh"
         
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
