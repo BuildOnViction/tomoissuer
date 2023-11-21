@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: '8.16.0'
       - name: install dependencies
-        run: npm ci
+        run: mkdir build && mkdir build/contracts && cp abis/*json build/contracts && npm ci
 
       - name: build
         run: npm run build
