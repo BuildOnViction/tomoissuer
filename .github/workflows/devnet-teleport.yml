@@ -25,8 +25,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '8.16.0'
+      - name: Install Python
+        run: sudo apt install python2
       - name: install dependencies
-        run: mkdir build && mkdir build/contracts && cp abis/*json build/contracts && npm ci
+        run: mkdir build && mkdir build/contracts && cp abis/*json build/contracts && npm ci --python=python2 --no-audit
 
       - name: build
         run: npm run build
@@ -51,7 +53,7 @@ jobs:
       - name: Deploy to devnet
         run: |
             tsh -i ${{ steps.auth.outputs.identity-file }} ssh ${{ secrets.TELEPORT_USERNAME_DEVNET }}@${{ secrets.TELEPORT_HOSTNAME_DEVNET }} "rm -rf ${{ secrets.DEVNET_DEPLOY_PATH }} && mkdir ${{ secrets.DEVNET_DEPLOY_PATH }}"
-            rsync -r -e 'tsh ssh -i ${{ steps.auth.outputs.identity-file }}' ./build  ${{ secrets.TELEPORT_USERNAME_DEVNET }}@${{ secrets.TELEPORT_HOSTNAME_DEVNET }}:${{ secrets.DEVNET_DEPLOY_PATH }}
+            rsync -r -e 'tsh ssh -i ${{ steps.auth.outputs.identity-file }}' ./  ${{ secrets.TELEPORT_USERNAME_DEVNET }}@${{ secrets.TELEPORT_HOSTNAME_DEVNET }}:${{ secrets.DEVNET_DEPLOY_PATH }}
             tsh -i ${{ steps.auth.outputs.identity-file }} ssh ${{ secrets.TELEPORT_USERNAME_DEVNET }}@${{ secrets.TELEPORT_HOSTNAME_DEVNET }} "cd ${{ secrets.DEVNET_DEPLOY_PATH }} && bash deploy-dev.sh"
         
       - name: Slack Notification
