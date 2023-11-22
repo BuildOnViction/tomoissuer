@@ -106,12 +106,12 @@
                                     </li>
                                     <li>
                                         <a
-                                            href="https://docs.tomochain.com/legal/privacy"
+                                            href="https://docs.viction.xyz/legal/privacy"
                                             target="_blank">Privacy Policy</a>
                                     </li>
                                     <li>
                                         <a
-                                            href="https://docs.tomochain.com/legal/terms-of-use"
+                                            href="https://docs.viction.xyz/legal/terms-of-use"
                                             target="_blank">Terms of Use</a>
                                     </li>
                                     <li>
@@ -170,7 +170,7 @@ export default {
             version: pkg.version,
             balance: '',
             display: false,
-            needHelpLink: 'https://docs.tomochain.com/faq/products/tomochain-applications/tomoissuer'
+            needHelpLink: 'https://docs.viction.xyz/faq/products/vicissuer'
         }
     },
     computed: {
