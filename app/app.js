@@ -28,6 +28,7 @@ import Eth from '@ledgerhq/hw-app-eth'
 import VueCodeMirror from 'vue-codemirror'
 import Transaction from 'ethereumjs-tx'
 import * as ethUtils from 'ethereumjs-util'
+import walletAdapter from './walletAdapter'
 // import * as contract from 'truffle-contract'
 
 Vue.use(BootstrapVue)
@@ -38,9 +39,9 @@ Vue.use(Toasted, {
     position: 'bottom-right',
     theme: 'bubble',
     duration: 4000,
-    action : {
-        text : 'Dismiss',
-        onClick : (e, toastObject) => {
+    action: {
+        text: 'Dismiss',
+        onClick: (e, toastObject) => {
             toastObject.goAway(0)
         }
     },
@@ -107,27 +108,46 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
 Vue.prototype.getAccount = async function () {
     const provider = Vue.prototype.NetworkProvider || ''
     const wjs = Vue.prototype.web3
-    let account
-    console.log('provider', provider)
+    let account, w
     switch (provider) {
-    case 'metamask':
-        // Request account access if needed - for metamask
-        if (window.ethereum) {
-            // await window.ethereum.enable()
-            await window.ethereum.request({ method: 'eth_requestAccounts' })
+    case walletAdapter.WALLET_TYPE.COIN98:
+        w = await walletAdapter.connectCoin98()
+        if (!w.error) {
+            account = w
+            break
         }
-        account = (await wjs.eth.getAccounts())[0]
-        break
-    case 'pantograph':
-        // Request account access if needed - for pantograph
-        if (window.tomochain) {
-            await window.tomochain.enable()
+        throw new Error(w.error)
+    case walletAdapter.WALLET_TYPE.VICTION:
+        w = await walletAdapter.connectViction()
+        if (!w.error) {
+            account = w
+            break
         }
-        account = (await wjs.eth.getAccounts())[0]
-        break
-    case 'tomowallet':
-        account = (await wjs.eth.getAccounts())[0]
-        break
+        throw new Error(w.error)
+    case walletAdapter.WALLET_TYPE.RAMPER:
+        w = await walletAdapter.connectRamper()
+        if (!w.error) {
+            account = w
+            break
+        }
+        throw new Error(w.error)
+    case walletAdapter.WALLET_TYPE.METAMASK:
+        w = await walletAdapter.connectMetamask()
+        if (!w.error) {
+            account = w
+            break
+        }
+        throw new Error(w.error)
+        // case 'pantograph':
+        //     // Request account access if needed - for pantograph
+        //     if (window.tomochain) {
+        //         await window.tomochain.enable()
+        //     }
+        //     account = (await wjs.eth.getAccounts())[0]
+        //     break
+        // case 'tomowallet':
+        //     account = (await wjs.eth.getAccounts())[0]
+        //     break
     case 'custom':
         account = (await wjs.eth.getAccounts())[0]
         // if (wjs.currentProvider.address) {
@@ -171,7 +191,7 @@ Vue.prototype.getAccount = async function () {
     default:
         break
     }
-    if (!account || account.length <= 0) {
+    if (provider !== '' && (!account || account.length <= 0)) {
         console.log(`Couldn't get any accounts! Make sure
             your Ethereum client is configured correctly.`)
     }
@@ -300,25 +320,28 @@ Vue.prototype.detectNetwork = async function (provider) {
         let wjs = this.web3
         if (!wjs) {
             switch (provider) {
-            case 'tomowallet':
-            case 'pantograph':
-            case 'metamask':
-                if (window.ethereum) {
-                    // var p = window.web3.currentProvider
-                    var p = window.ethereum
-                    wjs = new Web3(p)
-                }
+            case walletAdapter.WALLET_TYPE.COIN98:
+                wjs = await walletAdapter.loadCoin98Provider()
                 break
-            // case 'pantograph':
-            //     if (window.tomoWeb3) {
-            //         if (window.tomoWeb3.currentProvider) {
-            //             let pp = window.tomoWeb3.currentProvider
-            //             wjs = new Web3(pp)
-            //         } else {
-            //             wjs = window.tomoWeb3
-            //         }
-            //     }
-            //     break
+            case walletAdapter.WALLET_TYPE.VICTION:
+                wjs = await walletAdapter.loadVictionProvider()
+                break
+            case walletAdapter.WALLET_TYPE.RAMPER:
+                wjs = await walletAdapter.loadRamperProvider()
+                break
+            case walletAdapter.WALLET_TYPE.METAMASK:
+                wjs = await walletAdapter.loadMetamaskProvider()
+                break
+                // case 'pantograph':
+                //     if (window.tomoWeb3) {
+                //         if (window.tomoWeb3.currentProvider) {
+                //             let pp = window.tomoWeb3.currentProvider
+                //             wjs = new Web3(pp)
+                //         } else {
+                //             wjs = window.tomoWeb3
+                //         }
+                //     }
+                //     break
             case 'trezor':
             case 'ledger':
                 if (provider === 'ledger') {
@@ -462,8 +485,8 @@ Vue.prototype.truncate = (fullStr, strLen) => {
     let backChars = Math.floor(charsToShow / 2)
 
     return fullStr.substr(0, frontChars) +
-           separator +
-           fullStr.substr(fullStr.length - backChars)
+        separator +
+        fullStr.substr(fullStr.length - backChars)
 }
 
 Vue.prototype.formatNumber = function (number) {
@@ -498,7 +521,7 @@ Vue.prototype.formatCapacity = function (value) {
         // Six Zeroes for Millions
         : Math.abs(Number(value)) >= 1.0e+6
             ? (Math.abs(Number(value)) / 1.0e+6).toFixed(2) + 'M'
-        // Three Zeroes for Thousands
+            // Three Zeroes for Thousands
             : Math.abs(Number(value)) >= 1.0e+3
                 ? (Math.abs(Number(value)) / 1.0e+3).toFixed(2) + 'K'
                 : (Math.abs(Number(value))).toFixed(2)

@@ -5,7 +5,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const commonConfig = require('./webpack.config.common')
 const merge = require('webpack-merge')
-
+require('dotenv').config({
+    path: path.resolve(__dirname, '../.env')
+})
+console.log(path.resolve(__dirname, '../.env'))
 const webpackConfig = merge(commonConfig, {
     mode: 'production',
     entry: {
@@ -48,7 +51,9 @@ const webpackConfig = merge(commonConfig, {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: '"production"'
+                NODE_ENV: '"production"',
+                RPC_ENDPOINT: `${JSON.stringify(process.env.VUE_APP_RPC_ENDPOINT)}`,
+                CHAIN_ID: `${JSON.stringify(process.env.VUE_APP_CHAIN_ID)}`
             }
         }),
         new webpack.LoaderOptionsPlugin({
