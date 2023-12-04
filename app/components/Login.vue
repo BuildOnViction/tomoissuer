@@ -1,8 +1,6 @@
 <template>
-    <div
-        class="container">
-        <div
-            class="main-page-login">
+    <div class="container">
+        <div class="main-page-login">
             <h2 class="tmp-title-large">Unlock your wallet</h2>
             <p>Start by choosing the wallet you would like to unlock</p>
             <div class="content-page">
@@ -10,13 +8,68 @@
                     class="form-login"
                     novalidate
                     @submit.prevent="validate()">
-                    <b-tabs v-model="tabIndex">
+                    <b-tabs v-model="wprovider">
+                        <b-tab>
+                            <template slot="title">
+                                <b-img
+                                    src="/app/assets/images/coin98.png"
+                                    alt="coin98 logo"
+                                    @click="changeView" />
+                                <span>Coin98</span>
+                            </template>
+                            <div class="inner-content tab-coin98">
+                                <div class="btn-box">
+                                    <b-button
+                                        class="tmp-btn-blue"
+                                        type="submit">
+                                        Unlock
+                                    </b-button>
+                                </div>
+                            </div>
+                        </b-tab>
+                        <b-tab>
+                            <template slot="title">
+                                <b-img
+                                    src="/app/assets/images/viction.png"
+                                    alt="viction logo"
+                                    @click="changeView" />
+                                <span>Viction</span>
+                            </template>
+                            <div class="inner-content tab-viction">
+                                <div class="btn-box">
+                                    <b-button
+                                        class="tmp-btn-blue"
+                                        name="viction"
+                                        type="submit">
+                                        Unlock
+                                    </b-button>
+                                </div>
+                            </div>
+                        </b-tab>
+                        <b-tab>
+                            <template slot="title">
+                                <b-img
+                                    src="/app/assets/images/ramper.png"
+                                    alt="ramper logo"
+                                    @click="changeView" />
+                                <span>Ramper</span>
+                            </template>
+                            <div class="inner-content tab-ramper">
+                                <div class="btn-box">
+                                    <b-button
+                                        class="tmp-btn-blue"
+                                        type="submit">
+                                        Unlock
+                                    </b-button>
+                                </div>
+                            </div>
+                        </b-tab>
                         <b-tab>
                             <template slot="title">
                                 <b-img
                                     src="/app/assets/images/logo-metamask.png"
                                     alt="logo-metamask.png"
-                                    @click="changeView"/>
+                                    @click="changeView" />
                                 <span>Metamask</span>
                             </template>
                             <div class="inner-content tab-metamask">
@@ -34,7 +87,7 @@
                                 <b-img
                                     src="/app/assets/images/logo-ledgerwallet.png"
                                     alt="logo-ledgerwallet.png"
-                                    @click="changeView"/>
+                                    @click="changeView" />
                                 <span>Ledger Wallet</span>
                             </template>
                             <div class="inner-content tab-ledgerwallet">
@@ -49,7 +102,7 @@
                                         <b-form-input
                                             v-model="hdPath"
                                             type="text"
-                                            placeholder="m/44’/889’/0’/0"/>
+                                            placeholder="m/44’/889’/0’/0" />
                                         <b-form-text>
                                             To unlock the wallet, try paths
                                             <span
@@ -81,7 +134,7 @@
                                 <b-img
                                     src="/app/assets/images/logo-trezorwallet.png"
                                     alt="logo-trezorwallet.png"
-                                    @click="changeView"/>
+                                    @click="changeView" />
                                 <span>Trezor Wallet</span>
                             </template>
                             <div class="inner-content tab-trezorwallet">
@@ -95,7 +148,7 @@
                                 </div>
                             </div>
                         </b-tab>
-                        <b-tab>
+                        <!-- <b-tab>
                             <template slot="title">
                                 <b-img
                                     src="/app/assets/images/logo-privatekey.png"
@@ -169,7 +222,7 @@
                                         type="submit">Unlock</b-button>
                                 </div>
                             </div>
-                        </b-tab>
+                        </b-tab> -->
                     </b-tabs>
                 </b-form>
             </div>
@@ -194,8 +247,7 @@
                                 <b-form-radio
                                     :value="index"
                                     name="hdWallet">
-                                    <span
-                                        :title="hdwallet.address">
+                                    <span :title="hdwallet.address">
                                         {{ hdwallet.address }}
                                     </span>
                                 </b-form-radio>
@@ -212,8 +264,7 @@
                 </div>
             </div>
         </b-modal>
-        <div
-            :class="(loading ? 'tomo-loading' : '')"/>
+        <div :class="(loading ? 'tomo-loading' : '')" />
     </div>
 </template>
 
@@ -224,7 +275,7 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import { HDWalletProvider } from '../../helpers.js'
 import PrivateKeyProvider from 'truffle-privatekey-provider'
 import store from 'store'
-
+import walletAdapter from '../walletAdapter'
 const defaultWalletNumber = 10
 export default {
     name: 'App',
@@ -246,9 +297,8 @@ export default {
             balance: 0,
             chainConfig: {},
             networks: {
-                // mainnet: 'https://core.tomochain.com',
-                rpc: 'https://testnet.tomochain.com',
-                tomowallet: 'https://testnet.tomochain.com'
+                rpc: process.env.RPC_ENDPOINT,
+                tomowallet: process.env.RPC_ENDPOINT
             },
             loading: false,
             qrCode: 'text',
@@ -283,8 +333,8 @@ export default {
         }
     },
     watch: {},
-    updated () {},
-    beforeDestroy () {},
+    updated () { },
+    beforeDestroy () { },
     created: async function () {
         const self = this
         self.hdWallets = self.hdWallets || {}
@@ -292,7 +342,7 @@ export default {
         self.chainConfig = self.config.blockchain || {}
         self.networks.rpc = self.chainConfig.rpc
     },
-    mounted () {},
+    mounted () { },
     methods: {
         async login () {
             const self = this
@@ -302,20 +352,19 @@ export default {
                 let walletProvider
                 let offset
                 switch (self.provider) {
-                case 'metamask':
-                    if (window.ethereum) {
-                        // walletProvider = window.web3.currentProvider
-                        walletProvider = window.ethereum
-                        wjs = new Web3(walletProvider)
-                    }
+                case walletAdapter.WALLET_TYPE.COIN98:
+                    wjs = walletAdapter.loadCoin98Provider()
                     break
-                case 'pantograph':
-                    if (window.tomoWeb3) {
-                        walletProvider = window.tomoWeb3.currentProvider
-                        wjs = new Web3(walletProvider)
-                    }
+                case walletAdapter.WALLET_TYPE.VICTION:
+                    wjs = walletAdapter.loadVictionProvider()
                     break
-                case 'ledger':
+                case walletAdapter.WALLET_TYPE.RAMPER:
+                    wjs = walletAdapter.loadRamperProvider()
+                    break
+                case walletAdapter.WALLET_TYPE.METAMASK:
+                    wjs = walletAdapter.loadMetamaskProvider()
+                    break
+                case walletAdapter.WALLET_TYPE.LEDGER:
                     // Object - HttpProvider
                     wjs = new Web3(new Web3.providers.HttpProvider(self.networks.rpc))
                     // Object - IpcProvider: The IPC provider is used node.js dapps when running a local node
@@ -329,7 +378,7 @@ export default {
                     offset = document.querySelector('input[name="hdWallet"]:checked').value.toString()
                     store.set('hdDerivationPath', self.hdPath + '/' + offset)
                     break
-                case 'trezor':
+                case walletAdapter.WALLET_TYPE.TREZOR:
                     wjs = new Web3(new Web3.providers.HttpProvider(self.networks.rpc))
                     offset = document.querySelector('input[name="hdWallet"]:checked').value.toString()
                     store.set('hdDerivationPath', self.hdPath + '/' + offset)
@@ -348,11 +397,18 @@ export default {
                     break
                 }
                 self.setupProvider(self.provider, wjs)
-                self.address = await self.getAccount()
+                try {
+                    self.address = await self.getAccount()
+                } catch (er) {
+                    self.$toasted.show(er.message, { type: 'error' })
+                    self.loading = false
+                    return
+                }
 
                 if (self.address) {
                     self.$store.state.address = self.address.toLowerCase()
-                    if (self.provider === 'metamask' || self.provider === 'pantograph') {
+                    if (self.provider !== walletAdapter.WALLET_TYPE.TREZOR &&
+                        self.provider !== walletAdapter.WALLET_TYPE.LEDGER) {
                         store.set('address', self.address.toLowerCase())
                         store.set('network', self.provider)
                     }
@@ -372,44 +428,48 @@ export default {
                     self.$toasted.show(
                         'Couldn\'t get any accounts! Make sure ' +
                         'your Ethereum client is configured correctly.', {
-                            type : 'error'
+                            type: 'error'
                         })
                 }
                 self.loading = false
             } catch (error) {
                 self.loading = false
+                console.trace(error)
                 self.$toasted.show(
-                    error, { type : 'error' }
+                    error, { type: 'error' }
                 )
             }
         },
         validate: function () {
-            const tabIndex = this.tabIndex
-            if (tabIndex === 0) {
-                this.provider = 'metamask'
-                this.login()
-            }
-
-            // if (tabIndex === 0) {
-            //     this.provider = 'pantograph'
-            //     this.login()
-            // }
-
             this.$v.$touch()
-            // ledger
-            if (tabIndex === 1 && !this.$v.hdPath.$invalid) {
-                this.provider = 'ledger'
-                this.selectHdPath()
-            }
-            // trezor
-            if (tabIndex === 2) {
-                this.hdPath = "m/44'/60'/0'/0"
-                this.provider = 'trezor'
-                this.selectHdPath()
-            }
-            if ((tabIndex === 3 || tabIndex === 4) && !this.$v.mnemonic.$invalid) {
-                this.provider = 'custom'
+            switch (this.wprovider) {
+            case 0:
+                this.provider = walletAdapter.WALLET_TYPE.COIN98
                 this.login()
+                break
+            case 1:
+                this.provider = walletAdapter.WALLET_TYPE.VICTION
+                this.login()
+                break
+            case 2:
+                this.provider = walletAdapter.WALLET_TYPE.RAMPER
+                this.login()
+                break
+            case 3:
+                this.provider = walletAdapter.WALLET_TYPE.METAMASK
+                this.login()
+                break
+            case 4:
+                if (!this.$v.hdPath.$invalid) {
+                    this.provider = walletAdapter.WALLET_TYPE.LEDGER
+                    this.selectHdPath()
+                }
+                break
+            case 5:
+                this.hdPath = "m/44'/60'/0'/0"
+                this.provider = walletAdapter.WALLET_TYPE.TREZOR
+                this.selectHdPath()
+                break
             }
         },
         getValidationClass: function (fieldName) {
@@ -430,7 +490,7 @@ export default {
                 self.loading = true
                 const tabIndex = self.tabIndex
                 store.set('hdDerivationPath', self.hdPath)
-                if (tabIndex === 3 || this.provider === 'trezor') {
+                if (tabIndex === 5 || this.provider === walletAdapter.WALLET_TYPE.TREZOR) {
                     await self.unlockTrezor()
                     wallets = await self.loadTrezorWallets(offset, limit)
                 } else {
@@ -447,7 +507,7 @@ export default {
                 console.log(error.message)
                 self.loading = false
                 self.$toasted.show(error.message || error, {
-                    type : 'error'
+                    type: 'error'
                 })
             }
         },
@@ -473,10 +533,10 @@ export default {
             //         await this.getLoginResult()
             //     }, 3000)
             //     break
-            case 'trezor':
+            case walletAdapter.WALLET_TYPE.TREZOR:
                 this.hdPath = "m/44'/60'/0'/0"
                 break
-            case 'ledger':
+            case walletAdapter.WALLET_TYPE.LEDGER:
                 this.hdPath = "m/44'/889'/0'/0"
                 break
             default:
@@ -493,16 +553,16 @@ export default {
         },
         changePath (path) {
             this.hdPath = path
-        },
-        loginWallet () {
-            if (this.mobileCheck) {
-                window.open('tomochain://dapp?url=https://issuer.testnet.tomochain.com')
-            } else {
-                if (confirm('Download TomoWallet to open in app')) {
-                    window.open('https://play.google.com/store/apps/details?id=com.tomochain.wallet&hl=en')
-                }
-            }
         }
+        // loginWallet () {
+        //     if (this.mobileCheck) {
+        //         window.open('tomochain://dapp?url=https://issuer.testnet.tomochain.com')
+        //     } else {
+        //         if (confirm('Download TomoWallet to open in app')) {
+        //             window.open('https://play.google.com/store/apps/details?id=com.tomochain.wallet&hl=en')
+        //         }
+        //     }
+        // }
     }
 }
 </script>
