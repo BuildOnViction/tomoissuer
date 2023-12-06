@@ -2,9 +2,8 @@ var path = require('path')
 var appName = '[name].js'
 const commonConfig = require('./webpack.config.common')
 const merge = require('webpack-merge')
-require('dotenv').config({
-    path: path.resolve(__dirname, '../.env')
-})
+const config = require('config')
+
 const webpack = require('webpack')
 const webpackConfig = merge(commonConfig, {
     mode: 'development',
@@ -29,8 +28,8 @@ const webpackConfig = merge(commonConfig, {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: '"development"',
-                RPC_ENDPOINT: `${JSON.stringify(process.env.VUE_APP_RPC_ENDPOINT)}`,
-                CHAIN_ID: `${JSON.stringify(process.env.VUE_APP_CHAIN_ID)}`
+                RPC_ENDPOINT: `${JSON.stringify(config.blockchain.rpc)}`,
+                CHAIN_ID: `${JSON.stringify(config.blockchain.networkId)}`
             }
         })
     ]
