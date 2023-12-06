@@ -4,7 +4,7 @@ const config = require('config')
 const router = express.Router()
 const { check, validationResult, query } = require('express-validator/check')
 const axios = require('axios')
-// const web3 = require('../models/blockchain/web3')
+const web3 = require('../models/blockchain/web3')
 const urljoin = require('url-join')
 
 function serializeQuery (params, prefix) {
@@ -47,21 +47,21 @@ router.get('/:account/listTokens', [
     query('limit')
         .isInt({ min: 0, max: 200 }).optional().withMessage('limit should greater than 0 and less than 200'),
     query('page').isNumeric({ no_symbols: true }).optional().withMessage('page must be number'),
-    check('account').exists().isLength({ min: 42, max: 42 }).withMessage('Account address is incorrect.')
+    check('account').exists().custom((account) => web3.utils.isAddress(account)).withMessage('Account address is incorrect.')
 ], async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return next(errors.array())
     }
     try {
-        const account = (req.params.account || '').toLowerCase()
+        const account = web3.utils.toChecksumAddress(req.params.account)
         const params = {
             limit: req.query.limit || 1,
             page: req.query.page || 1
         }
         const query = serializeQuery(params)
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanAPI'), `/api/accounts/${account}/listTokens?${query}`)
+            urljoin(config.get('tomoscanAPI'), `/api/token/listByOwner?owner=${account}&${query}`)
         )
         return res.json(data)
     } catch (error) {

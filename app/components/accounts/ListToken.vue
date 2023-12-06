@@ -47,7 +47,7 @@
                             </template>
                             <template
                                 #cell(totalSupply)="data">
-                                {{ formatNumber(data.value) }}
+                                {{ formatNumber(data.supply) }}
                             </template>
                             <template
                                 #cell(volume)="data">
@@ -169,7 +169,7 @@ export default {
                 { key: 'ownerBalance', label: 'Balance' },
                 { key: 'holders', label: 'Holders' },
                 { key: 'price', label: 'Price' },
-                { key: 'value', label: 'Value' },
+                { key: 'supply', label: 'Supply' },
                 // { key: 'totalSupply', label: 'Total supply' },
                 // { key: 'transferToken', label: '', variant: 'sp-text-center' },
                 { key: 'applytomoz', label: '', variant: 'sp-text-center' }
@@ -209,24 +209,31 @@ export default {
                 const query = self.serializeQuery(params)
                 let promises = this.checkAppliedZ()
                 let appliedXPromise = this.checkAppliedX()
-                const { data } = await axios.get(`/api/account/${self.account}/listTokens?${query}`)
+                const { data } = await axios.get(
+                    `/api/account/${self.account}/listTokens?${query}`
+                )
                 self.appliedZList = await promises
                 self.appliedXList = await appliedXPromise
-                if (data.items.length > 0) {
-                    const map = await Promise.all(data.items.map(async i => {
+                if (data.data.length > 0) {
+                    const map = await Promise.all(data.data.map(async (i) => {
+                        const ownerBalance = await self.getOwnerBalance(i.address, i.decimals)
+                        const ownerBalanceStr = ownerBalance ? this.formatNumber(ownerBalance) : '---'
+                        const ownerValueStr = i.price ? `(${ownerBalance.multipliedBy(i.price)}$)` : ''
                         return {
                             name: i.name,
                             token: `${i.name} (${i.symbol})`,
                             symbol: i.symbol,
-                            hash: i.hash,
-                            price: '---',
-                            value: '---',
+                            hash: i.address,
+                            price: i.price ? i.price : '---',
                             totalSupply: i.totalSupplyNumber,
-                            ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
-                            holders: i.holders || '---',
-                            applytomoz: ((self.appliedZList || []).indexOf(i.hash) > -1),
-                            applytomox: ((self.appliedXList || []).indexOf(i.hash) > -1),
-                            logo: await self.getLogo(i.hash),
+                            ownerBalance: ownerBalanceStr + ownerValueStr,
+                            supply: new BigNumber(
+                                i.circulatingSupply ? i.circulatingSupply : i.totalSupply
+                            ).div(10 ** i.decimals),
+                            holders: i.holder || '---',
+                            applytomoz: ((self.appliedZList || []).indexOf(i.address) > -1),
+                            applytomox: ((self.appliedXList || []).indexOf(i.address) > -1),
+                            logo: await self.getLogo(i.address),
                             mintable: i.isMintable,
                             type: i.type
                         }

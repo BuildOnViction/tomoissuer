@@ -391,7 +391,7 @@ router.get('/:token', [], async (req, res, next) => {
     try {
         const token = req.params.token || ''
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanAPI'), `/api/tokens/${token}`)
+            urljoin(config.get('tomoscanAPI'), `/api/token/${token}`)
         )
         return res.json(data)
     } catch (error) {
