@@ -650,7 +650,7 @@ export default {
             if (web3) {
                 const contract = this.TRC21Issuer
                 contract.methods.getTokenCapacity(this.address).call().then(capacity => {
-                    let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
+                    let balance = new BigNumber(capacity > 0 ? this.web3.utils.hexToNumberString(capacity) : 0)
                     this.poolingFee = balance.div(10 ** 18).toNumber()
                     this.$store.state.token['poolingFee'] = this.poolingFee
                 }).catch(error => {
@@ -678,7 +678,7 @@ export default {
         checkAppliedZ () {
             const contract = this.TRC21Issuer
             if (contract) {
-                contract.methods.tokens.call()
+                contract.methods.tokens().call()
                     .then(result => {
                         if (result && result.length > 0) {
                             const lowerCaseArr = result.map(m => m.toLowerCase())
