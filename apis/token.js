@@ -79,7 +79,7 @@ router.post('/createToken', [
     check('decimals').exists().withMessage("'decimal' is required"),
     check('totalSupply').exists().withMessage("'totalSupply' is required"),
     check('type').exists().withMessage("'type' is required")
-        .isIn(['trc20', 'trc21']).withMessage("'type' should be 'trc20' or 'trc21'"),
+        .isIn(['trc20', 'trc21', 'vrc25']).withMessage("'type' should be 'trc20' or 'trc21'"),
     check('minFee').isFloat({ min: 0 }).exists().withMessage("'minFee' is required"),
     check('mintable').exists().isBoolean().withMessage("'mintable' must be true or false")
 ], async function (req, res, next) {
@@ -100,7 +100,10 @@ router.post('/createToken', [
     let contractCode
     let p
     if (mintable) {
-        if (type === 'trc21') {
+        if (type === 'vrc25') {
+            p = path.resolve(__dirname, '../contracts', 'MyVRC25Mintable.sol')
+            contractCode = fs.readFileSync(p, 'UTF-8')
+        } else if (type === 'trc21') {
             p = path.resolve(__dirname, '../contracts', 'TRC21Mintable.sol')
             contractCode = fs.readFileSync(p, 'UTF-8')
         } else {
@@ -108,7 +111,10 @@ router.post('/createToken', [
             contractCode = fs.readFileSync(p, 'UTF-8')
         }
     } else {
-        if (type === 'trc21') {
+        if (type === 'vrc25') {
+            p = path.resolve(__dirname, '../contracts', 'MyVRC25.sol')
+            contractCode = fs.readFileSync(p, 'UTF-8')
+        } else if (type === 'trc21') {
             p = path.resolve(__dirname, '../contracts', 'TRC21.sol')
             contractCode = fs.readFileSync(p, 'UTF-8')
         } else {

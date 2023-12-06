@@ -205,6 +205,23 @@
                                 cols="3"
                                 md="4">
                                 <b-form-radio
+                                    value="vrc25"
+                                    class="font-weight-bold">
+                                    VRC25
+                                    <i
+                                        id="vrc25"
+                                        class="tm-icon-info mb-2"/>
+                                    <!-- <span class="new-gif">new</span> -->
+                                    <b-tooltip
+                                        target="vrc25">
+                                        VRC25 is the standard token that goes along with Viction Zero Gas Protocol.
+                                    </b-tooltip>
+                                </b-form-radio>
+                            </b-col>
+                            <b-col
+                                cols="3"
+                                md="4">
+                                <b-form-radio
                                     value="trc20"
                                     class="font-weight-bold">
                                     VRC20
@@ -235,13 +252,13 @@
                                     </b-tooltip>
                                 </b-form-radio>
                             </b-col>
-                            <b-col
+                            <!-- <b-col
                                 cols="4"
                                 md="3">
                                 <div
                                     class="tokenInfotrc2021"
                                     @click="showModal">Differences?</div>
-                            </b-col>
+                            </b-col> -->
                         </b-row>
                     </b-form-radio-group>
                 </b-form-group>
@@ -328,7 +345,7 @@ export default {
             decimals: 18,
             totalSupply: '',
             account: '',
-            type: 'trc20',
+            type: 'vrc25',
             balance: 0,
             txFee: 0,
             gasPrice: 250000000,
@@ -471,6 +488,26 @@ export default {
             }
         },
         getAbi () {
+            if (this.type === 'vrc25' && this.mintable) {
+                return {
+                    contractAbi: this.MyVRC25Mintable,
+                    arguments: [
+                        // 'example',
+                        // 'example',
+                        // 18
+                    ]
+                }
+            }
+            if (this.type === 'vrc25' && !this.mintable) {
+                return {
+                    contractAbi: this.MyVRC25,
+                    arguments: [
+                        // 'example',
+                        // 'example',
+                        // 18
+                    ]
+                }
+            }
             if (this.type === 'trc20' && this.mintable) {
                 return {
                     contractAbi: this.MyTRC20Mintable,
