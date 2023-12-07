@@ -387,9 +387,13 @@ router.get('/getToken', async function (req, res, next) {
     }
 })
 
-router.get('/:token', [], async (req, res, next) => {
+router.get('/:token', [
+    check('token').exists().custom(
+        (token) => web3.utils.isAddress(token)
+    ).withMessage('token address is incorrect.')
+], async (req, res, next) => {
     try {
-        const token = req.params.token || ''
+        const token = web3.utils.toChecksumAddress(req.params.token)
         const { data } = await axios.get(
             urljoin(config.get('tomoscanAPI'), `/api/token/${token}`)
         )
@@ -412,26 +416,17 @@ router.get('/holders/trc21/:token', [], async (req, res, next) => {
         return next(error)
     }
 })
-router.get('/holders/:token', [], async (req, res, next) => {
+router.get('/holders/:token', [
+    check('token').exists().custom(
+        (token) => web3.utils.isAddress(token)
+    ).withMessage('token address is incorrect.')
+], async (req, res, next) => {
     try {
-        const token = req.params.token || ''
+        const token = web3.utils.toChecksumAddress(req.params.token)
         const page = req.query.page || 1
         const limit = req.query.limit || 20
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanAPI'), `/api/token-holders/?address=${token}&page=${page}&limit=${limit}`)
-        )
-        return res.json(data)
-    } catch (error) {
-        return next(error)
-    }
-})
-router.get('/txes/trc20/:token', [], async (req, res, next) => {
-    try {
-        const token = req.params.token || ''
-        const page = req.query.page || 1
-        const limit = req.query.limit || 20
-        const { data } = await axios.get(
-            urljoin(config.get('tomoscanAPI'), `/api/token-txs/trc20?token=${token}&page=${page}&limit=${limit}`)
+            urljoin(config.get('tomoscanAPI'), `/api/tokenHolder/${token}?offset=${(page - 1) * limit}&limit=${limit}`)
         )
         return res.json(data)
     } catch (error) {
@@ -439,13 +434,41 @@ router.get('/txes/trc20/:token', [], async (req, res, next) => {
     }
 })
 
-router.get('/txes/trc21/:token', [], async (req, res, next) => {
+router.get('/nft/txs/:token', [
+    check('token').exists().custom(
+        (token) => web3.utils.isAddress(token)
+    ).withMessage('token address is incorrect.')
+], async (req, res, next) => {
     try {
-        const token = req.params.token || ''
+        const token = web3.utils.toChecksumAddress(req.params.token)
         const page = req.query.page || 1
         const limit = req.query.limit || 20
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanAPI'), `/api/token-txs/trc21?token=${token}&page=${page}&limit=${limit}`)
+            urljoin(
+                config.get('tomoscanAPI'),
+                `/api/tokenTx/nft/list?tokenAddress=${token}&offset=${(page - 1) * limit}&limit=${limit}`
+            )
+        )
+        return res.json(data)
+    } catch (error) {
+        return next(error)
+    }
+})
+
+router.get('/txs/:token', [
+    check('token').exists().custom(
+        (token) => web3.utils.isAddress(token)
+    ).withMessage('token address is incorrect.')
+], async (req, res, next) => {
+    try {
+        const token = web3.utils.toChecksumAddress(req.params.token)
+        const page = req.query.page || 1
+        const limit = req.query.limit || 20
+        const { data } = await axios.get(
+            urljoin(
+                config.get('tomoscanAPI'),
+                `/api/tokenTx/list?tokenAddress=${token}&offset=${(page - 1) * limit}&limit=${limit}`
+            )
         )
         return res.json(data)
     } catch (error) {

@@ -35,7 +35,7 @@ router.get('/:account', [
     try {
         const account = req.params.account.toLowerCase()
         const { data } = await axios.get(
-            urljoin(config.get('tomoscanAPI'), `/api/accounts/${account}`)
+            urljoin(config.get('tomoscanAPI'), `/api/account/${account}`)
         )
         return res.json(data)
     } catch (error) {
@@ -47,7 +47,8 @@ router.get('/:account/listTokens', [
     query('limit')
         .isInt({ min: 0, max: 200 }).optional().withMessage('limit should greater than 0 and less than 200'),
     query('page').isNumeric({ no_symbols: true }).optional().withMessage('page must be number'),
-    check('account').exists().custom((account) => web3.utils.isAddress(account)).withMessage('Account address is incorrect.')
+    check('account').exists().custom((account) => web3.utils.isAddress(account))
+        .withMessage('Account address is incorrect.')
 ], async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -56,9 +57,9 @@ router.get('/:account/listTokens', [
     try {
         const account = web3.utils.toChecksumAddress(req.params.account)
         const params = {
-            limit: req.query.limit || 1,
-            page: req.query.page || 1
+            limit: req.query.limit || 1
         }
+        params.offset = ((req.query.page || 1) - 1) * params.limit
         const query = serializeQuery(params)
         const { data } = await axios.get(
             urljoin(config.get('tomoscanAPI'), `/api/token/listByOwner?owner=${account}&${query}`)

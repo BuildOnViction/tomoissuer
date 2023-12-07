@@ -2,14 +2,14 @@
     <div class="container container-medium">
         <div class="tomo-apply text-center">
             <h2 class="tmp-title-large">Pay fee by {{ token.name }} token</h2>
-            <div class="about-tomoz">
-                <h6 class="tmp-title-normal weightbold">What is TomoZ</h6>
+            <div class="about-VicZ">
+                <h6 class="tmp-title-normal weightbold">What is VicZ</h6>
                 <p>
-                    TomoZ - the first on-chain protocol that offers the ability for any user
+                    VicZ - the first on-chain protocol that offers the ability for any user
                     to pay transaction fees with the same token the user is holding. Along with
-                    the TomoZ protocol, TRC21 is also proposed as a new smart contract-based
+                    the VicZ protocol, VRC25 is also proposed as a new smart contract-based
                     token standard that allows users to pay fees of any transaction sent to a
-                    TRC21 smart contract in terms of the TRC21 token itself, without holding VIC in their wallet.
+                    VRC25 smart contract in terms of the VRC25 token itself, without holding VIC in their wallet.
                 </p>
             </div>
             <div class="box-condition">
@@ -23,7 +23,7 @@
                         </p>
                         <p>
                             The token issuer has to deposit a minimum amount of 10 VIC to apply
-                            to the TomoZ protocol. The deposit cannot be withdrawn.
+                            to the VicZ protocol. The deposit cannot be withdrawn.
                         </p>
                     </b-col>
                     <b-col
@@ -64,7 +64,7 @@
             </div>
             <div class="btn-box">
                 <b-button
-                    :to="'/tomozapplication/' + address"
+                    :to="'/VicZapplication/' + address"
                     class="tmp-btn-violet">
                     I understand
                 </b-button>
@@ -77,7 +77,7 @@
 import store from 'store'
 import axios from 'axios'
 export default {
-    name: 'ApplyTomoZ',
+    name: 'ApplyVicZ',
     components: { },
     data () {
         return {

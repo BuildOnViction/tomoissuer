@@ -266,7 +266,7 @@ export default {
         async checkAppliedZ () {
             const contract = await this.TRC21Issuer
             if (contract) {
-                const result = await contract.methods.tokens.call()
+                const result = await contract.methods.tokens().call()
                 if (result && result.length > 0) {
                     let lowerCaseArr = result.map(m => m.toLowerCase())
                     return lowerCaseArr
@@ -277,7 +277,7 @@ export default {
         async checkAppliedX () {
             const contract = await this.TomoXListing
             if (contract) {
-                const result = await contract.methods.tokens.call()
+                const result = await contract.methods.tokens().call()
                 if (result && result.length > 0) {
                     let lowerCaseArr = result.map(m => m.toLowerCase())
                     return lowerCaseArr

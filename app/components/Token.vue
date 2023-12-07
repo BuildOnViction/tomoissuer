@@ -10,6 +10,11 @@
                             {{ token.symbol }}
                         </span>
                         <span
+                            v-if="token.type === 'vrc25'"
+                            class="apply-trc">
+                            VRC-25
+                        </span>
+                        <span
                             v-if="token.type === 'trc21'"
                             class="apply-trc">
                             VRC-21
@@ -51,7 +56,9 @@
                         <ul>
                             <li>
                                 <b-link
-                                    v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
+                                    v-if="(token.type === 'trc21' || token.type === 'vrc25')
+                                        && !isAppliedZ
+                                    && account === contractCreation"
                                     :to="'/tomozcondition/' + address"
                                     class="tmp-btn-violet"
                                     style="width: 240px">
@@ -59,7 +66,7 @@
                                         <span class="path1"/><span class="path2"/>
                                     </span>
                                     <!-- <i class="tm-icon-tomoz mr-1"/> -->
-                                    Apply to Viction Zero Gas Protocol
+                                    Apply Zero Gas Protocol
                                 </b-link>
                             </li>
                             <!-- <li>
@@ -134,14 +141,17 @@
                                         Transfer Token
                                     </b-dropdown-item> -->
                                     <b-dropdown-item
-                                        v-if="token.type === 'trc21' && isAppliedZ && contractCreation === account"
+                                        v-if="(token.type === 'trc21' || token.type === 'vrc25')
+                                            && isAppliedZ
+                                        && contractCreation === account"
                                         :to="'/edittransactionsfee/' + address">
                                         Edit transaction fee
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="token.type === 'trc21' && isAppliedZ"
+                                        v-if="(token.type === 'trc21' || token.type === 'vrc25')
+                                        && isAppliedZ"
                                         :to="'/depositfee/' + address">
-                                        Deposit VRC-21 fee fund
+                                        Deposit fee fund
                                     </b-dropdown-item>
                                     <b-dropdown-divider v-if="token.isMintable"/>
                                     <b-dropdown-item
@@ -220,7 +230,7 @@
                                             <p class="title-small">Decimals</p>
                                             <p>{{ token.decimals }}</p>
                                         </li>
-                                        <li v-if="token.type === 'trc21' && isAppliedZ">
+                                        <li v-if="(token.type === 'trc21' || token.type === 'vrc25') && isAppliedZ">
                                             <p class="title-small">
                                                 Transactions fee
                                                 <b-link
@@ -254,7 +264,7 @@
                                                 </span> -->
                                             </div>
                                         </li>
-                                        <li v-if="token.type === 'trc21' && isAppliedZ">
+                                        <li v-if="(token.type === 'trc21' || token.type === 'vrc25') && isAppliedZ">
                                             <p class="title-small">VRC-21 fee fund</p>
                                             <div class="flex-box">
                                                 <span>{{ formatNumber(poolingFee) }} VIC</span>
@@ -559,36 +569,35 @@ export default {
             self.token.contract = data.hash
             self.tokenName = data.name
             self.symbol = data.symbol
-            self.contractCreation = data.contractCreation
+            self.contractCreation = data.owner.toLowerCase()
 
             self.$store.state.token = self.token
         },
         getTokenTransfer () {
             const self = this
             self.loading = true
-            const isTrc21 = self.token.type
             const params = {
                 limit: self.transferPerPage,
                 page: self.transferCurrentPage
             }
             const query = self.serializeQuery(params)
-            axios.get(`/api/token/txes/${isTrc21}/${this.address}?${query}`).then(response => {
+            axios.get(`/api/token/txs/${this.address}?${query}`).then(response => {
                 const data = response.data
                 if (data) {
                     const items = []
-                    data.items.map(m => {
+                    data.data.map(m => {
                         items.push({
                             txn_hash: m.transactionHash,
-                            age: moment(m.blockTime).fromNow(),
+                            age: moment(m.timestamp * 1000).fromNow(),
                             from: m.from,
                             to: m.to,
                             amount: self.formatNumber(
-                                new BigNumber(m.value).div(10 ** self.token.decimals).toNumber())
+                                new BigNumber(m.value).div(10 ** m.tokenDecimals).toNumber())
                         })
                     })
                     self.transferItems = items
                     self.transferRows = data.total
-                    self.tokenTransfers = response.data.total
+                    self.tokenTransfers = data.total
                     self.loading = false
                 }
             }).catch(error => {
@@ -604,23 +613,22 @@ export default {
                 page: self.holdersCurrentPage,
                 limit: self.holdersPerPage
             }
-            const isTrc21 = self.token.type === 'trc21' ? 'trc21/' : ''
             const query = self.serializeQuery(params)
-            axios.get(`/api/token/holders/${isTrc21}${this.address}?${query}`).then(response => {
+            axios.get(`/api/token/holders/${this.address}?${query}`).then(response => {
                 const data = response.data
                 if (data) {
                     const items = []
-                    data.items.map(m => {
+                    data.data.map((m, mIndex) => {
                         items.push({
-                            rank: m.rank,
-                            address: m.hash,
+                            rank: mIndex + 1,
+                            address: m.address,
                             amount: self.formatNumber(m.quantityNumber),
-                            percentage: m.percentage
+                            percentage: (m.quantityNumber * 100 / self.token.totalSupplyNumber).toFixed(2)
                         })
                     })
                     self.holdersItems = items
                     self.holdersRows = data.total
-                    self.tokenHolders = response.data.total
+                    self.tokenHolders = data.total
                     self.loading = false
                 }
             }).catch(error => {

@@ -218,7 +218,7 @@
                                     </b-tooltip>
                                 </b-form-radio>
                             </b-col>
-                            <b-col
+                            <!-- <b-col
                                 cols="3"
                                 md="4">
                                 <b-form-radio
@@ -228,7 +228,6 @@
                                     <i
                                         id="trc20"
                                         class="tm-icon-info mb-2"/>
-                                    <!-- <span class="new-gif">new</span> -->
                                     <b-tooltip
                                         target="trc20">
                                         VRC20 is the most standard token on Viction.
@@ -251,7 +250,7 @@
                                         Transaction fees are paid by the token itself.
                                     </b-tooltip>
                                 </b-form-radio>
-                            </b-col>
+                            </b-col> -->
                             <!-- <b-col
                                 cols="4"
                                 md="3">
@@ -359,7 +358,7 @@ export default {
             warningSymbol: '',
             warningDecimals: '',
             warningMintable: '',
-            mintable: '',
+            mintable: true,
             tokenInfoFields: [
                 { key: 'title', label: '' },
                 { key: 'trc20', label: 'TRC20' },

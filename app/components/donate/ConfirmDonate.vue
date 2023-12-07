@@ -2,7 +2,7 @@
     <div class="container container-small">
         <div class="confirm-table">
             <div class="info-header text-center">
-                <h2 class="tmp-title-large">Donate TRC-21 transaction fee</h2>
+                <h2 class="tmp-title-large">Donate transaction fee</h2>
             </div>
             <div class="tmp-table-three">
                 <table>

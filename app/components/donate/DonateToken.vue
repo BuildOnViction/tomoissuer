@@ -187,7 +187,7 @@ export default {
         },
         getPoolingFee () {
             const contract = this.TRC21Issuer
-            contract.methods.tokens.call().then(result => {
+            contract.methods.tokens().call().then(result => {
                 const lowerCaseArr = result.map(m => m.toLowerCase())
                 if (lowerCaseArr.indexOf(this.tokenAddress) > -1) {
                     this.isAppliedZ = true

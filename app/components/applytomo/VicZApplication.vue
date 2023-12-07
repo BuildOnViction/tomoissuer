@@ -6,7 +6,7 @@
                     <span class="tm-icon-tomoz-new"><span class="path1"/><span class="path2"/></span>
                 </p>
                 <!-- <p><i class="tm-icon-tomoz-new"/></p> -->
-                <h2 class="tmp-title-large">TomoZ Protocol Application</h2>
+                <h2 class="tmp-title-large">Zero Protocol Application</h2>
             </div>
             <b-form
                 class="tmp-form-one"
@@ -60,7 +60,7 @@ import {
     minValue
 } from 'vuelidate/lib/validators'
 export default {
-    name: 'TomoZApplication',
+    name: 'VicZApplication',
     mixins: [validationMixin],
     data () {
         return {

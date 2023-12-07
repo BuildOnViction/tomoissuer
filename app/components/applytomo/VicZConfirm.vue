@@ -47,7 +47,7 @@
             </div>
             <div class="btn-box">
                 <b-button
-                    :to="'/tomozapplication/' + address"
+                    :to="'/viczapplication/' + address"
                     class="tmp-btn-boder-violet btn-min">
                     Back
                 </b-button>
@@ -104,11 +104,11 @@
 import store from 'store'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
-import TomoZApplied from './TomoZApplied.vue'
+import VicZApplied from './VicZApplied.vue'
 export default {
     name: 'TomoZConfirm',
     components: {
-        TomoZApplied
+        VicZApplied
     },
     data () {
         return {
