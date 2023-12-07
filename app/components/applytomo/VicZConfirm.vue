@@ -11,7 +11,7 @@
                     <i class="tm-icon-tomoz-new"><span class="path1"/><span class="path2"/></i>
                 </p>
                 <!-- <p><i class="tm-icon-tomoz-new"/></p> -->
-                <h2 class="tmp-title-large">TomoZ Protocol Application</h2>
+                <h2 class="tmp-title-large">Zero Gas Protocol Application</h2>
             </div>
             <div class="tmp-table-three">
                 <table>
@@ -54,7 +54,7 @@
                 <b-button
                     class="tmp-btn-violet"
                     @click="applyTomoZ">
-                    Apply to TomoZ protocol
+                    Apply Zero Gas protocol
                 </b-button>
             </div>
             <b-modal

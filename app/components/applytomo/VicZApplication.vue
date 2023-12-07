@@ -6,7 +6,7 @@
                     <span class="tm-icon-tomoz-new"><span class="path1"/><span class="path2"/></span>
                 </p>
                 <!-- <p><i class="tm-icon-tomoz-new"/></p> -->
-                <h2 class="tmp-title-large">Zero Protocol Application</h2>
+                <h2 class="tmp-title-large">Zero Gas Protocol Application</h2>
             </div>
             <b-form
                 class="tmp-form-one"
@@ -146,7 +146,7 @@ export default {
             this.$router.go(-2)
         },
         confirm () {
-            this.$router.push({ name: 'TomoZConfirm',
+            this.$router.push({ name: 'VicZConfirm',
                 params: {
                     address: this.address,
                     token: this.token,

@@ -59,7 +59,7 @@
                                     v-if="(token.type === 'trc21' || token.type === 'vrc25')
                                         && !isAppliedZ
                                     && account === contractCreation"
-                                    :to="'/tomozcondition/' + address"
+                                    :to="'/viczcondition/' + address"
                                     class="tmp-btn-violet"
                                     style="width: 240px">
                                     <span class="tm-icon-tomoz-new-w mr-1">
@@ -95,7 +95,7 @@
                                     </template>
                                     <!-- <b-dropdown-item
                                         v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
-                                        :to="'/tomozcondition/' + address">
+                                        :to="'/viczcondition/' + address">
                                         Apply to Viction Zero Gas Protocol
                                     </b-dropdown-item>
                                     <b-dropdown-item

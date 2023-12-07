@@ -45,10 +45,10 @@
                                 #cell(price)="data">
                                 {{ data.item.price || '---' }}
                             </template>
-                            <template
+                            <!-- <template
                                 #cell(totalSupply)="data">
                                 {{ formatNumber(data.supply) }}
-                            </template>
+                            </template> -->
                             <template
                                 #cell(volume)="data">
                                 {{ data.item.volume || '---' }}
@@ -83,7 +83,7 @@
                                     </template>
                                     <b-dropdown-item
                                         v-if="data.type === 'trc21' && !data.item.applytomoz"
-                                        :to="'/tomozcondition/' + data.item.hash">
+                                        :to="'/viczcondition/' + data.item.hash">
                                         Apply to VICZ
                                     </b-dropdown-item>
                                     <!-- <b-dropdown-item
@@ -109,7 +109,7 @@
                                 </b-dropdown>
                                 <!-- <router-link
                                     v-if="!data.value"
-                                    :to="`/tomozcondition/${data.item.hash}`">
+                                    :to="`/viczcondition/${data.item.hash}`">
                                     Apply VICZ
                                 </router-link> -->
                             </template>
@@ -162,7 +162,7 @@ export default {
         return {
             listokenCurrentPage: this.$store.state.listokenCurrentPage || 1,
             listokenRows: 0,
-            listokenPerPage: 7,
+            listokenPerPage: 8,
             listokenFields: [
                 { key: 'logo', label: '', variant: 'sp-text-center' },
                 { key: 'token', label: 'Token' },
@@ -175,7 +175,7 @@ export default {
                 { key: 'applytomoz', label: '', variant: 'sp-text-center' }
             ],
             listokenItems: [],
-            sortBy: 'totalSupplyNumber',
+            sortBy: 'price',
             sortDesc: true,
             tokens: [],
             loading: false,
@@ -225,11 +225,12 @@ export default {
                             symbol: i.symbol,
                             hash: i.address,
                             price: i.price ? i.price : '---',
-                            totalSupply: i.totalSupplyNumber,
+                            // totalSupply: this.formatNumber(i.totalSupplyNumber),
                             ownerBalance: ownerBalanceStr + ownerValueStr,
-                            supply: new BigNumber(
+                            supply: this.formatNumber(new BigNumber(
                                 i.circulatingSupply ? i.circulatingSupply : i.totalSupply
-                            ).div(10 ** i.decimals),
+                            ).div(10 ** i.decimals)
+                            ),
                             holders: i.holder || '---',
                             applytomoz: ((self.appliedZList || []).indexOf(i.address) > -1),
                             applytomox: ((self.appliedXList || []).indexOf(i.address) > -1),

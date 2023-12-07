@@ -93,7 +93,7 @@
                             class="btn tmp-btn-boder-violet btn-secondary">Token detail
                         </router-link>
                         <!-- <router-link
-                            :to="'/tomozcondition/' + contractAddress"
+                            :to="'/viczcondition/' + contractAddress"
                             class="tmp-btn-violet">
                             <span class="tm-icon-tomoz-new-w mr-1">
                                 <span class="path1"/><span class="path2"/>
