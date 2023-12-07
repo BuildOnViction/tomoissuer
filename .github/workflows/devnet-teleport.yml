@@ -24,11 +24,13 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v2
         with:
-          node-version: '8.16.0'
+          node-version: '10.6.0'
+      - name: Copy ABI
+        run: mkdir build && mkdir build/contracts && cp abis/*json build/contracts
       - name: Install Python
         run: sudo apt install python2
       - name: install dependencies
-        run: mkdir build && mkdir build/contracts && cp abis/*json build/contracts && npm ci --python=python2 --no-audit
+        run: npm rebuild node-sass --force && npm ci --python=python2 --no-audit
 
       - name: build
         run: npm run build
