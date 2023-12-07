@@ -3,7 +3,7 @@
         <div class="tomo-apply text-center">
             <h2 class="tmp-title-large">Pay fee by {{ token.name }} token</h2>
             <div class="about-VicZ">
-                <h6 class="tmp-title-normal weightbold">What is VicZ</h6>
+                <h6 class="tmp-title-normal weightbold">What is Zero Gas Protocol (VicZ)</h6>
                 <p>
                     VicZ - the first on-chain protocol that offers the ability for any user
                     to pay transaction fees with the same token the user is holding. Along with
