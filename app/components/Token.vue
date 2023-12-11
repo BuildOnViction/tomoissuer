@@ -56,8 +56,7 @@
                         <ul>
                             <li>
                                 <b-link
-                                    v-if="(token.type === 'trc21' || token.type === 'vrc25')
-                                        && !isAppliedZ
+                                    v-if="!isAppliedZ
                                     && account === contractCreation"
                                     :to="'/viczcondition/' + address"
                                     class="tmp-btn-violet"
@@ -93,32 +92,6 @@
                                         class="tmp-btn-transparent">
                                         <i class="tm-icon-cog" />
                                     </template>
-                                    <!-- <b-dropdown-item
-                                        v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
-                                        :to="'/viczcondition/' + address">
-                                        Apply to Viction Zero Gas Protocol
-                                    </b-dropdown-item>
-                                    <b-dropdown-item
-                                        v-if="token.type === 'trc21' && !isAppliedX && account === contractCreation"
-                                        :to="'/tomoxcondition/' + address">
-                                        Apply to TomoX Protocol
-                                    </b-dropdown-item> -->
-                                    <!-- <b-dropdown-item
-                                        v-if="isBridgeToken && !isAppliedB">
-                                        <div id="applyBridge">
-                                            <b-link
-                                                :disabled="!isAppliedZ"
-                                                :style="!isAppliedZ ? `cursor: not-allowed` : ''"
-                                                @click="showAnnounceBridgeModal">
-                                                Apply to TomoBridge
-                                            </b-link>
-                                        </div>
-                                        <b-tooltip
-                                            v-if="!isAppliedZ"
-                                            target="applyBridge">
-                                            Apply to TomoZ is required
-                                        </b-tooltip>
-                                    </b-dropdown-item> -->
                                     <b-dropdown-item
                                         :to="'/viewToken/' + address">
                                         View Token Info
@@ -129,31 +102,16 @@
                                         Update Token Info
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="!token.contract"
-                                        :href="config.tomoscanUrl + '/contracts/verify/' + address"
-                                        target="_blank">
-                                        Verify & Publish Contract
-                                    </b-dropdown-item>
-                                    <b-dropdown-divider/>
-                                    <!-- <b-dropdown-item
-                                        :href="config.tomowalletUrl"
-                                        target="_blank">
-                                        Transfer Token
-                                    </b-dropdown-item> -->
-                                    <b-dropdown-item
-                                        v-if="(token.type === 'trc21' || token.type === 'vrc25')
-                                            && isAppliedZ
+                                        v-if="isAppliedZ
                                         && contractCreation === account"
                                         :to="'/edittransactionsfee/' + address">
                                         Edit transaction fee
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="(token.type === 'trc21' || token.type === 'vrc25')
-                                        && isAppliedZ"
+                                        v-if="isAppliedZ"
                                         :to="'/depositfee/' + address">
                                         Deposit fee fund
                                     </b-dropdown-item>
-                                    <b-dropdown-divider v-if="token.isMintable"/>
                                     <b-dropdown-item
                                         v-if="token.isMintable"
                                         :to="'/reissueToken/' + address">
@@ -230,7 +188,7 @@
                                             <p class="title-small">Decimals</p>
                                             <p>{{ token.decimals }}</p>
                                         </li>
-                                        <li v-if="(token.type === 'trc21' || token.type === 'vrc25') && isAppliedZ">
+                                        <li v-if="isAppliedZ">
                                             <p class="title-small">
                                                 Transactions fee
                                                 <b-link
@@ -264,8 +222,8 @@
                                                 </span> -->
                                             </div>
                                         </li>
-                                        <li v-if="(token.type === 'trc21' || token.type === 'vrc25') && isAppliedZ">
-                                            <p class="title-small">VRC-21 fee fund</p>
+                                        <li v-if="isAppliedZ">
+                                            <p class="title-small">VRC fee fund</p>
                                             <div class="flex-box">
                                                 <span>{{ formatNumber(poolingFee) }} VIC</span>
                                                 <span>
@@ -686,6 +644,9 @@ export default {
         },
         checkAppliedZ () {
             const contract = this.TRC21Issuer
+            if (this.token.type !== 'vrc25' && this.token.type !== 'vrc21') {
+                return false
+            }
             if (contract) {
                 contract.methods.tokens().call()
                     .then(result => {
