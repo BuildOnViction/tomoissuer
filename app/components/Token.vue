@@ -219,10 +219,10 @@
                                             </p>
                                             <p class="common_txt_ellipsis text-blue">
                                                 <a
-                                                    :title="token.hash"
+                                                    :title="token.address"
                                                     :href="config.tomoscanUrl + '/token/' + address"
                                                     target="_blank">
-                                                    {{ token.hash }}
+                                                    {{ token.address }}
                                                 </a>
                                             </p>
                                         </li>
@@ -566,7 +566,8 @@ export default {
             const self = this
             const { data } = await axios.get(`/api/token/${self.address}`)
             self.token = data
-            self.token.contract = data.hash
+            self.token.address = data.address.toLowerCase()
+            self.token.contract = data.address.toLowerCase()
             self.tokenName = data.name
             self.symbol = data.symbol
             self.contractCreation = data.owner.toLowerCase()

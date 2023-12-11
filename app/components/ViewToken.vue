@@ -67,17 +67,23 @@
                     <tr style="grid-template-columns: 100%;">
                         <td colspan="2">
                             <div
-                                v-if="token.type === 'trc21' || token.type === 'trc20'">
-                                <div class="pb-2 text-danger">Generated following tomochain sourcecode,
+                                v-if="sourceCode">
+                                <div class="pb-2 text-danger">Generated following Viction sourcecode,
                                 if not your sourcecode, please ignore</div>
                                 <codemirror
                                     ref="code"
                                     v-model="sourceCode"
                                     :options="{mode:'application/ld+json',styleActiveLine:false}"/>
                             </div>
-                            <span
-                                v-else
-                                class="w-100">This is not VRC21 or VRC20 token</span>
+                            <div v-else>
+                                <span class="w-100 pb-2 text-danger">Source code is not verified</span>
+                                <a
+                                    :href="config.tomoscanUrl + '/address/' + token.address + '#code'"
+                                    target="_blank">
+                                    Verify code on Explorer
+                                </a>
+                            </div>
+
                         </td>
                         <td />
                     </tr>
@@ -91,7 +97,6 @@
 
 <script>
 import axios from 'axios'
-import urljoin from 'url-join'
 import store from 'store'
 export default {
     name: 'App',
@@ -170,16 +175,22 @@ export default {
         async getTokenDetail () {
             const self = this
             const { data } = await axios.get(`/api/account/${self.address}`)
-            const token = data.token
+            const token = data.tokenData
             if (token) {
+                const { data : tokenData } = await axios.get(`/api/token/${self.address}`)
                 self.token = {
-                    name: token.name,
-                    symbol: token.symbol,
-                    decimals: token.decimals,
-                    type: token.type || '',
-                    mintable: token.isMintable,
-                    totalSupply: token.totalSupplyNumber
+                    address: tokenData.address,
+                    name: tokenData.name,
+                    symbol: tokenData.symbol,
+                    decimals: tokenData.decimals,
+                    type: tokenData.type || '',
+                    mintable: tokenData.isMintable,
+                    totalSupply: tokenData.totalSupplyNumber
                 }
+            }
+            if (data.contractData && data.contractData.sourceCode) {
+                const fileName = Object.keys(data.contractData.sourceCode)[0]
+                self.sourceCode = data.contractData.sourceCode[fileName].content
             }
             self.contractCreation = data.contractCreation
         },
@@ -195,32 +206,34 @@ export default {
         },
         async checkBridgeToken () {
             const self = this
-            try {
-                const contract = new this.web3.eth.Contract(
-                    this.TomoBridgeWrapToken.abi,
-                    this.address
-                )
-                await contract.methods.original_contract.call()
-                    .then(result => {
-                        self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
-                        self.tokenERC20Address = result
-                        if (!result) {
-                            self.isBridgeToken = false
-                            return
-                        }
-                        self.tokenAddressURL = urljoin(
-                            self.config.etherChain.etherScanURL,
-                            'token',
-                            result
-                        )
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        self.isBridgeToken = false
-                    })
-            } catch (error) {
-                console.log(error)
-            }
+            self.isBridgeToken = false
+            return false
+            // try {
+            //     const contract = new this.web3.eth.Contract(
+            //         this.TomoBridgeWrapToken.abi,
+            //         this.address
+            //     )
+            //     await contract.methods.original_contract().call()
+            //         .then(result => {
+            //             self.isBridgeToken = (this.web3.utils.isAddress(result) || false)
+            //             self.tokenERC20Address = result
+            //             if (!result) {
+            //                 self.isBridgeToken = false
+            //                 return
+            //             }
+            //             self.tokenAddressURL = urljoin(
+            //                 self.config.etherChain.etherScanURL,
+            //                 'token',
+            //                 result
+            //             )
+            //         })
+            //         .catch(error => {
+            //             console.log(error)
+            //             self.isBridgeToken = false
+            //         })
+            // } catch (error) {
+            //     console.log(error)
+            // }
         }
     }
 }
