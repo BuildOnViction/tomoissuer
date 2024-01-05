@@ -49,7 +49,7 @@
     "js-yaml": "^3.13.1",
     "lodash.get": "^4.4.2",
     "lodash.map": "^4.6.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mongoose": "^5.5.12",
     "morgan": "^1.9.1",
     "solc": "^0.4.25",
