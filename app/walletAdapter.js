@@ -32,7 +32,7 @@ export default {
                 method: 'net_version'
             })
             try {
-                if (parseInt(supportedWalletOption[0].chainId, 10) !== parseInt(chainId, 10)) {
+                if (parseInt(supportedWalletOption[0].chainId) !== parseInt(chainId)) {
                     await provider.request({
                         method: 'wallet_addEthereumChain',
                         params: supportedWalletOption
@@ -87,7 +87,7 @@ export default {
                 method: 'net_version'
             })
             try {
-                if (parseInt(supportedWalletOption[0].chainId, 10) !== parseInt(chainId, 10)) {
+                if (parseInt(supportedWalletOption[0].chainId) !== parseInt(chainId)) {
                     await provider.request({
                         method: 'wallet_addEthereumChain',
                         params: supportedWalletOption
@@ -122,7 +122,7 @@ export default {
                 method: 'net_version'
             })
             try {
-                if (parseInt(supportedWalletOption[0].chainId, 10) !== parseInt(chainId, 10)) {
+                if (parseInt(supportedWalletOption[0].chainId) !== parseInt(chainId)) {
                     await provider.request({
                         method: 'wallet_addEthereumChain',
                         params: supportedWalletOption
