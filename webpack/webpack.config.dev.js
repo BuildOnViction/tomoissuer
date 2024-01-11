@@ -28,7 +28,7 @@ const webpackConfig = merge(commonConfig, {
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: '"development"',
-                RPC_ENDPOINT: `${JSON.stringify(config.blockchain.rpc)}`,
+                RPC_ENDPOINT: `${JSON.stringify(config.blockchain.clientRpc)}`,
                 CHAIN_ID: `${JSON.stringify(config.blockchain.networkId)}`
             }
         })

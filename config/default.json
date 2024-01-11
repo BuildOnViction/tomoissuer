@@ -26,8 +26,9 @@
     "bridgeAuthorityKey": "",
     "coingeckoAPI": "https://api.coingecko.com/api/v3",
     "blockchain": {
-        "rpc": "https://rpc.tomochain.com",
-        "ws": "wss://ws.tomochain.com",
+        "clientRpc": "https://rpc.viction.xyz",
+        "rpc": "https://rpc.viction.xyz",
+        "ws": "wss://ws.viction.xyz",
         "networkId": 88,
         "gas": 2000000,
         "deployPrice": 10000000000000,
