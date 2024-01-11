@@ -1,9 +1,9 @@
 <template>
     <div class="container container-small">
         <div class="tomo-donate">
-            <h2 class="tmp-title-large">Donate TRC-21 transaction fee</h2>
+            <h2 class="tmp-title-large">Donate transaction fee</h2>
             <div class="box-desc">
-                <h6 class="tmp-title-normal weightbold">Why do we need to donate TRC-21 transaction fee?</h6>
+                <h6 class="tmp-title-normal weightbold">Why do we need to transaction fee?</h6>
                 <p>
                     Token transactions will not be processed if the remaining deposit is not
                     enough to pay transaction fees. In such a case, to resume the processing
@@ -47,7 +47,7 @@
                         class="text-danger pt-2">Token not found</div>
                     <div
                         v-if="!isAppliedZ && tokenExist"
-                        class="text-danger pt-2">Token has not been applied to VIC yet</div>
+                        class="text-danger pt-2">Token has not been applied to VICz yet</div>
                 </b-form-group>
                 <b-form-group
                     :description="`Available balance:  ${balance} VIC`"
@@ -187,7 +187,7 @@ export default {
         },
         getPoolingFee () {
             const contract = this.TRC21Issuer
-            contract.methods.tokens.call().then(result => {
+            contract.methods.tokens().call().then(result => {
                 const lowerCaseArr = result.map(m => m.toLowerCase())
                 if (lowerCaseArr.indexOf(this.tokenAddress) > -1) {
                     this.isAppliedZ = true

@@ -130,11 +130,11 @@ export default {
     methods: {
         async getTokenDetail () {
             const self = this
-            const { data } = await axios.get(`/api/account/${self.address}`)
-            const token = data.token
+            const { data } = await axios.get(`/api/token/${self.address}`)
+            const token = data
             self.token = token || {}
             self.totalSupply = self.token.totalSupplyNumber
-            self.contractCreation = data.contractCreation
+            self.contractCreation = data.owner.toLowerCase()
         },
         getOwnerBalance () {
             const web3 = this.web3

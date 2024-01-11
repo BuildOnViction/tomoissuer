@@ -10,8 +10,8 @@
         "https://swagger.tomochain.com",
         "http://api.etherscan.io"
     ],
-    "tomoscanUrl": "https://tomoscan.io",
-    "tomoscanAPI": "https://scan.tomochain.com",
+    "tomoscanUrl": "https://www.vicscan.xyz",
+    "tomoscanAPI": "https://www.vicscan.xyz",
     "tomowalletUrl": "https://wallet.testnet.tomochain.com",
     "tomorelayerAPI": "https://relayer.testnet.tomochain.com",
     "relayerAuthorityKey": "",
@@ -26,8 +26,8 @@
     "bridgeAuthorityKey": "",
     "coingeckoAPI": "https://api.coingecko.com/api/v3",
     "blockchain": {
-        "rpc": "https://rpc.tomochain.com",
-        "ws": "wss://ws.tomochain.com",
+        "rpc": "https://rpc.viction.xyz",
+        "ws": "wss://ws.viction.xyz",
         "networkId": 88,
         "gas": 2000000,
         "deployPrice": 10000000000000,

@@ -11,7 +11,7 @@
                     <i class="tm-icon-tomoz-new"><span class="path1"/><span class="path2"/></i>
                 </p>
                 <!-- <p><i class="tm-icon-tomoz-new"/></p> -->
-                <h2 class="tmp-title-large">TomoZ Protocol Application</h2>
+                <h2 class="tmp-title-large">Zero Gas Protocol Application</h2>
             </div>
             <div class="tmp-table-three">
                 <table>
@@ -47,14 +47,14 @@
             </div>
             <div class="btn-box">
                 <b-button
-                    :to="'/tomozapplication/' + address"
+                    :to="'/viczapplication/' + address"
                     class="tmp-btn-boder-violet btn-min">
                     Back
                 </b-button>
                 <b-button
                     class="tmp-btn-violet"
                     @click="applyTomoZ">
-                    Apply to TomoZ protocol
+                    Apply Zero Gas protocol
                 </b-button>
             </div>
             <b-modal
@@ -104,11 +104,11 @@
 import store from 'store'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
-import TomoZApplied from './TomoZApplied.vue'
+import VicZApplied from './VicZApplied.vue'
 export default {
     name: 'TomoZConfirm',
     components: {
-        TomoZApplied
+        VicZApplied
     },
     data () {
         return {

@@ -11,6 +11,8 @@ import MyTRC21Abi from '../build/contracts/MyTRC21'
 import MyTRC21MintableAbi from '../build/contracts/MyTRC21Mintable'
 import MyTRC20Abi from '../build/contracts/MyTRC20'
 import MyTRC20MintableAbi from '../build/contracts/MyTRC20Mintable'
+import MyVRC25Abi from '../build/contracts/MyVRC25'
+import MyVRC25MintableAbi from '../build/contracts/MyVRC25Mintable'
 
 import Web3 from 'web3'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
@@ -90,6 +92,8 @@ Vue.prototype.setupProvider = async function (provider, wjs) {
         Vue.prototype.MyTRC21Mintable = MyTRC21MintableAbi
         Vue.prototype.MyTRC20 = MyTRC20Abi
         Vue.prototype.MyTRC20Mintable = MyTRC20MintableAbi
+        Vue.prototype.MyVRC25 = MyVRC25Abi
+        Vue.prototype.MyVRC25Mintable = MyVRC25MintableAbi
         if (chainConfig.issuerAddress) {
             Vue.prototype.TRC21Issuer = new wjs.eth.Contract(
                 TRC21IssuerAritfacts.abi,

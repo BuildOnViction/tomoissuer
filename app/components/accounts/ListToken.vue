@@ -45,10 +45,10 @@
                                 #cell(price)="data">
                                 {{ data.item.price || '---' }}
                             </template>
-                            <template
+                            <!-- <template
                                 #cell(totalSupply)="data">
-                                {{ formatNumber(data.value) }}
-                            </template>
+                                {{ formatNumber(data.supply) }}
+                            </template> -->
                             <template
                                 #cell(volume)="data">
                                 {{ data.item.volume || '---' }}
@@ -83,7 +83,7 @@
                                     </template>
                                     <b-dropdown-item
                                         v-if="data.type === 'trc21' && !data.item.applytomoz"
-                                        :to="'/tomozcondition/' + data.item.hash">
+                                        :to="'/viczcondition/' + data.item.hash">
                                         Apply to VICZ
                                     </b-dropdown-item>
                                     <!-- <b-dropdown-item
@@ -109,7 +109,7 @@
                                 </b-dropdown>
                                 <!-- <router-link
                                     v-if="!data.value"
-                                    :to="`/tomozcondition/${data.item.hash}`">
+                                    :to="`/viczcondition/${data.item.hash}`">
                                     Apply VICZ
                                 </router-link> -->
                             </template>
@@ -162,20 +162,20 @@ export default {
         return {
             listokenCurrentPage: this.$store.state.listokenCurrentPage || 1,
             listokenRows: 0,
-            listokenPerPage: 7,
+            listokenPerPage: 8,
             listokenFields: [
                 { key: 'logo', label: '', variant: 'sp-text-center' },
                 { key: 'token', label: 'Token' },
                 { key: 'ownerBalance', label: 'Balance' },
                 { key: 'holders', label: 'Holders' },
                 { key: 'price', label: 'Price' },
-                { key: 'value', label: 'Value' },
+                { key: 'supply', label: 'Supply' },
                 // { key: 'totalSupply', label: 'Total supply' },
                 // { key: 'transferToken', label: '', variant: 'sp-text-center' },
                 { key: 'applytomoz', label: '', variant: 'sp-text-center' }
             ],
             listokenItems: [],
-            sortBy: 'totalSupplyNumber',
+            sortBy: 'price',
             sortDesc: true,
             tokens: [],
             loading: false,
@@ -209,24 +209,32 @@ export default {
                 const query = self.serializeQuery(params)
                 let promises = this.checkAppliedZ()
                 let appliedXPromise = this.checkAppliedX()
-                const { data } = await axios.get(`/api/account/${self.account}/listTokens?${query}`)
+                const { data } = await axios.get(
+                    `/api/account/${self.account}/listTokens?${query}`
+                )
                 self.appliedZList = await promises
                 self.appliedXList = await appliedXPromise
-                if (data.items.length > 0) {
-                    const map = await Promise.all(data.items.map(async i => {
+                if (data.data.length > 0) {
+                    const map = await Promise.all(data.data.map(async (i) => {
+                        const ownerBalance = await self.getOwnerBalance(i.address, i.decimals)
+                        const ownerBalanceStr = ownerBalance ? this.formatNumber(ownerBalance) : '---'
+                        const ownerValueStr = i.price ? `(${ownerBalance.multipliedBy(i.price)}$)` : ''
                         return {
                             name: i.name,
                             token: `${i.name} (${i.symbol})`,
                             symbol: i.symbol,
-                            hash: i.hash,
-                            price: '---',
-                            value: '---',
-                            totalSupply: i.totalSupplyNumber,
-                            ownerBalance: this.formatNumber(await self.getOwnerBalance(i.hash, i.decimals)),
-                            holders: i.holders || '---',
-                            applytomoz: ((self.appliedZList || []).indexOf(i.hash) > -1),
-                            applytomox: ((self.appliedXList || []).indexOf(i.hash) > -1),
-                            logo: await self.getLogo(i.hash),
+                            hash: i.address,
+                            price: i.price ? i.price : '---',
+                            // totalSupply: this.formatNumber(i.totalSupplyNumber),
+                            ownerBalance: ownerBalanceStr + ownerValueStr,
+                            supply: this.formatNumber(new BigNumber(
+                                i.circulatingSupply ? i.circulatingSupply : i.totalSupply
+                            ).div(10 ** i.decimals)
+                            ),
+                            holders: i.holder || '---',
+                            applytomoz: ((self.appliedZList || []).indexOf(i.address) > -1),
+                            applytomox: ((self.appliedXList || []).indexOf(i.address) > -1),
+                            logo: await self.getLogo(i.address),
                             mintable: i.isMintable,
                             type: i.type
                         }
@@ -259,7 +267,7 @@ export default {
         async checkAppliedZ () {
             const contract = await this.TRC21Issuer
             if (contract) {
-                const result = await contract.methods.tokens.call()
+                const result = await contract.methods.tokens().call()
                 if (result && result.length > 0) {
                     let lowerCaseArr = result.map(m => m.toLowerCase())
                     return lowerCaseArr
@@ -270,7 +278,7 @@ export default {
         async checkAppliedX () {
             const contract = await this.TomoXListing
             if (contract) {
-                const result = await contract.methods.tokens.call()
+                const result = await contract.methods.tokens().call()
                 if (result && result.length > 0) {
                     let lowerCaseArr = result.map(m => m.toLowerCase())
                     return lowerCaseArr

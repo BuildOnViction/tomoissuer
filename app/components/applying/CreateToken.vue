@@ -205,13 +205,29 @@
                                 cols="3"
                                 md="4">
                                 <b-form-radio
+                                    value="vrc25"
+                                    class="font-weight-bold">
+                                    VRC25
+                                    <i
+                                        id="vrc25"
+                                        class="tm-icon-info mb-2"/>
+                                    <!-- <span class="new-gif">new</span> -->
+                                    <b-tooltip
+                                        target="vrc25">
+                                        VRC25 is the standard token that goes along with Viction Zero Gas Protocol.
+                                    </b-tooltip>
+                                </b-form-radio>
+                            </b-col>
+                            <!-- <b-col
+                                cols="3"
+                                md="4">
+                                <b-form-radio
                                     value="trc20"
                                     class="font-weight-bold">
                                     VRC20
                                     <i
                                         id="trc20"
                                         class="tm-icon-info mb-2"/>
-                                    <!-- <span class="new-gif">new</span> -->
                                     <b-tooltip
                                         target="trc20">
                                         VRC20 is the most standard token on Viction.
@@ -234,14 +250,14 @@
                                         Transaction fees are paid by the token itself.
                                     </b-tooltip>
                                 </b-form-radio>
-                            </b-col>
-                            <b-col
+                            </b-col> -->
+                            <!-- <b-col
                                 cols="4"
                                 md="3">
                                 <div
                                     class="tokenInfotrc2021"
                                     @click="showModal">Differences?</div>
-                            </b-col>
+                            </b-col> -->
                         </b-row>
                     </b-form-radio-group>
                 </b-form-group>
@@ -328,7 +344,7 @@ export default {
             decimals: 18,
             totalSupply: '',
             account: '',
-            type: 'trc20',
+            type: 'vrc25',
             balance: 0,
             txFee: 0,
             gasPrice: 250000000,
@@ -342,7 +358,7 @@ export default {
             warningSymbol: '',
             warningDecimals: '',
             warningMintable: '',
-            mintable: '',
+            mintable: true,
             tokenInfoFields: [
                 { key: 'title', label: '' },
                 { key: 'trc20', label: 'TRC20' },
@@ -471,6 +487,28 @@ export default {
             }
         },
         getAbi () {
+            if (this.type === 'vrc25' && this.mintable) {
+                return {
+                    contractAbi: this.MyVRC25Mintable,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+            if (this.type === 'vrc25' && !this.mintable) {
+                return {
+                    contractAbi: this.MyVRC25,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
             if (this.type === 'trc20' && this.mintable) {
                 return {
                     contractAbi: this.MyTRC20Mintable,
