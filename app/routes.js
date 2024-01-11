@@ -6,9 +6,9 @@ import ConfirmToken from './components/applying/ConfirmToken.vue'
 import TokenDetail from './components/Token.vue'
 import DonateToken from './components/donate/DonateToken.vue'
 import ConfirmDonate from './components/donate/ConfirmDonate.vue'
-import TomoZCondition from './components/applytomo/TomoZCondition.vue'
-import TomoZApplication from './components/applytomo/TomoZApplication.vue'
-import TomoZConfirm from './components/applytomo/TomoZConfirm.vue'
+import VicZCondition from './components/applytomo/VicZCondition.vue'
+import VicZApplication from './components/applytomo/VicZApplication.vue'
+import VicZConfirm from './components/applytomo/VicZConfirm.vue'
 import DepositFee from './components/deposit/DepositFee.vue'
 import DepositConfirm from './components/deposit/DepositConfirm.vue'
 import EditTransactionsFee from './components/edittransactionsfee/EditTransactionsFee.vue'
@@ -34,9 +34,9 @@ const routes = [
     { path: '/token/:address', component: TokenDetail },
     { path: '/donateTxFee', component: DonateToken },
     { path: '/confirmdonate/:address', component: ConfirmDonate, name: 'ConfirmDonate' },
-    { path: '/tomozcondition/:address', component: TomoZCondition },
-    { path: '/tomozapplication/:address', component: TomoZApplication },
-    { path: '/tomozconfirm/:address', component: TomoZConfirm, name: 'TomoZConfirm' },
+    { path: '/viczcondition/:address', component: VicZCondition },
+    { path: '/viczapplication/:address', component: VicZApplication },
+    { path: '/viczconfirm/:address', component: VicZConfirm, name: 'VicZConfirm' },
     { path: '/depositfee/:address', component: DepositFee },
     { path: '/depositconfirm/:address', component: DepositConfirm, name: 'DepositConfirm' },
     { path: '/edittransactionsfee/:address', component: EditTransactionsFee },

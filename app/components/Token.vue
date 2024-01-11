@@ -10,6 +10,11 @@
                             {{ token.symbol }}
                         </span>
                         <span
+                            v-if="token.type === 'vrc25'"
+                            class="apply-trc">
+                            VRC-25
+                        </span>
+                        <span
                             v-if="token.type === 'trc21'"
                             class="apply-trc">
                             VRC-21
@@ -51,15 +56,16 @@
                         <ul>
                             <li>
                                 <b-link
-                                    v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
-                                    :to="'/tomozcondition/' + address"
+                                    v-if="!isAppliedZ
+                                    && account === contractCreation"
+                                    :to="'/viczcondition/' + address"
                                     class="tmp-btn-violet"
                                     style="width: 240px">
                                     <span class="tm-icon-tomoz-new-w mr-1">
                                         <span class="path1"/><span class="path2"/>
                                     </span>
                                     <!-- <i class="tm-icon-tomoz mr-1"/> -->
-                                    Apply to Viction Zero Gas Protocol
+                                    Apply Zero Gas Protocol
                                 </b-link>
                             </li>
                             <!-- <li>
@@ -86,32 +92,6 @@
                                         class="tmp-btn-transparent">
                                         <i class="tm-icon-cog" />
                                     </template>
-                                    <!-- <b-dropdown-item
-                                        v-if="token.type === 'trc21' && !isAppliedZ && account === contractCreation"
-                                        :to="'/tomozcondition/' + address">
-                                        Apply to Viction Zero Gas Protocol
-                                    </b-dropdown-item>
-                                    <b-dropdown-item
-                                        v-if="token.type === 'trc21' && !isAppliedX && account === contractCreation"
-                                        :to="'/tomoxcondition/' + address">
-                                        Apply to TomoX Protocol
-                                    </b-dropdown-item> -->
-                                    <!-- <b-dropdown-item
-                                        v-if="isBridgeToken && !isAppliedB">
-                                        <div id="applyBridge">
-                                            <b-link
-                                                :disabled="!isAppliedZ"
-                                                :style="!isAppliedZ ? `cursor: not-allowed` : ''"
-                                                @click="showAnnounceBridgeModal">
-                                                Apply to TomoBridge
-                                            </b-link>
-                                        </div>
-                                        <b-tooltip
-                                            v-if="!isAppliedZ"
-                                            target="applyBridge">
-                                            Apply to TomoZ is required
-                                        </b-tooltip>
-                                    </b-dropdown-item> -->
                                     <b-dropdown-item
                                         :to="'/viewToken/' + address">
                                         View Token Info
@@ -122,28 +102,16 @@
                                         Update Token Info
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="!token.contract"
-                                        :href="config.tomoscanUrl + '/contracts/verify/' + address"
-                                        target="_blank">
-                                        Verify & Publish Contract
-                                    </b-dropdown-item>
-                                    <b-dropdown-divider/>
-                                    <!-- <b-dropdown-item
-                                        :href="config.tomowalletUrl"
-                                        target="_blank">
-                                        Transfer Token
-                                    </b-dropdown-item> -->
-                                    <b-dropdown-item
-                                        v-if="token.type === 'trc21' && isAppliedZ && contractCreation === account"
+                                        v-if="isAppliedZ
+                                        && contractCreation === account"
                                         :to="'/edittransactionsfee/' + address">
                                         Edit transaction fee
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="token.type === 'trc21' && isAppliedZ"
+                                        v-if="isAppliedZ"
                                         :to="'/depositfee/' + address">
-                                        Deposit VRC-21 fee fund
+                                        Deposit fee fund
                                     </b-dropdown-item>
-                                    <b-dropdown-divider v-if="token.isMintable"/>
                                     <b-dropdown-item
                                         v-if="token.isMintable"
                                         :to="'/reissueToken/' + address">
@@ -209,10 +177,10 @@
                                             </p>
                                             <p class="common_txt_ellipsis text-blue">
                                                 <a
-                                                    :title="token.hash"
+                                                    :title="token.address"
                                                     :href="config.tomoscanUrl + '/token/' + address"
                                                     target="_blank">
-                                                    {{ token.hash }}
+                                                    {{ token.address }}
                                                 </a>
                                             </p>
                                         </li>
@@ -220,7 +188,7 @@
                                             <p class="title-small">Decimals</p>
                                             <p>{{ token.decimals }}</p>
                                         </li>
-                                        <li v-if="token.type === 'trc21' && isAppliedZ">
+                                        <li v-if="isAppliedZ">
                                             <p class="title-small">
                                                 Transactions fee
                                                 <b-link
@@ -254,8 +222,8 @@
                                                 </span> -->
                                             </div>
                                         </li>
-                                        <li v-if="token.type === 'trc21' && isAppliedZ">
-                                            <p class="title-small">VRC-21 fee fund</p>
+                                        <li v-if="isAppliedZ">
+                                            <p class="title-small">VRC fee fund</p>
                                             <div class="flex-box">
                                                 <span>{{ formatNumber(poolingFee) }} VIC</span>
                                                 <span>
@@ -556,39 +524,39 @@ export default {
             const self = this
             const { data } = await axios.get(`/api/token/${self.address}`)
             self.token = data
-            self.token.contract = data.hash
+            self.token.address = data.address.toLowerCase()
+            self.token.contract = data.address.toLowerCase()
             self.tokenName = data.name
             self.symbol = data.symbol
-            self.contractCreation = data.contractCreation
+            self.contractCreation = data.owner.toLowerCase()
 
             self.$store.state.token = self.token
         },
         getTokenTransfer () {
             const self = this
             self.loading = true
-            const isTrc21 = self.token.type
             const params = {
                 limit: self.transferPerPage,
                 page: self.transferCurrentPage
             }
             const query = self.serializeQuery(params)
-            axios.get(`/api/token/txes/${isTrc21}/${this.address}?${query}`).then(response => {
+            axios.get(`/api/token/txs/${this.address}?${query}`).then(response => {
                 const data = response.data
                 if (data) {
                     const items = []
-                    data.items.map(m => {
+                    data.data.map(m => {
                         items.push({
                             txn_hash: m.transactionHash,
-                            age: moment(m.blockTime).fromNow(),
+                            age: moment(m.timestamp * 1000).fromNow(),
                             from: m.from,
                             to: m.to,
                             amount: self.formatNumber(
-                                new BigNumber(m.value).div(10 ** self.token.decimals).toNumber())
+                                new BigNumber(m.value).div(10 ** m.tokenDecimals).toNumber())
                         })
                     })
                     self.transferItems = items
                     self.transferRows = data.total
-                    self.tokenTransfers = response.data.total
+                    self.tokenTransfers = data.total
                     self.loading = false
                 }
             }).catch(error => {
@@ -604,23 +572,22 @@ export default {
                 page: self.holdersCurrentPage,
                 limit: self.holdersPerPage
             }
-            const isTrc21 = self.token.type === 'trc21' ? 'trc21/' : ''
             const query = self.serializeQuery(params)
-            axios.get(`/api/token/holders/${isTrc21}${this.address}?${query}`).then(response => {
+            axios.get(`/api/token/holders/${this.address}?${query}`).then(response => {
                 const data = response.data
                 if (data) {
                     const items = []
-                    data.items.map(m => {
+                    data.data.map((m, mIndex) => {
                         items.push({
-                            rank: m.rank,
-                            address: m.hash,
+                            rank: mIndex + 1,
+                            address: m.address,
                             amount: self.formatNumber(m.quantityNumber),
-                            percentage: m.percentage
+                            percentage: (m.quantityNumber * 100 / self.token.totalSupplyNumber).toFixed(2)
                         })
                     })
                     self.holdersItems = items
                     self.holdersRows = data.total
-                    self.tokenHolders = response.data.total
+                    self.tokenHolders = data.total
                     self.loading = false
                 }
             }).catch(error => {
@@ -650,7 +617,7 @@ export default {
             if (web3) {
                 const contract = this.TRC21Issuer
                 contract.methods.getTokenCapacity(this.address).call().then(capacity => {
-                    let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
+                    let balance = new BigNumber(capacity > 0 ? this.web3.utils.hexToNumberString(capacity) : 0)
                     this.poolingFee = balance.div(10 ** 18).toNumber()
                     this.$store.state.token['poolingFee'] = this.poolingFee
                 }).catch(error => {
@@ -677,8 +644,11 @@ export default {
         },
         checkAppliedZ () {
             const contract = this.TRC21Issuer
+            if (this.token.type !== 'vrc25' && this.token.type !== 'vrc21') {
+                return false
+            }
             if (contract) {
-                contract.methods.tokens.call()
+                contract.methods.tokens().call()
                     .then(result => {
                         if (result && result.length > 0) {
                             const lowerCaseArr = result.map(m => m.toLowerCase())

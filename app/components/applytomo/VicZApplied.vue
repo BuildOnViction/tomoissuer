@@ -5,7 +5,7 @@
                 <p>
                     <span class="tm-icon-tomoz-new"><span class="path1"/><span class="path2"/></span>
                 </p>
-                <h2 class="tmp-title-large">TomoZ Protocol Application</h2>
+                <h2 class="tmp-title-large">Zero Gas Protocol Application</h2>
             </div>
             <b-form
                 class="tmp-form-one"

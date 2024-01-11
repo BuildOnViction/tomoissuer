@@ -351,6 +351,28 @@ export default {
             }
         },
         getAbi () {
+            if (this.type === 'vrc25' && this.mintable) {
+                return {
+                    contractAbi: this.MyVRC25Mintable,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
+            if (this.type === 'vrc25' && !this.mintable) {
+                return {
+                    contractAbi: this.MyVRC25,
+                    arguments: [
+                        'example',
+                        'example',
+                        18,
+                        (new BigNumber(100000000).multipliedBy(10 ** 18)).toString(10)
+                    ]
+                }
+            }
             if (this.type === 'trc20' && this.mintable) {
                 return {
                     contractAbi: this.MyTRC20Mintable,
