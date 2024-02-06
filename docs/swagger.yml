@@ -8,7 +8,7 @@ info:
     url: 'https://github.com/buildOnViction/tomoissuer'
 tags:
   - name: Config
-    description: Get TomoIssuer Application Configuration
+    description: Get VicIssuer Application Configuration
   - name: Account
     description: Get account's informations(from VicScan)
   - name: Token
@@ -142,36 +142,6 @@ paths:
           description: Not Acceptable
         '500':
           description: Server Internal Error
-  '/api/token//holders/trc21/{token}':
-    get:
-      tags:
-        - Token
-      summary: Get token's holders of trc21 token(calling VicScan API)
-      parameters:
-        - name: token
-          in: path
-          type: string
-          description: Token address
-          required: true
-        - name: limit
-          in: query
-          type: string
-          description: Limit records in response
-        - name: page
-          in: query
-          type: string
-          description: Page number
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '406':
-          description: Not Acceptable
-        '500':
-          description: Server Internal Error
   '/api/token//holders/{token}':
     get:
       tags:
@@ -202,7 +172,7 @@ paths:
           description: Not Acceptable
         '500':
           description: Server Internal Error
-  '/api/token/txs/trc21/{token}':
+  '/api/token/txs/{token}':
     get:
       tags:
         - Token
@@ -232,37 +202,7 @@ paths:
           description: Not Acceptable
         '500':
           description: Server Internal Error
-  '/api/token/txs/trc20/{token}':
-    get:
-      tags:
-        - Token
-      summary: Get token's transactions of trc20 token(calling VicScan API)
-      parameters:
-        - name: token
-          in: path
-          type: string
-          description: Token address
-          required: true
-        - name: limit
-          in: query
-          type: string
-          description: Limit records in response
-        - name: page
-          in: query
-          type: string
-          description: Page number
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '406':
-          description: Not Acceptable
-        '500':
-          description: Server Internal Error
-  /api/token/search:
+  '/api/token/search':
     get:
       tags:
         - Token

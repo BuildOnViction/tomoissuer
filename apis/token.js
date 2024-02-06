@@ -403,19 +403,6 @@ router.get('/:token', [
     }
 })
 
-router.get('/holders/trc21/:token', [], async (req, res, next) => {
-    try {
-        const token = req.params.token || ''
-        const page = req.query.page || 1
-        const limit = req.query.limit || 20
-        const { data } = await axios.get(
-            urljoin(config.get('tomoscanAPI'), `/api/token-holders/trc21/?address=${token}&page=${page}&limit=${limit}`)
-        )
-        return res.json(data)
-    } catch (error) {
-        return next(error)
-    }
-})
 router.get('/holders/:token', [
     check('token').exists().custom(
         (token) => web3.utils.isAddress(token)
@@ -469,20 +456,6 @@ router.get('/txs/:token', [
                 config.get('tomoscanAPI'),
                 `/api/tokenTx/list?tokenAddress=${token}&offset=${(page - 1) * limit}&limit=${limit}`
             )
-        )
-        return res.json(data)
-    } catch (error) {
-        return next(error)
-    }
-})
-
-router.get('/txes/trc721/:token', [], async (req, res, next) => {
-    try {
-        const token = req.params.token || ''
-        const page = req.query.page || 1
-        const limit = req.query.limit || 20
-        const { data } = await axios.get(
-            urljoin(config.get('tomoscanAPI'), `/api/token-txs/trc721?token=${token}&page=${page}&limit=${limit}`)
         )
         return res.json(data)
     } catch (error) {
