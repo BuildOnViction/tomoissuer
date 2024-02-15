@@ -524,11 +524,11 @@ export default {
             const self = this
             const { data } = await axios.get(`/api/token/${self.address}`)
             self.token = data
-            self.token.address = data.address.toLowerCase()
-            self.token.contract = data.address.toLowerCase()
+            self.token.address = (data && data.address ? data.address : self.address).toLowerCase()
+            self.token.contract = (data && data.address ? data.address : self.address).toLowerCase()
             self.tokenName = data.name
             self.symbol = data.symbol
-            self.contractCreation = data.owner.toLowerCase()
+            self.contractCreation = (data && data.owner ? data.owner : self.account).toLowerCase()
 
             self.$store.state.token = self.token
         },
