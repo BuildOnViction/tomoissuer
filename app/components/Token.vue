@@ -503,6 +503,7 @@ export default {
                 self.$router.push({ path: '/login' })
             }
             self.config = store.get('configIssuer') || await self.appConfig()
+
             await self.getTokenDetail()
             self.getTokenTransfer()
             self.getTokenHolders()

@@ -108,6 +108,9 @@
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import store from 'store'
+
+const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time))
+
 export default {
     name: 'App',
     components: { },
@@ -258,12 +261,22 @@ export default {
                                 let check = true
                                 while (check) {
                                     const receipt = await web3.eth.getTransactionReceipt(txHash)
-                                    if (receipt) {
+                                    if (receipt && receipt.contractAddress) {
                                         self.contractAddress = receipt.contractAddress
+                                        while (true) {
+                                            // waiting for fetching token data from vicscan
+                                            const { data } = await axios.get(`/api/token/${self.contractAddress}`)
+                                            if (data) {
+                                                break
+                                            }
+                                            await sleep(2000)
+                                        }
                                         setTimeout(() => {
                                             self.loading = false
                                             check = false
-                                            self.$refs.newtokenmodal.show()
+                                            if (self.$refs.newtokenmodal) {
+                                                self.$refs.newtokenmodal.show()
+                                            }
                                         }, 1500)
                                     }
                                 }
