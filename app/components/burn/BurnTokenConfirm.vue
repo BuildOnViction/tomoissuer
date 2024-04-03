@@ -105,7 +105,7 @@ export default {
             token: {},
             config: {},
             loading: false,
-            gasPrice: '',
+            gasPrice: 250000000,
             txFee: '',
             ownerBalance: ''
         }

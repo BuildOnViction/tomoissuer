@@ -97,7 +97,7 @@ export default {
             token: {},
             transactionHash: '123',
             config: {},
-            gasPrice: ''
+            gasPrice: 250000000
         }
     },
     async updated () {},

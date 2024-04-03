@@ -119,7 +119,7 @@ export default {
             config: {},
             transactionHash: '',
             isAppliedZ: false,
-            gasPrice: '',
+            gasPrice: 250000000,
             loading: false
         }
     },

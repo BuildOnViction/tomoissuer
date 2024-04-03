@@ -125,7 +125,7 @@ export default {
             loading: false,
             config: {},
             token: {},
-            gasPrice: '',
+            gasPrice: 250000000,
             txFee: ''
         }
     },
