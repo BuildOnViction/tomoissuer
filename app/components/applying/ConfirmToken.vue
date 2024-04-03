@@ -246,6 +246,9 @@ export default {
                     case 'metamask':
                     case 'tomowallet':
                     case 'pantograph':
+                    case 'coin98':
+                    case 'viction':
+                    case 'ramper':
                         const estimateGas = await contract.deploy({
                             arguments: args
                         }).estimateGas()
