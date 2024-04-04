@@ -146,7 +146,7 @@ paths:
     get:
       tags:
         - Token
-      summary: Get token's holders of trc20 token(calling VicScan API)
+      summary: Get token's holders of token(calling VicScan API)
       parameters:
         - name: token
           in: path
@@ -176,7 +176,7 @@ paths:
     get:
       tags:
         - Token
-      summary: Get token's transactions of trc21 token(calling VicScan API)
+      summary: Get token's transactions of token(calling VicScan API)
       parameters:
         - name: token
           in: path
