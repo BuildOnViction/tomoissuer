@@ -2,7 +2,7 @@
     <div class="container">
         <div
             v-if="isAppliedZ"
-            class="mt-3"><b>This token is already applied to tomoZ</b></div>
+            class="mt-3"><b>This token is already applied to VictionZ</b></div>
         <div
             v-if="isAppliedX"
             class="mt-3"><b>This token is already applied to tomoX</b></div>

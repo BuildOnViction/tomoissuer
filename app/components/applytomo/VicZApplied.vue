@@ -11,7 +11,7 @@
                 class="tmp-form-one"
                 novalidate
                 @submit.prevent="validate()">
-                <h2 class="tmp-title-medium text-center">This token is already applied to TomoZ</h2>
+                <h2 class="tmp-title-medium text-center">This token is already applied to VictionZ</h2>
                 <div class="btn-box">
                     <b-button
                         :to="'/token/' + address"
