@@ -105,8 +105,7 @@ export default {
         getPoolingFee () {
             const contract = this.TRC21Issuer
             contract.methods.getTokenCapacity(this.address).call().then(capacity => {
-                let balance = new BigNumber(this.web3.utils.hexToNumberString(capacity))
-                this.currentPoolingFee = balance.div(10 ** 18).toNumber().toFixed(2)
+                this.currentPoolingFee = new BigNumber(capacity).div(10 ** 18).toNumber().toFixed(2)
             }).catch(error => {
                 console.log(error)
                 this.$toatsed.show(error, { type: 'error' })

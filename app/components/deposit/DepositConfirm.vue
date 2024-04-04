@@ -186,7 +186,6 @@ export default {
                         value: this.web3.utils.toHex(new BigNumber(this.depositFee)
                             .multipliedBy(10 ** 18)).toString(10)
                     }
-
                     const contract = this.TRC21Issuer
                     const provider = this.NetworkProvider
                     if (provider === 'ledger' || provider === 'trezor') {

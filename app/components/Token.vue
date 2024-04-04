@@ -618,8 +618,7 @@ export default {
             if (web3) {
                 const contract = this.TRC21Issuer
                 contract.methods.getTokenCapacity(this.address).call().then(capacity => {
-                    let balance = new BigNumber(capacity > 0 ? this.web3.utils.hexToNumberString(capacity) : 0)
-                    this.poolingFee = balance.div(10 ** 18).toNumber()
+                    this.poolingFee = new BigNumber(capacity).div(10 ** 18).toNumber()
                     this.$store.state.token['poolingFee'] = this.poolingFee
                 }).catch(error => {
                     console.log(error)
