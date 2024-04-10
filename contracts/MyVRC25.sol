@@ -1156,7 +1156,7 @@ pragma solidity >=0.6.2;
 contract MyVRC25 is VRC25Permit {
     using Address for address;
 
-    constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _initialSupply) VRC25(_name, _symbol, _decimals) {
+    constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _initialSupply) public VRC25(_name, _symbol, _decimals) {
         _mint(msg.sender, _initialSupply);
     }
 
@@ -1165,7 +1165,7 @@ contract MyVRC25 is VRC25Permit {
      * @param value Amount of fee
      */
     function _estimateFee(uint256 value) internal view override returns (uint256) {
-        return value + minFee();
+        return minFee();
     }
 
 
