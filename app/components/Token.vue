@@ -102,8 +102,7 @@
                                         Update Token Info
                                     </b-dropdown-item>
                                     <b-dropdown-item
-                                        v-if="isAppliedZ
-                                        && contractCreation === account"
+                                        v-if="isAppliedZ && contractCreation === account && token.type !== 'vrc25'"
                                         :to="'/edittransactionsfee/' + address">
                                         Edit transaction fee
                                     </b-dropdown-item>
