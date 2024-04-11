@@ -1,0 +1,48 @@
+name: Testnet
+#Build and Deploy Viction Issuer Web on Testnet
+
+on: workflow_dispatch
+
+env:
+  APPLICATION: "tomochain"
+  ENVIRONMENT: "testnet"
+  AWS_REGION: "ap-southeast-1"
+  CULIOPS_BRANCH: "main"
+  ECS_SERVICE_NAME: "issuer-web"
+  APP_REPO_NAME: "tomoissuer"
+  APP_BRANCH: "master"
+
+permissions:
+  id-token: write
+  contents: write
+  actions: write
+
+jobs:
+  set_vars:
+    runs-on: ubuntu-latest
+    outputs:
+      aws_region: ${{ env.AWS_REGION }}
+      aws_account_id: "604763758327"
+      aws_role_assume_name: "${{ env.APPLICATION }}-ci-${{ env.ENVIRONMENT }}"
+      codebuild_project_name: "${{ env.APPLICATION }}-${{ env.ENVIRONMENT }}"
+      culiops_branch: ${{ env.CULIOPS_BRANCH }}
+      ecs_cluster_name: "${{ env.APPLICATION }}-${{ env.ENVIRONMENT }}"
+      ecs_service_name: ${{ env.ECS_SERVICE_NAME }}
+      app_repo_name: ${{ env.APP_REPO_NAME }}
+      app_branch: ${{ env.APP_BRANCH }}
+    steps:
+      - run: echo "Exposing ENV vars"
+
+  deploy:
+    needs: [set_vars]
+    uses: BuildOnViction/tomoissuer/.github/workflows/deploy-viction-by-codebuild.yml@master
+    with:
+      aws_region: ${{ needs.set_vars.outputs.aws_region }}
+      aws_account_id: ${{ needs.set_vars.outputs.aws_account_id }}
+      aws_role_assume_name: ${{ needs.set_vars.outputs.aws_role_assume_name }}
+      codebuild_project_name: ${{ needs.set_vars.outputs.codebuild_project_name }}
+      culiops_branch: ${{ needs.set_vars.outputs.culiops_branch }}
+      ecs_cluster_name: ${{ needs.set_vars.outputs.ecs_cluster_name }}
+      ecs_service_name: ${{ needs.set_vars.outputs.ecs_service_name }}
+      app_repo_name: ${{ needs.set_vars.outputs.app_repo_name }}
+      app_branch: ${{ needs.set_vars.outputs.app_branch }}

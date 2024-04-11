@@ -1,0 +1,69 @@
+name: Deploy Docker Image By Codebuild
+
+on:
+  workflow_call:
+    inputs:
+      aws_region:
+        type: string
+        default: "ap-southeast-1"
+      aws_account_id:
+        required: true
+        type: string
+      aws_role_assume_name:
+        required: true
+        type: string
+      codebuild_project_name:
+        required: true
+        type: string
+      culiops_branch:
+        type: string
+        default: "main"
+      app_branch:
+        type: string
+        default: "master"
+      app_repo_name:
+        required: true
+        type: string
+      ecs_cluster_name:
+        type: string
+        default: "tomochain-testnet"
+      ecs_service_name:
+        required: true
+        type: string
+
+jobs:
+  codebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ inputs.aws_region }}
+          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_assume_name }}
+
+      - name: Get AWS caller identity
+        run: aws sts get-caller-identity
+
+      - name: Trigger CodeBuild
+        uses: aws-actions/aws-codebuild-run-build@v1
+        with:
+          project-name: ${{ inputs.codebuild_project_name }}
+          disable-source-override: true
+          env-vars-for-codebuild: |
+            AWS_DEFAULT_REGION,
+            AWS_ACCOUNT_ID,
+            CULIOPS_BRANCH,
+            ECS_CLUSTER_NAME,
+            BUILD_TYPE,
+            APP_BRANCH,
+            APP_REPO_NAME,
+            TRIGGERED_BY
+        env:
+          AWS_DEFAULT_REGION: ${{ inputs.aws_region }}
+          AWS_ACCOUNT_ID: ${{ inputs.aws_account_id }}
+          CULIOPS_BRANCH: ${{ inputs.culiops_branch }}
+          ECS_CLUSTER_NAME: ${{ inputs.ecs_cluster_name }}
+          BUILD_TYPE: ${{ inputs.ecs_service_name }}
+          APP_BRANCH: ${{ inputs.app_branch }}
+          APP_REPO_NAME: ${{ inputs.app_repo_name }}
+          TRIGGERED_BY: ${{ github.actor }}
